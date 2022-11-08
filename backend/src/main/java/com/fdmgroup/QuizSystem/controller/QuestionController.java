@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,13 +9,12 @@ import com.fdmgroup.QuizSystem.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("questions")  //http://localhost:8088/QuestionSystem/questions
+@RequestMapping("/questions") // http://localhost:8088/QuestionSystem/questions
 public class QuestionController {
-	
-	//@Autowired is not needed anymore as we already use @RequiredArgsConstructor for final fields
-	private final QuestionService questionService;
-	
+
+	@Autowired
+	private QuestionService questionService;
+
 //	@GetMapping
 //	public String getQuestions() {
 //		return "Got all the questiones";

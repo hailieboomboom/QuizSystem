@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.service.QuizService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("quizzes")  //http://localhost:8088/QuizSystem/quizzes
+@RequestMapping("/quizzes")  //http://localhost:8088/QuizSystem/quizzes
 public class QuizController {
 	
-	//@Autowired is not needed anymore as we already use @RequiredArgsConstructor for final fields
-	private final QuizService quizService;
+	@Autowired
+	private QuizService quizService;
 	
 	@GetMapping
 	public String getQuizes() {

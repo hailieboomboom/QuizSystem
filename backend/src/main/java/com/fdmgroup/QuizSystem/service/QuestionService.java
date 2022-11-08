@@ -1,18 +1,17 @@
 package com.fdmgroup.QuizSystem.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class QuestionService {
 
-    private final QuestionRepository questionRepository;
+	@Autowired
+    private QuestionRepository questionRepository;
 
 
 //    public Question getQuestionById(long id){

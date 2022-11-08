@@ -6,16 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class QuizService {
-	
-	//@Autowired is not needed anymore as we already use @RequiredArgsConstructor for final fields
-    private final QuizRepository quizRepository;
 
+	@Autowired
+	private QuizRepository quizRepository;
 
 //    public Quiz getQuizById(long id){
 //
