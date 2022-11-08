@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class QuizService {
-
+	
+	//@Autowired is not needed anymore as we already use @RequiredArgsConstructor for final fields
     private final QuizRepository quizRepository;
 
 
