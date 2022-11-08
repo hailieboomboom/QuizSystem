@@ -1,15 +1,12 @@
 package com.fdmgroup.QuizSystem.model;
 
 import lombok.*;
-
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table( name = "user")
 public class User {
 

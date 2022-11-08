@@ -44,6 +44,9 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    public static final String ADMIN = "ADMIN";
-//    public static final String USER = "USER";
+//    public static final String UNAUTHORISED = "Unauthorised";
+//    public static final String  = "Unauthorised";
+//    public static final String UNAUTHORISED = "Unauthorised";
+//    public static final String UNAUTHORISED = "Unauthorised";
+
 }
