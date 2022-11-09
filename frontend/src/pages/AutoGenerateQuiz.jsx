@@ -8,14 +8,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import Slider from '@mui/material/Slider';
 import { useState } from 'react';
 import { Container } from '@mui/material';
-import { Link } from "react-router-dom";
 
 function numQuestions(value) {
     return `${value}°C`;
   }
-const CreateQuiz = () => {
+const AutogenerateQuiz = () => {
   const [category, setCategory] = useState('');
   const [difficulty, setDifficulty] = useState('');
   const [type, setType] = useState('');
@@ -37,23 +37,23 @@ const CreateQuiz = () => {
         <React.Fragment>
             <Container>
   <Typography variant="h6" gutterBottom>
-        Create Quiz
+        Autogenerate Create Quiz
       </Typography>
       <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <FormControl variant="standard"  fullWidth>
-       
-        <TextField
-            required
-            id="quizname"
-            name="quizname"
-            label="Quiz name"
-            fullWidth
-            autoComplete="quiz-name"
-            variant="standard"
-          />
-      </FormControl>
+        <Grid item xs={12}>
+         
+<Slider
+        aria-label="Temperature"
+        defaultValue={30}
+        getAriaValueText={numQuestions}
+        valueLabelDisplay="auto"
+        step={10}
+        marks
+        min={10}
+        max={110}
+      />
         </Grid>
+       
         <Grid item xs={12}>
         <FormControl variant="standard"  fullWidth>
         <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
@@ -112,10 +112,9 @@ const CreateQuiz = () => {
         </Select>
       </FormControl>
         </Grid>
-       
         <Grid item xs={1}>
        
-      <Button  variant="outlined" as={Link} to="/viewQuestions">
+      <Button variant="outlined" endIcon={<SendIcon />}>
         Create
       </Button>
         </Grid>
@@ -129,4 +128,4 @@ const CreateQuiz = () => {
     )
 }
 
-export default CreateQuiz
+export default AutogenerateQuiz
