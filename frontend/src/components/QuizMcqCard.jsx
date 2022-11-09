@@ -1,3 +1,5 @@
+// Author: Istiaq
+
 import * as React from 'react';
 import "../styles/QuizCardStyle.css"
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,7 +12,7 @@ import CardActions from "@mui/material/CardActions";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 
-export default function QuizMcqCard() {
+export default function QuizMcqCard(props) {
     const [value, setValue] = React.useState();
 
     const handleChange = (event) => {
@@ -24,17 +26,20 @@ export default function QuizMcqCard() {
                     Question:
                 </Typography>
                 <Typography className={"questionString"} variant="h5" component="div">
-                    Insert Question here
+                    {props.question}
                 </Typography>
                 <RadioGroup
                     className={"radioGroup"}
                     value={value}
                     onChange={handleChange}
                 >
-                    <FormControlLabel value="Option 1" control={<Radio/>} label="Option 1"/>
-                    <FormControlLabel value="Option 2" control={<Radio/>} label="Option 2"/>
-                    <FormControlLabel value="Option 3" control={<Radio/>} label="Option 3"/>
-                    <FormControlLabel value="Option 4" control={<Radio/>} label="Option 4"/>
+                    <FormControlLabel value="Option 1" control={<Radio/>} label={props.rightAnswer}/>
+                    {props.wrongAnswers.map(answer => {
+                        return <FormControlLabel key={answer} value={answer} control={<Radio/>} label={answer}/>;
+                    })}
+
+                    {/*<FormControlLabel value="Option 3" control={<Radio/>} label="Option 3"/>*/}
+                    {/*<FormControlLabel value="Option 4" control={<Radio/>} label="Option 4"/>*/}
                 </RadioGroup>
             </CardContent>
             <CardActions>
