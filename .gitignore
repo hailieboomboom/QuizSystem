@@ -33,3 +33,6 @@ build/
 .vscode/
 
 */application.properties
+ 
+### MAC
+.DS_Store 
