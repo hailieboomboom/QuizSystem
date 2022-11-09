@@ -1,26 +1,32 @@
 package com.fdmgroup.QuizSystem.model;
-
 import lombok.*;
 import javax.persistence.*;
 
+
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
-@Table( name = "user")
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private long id;
 
-    @Column(name = "username", length = 45, nullable = false, unique = true)
+    @Column( unique = true, length = 45, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", length = 45, nullable = false, unique = true)
+    @Column( unique = true, length = 45, nullable = false)
     private String email;
+
+    private String firstname;
+
+    private String lastname;
+
+    private Role role;
+
 }

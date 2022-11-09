@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.controller;
 
+import com.fdmgroup.QuizSystem.dto.QuizInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class QuizController {
 	}
 	
 	@PostMapping
-	public String createQuiz(@RequestBody Quiz quiz) {
+	public String createQuiz(@RequestBody QuizInput quizInput) {
 		return "Created quiz was called";
 	}
 	

@@ -1,7 +1,10 @@
 package com.fdmgroup.QuizSystem.service;
 
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.User;
+import com.fdmgroup.QuizSystem.repository.StudentRepository;
+//import com.fdmgroup.QuizSystem.repository.UserRepository;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,14 +23,14 @@ public class UserService {
      * @param id User id.
      * @return   User.
      */
-    public User getUserById(long id){
-
-        Optional<User> maybeUser = userRepository.findById(id);
-        if(maybeUser.isEmpty()){
-            throw new UserNotFoundException();
-        }
-        return maybeUser.get();
-    }
+//    public User getUserById(long id){
+//
+//        Optional<User> maybeUser = studentRepository.findById(id);
+//        if(maybeUser.isEmpty()){
+//            throw new UserNotFoundException();
+//        }
+//        return maybeUser.get();
+//    }
 
     /**
      * Get user by the name.
@@ -46,15 +49,15 @@ public class UserService {
      * Delete user.
      * @param id User id.
      */
-    public void deleteUserById(long id){
-        if(userRepository.existsById(id)){
-            userRepository.deleteById(id);
-        }
-        else {
-            throw new UserNotFoundException();
-        }
-
-    }
+//    public void deleteUserById(long id){
+//        if(userRepository.existsById(id)){
+//            userRepository.deleteById(id);
+//        }
+//        else {
+//            throw new UserNotFoundException();
+//        }
+//
+//    }
 
     /**
      * Update user.
@@ -62,19 +65,19 @@ public class UserService {
      * @param modifiedUser Updated information.
      * @return             User.
      */
-    public User updateUser(long id, User modifiedUser) {
-        Optional<User> maybeUser = userRepository.findById(id);
-        if(maybeUser.isEmpty()){
-            throw new UserNotFoundException();
-        }
-        // Update user with new attributes
-        User user = maybeUser.get();
-//        user.setAvatar(input.getAvatar());
-        user.setUsername(modifiedUser.getUsername());
-        user.setPassword(modifiedUser.getPassword());
-        user.setEmail(modifiedUser.getEmail());
-        return userRepository.save(user);
-    }
+//    public User updateUser(long id, User modifiedUser) {
+//        Optional<User> maybeUser = userRepository.findById(id);
+//        if(maybeUser.isEmpty()){
+//            throw new UserNotFoundException();
+//        }
+//        // Update user with new attributes
+//        User user = maybeUser.get();
+////        user.setAvatar(input.getAvatar());
+//        user.setUsername(modifiedUser.getUsername());
+//        user.setPassword(modifiedUser.getPassword());
+//        user.setEmail(modifiedUser.getEmail());
+//        return userRepository.save(user);
+//    }
 
     /**
      * Check user's existence by username.
@@ -84,22 +87,22 @@ public class UserService {
     public boolean existsByUsername(String username){
         return userRepository.existsByUsername(username);
     }
-
-    /**
-     * Check user's existence by email.
-     * @param email Email.
-     * @return      true or false.
-     */
+//
+//    /**
+//     * Check user's existence by email.
+//     * @param email Email.
+//     * @return      true or false.
+//     */
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
-
-    /**
-     * Persist user to the database.
-     * @param user User.
-     * @return     Persisted user.
-     */
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+//
+//    /**
+//     * Persist user to the database.
+//     * @param user User.
+//     * @return     Persisted user.
+//     */
+//    public User save(User user) {
+//        return userRepository.save(user);
+//    }
 }

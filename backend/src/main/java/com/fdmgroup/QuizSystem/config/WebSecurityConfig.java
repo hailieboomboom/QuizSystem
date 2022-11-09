@@ -28,8 +28,13 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/**").authenticated()
+//                .antMatchers("/api/**").authenticated()
                 .antMatchers( "/auth/**").permitAll()
+                .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
+                .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
+                .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
+                .antMatchers("/create-content-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
+                .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -44,9 +49,12 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    public static final String UNAUTHORISED = "Unauthorised";
-//    public static final String  = "Unauthorised";
-//    public static final String UNAUTHORISED = "Unauthorised";
-//    public static final String UNAUTHORISED = "Unauthorised";
+//    public static final String UNAUTHORISED = "UNAUTHORISED";
+//    public static final String TRAINERS = "TRAINERS";
+//    public static final String SALES = "SALES";
+//    public static final String TRAINING = "TRAINING";
+//    public static final String POND = "POND";
+//    public static final String BEACHED = "BEACHED";
+//    public static final String ABSENT = "ABSENT";
 
 }
