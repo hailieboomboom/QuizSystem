@@ -1,6 +1,7 @@
 package com.fdmgroup.QuizSystem.service;
 
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,12 @@ public class SalesService {
     	Sales sales = findByUsername(modifiedSales.getUsername());
     	modifiedSales.setId(sales.getId());
     	return salesRepository.save(modifiedSales);
+    }
+
+    public Sales authoriseSales(String username){
+        Sales sales = findByUsername(username);
+        sales.setRole(Role.AUTHORISED_SALES);
+        return salesRepository.save(sales);
     }
     
     public Sales save(Sales sales) {

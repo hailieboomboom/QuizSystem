@@ -14,6 +14,6 @@ import javax.persistence.Entity;
 @Builder
 public class Trainer extends User{
 
-    private Role role = Role.AUTHORISED_TRAINER;
+    private Role role = Role.UNAUTHORISED_TRAINER;
 
 }

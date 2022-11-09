@@ -5,6 +5,7 @@ import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.StudentRepository;
 //import com.fdmgroup.QuizSystem.repository.UserRepository;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
     /**
      * Get user by id.
@@ -37,7 +38,7 @@ public class UserService {
      * @return         User.
      */
     public User getUserByUsername(String username){
-        Optional<Student> maybe_user = studentRepository.findStudentByUsername(username);
+        Optional<User> maybe_user = userRepository.findUserByUsername(username);
         if(maybe_user.isEmpty()){
             throw new UserNotFoundException();
         }
@@ -78,23 +79,23 @@ public class UserService {
 //        return userRepository.save(user);
 //    }
 
-//    /**
-//     * Check user's existence by username.
-//     * @param username Username.
-//     * @return         true or false.
-//     */
-//    public boolean existsByUsername(String username){
-//        return userRepository.existsByUsername(username);
-//    }
+    /**
+     * Check user's existence by username.
+     * @param username Username.
+     * @return         true or false.
+     */
+    public boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
+    }
 //
 //    /**
 //     * Check user's existence by email.
 //     * @param email Email.
 //     * @return      true or false.
 //     */
-//    public boolean existsByEmail(String email){
-//        return userRepository.existsByEmail(email);
-//    }
+    public boolean existsByEmail(String email){
+        return userRepository.existsByEmail(email);
+    }
 //
 //    /**
 //     * Persist user to the database.

@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.service;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.TrainerRepository;
@@ -30,6 +31,12 @@ public class TrainerService {
         Trainer trainer = findByUsername(modifiedTrainer.getUsername());
         modifiedTrainer.setId(trainer.getId());
         return trainerRepository.save(modifiedTrainer);
+    }
+
+    public Trainer authoriseTrainer(String username) {
+        Trainer trainer = findByUsername(username);
+        trainer.setRole(Role.AUTHORISED_TRAINER);
+        return trainerRepository.save(trainer);
     }
 
 

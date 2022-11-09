@@ -20,10 +20,13 @@ public class User {
 
     private String password;
 
+    @Column( unique = true, length = 45, nullable = false)
     private String email;
 
-    private String firstName;
+    private String firstname;
 
-    private String lastName;
+    private String lastname;
+
+    private Role role;
 
 }
