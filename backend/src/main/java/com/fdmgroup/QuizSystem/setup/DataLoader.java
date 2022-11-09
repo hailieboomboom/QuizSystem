@@ -28,17 +28,17 @@ import com.fdmgroup.QuizSystem.service.TagService;
 
 @Component
 public class DataLoader implements ApplicationRunner {
-    
-	@Autowired
+
+    @Autowired
     private QuestionService questionService;
-    
+
     @Autowired
     private QuizService quizService;
-    
+
     @Autowired
     private MultipleChoiceOptionService mcoService;
-    
-    
+
+
     @Autowired
     private TagService tagService;
     private Log log = LogFactory.getLog(DataLoader.class);
@@ -48,7 +48,7 @@ public class DataLoader implements ApplicationRunner {
     @Modifying
     public void run(ApplicationArguments args) throws Exception {
         log.info("Starting setup");
-        
+
         ////////// Load Users ////////////
         ////////// Load Questions ////////////
 
@@ -57,23 +57,23 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
-        
+
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("short answer");
         sa1.setCorrectAnswer("test answer");
-        
+
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
         tag1.setTagName("course");
         tag2.setTagName("interview");
-        
+
         mcq1.addOneTag(tag1);
         sa1.addOneTag(tag2);
         sa1.addOneTag(tag1);
-       
+
         tagService.save(tag1);
         tagService.save(tag2);
-        
+
         questionService.save(mcq1);
         questionService.save(sa1);
         mcoService.save(mco1);
@@ -81,13 +81,13 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco3);
 
         ////////// Load Quizzes ////////////
-        
-        
+
+
         Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
         quizService.save(courseQuiz1);
-        log.info("--------------- All users ------------------------"); 
-		log.info(quizService.getAllQuizzes()); 
-       
+        log.info("--------------- All users ------------------------");
+        log.info(quizService.getAllQuizzes());
+
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");
     }
