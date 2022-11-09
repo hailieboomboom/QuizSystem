@@ -22,7 +22,7 @@ public class UnauthorisedTrainerService {
 
 
 
-    public UnauthorisedTrainer findUnauthorisedTrainerByName(String username) {
+    public UnauthorisedTrainer findByUsername(String username) {
         Optional<UnauthorisedTrainer> maybeTrainer = unauthorisedTrainerRepository.findByUsername(username);
         if (maybeTrainer.isEmpty()) {
             throw new UserNotFoundException("Trainer is not found!");
@@ -35,12 +35,12 @@ public class UnauthorisedTrainerService {
     }
 
     public void delete(String username){
-        UnauthorisedTrainer unauthorisedTrainer = findUnauthorisedTrainerByName(username);
+        UnauthorisedTrainer unauthorisedTrainer = findByUsername(username);
         unauthorisedTrainerRepository.delete(unauthorisedTrainer);
     }
 
     public Trainer authoriseTrainer(String username){
-        UnauthorisedTrainer unauthorisedTrainer = findUnauthorisedTrainerByName(username);
+        UnauthorisedTrainer unauthorisedTrainer = findByUsername(username);
         Trainer trainer = new Trainer();
         trainer.setUsername(unauthorisedTrainer.getUsername());
         trainer.setEmail(unauthorisedTrainer.getEmail());

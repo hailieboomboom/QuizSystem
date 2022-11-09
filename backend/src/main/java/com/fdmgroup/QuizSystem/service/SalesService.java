@@ -23,4 +23,22 @@ public class SalesService {
         }
         return maybeSales.get();
     }
+    
+    public Sales findByUsername(String username) {
+    	Optional<Sales> maybeSales = salesRepository.findByUsername(username);
+    	if (maybeSales.isEmpty()) {
+    		throw new UserNotFoundException("Sales user is not found");
+    	}
+    	return maybeSales.get();
+    }
+    
+    public Sales update(Sales modifiedSales) {
+    	Sales sales = findByUsername(modifiedSales.getUsername());
+    	modifiedSales.setId(sales.getId());
+    	return salesRepository.save(modifiedSales);
+    }
+    
+    public Sales save(Sales sales) {
+		return salesRepository.save(sales);
+	}
 }

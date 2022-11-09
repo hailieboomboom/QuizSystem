@@ -12,7 +12,6 @@ public class TrainerAuthorisationController {
 
     @PostMapping("/authorise/{username}")
     public Trainer authoriseTrainer(@PathVariable String username){
-
-        return unauthorisedTrainerService.authoriseTrainer(username);
+    	return unauthorisedTrainerService.authoriseTrainer(username);
     }
 }

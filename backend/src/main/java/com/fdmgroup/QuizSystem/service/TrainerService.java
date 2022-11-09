@@ -17,14 +17,7 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
 
-
-    private final UserRepository userRepository;
-
-    public Trainer findTrainerByUsername(String username){
-//        Optional<User> maybeUser = userRepository.findUserByUsername(username);
-//        if(maybeUser.isEmpty()){
-//            throw new UserNotFoundException("Trainer is not found!");
-//        }
+    public Trainer findByUsername(String username){
 
         Optional<Trainer> maybeTrainer = trainerRepository.findByUsername(username);
         if (maybeTrainer.isEmpty()) {
@@ -33,8 +26,8 @@ public class TrainerService {
         return maybeTrainer.get();
     }
 
-    public Trainer updateTrainer(Trainer modifiedTrainer) {
-        Trainer trainer = findTrainerByUsername(modifiedTrainer.getUsername());
+    public Trainer update(Trainer modifiedTrainer) {
+        Trainer trainer = findByUsername(modifiedTrainer.getUsername());
         modifiedTrainer.setId(trainer.getId());
         return trainerRepository.save(modifiedTrainer);
     }
