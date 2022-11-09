@@ -1,0 +1,16 @@
+.cardContent{
+    background-color: #ebe1f2;
+}
+
+.questionTitle{
+    font-size: 20px;
+    text-align-last: left;
+}
+
+.questionString{
+    font-size: 15px;
+    text-align-last: left;
+}
+.headerTest{
+    color: red;
+}
