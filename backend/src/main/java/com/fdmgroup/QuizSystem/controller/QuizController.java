@@ -13,7 +13,7 @@ import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.service.QuizService;
 
 @RestController
-@RequestMapping("/quizzes")  //http://localhost:8088/QuizSystem/quizzes
+@RequestMapping("/api/quizzes")  //http://localhost:8088/QuizSystem/api/quizzes
 public class QuizController {
 	
 	@Autowired
