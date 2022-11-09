@@ -7,7 +7,7 @@ function NavigationBar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand >Quiz App</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">Quiz App</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -18,7 +18,7 @@ function NavigationBar() {
               <NavDropdown.Item as={Link} to="/createQuiz">
                 Create Quiz
               </NavDropdown.Item>
-              
+              <NavDropdown.Item as={Link} to="/autoGenerate">Auto Generate Quiz</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>

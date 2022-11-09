@@ -13,6 +13,8 @@ import Logout from "./pages/Logout";
 import CreateQuestion from "./pages/CreateQuestion";
 import CreateQuiz from "./pages/CreateQuiz";
 import Questions from "./pages/Questions";
+import ViewQuestions from "./pages/ViewQuestions";
+import AutogenerateQuiz from "./pages/AutoGenerateQuiz";
 function App() {
   return (
     <div className="App">
@@ -28,6 +30,8 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="quiz" element={<Quiz />} />
           <Route path="questions" element={<Questions />} />
+          <Route path="viewQuestions" element={<ViewQuestions />} />
+          <Route path="autoGenerate" element={<AutogenerateQuiz />} />
         </Routes>
       </BrowserRouter>
     </div>
