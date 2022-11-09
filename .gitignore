@@ -4,5 +4,6 @@
 *.iml
 *.ipr
 
+backend/src/main/resources/application.properties
 ### MAC
 .DS_Store
