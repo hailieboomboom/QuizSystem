@@ -10,5 +10,5 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @ToString
 public class Sales extends User{
-    private Role role = Role.AUTHORISED_SALES;
+    private Role role = Role.UNAUTHORISED_SALES;
 }
