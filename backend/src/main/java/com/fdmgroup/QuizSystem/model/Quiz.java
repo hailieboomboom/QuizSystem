@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -24,19 +25,26 @@ import lombok.Setter;
 public class Quiz {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	private QuizCategory quizCategory;
 
 	@ManyToMany
+	@JoinTable(name="QUIZ_QUESTION", 
+		    joinColumns=@JoinColumn(name="quiz_id"),
+		    inverseJoinColumns= @JoinColumn(name="question_id"))
 	private List<Question> questions;
+	
+	@ManyToOne
+	private User creator;
 
 
 	public Quiz(QuizCategory quizCategory, List<Question> questions) {
 		super();
 		this.quizCategory = quizCategory;
 		this.questions = questions; // Constructor of owning side include inverse side
+//		this.creator = creator; 
 	}
 
 	@Override
@@ -45,17 +53,6 @@ public class Quiz {
 	}
 
 }
-
-//@ManyToMany
-//@JoinTable(name="quiz_question", 
-//	    joinColumns=@JoinColumn(name="quiz_id"),
-//	    inverseJoinColumns= @JoinColumn(name="question_id"))
-//private List<Question> questions;
-
-
-//@ManyToOne
-//@Column(name="created_by_id")
-//private User user;
 
 
 

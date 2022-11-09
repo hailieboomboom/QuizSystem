@@ -19,7 +19,7 @@ public class QuizService {
 	@Autowired
 	private QuizRepository quizRepository;
 
-	public Quiz saveQuiz(Quiz quizToSave) {
+	public Quiz save(Quiz quizToSave) {
 		return quizRepository.save(quizToSave);
 	}
 
