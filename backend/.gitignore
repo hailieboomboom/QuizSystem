@@ -33,4 +33,8 @@ build/
 .vscode/
 
 
+<<<<<<< HEAD
 application.properties
+=======
+application.properties
+>>>>>>> origin/backend-user
