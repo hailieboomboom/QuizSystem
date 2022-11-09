@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import CreateQuestion from "./pages/CreateQuestion";
 import CreateQuiz from "./pages/CreateQuiz"
+import Questions from "./pages/Questions"
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="logout" element={<Logout/>} />
                 <Route path="register" element={<Register/>} />
                 <Route path="quiz" element={<Quiz/>} />
+                <Route path="questions" element={<Questions/>} />
             </Routes>
         </BrowserRouter>
 
