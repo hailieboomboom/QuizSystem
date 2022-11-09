@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/**").authenticated()
                 .antMatchers( "/auth/**").permitAll()
                 .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -44,9 +44,12 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    public static final String UNAUTHORISED = "Unauthorised";
-//    public static final String  = "Unauthorised";
-//    public static final String UNAUTHORISED = "Unauthorised";
-//    public static final String UNAUTHORISED = "Unauthorised";
+//    public static final String UNAUTHORISED = "UNAUTHORISED";
+//    public static final String TRAINERS = "TRAINERS";
+//    public static final String SALES = "SALES";
+//    public static final String TRAINING = "TRAINING";
+//    public static final String POND = "POND";
+//    public static final String BEACHED = "BEACHED";
+//    public static final String ABSENT = "ABSENT";
 
 }
