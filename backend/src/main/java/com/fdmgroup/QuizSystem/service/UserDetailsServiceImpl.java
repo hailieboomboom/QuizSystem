@@ -26,7 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userService.getUserByUsername(username);
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
         return mapUserToCustomUserDetails(user, authorities);
-
     }
 
     /**
