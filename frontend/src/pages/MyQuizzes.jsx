@@ -99,4 +99,4 @@ const MyQuizzes = () => {
     )
 };
 
-export default AttemptQuizzes;
+export default MyQuizzes;
