@@ -15,6 +15,7 @@ import CreateQuiz from "./pages/CreateQuiz";
 import Questions from "./pages/Questions";
 import ViewQuestions from "./pages/ViewQuestions";
 import AutogenerateQuiz from "./pages/AutoGenerateQuiz";
+import EditQuestion from "./pages/EditQuestion";
 
 import {
   RecoilRoot,
@@ -42,6 +43,7 @@ function App() {
           <Route path="questions" element={<Questions />} />
           <Route path="viewQuestions" element={<ViewQuestions />} />
           <Route path="autoGenerate" element={<AutogenerateQuiz />} />
+          <Route path="editQuestion" element={<EditQuestion/>} />
         </Routes>
       </BrowserRouter>
       </RecoilRoot>

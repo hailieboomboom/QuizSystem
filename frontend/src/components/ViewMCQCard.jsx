@@ -13,13 +13,11 @@ const bull = (
         component="span"
         sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
     >
-        •
     </Box>
 );
 
 export default function ViewMCQCard() {
     return (
-        <div className={"card"}>
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
                     <div className={"questionCardContent"}>
@@ -49,7 +47,6 @@ export default function ViewMCQCard() {
                     <Button size="small">Show Answer</Button>
                 </CardActions>
             </Card>
-        </div>
 
     );
 }
