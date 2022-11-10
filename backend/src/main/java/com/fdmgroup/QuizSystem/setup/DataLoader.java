@@ -129,14 +129,24 @@ public class DataLoader implements ApplicationRunner {
 
         ////////// Load Quizzes ////////////
 
-		Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)));
-		Quiz interviewQuiz1 = new Quiz(QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)));
-		
-		courseQuiz1.setCreator(trainer);
-		interviewQuiz1.setCreator(sales);
-		
+		Quiz courseQuiz1 = new Quiz("course quiz 1", QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)), trainer);
+		Quiz interviewQuiz1 = new Quiz("interview quiz 1", QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)), sales);
 		quizRepository.save(courseQuiz1);
 		quizRepository.save(interviewQuiz1);
+
+//		// let question know about quiz
+//		mcq1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1,interviewQuiz1 )));
+//		sa1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1 )));
+//		questionService.save(mcq1);
+//		questionService.save(sa1);
+		
+//		// let user know about quiz
+//		trainer.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1)));
+//		sales.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1)));
+//		userService.save(trainer);
+//		userService.save(sales);
+		
+
 		log.info("--------------- All users ------------------------");
 		log.info(quizService.getAllQuizzes());
 

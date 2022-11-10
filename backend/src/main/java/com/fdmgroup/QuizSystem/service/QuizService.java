@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
+import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +35,7 @@ public class QuizService {
 
 	public QuizDto getQuizDto(Quiz quiz) {
 		QuizDto quizDto = new QuizDto();
+		quizDto.setName(quiz.getName());
 		quizDto.setQuizCategory(quiz.getQuizCategory());
 		quizDto.setQuestions(quiz.getQuestions());
 		quizDto.setCreatorId(quiz.getCreator().getId());
@@ -52,19 +53,16 @@ public class QuizService {
 		return quizDtos;
 	}
 
-	public void updateQuiz(long id, QuizDto quizDto) throws Exception {
-		
-		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+	public void updateQuiz(long id, QuizDto quizDto){
 		
 		// Check if quiz exists
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if (optionalQuiz.isEmpty()) {
-			// TODO: to fix it
-			// throw new Exception("Quiz not found");
 			 throw new QuizNotFoundException();
 		}
 
-		// Update quiz
 		Quiz quiz = optionalQuiz.get();
+		quiz.setName(quizDto.getName());
 		quiz.setQuizCategory(quizDto.getQuizCategory());
 		quiz.setQuestions(quizDto.getQuestions());
 		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
@@ -72,14 +70,35 @@ public class QuizService {
 	}
 	
 
-	
 	public void deleteQuizById(long id) {
 		
-		if (quizRepository.existsById(id)) {
-			quizRepository.deleteById(id);
-		} else {
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+		if(optionalQuiz.isEmpty()) {
 			throw new QuizNotFoundException();
 		}
+		Quiz managedQuiz = optionalQuiz.get();
+		
+	// TODO is it necessary to do these steps?	
+//		// let user know about quiz removal
+//		User managedUser = managedQuiz.getCreator();
+//		managedUser.removeQuiz(managedQuiz);
+//		userRepo.save(managedUser);
+//		
+//		// let questions know about quiz removal
+//		List<Question> managedQuestions = managedQuiz.getQuestions();
+//		for(Question managedQuestion: managedQuestions) {
+//			managedQuestion.removeQuiz(managedQuiz);
+//			questionRepository.save(managedQuestion);
+//		}
+		
+		quizRepository.delete(managedQuiz);
+		
+		// TODO or can it be simplify in this way?
+//		if (quizRepository.existsById(id)) {
+//			quizRepository.deleteById(id);
+//		} else {
+//			throw new QuizNotFoundException();
+//		}
 	}
 	
 

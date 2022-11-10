@@ -23,7 +23,6 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-//@RequestMapping("/api/quizzes") // http://localhost:8088/QuizSystem/api/quizzes
 public class QuizController {
 
 	private static final String SUCCESS_PRODUCT_HAS_BEEN_DELETED = "Product has been deleted";
@@ -37,14 +36,14 @@ public class QuizController {
 	@PostMapping("/api/quizzes")
 	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizDto quizDto) {
 		
-		// TODO do we need this? Don't think so
-		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
-
-		// check if user exists
-		if (optionalUser.isEmpty()) {
-			return new ResponseEntity<ApiResponse>(new ApiResponse(false, ERROR_USER_DOES_NOT_EXIST),
-					HttpStatus.BAD_REQUEST);
-		}
+//		// TODO do we need this? or do we need to check if the 
+//		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
+//
+//		// check if user exists
+//		if (optionalUser.isEmpty()) {
+//			return new ResponseEntity<ApiResponse>(new ApiResponse(false, ERROR_USER_DOES_NOT_EXIST),
+//					HttpStatus.BAD_REQUEST);
+//		}
 
 		// create quiz in database
 		quizService.createQuiz(quizDto);
@@ -53,15 +52,19 @@ public class QuizController {
 	}
 	
 	@GetMapping("/api/quizzes")
-	public ResponseEntity<List<QuizDto>> getQuizzes() {
+	public ResponseEntity<List<QuizDto>> getAllQuizzes() {
 		List<QuizDto> quizDtos = quizService.getAllQuizzes();
 		return new ResponseEntity<>(quizDtos, HttpStatus.OK);
 	}
 	
-	
+    /**
+     * Get quiz DTO by its id.
+     * @param id Quiz id.
+     * @return   Quiz DTO.
+     */
 	@GetMapping("/api/quizzes/{id}")
 	public ResponseEntity<QuizDto> getQuizById(@PathVariable("id") long id){
-		// TODO defensive coding here or not? what if can't find?
+		
 		QuizDto quizDto = quizService.getQuizById(id);
 		
 		return new ResponseEntity<>(quizDto, HttpStatus.OK);
@@ -76,25 +79,17 @@ public class QuizController {
 //	}
 
 	@PutMapping("/api/quizzes/{id}")
-	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable("id") long id, @RequestBody QuizDto quizDto) throws Exception {
+	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @RequestBody QuizDto quizDto) {
 
-		// TODO do we need this? proa
-		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
-		// check if user exists
-		if (optionalUser.isEmpty()) {
-			return new ResponseEntity<ApiResponse>(new ApiResponse(false, ERROR_USER_DOES_NOT_EXIST),
-					HttpStatus.BAD_REQUEST);
-		}
-		
 		quizService.updateQuiz(id, quizDto);
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_UPDATED), HttpStatus.OK);
 	}
 
 	//TODO to be completed
 	@DeleteMapping
-	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable("id") long quizId) {
+	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable long id) {
 		
-		quizService.deleteQuizById(quizId);
+		quizService.deleteQuizById(id);
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_DELETED), HttpStatus.OK);
 	}
 	

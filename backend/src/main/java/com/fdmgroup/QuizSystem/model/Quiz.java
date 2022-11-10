@@ -2,8 +2,6 @@ package com.fdmgroup.QuizSystem.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -29,33 +26,35 @@ public class Quiz {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	private String name;
 	private QuizCategory quizCategory;
 
 	@ManyToMany
-	@JoinTable(name="quiz_question", 
-		    joinColumns=@JoinColumn(name="quiz_id"),
-		    inverseJoinColumns= @JoinColumn(name="question_id"))
+	@JoinTable(name = "quiz_question", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions;
-	
+
 	@ManyToOne
 	private User creator;
 
-	public Quiz(QuizCategory quizCategory, List<Question> questions) {
+	
+	public Quiz(String name, QuizCategory quizCategory, List<Question> questions, User creator) {
 		super();
+		this.name = name;
 		this.quizCategory = quizCategory;
-		this.questions = questions; // Constructor of owning side includes inverse side
-//		this.creator = creator; 
+		this.questions = questions;
+		this.creator = creator;
+	}
+	
+	public void addQuestion(Question question) {
+		this.questions.add(question);
+	}
+	
+	public void removeQuestion(Question question) {
+		this.questions.remove(question);
 	}
 
-	@Override
-	public String toString() {
-		return "Quiz [id=" + id + ", quizCategory=" + quizCategory + "]";
-	}
-
+	
 }
-
-
 
 // TODO: Need to implement following to other classes
 //// User.java
@@ -63,5 +62,5 @@ public class Quiz {
 //private List<Quiz> createdQuizzes;
 //
 //// Question.java
-//@ManyToMany(mappedBy="questions")
+//@ManyToMany(mappedBy="questions", fetch = FetchType.EAGER?)
 //private List<Quiz> quizzes;
