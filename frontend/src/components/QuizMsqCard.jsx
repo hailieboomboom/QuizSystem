@@ -28,7 +28,7 @@ export default function QuizMsqCard() {
         setChecked([checked[0],checked[1],checked[2],event.target.checked,]);
     };
     return (
-        <Card className={"cardContent"} sx={{minWidth: 500, maxWidth: 725}}>
+        <Card className={"cardContent"} sx={{width: 700}}>
             <CardContent >
                 <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
                     Question:
