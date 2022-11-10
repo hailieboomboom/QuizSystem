@@ -42,18 +42,6 @@ export default function QuizMcqCard(props) {
                     {/*<FormControlLabel value="Option 4" control={<Radio/>} label="Option 4"/>*/}
                 </RadioGroup>
             </CardContent>
-            <CardActions>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-end"
-                >
-                    <Grid item/>
-                    <Button size="small">Submit</Button>
-                </Grid>
-
-            </CardActions>
         </Card>
 
 
