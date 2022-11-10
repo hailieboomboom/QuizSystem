@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import com.fdmgroup.QuizSystem.service.QuizService;

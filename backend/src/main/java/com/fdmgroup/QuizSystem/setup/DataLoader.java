@@ -1,5 +1,4 @@
 package com.fdmgroup.QuizSystem.setup;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,86 +32,102 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 
 @Component
 public class DataLoader implements ApplicationRunner {
-	@Autowired
-	private TrainerService trainerService;
-	@Autowired
-	private SalesService salesService;
-	private Log log = LogFactory.getLog(DataLoader.class);
+     @Autowired
+    private TrainerService trainerService;
+    @Autowired
+    private SalesService salesService;
+    private Log log = LogFactory.getLog(DataLoader.class);
 
-	@Autowired
-	private QuestionService questionService;
+    @Autowired
+    private QuestionService questionService;
 
-	@Autowired
-	private QuizService quizService;
+    @Autowired
+    private QuizService quizService;
 
-	@Autowired
-	private MultipleChoiceOptionService mcoService;
+    @Autowired
+    private MultipleChoiceOptionService mcoService;
 
-	@Autowired
-	private TagService tagService;
-
+    @Autowired
+    private TagService tagService;
+    
 	@Autowired
 	private QuizRepository quizRepository;
+  
 
-	@Override
-	@Transactional
-	@Modifying
-	public void run(ApplicationArguments args) throws Exception {
+    @Override
+    @Transactional
+    @Modifying
+    public void run(ApplicationArguments args) throws Exception { 
+        
+        ////////// Load Users ////////////
+        Trainer trainer = new Trainer();
+        trainer.setUsername("Jason");
+        trainer.setPassword("123");
+        trainer.setEmail("123@gmail.com");
+        trainer.setFirstname("JHJ");
+        trainer.setLastname("Liu");
+        trainer.setRole(Role.AUTHORISED_TRAINER);
+        trainerService.save(trainer);
+        System.out.println(trainerService.findByUsername("Jason"));
+        
+        Sales sales = new Sales();
+        sales.setUsername("Yutta");
+        sales.setPassword("321");
+        sales.setEmail("321@gmail.com");
+        sales.setFirstname("Yutta");
+        sales.setLastname("Karima");
+        sales.setRole(Role.AUTHORISED_SALES);
+        salesService.save(sales);
+        System.out.println(salesService.findByUsername("Yutta"));
+        
+        log.info("Finished setup");
 
-		////////// Load Users ////////////
-		Trainer trainer = new Trainer();
-		trainer.setUsername("Jason");
-		trainer.setPassword("123");
-		trainer.setEmail("123@gmail.com");
-		trainer.setFirstname("JHJ");
-		trainer.setLastname("Liu");
-		trainer.setRole(Role.AUTHORISED_TRAINER);
-		trainerService.save(trainer);
-		System.out.println(trainerService.findByUsername("Jason"));
 
-		Sales sales = new Sales();
-		sales.setUsername("Yutta");
-		sales.setPassword("321");
-		sales.setEmail("321@gmail.com");
-		sales.setFirstname("Yutta");
-		sales.setLastname("Karima");
-		sales.setRole(Role.AUTHORISED_SALES);
-		salesService.save(sales);
-		System.out.println(salesService.findByUsername("Yutta"));
+        ////////// Load Questions ////////////
 
-		log.info("Finished setup");
+        MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
+        mcq1.setQuestionDetails("test mcq1");
+        MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
+        MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
+        MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
+        mcq1.setCreator(sales);
 
-		////////// Load Questions ////////////
+        ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
+        sa1.setQuestionDetails("what is the best colour");
+        sa1.setCorrectAnswer("green is the best");
+        sa1.setCreator(trainer);
+        
+        ShortAnswerQuestion sa2 = new ShortAnswerQuestion();
+        sa2.setQuestionDetails("who is the best leader");
+        sa2.setCorrectAnswer("bts");
+        sa2.setCreator(trainer);
 
-		MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
-		mcq1.setQuestionDetails("test mcq1");
-		MultipleChoiceOption mco1 = new MultipleChoiceOption("op1", true, mcq1);
-		MultipleChoiceOption mco2 = new MultipleChoiceOption("op2", false, mcq1);
-		MultipleChoiceOption mco3 = new MultipleChoiceOption("op3", false, mcq1);
+        Tag tag1 = new Tag();
+        Tag tag2 = new Tag();
+        tag1.setTagName("course");
+        tag2.setTagName("interview");
+        
+        tag1.addOneQuestion(mcq1);
+        tag1.addOneQuestion(sa1);
+        tag1.addOneQuestion(sa2);
+        tag2.addOneQuestion(sa1);
 
-		ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
-		sa1.setQuestionDetails("short answer");
-		sa1.setCorrectAnswer("test answer");
+        mcq1.addOneTag(tag1);
+        sa1.addOneTag(tag2);
+        sa1.addOneTag(tag1);
+        sa2.addOneTag(tag1);
 
-		Tag tag1 = new Tag();
-		Tag tag2 = new Tag();
-		tag1.setTagName("course");
-		tag2.setTagName("interview");
+        tagService.save(tag1);
+        tagService.save(tag2);
 
-		mcq1.addOneTag(tag1);
-		sa1.addOneTag(tag2);
-		sa1.addOneTag(tag1);
+        questionService.save(mcq1);
+        questionService.save(sa1);
+        questionService.save(sa2);
+        mcoService.save(mco1);
+        mcoService.save(mco2);
+        mcoService.save(mco3);
 
-		tagService.save(tag1);
-		tagService.save(tag2);
-
-		questionService.save(mcq1);
-		questionService.save(sa1);
-		mcoService.save(mco1);
-		mcoService.save(mco2);
-		mcoService.save(mco3);
-
-		////////// Load Quizzes ////////////
+        ////////// Load Quizzes ////////////
 
 		Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)));
 		Quiz interviewQuiz1 = new Quiz(QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)));
@@ -125,8 +140,8 @@ public class DataLoader implements ApplicationRunner {
 		log.info("--------------- All users ------------------------");
 		log.info(quizService.getAllQuizzes());
 
-		log.info("Finished setup");
-		log.info("http://localhost:8088/QuizSystem");
-
-	}
+        log.info("Finished setup");
+        log.info("http://localhost:8088/QuizSystem");
+        
+    }
 }
