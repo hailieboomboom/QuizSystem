@@ -18,6 +18,6 @@ public class QuizDto {
 	// should I make the 2 question type into 2 seperate fields like this?
 //	private List<MCQDto> mcqDtos;
 //	private List<SAQDto> saqDtos;
-	private List<Question> questions;
+//	private List<Question> questions;
 
 }

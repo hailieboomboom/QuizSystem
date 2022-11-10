@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
@@ -28,7 +27,7 @@ public class QuizService {
 	public void createQuiz(QuizDto quizDto) {
 		Quiz quizEntity = new Quiz();
 		quizEntity.setQuizCategory(quizDto.getQuizCategory());
-		quizEntity.setQuestions(quizDto.getQuestions());
+//		quizEntity.setQuestions(quizDto.getQuestions());
 		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
 		quizRepository.save(quizEntity);
 	}
@@ -37,7 +36,7 @@ public class QuizService {
 		QuizDto quizDto = new QuizDto();
 		quizDto.setName(quiz.getName());
 		quizDto.setQuizCategory(quiz.getQuizCategory());
-		quizDto.setQuestions(quiz.getQuestions());
+//		quizDto.setQuestions(quiz.getQuestions());
 		quizDto.setCreatorId(quiz.getCreator().getId());
 		return quizDto;
 	}
@@ -50,6 +49,7 @@ public class QuizService {
 		for (Quiz quiz : allQuizzes) {
 			quizDtos.add(getQuizDto(quiz));
 		}
+		
 		return quizDtos;
 	}
 
@@ -64,7 +64,7 @@ public class QuizService {
 		Quiz quiz = optionalQuiz.get();
 		quiz.setName(quizDto.getName());
 		quiz.setQuizCategory(quizDto.getQuizCategory());
-		quiz.setQuestions(quizDto.getQuestions());
+//		quiz.setQuestions(quizDto.getQuestions());
 		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
 		quizRepository.save(quiz);
 	}

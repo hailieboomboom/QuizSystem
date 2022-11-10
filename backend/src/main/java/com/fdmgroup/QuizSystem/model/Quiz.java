@@ -3,6 +3,7 @@ package com.fdmgroup.QuizSystem.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +32,9 @@ public class Quiz {
 	private String name;
 	private QuizCategory quizCategory;
 
+//	@ManyToMany(fetch = FetchType.EAGER)
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(name = "quiz_question", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions;
 
