@@ -10,7 +10,7 @@ import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
 import com.fdmgroup.QuizSystem.service.UserService;
 import com.fdmgroup.QuizSystem.util.TokenProvider;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class AuthController {
      * @return             JWT token
      */
 
-    @Operation(summary = "log in using username and password")
+    @ApiOperation(value = "log in using username and password")
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest){
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
@@ -55,7 +55,7 @@ public class AuthController {
      * @param signUpRequest Object contains username, email and password.
      * @return              Token String.
      */
-    @Operation(summary = "sign up using username, email and password")
+    @ApiOperation(value = "sign up using username, email and password")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
     public AuthResponse signUpStudent(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -82,7 +82,7 @@ public class AuthController {
      * @param password Password
      * @return         JWT String
      */
-    @Operation(summary = "authenticate user using username and password, returns token")
+    @ApiOperation(value = "authenticate user using username and password, returns token")
     protected String authenticateAndGetToken(String username, String password) {
         // Pass UsernamePasswordAuthenticationToken to the default AuthenticationProvider which will use the userDetails
         // service to get the user based on username and compare the encrypted password
