@@ -23,8 +23,9 @@ public class QuestionController {
 //		return "Got all the questiones";
 //	}
 //	
-//	@PostMapping
+//	@PostMapping("/{user_id}")
 //	public String createQuestion(@RequestBody Question question) {
+//
 //		return "Created question was called";
 //	}
 //	

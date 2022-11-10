@@ -1,5 +1,4 @@
 package com.fdmgroup.QuizSystem.config;
-
 import com.fdmgroup.QuizSystem.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +32,7 @@ public class WebSecurityConfig {
                 .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
                 .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
                 .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
-                .antMatchers("/create-content-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
+                .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
                 .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll();
@@ -48,13 +47,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    public static final String UNAUTHORISED = "UNAUTHORISED";
-//    public static final String TRAINERS = "TRAINERS";
-//    public static final String SALES = "SALES";
-//    public static final String TRAINING = "TRAINING";
-//    public static final String POND = "POND";
-//    public static final String BEACHED = "BEACHED";
-//    public static final String ABSENT = "ABSENT";
-
 }
