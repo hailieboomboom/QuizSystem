@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 
 const EditQuestion = () => {
 
+    const [question, setQuestion] = useState('');
+
+
     return (
         <React.Fragment>
             <Container>
@@ -20,7 +23,6 @@ const EditQuestion = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
-                            <InputLabel id="demo-simple-select-standard-label">MCQ Question</InputLabel>
                             <TextField
                                 required
                                 id="question"
@@ -34,7 +36,6 @@ const EditQuestion = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
-                            <InputLabel id="demo-simple-select-standard-label">Possible Answer</InputLabel>
                             <TextField
                                 required
                                 id="answer1"
@@ -49,7 +50,6 @@ const EditQuestion = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
-                            <InputLabel id="demo-simple-select-standard-label">Possible Answer</InputLabel>
                             <TextField
                                 required
                                 id="answer2"
@@ -64,7 +64,6 @@ const EditQuestion = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl variant="standard"  fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Possible Answer</InputLabel>
                         <TextField
                             required
                             id="answer3"
@@ -80,7 +79,7 @@ const EditQuestion = () => {
                     <Grid item xs={1}>
 
                         <Button  variant="outlined" as={Link} to="/EditQuestions">
-                            Create
+                            Edit Question
                         </Button>
                     </Grid>
             </Container>

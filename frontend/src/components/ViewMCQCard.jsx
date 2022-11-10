@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import '../styles/ViewQuestionsCard.css';
+import QuestionData from '../data/QuestionData';
+
+import axios from "axios";
 
 const bull = (
     <Box
@@ -16,27 +19,36 @@ const bull = (
     </Box>
 );
 
-export default function ViewMCQCard() {
+
+export default function ViewMCQCard(props) {
+    console.log(QuestionData)
+    const [question, setQuestion] = React.useState([]);
+
+    console.log(question)
+
+    const changeStyle = () => {
+
+    }
+
     return (
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
                     <div className={"questionCardContent"}>
                         <div>
                             <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
-                                Question:
+                                {props.questionCard.question}
                             </Typography>
                             <Typography className={"questionString"} variant="h5" component="div">
-                                Which is the correct implementation class of BeanFactory?
+
+
                             </Typography>
                         </div>
                         <div className={"answerSection"}>
-                            <button>XmlBeanFactory</button>
+                            <button className={"correctAnswer"}>{props.questionCard.correctAnswer}</button>
                             <div className="divider"/>
-                            <button>ClassPathBeanFactory</button>
-                            <div className="divider"/>
-                            <button>FileSystemBeanFactory</button>
-                            <div className="divider"/>
-                            <button>AdvancedBeanFactory</button>
+
+                            {props.questionCard.incorrectAnswers.map((answer) => (<button className={"button"}>{answer}</button>))}
+
                         </div>
                     </div>
 
@@ -44,7 +56,7 @@ export default function ViewMCQCard() {
                 </CardContent>
                 <CardActions>
                     <Button size="small">Edit</Button>
-                    <Button size="small">Show Answer</Button>
+                    <Button onClick={changeStyle} size="small">Show Answer</Button>
                 </CardActions>
             </Card>
 

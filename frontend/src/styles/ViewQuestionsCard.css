@@ -40,7 +40,9 @@
 .answerSection {
     width: 100%;
 }
-
+.correctAnswer{
+    background-color: green;
+}
 .divider{
     width: auto;
     height:5px;
@@ -51,6 +53,7 @@ button {
     width: 100%;
     background-color: #ebe1f2;
     padding: 5px;
+    margin: 5px;
 
 }
 

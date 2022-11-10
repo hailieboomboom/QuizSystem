@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import ViewMCQCard from "../components/ViewMCQCard";
 import '../styles/ViewQuestionsCard.css';
 import Grid from "@mui/material/Grid";
-
+import QuestionData from '../data/QuestionData';
 
 const Questions = () => {
     return (
@@ -18,18 +18,12 @@ const Questions = () => {
 
             <div><h1>Multiple Choice Questions</h1>
             <Typography className="headerTest" >test</Typography>
-               <Grid item>
-                   <ViewMCQCard/>
-               </Grid>
-                <Grid item>
-                    <ViewMCQCard/>
-                </Grid>
-                <Grid item>
-                    <ViewMCQCard/>
-                </Grid>
-                <Grid item>
-                    <ViewMCQCard/>
-                </Grid>
+                {
+                    QuestionData.map((question) => (<ViewMCQCard questionCard={question}/>))
+
+                }
+
+
 
             </div>
         </Grid>
