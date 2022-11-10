@@ -5,23 +5,26 @@ import QuizMsqCard from "../components/QuizMsqCard";
 import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
+import { useRecoilState } from 'recoil';
+import { attemptQuizState } from '../recoil/Atoms'
 
 
 const Quiz = () => {
 
-    const [quiz, setQuiz] = React.useState("");
-
-    React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuiz(response.data);
-
-
-        });
-    }, []);
+    // const [quiz, setQuiz] = React.useState("");
+    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
     console.log(quiz);
+    console.log("asb");
 
-
-    if (!quiz) return null;
+    // React.useEffect(() => {
+    //     axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
+    //         setQuiz(response.data);
+    //     });
+    // }, []);
+    // console.log(quiz);
+    //
+    //
+    // if (!quiz) return null;
     return (
         <div>
             <h1>Quiz</h1>
@@ -54,6 +57,7 @@ const Quiz = () => {
                 <Grid item>
                     <QuizMsqCard/>
                 </Grid>
+                
                 {/*<Grid item>*/}
                 {/*    <QuizMcqCard/>*/}
                 {/*</Grid>*/}
