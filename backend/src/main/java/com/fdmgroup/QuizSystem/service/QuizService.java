@@ -25,8 +25,7 @@ public class QuizService {
 	private QuizRepository quizRepository;
 	private UserRepository userRepository;
 
-	public void createQuiz(QuizDto quizDto){
-
+	public void createQuiz(QuizDto quizDto) {
 		Quiz quizEntity = new Quiz();
 		quizEntity.setQuizCategory(quizDto.getQuizCategory());
 		quizEntity.setQuestions(quizDto.getQuestions());
@@ -34,13 +33,24 @@ public class QuizService {
 		quizRepository.save(quizEntity);
 	}
 
-	public QuizDto getQuizDto(Quiz quiz){
+	public QuizDto getQuizDto(Quiz quiz) {
 		QuizDto quizDto = new QuizDto();
 		quizDto.setQuizCategory(quiz.getQuizCategory());
 		quizDto.setQuestions(quiz.getQuestions());
 		quizDto.setCreatorId(quiz.getCreator().getId());
 		return quizDto;
 	}
+
+	public List<QuizDto> getAllQuizzes() {
+		List<Quiz> allQuizzes = quizRepository.findAll();
+		List<QuizDto> quizDtos = new ArrayList<>();
+		for (Quiz quiz : allQuizzes) {
+
+			quizDtos.add(getQuizDto(quiz));
+		}
+		return quizDtos;
+	}
+
 	public Quiz updateQuiz(long id, Quiz quizToUpdate) {
 		Optional<Quiz> quizInRepo = quizRepository.findById(id);
 		if (quizInRepo.isEmpty()) {
@@ -61,14 +71,6 @@ public class QuizService {
 		}
 	}
 
-	public List<QuizDto> getAllQuizzes() {
-		List<Quiz> allQuizzes = quizRepository.findAll();
-		List<QuizDto> quizDtos = new ArrayList<>();
-		for(Quiz quiz: allQuizzes){
-			quizDtos.add(quiz);
-		}
-	}
-
 	public Quiz getQuizById(long id) {
 
 		Optional<Quiz> quizInRepo = quizRepository.findById(id);
@@ -78,11 +80,9 @@ public class QuizService {
 		return quizInRepo.get();
 	}
 
-
-	
 	public List<Quiz> getQuizzesByQuizCategory(QuizCategory quizCategory) {
 		return quizRepository.findByQuizCategory(quizCategory);
-		
+
 	}
 
 //	public Quiz getQuizByQuizCategory(QuizCategory quizCategory) {
@@ -92,5 +92,5 @@ public class QuizService {
 //	}
 //	return quizInRepo.get();
 //}
-	
+
 }

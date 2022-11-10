@@ -1,12 +1,9 @@
 package com.fdmgroup.QuizSystem.service;
-
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
-import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.User;
-import com.fdmgroup.QuizSystem.repository.StudentRepository;
-//import com.fdmgroup.QuizSystem.repository.UserRepository;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -14,6 +11,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -23,14 +21,14 @@ public class UserService {
      * @param id User id.
      * @return   User.
      */
-//    public User getUserById(long id){
-//
-//        Optional<User> maybeUser = studentRepository.findById(id);
-//        if(maybeUser.isEmpty()){
-//            throw new UserNotFoundException();
-//        }
-//        return maybeUser.get();
-//    }
+    public User getUserById(long id){
+
+        Optional<User> maybeUser = userRepository.findById(id);
+        if(maybeUser.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        return maybeUser.get();
+    }
 
     /**
      * Get user by the name.
@@ -96,14 +94,4 @@ public class UserService {
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
-//
-//    /**
-//     * Persist user to the database.
-//     * @param user User.
-//     * @return     Persisted user.
-//     */
-//    public User save(User user) {
-//        return userRepository.save(user);
-//    }
-
 }

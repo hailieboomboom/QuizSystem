@@ -1,7 +1,7 @@
 package com.fdmgroup.QuizSystem.setup;
-
 import javax.transaction.Transactional;
 
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
@@ -13,19 +13,14 @@ import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.QuizService;
 import com.fdmgroup.QuizSystem.service.TagService;
-
 import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import javax.transaction.Transactional;
-
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +35,8 @@ public class DataLoader implements ApplicationRunner {
     private TrainerService trainerService;
     @Autowired
     private SalesService salesService;
-
     private Log log = LogFactory.getLog(DataLoader.class);
-    
+
     @Autowired
     private QuestionService questionService;
 
@@ -112,16 +106,16 @@ public class DataLoader implements ApplicationRunner {
         questionService.save(mcq1);
         questionService.save(sa1);
         mcoService.save(mco1);
-        mcoService.save(mco2);
+        mcoService.save(mco2); 
         mcoService.save(mco3);
 
         ////////// Load Quizzes ////////////
 
 
-        Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
-        quizService.save(courseQuiz1);
-        log.info("--------------- All users ------------------------");
-        log.info(quizService.getAllQuizzes());
+//        QuizDto courseQuiz1 = new QuizDto(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)), 1);
+//        quizService.createQuiz(courseQuiz1);
+//        log.info("--------------- All users ------------------------");
+//        log.info(quizService.getAllQuizzes());
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");
