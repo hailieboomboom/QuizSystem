@@ -40,14 +40,15 @@ const MyQuizzes = () => {
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
+
         >
             <Grid item>
-                <Typography variant="h2" gutterBottom>
+                <Typography variant="h4" gutterBottom>
                     Example 1 : You have not created any quiz. Click below to create.
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h2" gutterBottom>
+                <Typography variant="h4" gutterBottom>
                     Example 2:Available Quizzes
                 </Typography>
             </Grid>
@@ -73,12 +74,25 @@ const MyQuizzes = () => {
                                         This is A Demo Quiz
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
-                                            Edit
-                                        </Button>
-                                        <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
-                                            Remove
-                                        </Button>
+                                        <Grid
+                                            item
+                                            container
+                                            direction="row"
+                                            justifyContent="flex-end"
+                                            alignItems="flex-start"
+                                            spacing={1}
+                                        >
+                                            <Grid item>
+                                                <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                                    Edit
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                                    Remove
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
                                     </TableCell>
                                     {/*<TableCell align="right">{row.fat}</TableCell>*/}
                                     {/*<TableCell align="right">{row.carbs}</TableCell>*/}
@@ -90,8 +104,8 @@ const MyQuizzes = () => {
                 </TableContainer>
             </Grid>
 
-            <Grid item>
-                <Button color="success" variant="outlined" size="large">Create Quiz</Button>
+            <Grid item sx={{ width:650 }}>
+                <Button fullWidth color="success" variant="outlined" size="large">Create Quiz</Button>
             </Grid>
 
         </Grid>
