@@ -21,14 +21,14 @@ public class UserService {
      * @param id User id.
      * @return   User.
      */
-//    public User getUserById(long id){
-//
-//        Optional<User> maybeUser = studentRepository.findById(id);
-//        if(maybeUser.isEmpty()){
-//            throw new UserNotFoundException();
-//        }
-//        return maybeUser.get();
-//    }
+    public User getUserById(long id){
+
+        Optional<User> maybeUser = userRepository.findById(id);
+        if(maybeUser.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        return maybeUser.get();
+    }
 
     /**
      * Get user by the name.
