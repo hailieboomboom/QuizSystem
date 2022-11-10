@@ -7,7 +7,13 @@ function NavigationBar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand as={Link} to="/">Quiz App</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/"><a className="navbar-brand" href="#">
+          <img src="https://surveymonkey-assets.s3.amazonaws.com/survey/182409455/e1ca79ba-8544-401a-b369-7cd97429a630.png" width="84" height="50"
+               className="d-inline-block align-content-center" alt=""/>
+              
+    Quizz App
+        </a>
+          </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
