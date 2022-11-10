@@ -26,7 +26,7 @@ export default function QuizShortAnswerCard() {
                 <Typography className={"questionString"} variant="h5" component="div">
                     Insert Question here
                 </Typography>
-                <TextField  fullWidth id="standard-basic" label="Answer" variant="standard" onChange={onChange} />
+                <TextField  fullWidth id="standard-basic" label="Answer" variant="standard"/>
             </CardContent>
             <CardActions>
                 <Grid

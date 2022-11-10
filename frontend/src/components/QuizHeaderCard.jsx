@@ -14,7 +14,7 @@ export default function QuizShortAnswerCard() {
         <Card className={"cardContent"} sx={{width: 700}}>
             <CardContent>
                 <Typography variant="h3" color="text.secondary" gutterBottom>
-                    Quiz: {text}
+                    Quiz:
                 </Typography>
                 <Typography className={"quizTitle"} color="text.secondary" gutterBottom>
                     Description:
