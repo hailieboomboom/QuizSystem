@@ -3,26 +3,19 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
 import { useState } from 'react';
 import { Container } from '@mui/material';
 import { Link } from "react-router-dom";
 
 const EditQuestion = () => {
-    const [category, setCategory] = useState('');
-    const [difficulty, setDifficulty] = useState('');
-    const [type, setType] = useState('');
-
 
     return (
         <React.Fragment>
             <Container>
                 <Typography variant="h6" gutterBottom>
-                    Create Quiz
+                    Edit Question
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -96,4 +89,4 @@ const EditQuestion = () => {
     )
 }
 
-export default CreateQuiz
+export default EditQuestion
