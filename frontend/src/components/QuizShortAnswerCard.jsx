@@ -28,10 +28,6 @@ export default function QuizShortAnswerCard() {
                 </Typography>
                 <TextField  fullWidth id="standard-basic" label="Answer" variant="standard"/>
             </CardContent>
-            <CardActions>
-
-
-            </CardActions>
         </Card>
 
 
