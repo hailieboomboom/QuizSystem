@@ -41,56 +41,74 @@ public class QuizService {
 		return quizDto;
 	}
 
+	
 	public List<QuizDto> getAllQuizzes() {
 		List<Quiz> allQuizzes = quizRepository.findAll();
+		
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (Quiz quiz : allQuizzes) {
-
 			quizDtos.add(getQuizDto(quiz));
 		}
 		return quizDtos;
 	}
 
-	public Quiz updateQuiz(long id, Quiz quizToUpdate) {
-		Optional<Quiz> quizInRepo = quizRepository.findById(id);
-		if (quizInRepo.isEmpty()) {
-			throw new QuizNotFoundException();
+	public void updateQuiz(long id, QuizDto quizDto) throws Exception {
+		
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+		
+		// Check if quiz exists
+		if (optionalQuiz.isEmpty()) {
+			// TODO: to fix it
+			// throw new Exception("Quiz not found");
+			 throw new QuizNotFoundException();
 		}
 
-		// Update quiz with new attributes
-		Quiz managedQuiz = quizInRepo.get();
-		managedQuiz.setQuizCategory(quizToUpdate.getQuizCategory());
-		return managedQuiz;
+		// Update quiz
+		Quiz quiz = optionalQuiz.get();
+		quiz.setQuizCategory(quizDto.getQuizCategory());
+		quiz.setQuestions(quizDto.getQuestions());
+		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quizRepository.save(quiz);
 	}
+	
 
+	
 	public void deleteQuizById(long id) {
+		
 		if (quizRepository.existsById(id)) {
 			quizRepository.deleteById(id);
 		} else {
 			throw new QuizNotFoundException();
 		}
 	}
+	
 
-	public Quiz getQuizById(long id) {
+	public QuizDto getQuizById(long id) {
 
-		Optional<Quiz> quizInRepo = quizRepository.findById(id);
-		if (quizInRepo.isEmpty()) {
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+		if (optionalQuiz.isEmpty()) {
 			throw new QuizNotFoundException();
 		}
-		return quizInRepo.get();
+		return getQuizDto(optionalQuiz.get());
 	}
+	
 
 	public List<Quiz> getQuizzesByQuizCategory(QuizCategory quizCategory) {
 		return quizRepository.findByQuizCategory(quizCategory);
 
 	}
 
-//	public Quiz getQuizByQuizCategory(QuizCategory quizCategory) {
-//	Optional<Quiz> quizInRepo = quizRepository.findByQuizCategory(quizCategory);
-//	if (quizInRepo.isEmpty()) {
-//		throw new QuizNotFoundException();
-//	}
-//	return quizInRepo.get();
-//}
+	public List<QuizDto> getContentQuizzes() {
+		
+		List<Quiz> contentQuizzes = quizRepository.findByQuizCategory(QuizCategory.COURSE_QUIZ);
+		
+		List<QuizDto> contentQuizDtos = new ArrayList<>();
+		for (Quiz quiz : contentQuizzes) {
+			contentQuizDtos.add(getQuizDto(quiz));
+		}
+		return contentQuizDtos;
+	}
+	
+
 
 }

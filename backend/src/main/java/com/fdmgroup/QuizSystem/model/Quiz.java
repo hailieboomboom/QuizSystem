@@ -2,6 +2,7 @@ package com.fdmgroup.QuizSystem.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -31,7 +33,7 @@ public class Quiz {
 	private QuizCategory quizCategory;
 
 	@ManyToMany
-	@JoinTable(name="QUIZ_QUESTION", 
+	@JoinTable(name="quiz_question", 
 		    joinColumns=@JoinColumn(name="quiz_id"),
 		    inverseJoinColumns= @JoinColumn(name="question_id"))
 	private List<Question> questions;
@@ -39,11 +41,10 @@ public class Quiz {
 	@ManyToOne
 	private User creator;
 
-
 	public Quiz(QuizCategory quizCategory, List<Question> questions) {
 		super();
 		this.quizCategory = quizCategory;
-		this.questions = questions; // Constructor of owning side include inverse side
+		this.questions = questions; // Constructor of owning side includes inverse side
 //		this.creator = creator; 
 	}
 
@@ -58,8 +59,8 @@ public class Quiz {
 
 // TODO: Need to implement following to other classes
 //// User.java
-//@OneToMany(mappedBy="user")
-//private List<Quiz> quizzes;
+//@OneToMany(mappedBy="creator", cascade=CascadeType.ALL)
+//private List<Quiz> createdQuizzes;
 //
 //// Question.java
 //@ManyToMany(mappedBy="questions")

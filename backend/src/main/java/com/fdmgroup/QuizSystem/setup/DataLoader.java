@@ -1,26 +1,10 @@
 package com.fdmgroup.QuizSystem.setup;
-import javax.transaction.Transactional;
 
-import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.model.Question;
-import com.fdmgroup.QuizSystem.model.Quiz;
-import com.fdmgroup.QuizSystem.model.QuizCategory;
-import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
-import com.fdmgroup.QuizSystem.model.Tag;
-import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
-import com.fdmgroup.QuizSystem.service.QuestionService;
-import com.fdmgroup.QuizSystem.service.QuizService;
-import com.fdmgroup.QuizSystem.service.TagService;
-import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.Sales;
-import com.fdmgroup.QuizSystem.model.Trainer;
-import com.fdmgroup.QuizSystem.service.SalesService;
-import com.fdmgroup.QuizSystem.service.TrainerService;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.transaction.Transactional;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,96 +13,120 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 
+import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
+import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
+import com.fdmgroup.QuizSystem.model.Question;
+import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.model.QuizCategory;
+import com.fdmgroup.QuizSystem.model.Role;
+import com.fdmgroup.QuizSystem.model.Sales;
+import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
+import com.fdmgroup.QuizSystem.model.Tag;
+import com.fdmgroup.QuizSystem.model.Trainer;
+import com.fdmgroup.QuizSystem.repository.QuizRepository;
+import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
+import com.fdmgroup.QuizSystem.service.QuestionService;
+import com.fdmgroup.QuizSystem.service.QuizService;
+import com.fdmgroup.QuizSystem.service.SalesService;
+import com.fdmgroup.QuizSystem.service.TagService;
+import com.fdmgroup.QuizSystem.service.TrainerService;
+
 @Component
 public class DataLoader implements ApplicationRunner {
-     @Autowired
-    private TrainerService trainerService;
-    @Autowired
-    private SalesService salesService;
-    private Log log = LogFactory.getLog(DataLoader.class);
+	@Autowired
+	private TrainerService trainerService;
+	@Autowired
+	private SalesService salesService;
+	private Log log = LogFactory.getLog(DataLoader.class);
 
-    @Autowired
-    private QuestionService questionService;
+	@Autowired
+	private QuestionService questionService;
 
-    @Autowired
-    private QuizService quizService;
+	@Autowired
+	private QuizService quizService;
 
-    @Autowired
-    private MultipleChoiceOptionService mcoService;
+	@Autowired
+	private MultipleChoiceOptionService mcoService;
 
-    @Autowired
-    private TagService tagService;
-  
+	@Autowired
+	private TagService tagService;
 
-    @Override
-    @Transactional
-    @Modifying
-    public void run(ApplicationArguments args) throws Exception { 
-        
-        ////////// Load Users ////////////
-        Trainer trainer = new Trainer();
-        trainer.setUsername("Jason");
-        trainer.setPassword("123");
-        trainer.setEmail("123@gmail.com");
-        trainer.setFirstname("JHJ");
-        trainer.setLastname("Liu");
-        trainer.setRole(Role.AUTHORISED_TRAINER);
-        trainerService.save(trainer);
-        System.out.println(trainerService.findByUsername("Jason"));
-        
-        Sales sales = new Sales();
-        sales.setUsername("Yutta");
-        sales.setPassword("321");
-        sales.setEmail("321@gmail.com");
-        sales.setFirstname("Yutta");
-        sales.setLastname("Karima");
-        sales.setRole(Role.AUTHORISED_SALES);
-        salesService.save(sales);
-        System.out.println(salesService.findByUsername("Yutta"));
-        
-        log.info("Finished setup");
+	@Autowired
+	private QuizRepository quizRepository;
 
+	@Override
+	@Transactional
+	@Modifying
+	public void run(ApplicationArguments args) throws Exception {
 
-        ////////// Load Questions ////////////
+		////////// Load Users ////////////
+		Trainer trainer = new Trainer();
+		trainer.setUsername("Jason");
+		trainer.setPassword("123");
+		trainer.setEmail("123@gmail.com");
+		trainer.setFirstname("JHJ");
+		trainer.setLastname("Liu");
+		trainer.setRole(Role.AUTHORISED_TRAINER);
+		trainerService.save(trainer);
+		System.out.println(trainerService.findByUsername("Jason"));
 
-        MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
-        mcq1.setQuestionDetails("test mcq1");
-        MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
-        MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
-        MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
+		Sales sales = new Sales();
+		sales.setUsername("Yutta");
+		sales.setPassword("321");
+		sales.setEmail("321@gmail.com");
+		sales.setFirstname("Yutta");
+		sales.setLastname("Karima");
+		sales.setRole(Role.AUTHORISED_SALES);
+		salesService.save(sales);
+		System.out.println(salesService.findByUsername("Yutta"));
 
-        ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
-        sa1.setQuestionDetails("short answer");
-        sa1.setCorrectAnswer("test answer");
+		log.info("Finished setup");
 
-        Tag tag1 = new Tag();
-        Tag tag2 = new Tag();
-        tag1.setTagName("course");
-        tag2.setTagName("interview");
+		////////// Load Questions ////////////
 
-        mcq1.addOneTag(tag1);
-        sa1.addOneTag(tag2);
-        sa1.addOneTag(tag1);
+		MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
+		mcq1.setQuestionDetails("test mcq1");
+		MultipleChoiceOption mco1 = new MultipleChoiceOption("op1", true, mcq1);
+		MultipleChoiceOption mco2 = new MultipleChoiceOption("op2", false, mcq1);
+		MultipleChoiceOption mco3 = new MultipleChoiceOption("op3", false, mcq1);
 
-        tagService.save(tag1);
-        tagService.save(tag2);
+		ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
+		sa1.setQuestionDetails("short answer");
+		sa1.setCorrectAnswer("test answer");
 
-        questionService.save(mcq1);
-        questionService.save(sa1);
-        mcoService.save(mco1);
-        mcoService.save(mco2); 
-        mcoService.save(mco3);
+		Tag tag1 = new Tag();
+		Tag tag2 = new Tag();
+		tag1.setTagName("course");
+		tag2.setTagName("interview");
 
-        ////////// Load Quizzes ////////////
+		mcq1.addOneTag(tag1);
+		sa1.addOneTag(tag2);
+		sa1.addOneTag(tag1);
 
+		tagService.save(tag1);
+		tagService.save(tag2);
 
-//        QuizDto courseQuiz1 = new QuizDto(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)), 1);
-//        quizService.createQuiz(courseQuiz1);
-//        log.info("--------------- All users ------------------------");
-//        log.info(quizService.getAllQuizzes());
+		questionService.save(mcq1);
+		questionService.save(sa1);
+		mcoService.save(mco1);
+		mcoService.save(mco2);
+		mcoService.save(mco3);
 
-        log.info("Finished setup");
-        log.info("http://localhost:8088/QuizSystem");
-        
-    }
+		////////// Load Quizzes ////////////
+
+		Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)));
+		Quiz interviewQuiz1 = new Quiz(QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)));
+		
+		courseQuiz1.setCreator(trainer);
+		interviewQuiz1.setCreator(sales);
+		
+		quizRepository.save(courseQuiz1);
+		quizRepository.save(interviewQuiz1);
+		log.info("--------------- All users ------------------------");
+		log.info(quizService.getAllQuizzes());
+
+		log.info("Finished setup");
+		log.info("http://localhost:8088/QuizSystem");
+
+	}
 }
