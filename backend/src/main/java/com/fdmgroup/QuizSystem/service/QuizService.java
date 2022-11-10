@@ -1,9 +1,14 @@
 package com.fdmgroup.QuizSystem.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fdmgroup.QuizSystem.dto.QuizDto;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,16 +18,29 @@ import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class QuizService {
 
-	@Autowired
 	private QuizRepository quizRepository;
+	private UserRepository userRepository;
 
-	public Quiz save(Quiz quizToSave) {
-		return quizRepository.save(quizToSave);
+	public void createQuiz(QuizDto quizDto){
+
+		Quiz quizEntity = new Quiz();
+		quizEntity.setQuizCategory(quizDto.getQuizCategory());
+		quizEntity.setQuestions(quizDto.getQuestions());
+		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quizRepository.save(quizEntity);
 	}
 
+	public QuizDto getQuizDto(Quiz quiz){
+		QuizDto quizDto = new QuizDto();
+		quizDto.setQuizCategory(quiz.getQuizCategory());
+		quizDto.setQuestions(quiz.getQuestions());
+		quizDto.setCreatorId(quiz.getCreator().getId());
+		return quizDto;
+	}
 	public Quiz updateQuiz(long id, Quiz quizToUpdate) {
 		Optional<Quiz> quizInRepo = quizRepository.findById(id);
 		if (quizInRepo.isEmpty()) {
@@ -43,8 +61,12 @@ public class QuizService {
 		}
 	}
 
-	public List<Quiz> getAllQuizzes() {
-		return quizRepository.findAll();
+	public List<QuizDto> getAllQuizzes() {
+		List<Quiz> allQuizzes = quizRepository.findAll();
+		List<QuizDto> quizDtos = new ArrayList<>();
+		for(Quiz quiz: allQuizzes){
+			quizDtos.add(quiz);
+		}
 	}
 
 	public Quiz getQuizById(long id) {
