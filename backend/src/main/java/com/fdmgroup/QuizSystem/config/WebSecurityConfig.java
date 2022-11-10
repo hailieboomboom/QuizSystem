@@ -32,7 +32,7 @@ public class WebSecurityConfig {
                 .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
                 .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
                 .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
-                .antMatchers("/create-content-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
+                .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
                 .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/", "/error", "/csrf", "/QuizSystem/swagger-ui.html", "/QuizSystem/swagger-ui/**").permitAll()
                 .anyRequest().permitAll();

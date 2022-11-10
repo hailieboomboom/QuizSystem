@@ -1,6 +1,9 @@
 package com.fdmgroup.QuizSystem.controller;
 
+import com.fdmgroup.QuizSystem.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +23,9 @@ public class QuestionController {
 //		return "Got all the questiones";
 //	}
 //	
-//	@PostMapping
+//	@PostMapping("/{user_id}")
 //	public String createQuestion(@RequestBody Question question) {
+//
 //		return "Created question was called";
 //	}
 //	

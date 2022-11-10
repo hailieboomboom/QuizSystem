@@ -25,8 +25,9 @@ public class QuizController {
 		return "Get quiz was called";
 	}
 	
-	@PostMapping
+	@PostMapping("/{user_id}")
 	public String createQuiz(@RequestBody QuizInput quizInput) {
+
 		return "Created quiz was called";
 	}
 	

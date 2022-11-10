@@ -1,13 +1,10 @@
 package com.fdmgroup.QuizSystem.setup;
-
 import javax.transaction.Transactional;
-
 import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +16,7 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements ApplicationRunner {
     private TrainerService trainerService;
     private SalesService salesService;
-
     private Log log = LogFactory.getLog(DataLoader.class);
-    
-    
     @Autowired
     public DataLoader(TrainerService trainerService, SalesService salesService) {
         super();
