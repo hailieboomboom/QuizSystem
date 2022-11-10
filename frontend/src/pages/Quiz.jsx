@@ -7,6 +7,7 @@ import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
 import { useRecoilState } from 'recoil';
 import { attemptQuizState } from '../recoil/Atoms'
+import Button from "@mui/material/Button";
 
 
 const Quiz = () => {
@@ -33,6 +34,7 @@ const Quiz = () => {
                 direction="column"
                 justifyContent="flex-start"
                 alignItems="center"
+                spacing={3}
             >
                 <Grid item>
                     <QuizHeaderCard/>
@@ -57,7 +59,19 @@ const Quiz = () => {
                 <Grid item>
                     <QuizMsqCard/>
                 </Grid>
-                
+                <Grid
+                    item
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-end" sx={{width: 700}}
+                >
+                    <Grid item/>
+                    <Grid item>
+                        <Button variant="outlined" size="large">Submit</Button>
+                    </Grid>
+
+                </Grid>
+                <Grid item/>
                 {/*<Grid item>*/}
                 {/*    <QuizMcqCard/>*/}
                 {/*</Grid>*/}
