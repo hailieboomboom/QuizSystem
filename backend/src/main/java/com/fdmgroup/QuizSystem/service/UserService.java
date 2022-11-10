@@ -96,6 +96,11 @@ public class UserService {
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
+
+	public User getUserById(Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 //
 //    /**
 //     * Persist user to the database.
