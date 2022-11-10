@@ -81,7 +81,6 @@ const AttemptQuizzes = () => {
                     </Table>
                 </TableContainer>
             </Grid>
-
         </Grid>
 
     )
