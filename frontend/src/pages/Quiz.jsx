@@ -5,16 +5,9 @@ import QuizMsqCard from "../components/QuizMsqCard";
 import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
-import withStyles from "@mui/material/styles/withStyles";
 
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    }
-});
 
-const Quiz = (props) => {
-    const { classes } = props;
+const Quiz = () => {
 
     const [quiz, setQuiz] = React.useState("");
 
@@ -30,7 +23,7 @@ const Quiz = (props) => {
 
     if (!quiz) return null;
     return (
-        <div className={classes.root}>
+        <div>
             <h1>Quiz</h1>
             <Grid
                 container
@@ -38,7 +31,7 @@ const Quiz = (props) => {
                 justifyContent="flex-start"
                 alignItems="center"
             >
-                <Grid item xs={6}>
+                <Grid item>
                     <QuizHeaderCard/>
                 </Grid>
 
@@ -54,7 +47,6 @@ const Quiz = (props) => {
                         </Grid>
                     )
                 }
-                {/*{listQuestions}*/}
 
                 <Grid item>
                     <QuizShortAnswerCard/>
@@ -72,5 +64,5 @@ const Quiz = (props) => {
     )
 };
 
-export default withStyles(styles)(Quiz);
+export default Quiz;
 

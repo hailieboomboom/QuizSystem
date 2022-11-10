@@ -7,8 +7,16 @@ import Typography from '@mui/material/Typography';
 import "../styles/QuizCardStyle.css"
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import { useRecoilState } from 'recoil';
+import { textState } from '../recoil/Atoms'
 
 export default function QuizShortAnswerCard() {
+
+    // const [text, setText] = useRecoilState(textState);
+    // const onChange = (event) => {
+    //     setText(event.target.value);
+    // };
+
     return (
         <Card className={"cardContent"} sx={{width: 700}}>
             <CardContent>
@@ -18,7 +26,7 @@ export default function QuizShortAnswerCard() {
                 <Typography className={"questionString"} variant="h5" component="div">
                     Insert Question here
                 </Typography>
-                <TextField  fullWidth id="standard-basic" label="Answer" variant="standard" />
+                <TextField  fullWidth id="standard-basic" label="Answer" variant="standard" onChange={onChange} />
             </CardContent>
             <CardActions>
                 <Grid

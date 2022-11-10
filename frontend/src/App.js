@@ -15,9 +15,19 @@ import CreateQuiz from "./pages/CreateQuiz";
 import Questions from "./pages/Questions";
 import ViewQuestions from "./pages/ViewQuestions";
 import AutogenerateQuiz from "./pages/AutoGenerateQuiz";
+
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+
 function App() {
   return (
     <div className="App">
+      <RecoilRoot>
       <BrowserRouter>
         <NavigationBar />
         <Routes>
@@ -34,6 +44,7 @@ function App() {
           <Route path="autoGenerate" element={<AutogenerateQuiz />} />
         </Routes>
       </BrowserRouter>
+      </RecoilRoot>
     </div>
   );
 }
