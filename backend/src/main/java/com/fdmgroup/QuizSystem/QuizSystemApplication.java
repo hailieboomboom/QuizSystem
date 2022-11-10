@@ -8,7 +8,6 @@ public class QuizSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(QuizSystemApplication.class, args);
-		System.out.println("-------------------- http://localhost:8088/QuizSystem  --------------");
 	}
 
 }

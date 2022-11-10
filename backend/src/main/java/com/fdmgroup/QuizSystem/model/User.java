@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -16,14 +15,18 @@ public class User {
     @GeneratedValue
     private long id;
 
+    @Column( unique = true, length = 45, nullable = false)
     private String username;
 
     private String password;
 
+    @Column( unique = true, length = 45, nullable = false)
     private String email;
 
-    private String firstName;
+    private String firstname;
 
-    private String lastName;
+    private String lastname;
+
+    private Role role;
 
 }

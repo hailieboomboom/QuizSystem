@@ -2,9 +2,13 @@ package com.fdmgroup.QuizSystem.service;
 import com.fdmgroup.QuizSystem.dto.CustomUserDetails;
 import com.fdmgroup.QuizSystem.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Concrete class for the UserDetailService.
@@ -20,9 +24,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userService.getUserByUsername(username);
-//        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
-//        return mapUserToCustomUserDetails(user, authorities);
-        return mapUserToCustomUserDetails(user);
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
+        return mapUserToCustomUserDetails(user, authorities);
+
     }
 
     /**
@@ -30,13 +34,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @param user User
      * @return     UserDetails
      */
-    private CustomUserDetails mapUserToCustomUserDetails(User user) {
+    private CustomUserDetails mapUserToCustomUserDetails(User user, List<SimpleGrantedAuthority> authorities) {
 
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.setId(user.getId());
         customUserDetails.setUsername(user.getUsername());
-        customUserDetails.setPassword(user.getPassword());
         customUserDetails.setEmail(user.getEmail());
+        customUserDetails.setAuthorities(authorities);
 
         return customUserDetails;
     }
