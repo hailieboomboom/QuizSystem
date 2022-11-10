@@ -27,7 +27,7 @@ public class StudentService {
         return maybeStudent.get();
     }
 
-    public Student updateRole(String username, Role role) {
+    public Student updateCategory(String username, Role role) {
         Optional<Student> maybeStudent = studentRepository.findStudentByUsername(username);
         if (maybeStudent.isEmpty()) {
             throw new UserNotFoundException("Student is not found!");

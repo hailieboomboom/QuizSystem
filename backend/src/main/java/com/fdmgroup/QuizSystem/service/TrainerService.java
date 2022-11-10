@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,14 @@ public class TrainerService {
         Trainer trainer = findByUsername(username);
         trainer.setRole(Role.AUTHORISED_TRAINER);
         return trainerRepository.save(trainer);
+    }
+
+    public List<Trainer> getAllUnauthorisedTrainers(){
+       return trainerRepository.findAll().stream().filter(trainer -> trainer.getRole() == Role.UNAUTHORISED_TRAINER).toList();
+    }
+
+    public List<Trainer> getAllTrainers(){
+        return trainerRepository.findAll();
     }
 
 

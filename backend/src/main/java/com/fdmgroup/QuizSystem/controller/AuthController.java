@@ -69,7 +69,6 @@ public class AuthController {
         mapSignUpRequestToUserAndSave(signUpRequest);
         log.info("user with role {}, username {} and email {} and password {} is signed up successfully", signUpRequest.getRole(), signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword());
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        log.info(token);
         return new AuthResponse(token);
     }
 
@@ -94,6 +93,7 @@ public class AuthController {
      * @param signUpRequest Signup request object
      * @return              User object
      */
+    @ApiOperation(value = "Map SignUpRequest to specific user based on the role value")
     private void mapSignUpRequestToUserAndSave(SignUpRequest signUpRequest) {
 
         switch (signUpRequest.getRole()) {
@@ -102,8 +102,8 @@ public class AuthController {
                 student.setEmail(signUpRequest.getEmail());
                 student.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 student.setUsername(signUpRequest.getUsername());
-                student.setFirstname(signUpRequest.getFirstname());
-                student.setLastname(signUpRequest.getLastname());
+                student.setFirstName(signUpRequest.getFirstName());
+                student.setLastName(signUpRequest.getLastName());
                 studentService.save(student);
             }
             case "trainer" -> {
@@ -111,8 +111,8 @@ public class AuthController {
                 trainer.setEmail(signUpRequest.getEmail());
                 trainer.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 trainer.setUsername(signUpRequest.getUsername());
-                trainer.setFirstname(signUpRequest.getFirstname());
-                trainer.setLastname(signUpRequest.getLastname());
+                trainer.setFirstName(signUpRequest.getFirstName());
+                trainer.setLastName(signUpRequest.getLastName());
                 trainerService.save(trainer);
             }
             case "sales" -> {
@@ -120,8 +120,8 @@ public class AuthController {
                 sales.setEmail(signUpRequest.getEmail());
                 sales.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 sales.setUsername(signUpRequest.getUsername());
-                sales.setFirstname(signUpRequest.getFirstname());
-                sales.setLastname(signUpRequest.getLastname());
+                sales.setFirstName(signUpRequest.getFirstName());
+                sales.setLastName(signUpRequest.getLastName());
                 salesService.save(sales);
             }
             default -> throw new RoleIsOutOfScopeException();

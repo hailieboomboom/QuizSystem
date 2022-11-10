@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,14 @@ public class SalesService {
     	Sales sales = findByUsername(modifiedSales.getUsername());
     	modifiedSales.setId(sales.getId());
     	return salesRepository.save(modifiedSales);
+    }
+
+    public List<Sales> getAllUnauthorisedSales(){
+        return salesRepository.findAll().stream().filter(sales -> sales.getRole() == Role.UNAUTHORISED_SALES).toList();
+    }
+
+    public List<Sales> getAllSales(){
+        return salesRepository.findAll();
     }
 
     public Sales authoriseSales(String username){
