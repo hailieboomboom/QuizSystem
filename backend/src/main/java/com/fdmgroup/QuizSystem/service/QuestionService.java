@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 
 @Service
@@ -69,7 +70,7 @@ public class QuestionService {
 //    }
 //
 //   
-//    public Question save(Question question) {
-//        return questionRepository.save(question);
-//    }
+    public Question save(Question question) {
+        return questionRepository.save(question);
+    }
 }

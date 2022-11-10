@@ -12,7 +12,7 @@ import com.fdmgroup.QuizSystem.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/questions") // http://localhost:8088/QuestionSystem/questions
+@RequestMapping("/api/questions") // http://localhost:8088/QuestionSystem/api/questions
 public class QuestionController {
 
 	@Autowired

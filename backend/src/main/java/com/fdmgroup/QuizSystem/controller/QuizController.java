@@ -1,6 +1,6 @@
 package com.fdmgroup.QuizSystem.controller;
 
-import com.fdmgroup.QuizSystem.dto.QuizInput;
+import com.fdmgroup.QuizSystem.model.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.service.QuizService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
-@RequestMapping("/quizzes")  //http://localhost:8088/QuizSystem/quizzes
+@AllArgsConstructor
+@RequestMapping("/api/quizzes")  //http://localhost:8088/QuizSystem/api/quizzes
 public class QuizController {
 	
-	@Autowired
 	private QuizService quizService;
 	
 	@GetMapping
@@ -25,10 +27,13 @@ public class QuizController {
 		return "Get quiz was called";
 	}
 	
-	@PostMapping("/{user_id}")
-	public String createQuiz(@RequestBody QuizInput quizInput) {
 
-		return "Created quiz was called";
+	@PostMapping
+	public Quiz createQuiz(@RequestBody Quiz quiz) {
+
+		quizService.save(quiz);
+		 
+		return null;
 	}
 	
 	@PutMapping
