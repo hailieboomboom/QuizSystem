@@ -30,5 +30,17 @@ public class Tag {
     public Tag(String tagName) {
         this.tagName = tagName;
     }
+    
+    public void addOneQuestion(Question question) {
+    	if(tutorials.contains(question) == false) {
+    		this.tutorials.add(question);
+    	}
+    }
+    
+    public void removeOneQuestion(Question question) {
+    	if(tutorials.contains(question)) {
+    		this.tutorials.remove(question);
+    	}
+    }
 
 }
