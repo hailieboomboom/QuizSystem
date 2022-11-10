@@ -26,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userService.getUserByUsername(username);
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
         return mapUserToCustomUserDetails(user, authorities);
+
     }
 
     /**
@@ -38,9 +39,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.setId(user.getId());
         customUserDetails.setUsername(user.getUsername());
-        customUserDetails.setPassword(user.getPassword());
         customUserDetails.setEmail(user.getEmail());
         customUserDetails.setAuthorities(authorities);
+
         return customUserDetails;
     }
 

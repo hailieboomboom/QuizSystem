@@ -32,7 +32,6 @@ public class TokenProvider {
     public String generate(Authentication authentication) {
         // authentication read current authenticated user
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        log.info(String.valueOf(user));
 
         byte[] signingKey = jwtSecret.getBytes();
 
