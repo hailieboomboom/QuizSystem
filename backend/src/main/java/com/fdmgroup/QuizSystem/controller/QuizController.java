@@ -34,7 +34,7 @@ public class QuizController {
 
 	@PostMapping("/api/quizzes")
 	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizRequest quizRequest) {
-		
+
 //		// TODO do we need this? or do we need to check if the 
 //		Optional<User> optionalUser = userRepository.findById(quizRequest.getCreatorId());
 //
@@ -46,32 +46,30 @@ public class QuizController {
 
 		// create quiz in database
 		quizService.createQuiz(quizRequest);
-		
+
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_QUIZ_HAS_BEEN_CREATED),
 				HttpStatus.CREATED);
 	}
-	
+
 //	@GetMapping("/api/quizzes")
 //	public ResponseEntity<List<QuizRequest>> getAllQuizzes() {
 //		List<QuizRequest> quizRequests = quizService.getAllQuizzes();
 //		return new ResponseEntity<>(quizRequests, HttpStatus.OK);
 //	}
-	
+
 	@GetMapping("/api/quizzes")
 	public ResponseEntity<List<QuizResponse>> getAllQuizzes() {
 		List<QuizResponse> quizResponses = quizService.getAllQuizzes();
 		return new ResponseEntity<>(quizResponses, HttpStatus.OK);
 	}
-	
-	
+
 	@GetMapping("/api/quizzes/{id}")
-	public ResponseEntity<QuizResponse> getQuizById(@PathVariable("id") long id){
-		
+	public ResponseEntity<QuizResponse> getQuizById(@PathVariable("id") long id) {
+
 		QuizResponse quizResponse = quizService.getQuizById(id);
-		
+
 		return new ResponseEntity<>(quizResponse, HttpStatus.OK);
 	}
-
 
 	@PutMapping("/api/quizzes/{id}")
 	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @RequestBody QuizRequest quizRequest) {
@@ -79,21 +77,16 @@ public class QuizController {
 		quizService.updateQuiz(id, quizRequest);
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_UPDATED), HttpStatus.OK);
 	}
-	
+
 //	@PutMapping("/api/quizzes/{id}/details")
 //	@PutMapping("/api/quizzes/{id}/questions")
 
-	//TODO to be completed
+	// TODO to be completed
 	@DeleteMapping("/api/quizzes/{id}")
 	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable long id) {
-		
+
 		quizService.deleteQuizById(id);
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_DELETED), HttpStatus.OK);
 	}
-	
-	
 
-	
-
-	
 }

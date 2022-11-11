@@ -4,12 +4,11 @@ import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
@@ -30,29 +29,26 @@ import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class DataLoader implements ApplicationRunner {
-     @Autowired
-    private TrainerService trainerService;
-    @Autowired
-    private SalesService salesService;
-    private Log log = LogFactory.getLog(DataLoader.class);
 
-    @Autowired
-    private QuestionService questionService;
+    private final TrainerService trainerService;
 
-    @Autowired
-    private QuizService quizService;
+    private final SalesService salesService;
 
-    @Autowired
-    private MultipleChoiceOptionService mcoService;
+	private final QuizRepository quizRepository;
 
-    @Autowired
-    private TagService tagService;
-    
-	@Autowired
-	private QuizRepository quizRepository;
-  
+    private final PasswordEncoder passwordEncoder;
+    private final QuestionService questionService;
+    private final QuizService quizService;
+    private final MultipleChoiceOptionService mcoService;
+    private final TagService tagService;
+
 
     @Override
     @Transactional
@@ -64,8 +60,8 @@ public class DataLoader implements ApplicationRunner {
         trainer.setUsername("Jason");
         trainer.setPassword("123");
         trainer.setEmail("123@gmail.com");
-        trainer.setFirstname("JHJ");
-        trainer.setLastname("Liu");
+        trainer.setFirstName("JHJ");
+        trainer.setLastName("Liu");
         trainer.setRole(Role.AUTHORISED_TRAINER);
         trainerService.save(trainer);
         System.out.println(trainerService.findByUsername("Jason"));
@@ -74,8 +70,8 @@ public class DataLoader implements ApplicationRunner {
         sales.setUsername("Yutta");
         sales.setPassword("321");
         sales.setEmail("321@gmail.com");
-        sales.setFirstname("Yutta");
-        sales.setLastname("Karima");
+        sales.setFirstName("Yutta");
+        sales.setLastName("Karima");
         sales.setRole(Role.AUTHORISED_SALES);
         salesService.save(sales);
         System.out.println(salesService.findByUsername("Yutta"));
@@ -134,6 +130,7 @@ public class DataLoader implements ApplicationRunner {
 		quizRepository.save(courseQuiz1);
 		quizRepository.save(interviewQuiz1);
 
+
 //		// let question know about quiz
 //		mcq1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1,interviewQuiz1 )));
 //		sa1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1 )));
@@ -145,10 +142,10 @@ public class DataLoader implements ApplicationRunner {
 //		sales.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1)));
 //		userService.save(trainer);
 //		userService.save(sales);
-		
 
-		log.info("--------------- All users ------------------------");
-		log.info(quizService.getAllQuizzes());
+//        log.info("--------------- All users ------------------------");
+//        log.info(quizService.getAllQuizzes());
+
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

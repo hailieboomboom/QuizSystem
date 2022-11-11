@@ -29,6 +29,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
 //                .antMatchers("/api/**").authenticated()
                 .antMatchers( "/auth/**").permitAll()
+                .antMatchers("/users/**").permitAll()
                 .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
                 .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
                 .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
