@@ -18,6 +18,7 @@ import AutogenerateQuiz from "./pages/AutoGenerateQuiz";
 import EditQuestion from "./pages/EditQuestion";
 import AttemptQuizzes from "./pages/AttemptQuizzes";
 import MyQuizzes from "./pages/MyQuizzes";
+import AttemptedQuizzes from "./pages/AttemptedQuizzes";
 
 import {
   RecoilRoot,
@@ -43,6 +44,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="quiz" element={<Quiz />} />
           <Route path="viewQuizzes" element={<AttemptQuizzes/>} />
+          <Route path="attemptedQuizzes" element={<AttemptedQuizzes/>} />
           <Route path="myQuizzes" element={<MyQuizzes/>} />
           <Route path="questions" element={<Questions />} />
           <Route path="viewQuestions" element={<ViewQuestions />} />
