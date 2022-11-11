@@ -16,10 +16,12 @@ import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import '../styles/QuizzesTableStyle.css';
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const AttemptedQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     const filterOptions = createFilterOptions({
@@ -30,15 +32,26 @@ const AttemptedQuizzes = () => {
     React.useEffect(() => {
         axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
             setQuizzes([...quizzes, response.data]);
-        });
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+            setLoading(false);
         });
     }, []);
     console.log(quizzes);
     console.log(quiz);
 
-    if (!quizzes) return null;
+    if (loading) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Wait...</Typography>
+                <CircularProgress />
+            </Grid>
+        </Grid>
+
+    );
+
     return (
         <Grid
             container
@@ -72,13 +85,13 @@ const AttemptedQuizzes = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <Typography variant="body" component="body">This is a demo quiz</Typography>
+                                        <Typography variant="body">This is a demo quiz</Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Typography variant="body" component="body">1</Typography>
+                                        <Typography variant="body">1</Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Typography variant="body" component="body">100</Typography>
+                                        <Typography variant="body">100</Typography>
                                     </TableCell>
                                     {/*<TableCell align="right">{row.carbs}</TableCell>*/}
                                     {/*<TableCell align="right">{row.protein}</TableCell>*/}

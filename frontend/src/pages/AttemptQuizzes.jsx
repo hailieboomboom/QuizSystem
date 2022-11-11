@@ -16,10 +16,12 @@ import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import '../styles/QuizzesTableStyle.css';
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const AttemptQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     const filterOptions = createFilterOptions({
@@ -36,14 +38,25 @@ const AttemptQuizzes = () => {
     React.useEffect(() => {
         axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
             setQuizzes([...quizzes, response.data]);
-        });
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+            setLoading(false);
         });
         }, []);
     console.log(quizzes);
     console.log(quiz);
-    if (!quizzes) return null;
+
+    if (loading) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Wait...</Typography>
+                <CircularProgress />
+            </Grid>
+        </Grid>
+
+    );
     return (
         <Grid
             container
