@@ -20,7 +20,6 @@ const Questions = () => {
             <Typography className="headerTest" >test</Typography>
                 {
                     QuestionData.map((question) => (<ViewMCQCard questionCard={question}/>))
-
                 }
 
 

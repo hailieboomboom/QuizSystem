@@ -14,26 +14,37 @@ import { attemptQuizState } from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import '../styles/QuizzesTableStyle.css';
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MyQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     React.useEffect(() => {
         axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
             setQuizzes([...quizzes, response.data]);
-        });
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+            setLoading(false);
         });
     }, []);
     console.log(quizzes);
     console.log(quiz);
 
 
-    if (!quizzes) return null;
+    if (loading) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Wait...</Typography>
+                <CircularProgress />
+            </Grid>
+        </Grid>
 
+    );
     return (
         <Grid
             container

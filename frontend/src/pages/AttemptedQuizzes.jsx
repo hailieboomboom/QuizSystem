@@ -18,7 +18,7 @@ import '../styles/QuizzesTableStyle.css';
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const AttemptQuizzes = () => {
+const AttemptedQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
@@ -29,18 +29,12 @@ const AttemptQuizzes = () => {
         stringify: (option) => option.title,
     });
 
-    const quizCategories = [
-        {title: "Interview"},
-        {title: "Skill"},
-        {title: "All"}
-    ];
-
     React.useEffect(() => {
         axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
             setQuizzes([...quizzes, response.data]);
             setLoading(false);
         });
-        }, []);
+    }, []);
     console.log(quizzes);
     console.log(quiz);
 
@@ -57,6 +51,7 @@ const AttemptQuizzes = () => {
         </Grid>
 
     );
+
     return (
         <Grid
             container
@@ -67,30 +62,8 @@ const AttemptQuizzes = () => {
         >
             <Grid item>
                 <Typography variant="h2" gutterBottom>
-                    Available Quizzes
+                    Attempted Quizzes
                 </Typography>
-            </Grid>
-
-            <Grid
-                item
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-            >
-                <Grid item />
-                <Grid item>
-                    <Autocomplete
-                        disableClearable
-                        id="filter-demo"
-                        options={quizCategories}
-                        getOptionLabel={(option) => option.title}
-                        filterOptions={filterOptions}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Filter" />}
-                    />
-                </Grid>
-
-
             </Grid>
 
             <Grid item>
@@ -99,8 +72,8 @@ const AttemptQuizzes = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
-                                <TableCell align="right">Action</TableCell>
-                                {/*<TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
+                                <TableCell align="right">Attempt Number</TableCell>
+                                <TableCell align="right">Marks</TableCell>
                                 {/*<TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
                                 {/*<TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
                             </TableRow>
@@ -112,14 +85,14 @@ const AttemptQuizzes = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        This is A Demo Quiz
+                                        <Typography variant="body">This is a demo quiz</Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
-                                            Take Quiz
-                                        </Button>
+                                        <Typography variant="body">1</Typography>
                                     </TableCell>
-                                    {/*<TableCell align="right">{row.fat}</TableCell>*/}
+                                    <TableCell align="right">
+                                        <Typography variant="body">100</Typography>
+                                    </TableCell>
                                     {/*<TableCell align="right">{row.carbs}</TableCell>*/}
                                     {/*<TableCell align="right">{row.protein}</TableCell>*/}
                                 </TableRow>
@@ -133,4 +106,4 @@ const AttemptQuizzes = () => {
     )
 };
 
-export default AttemptQuizzes;
+export default AttemptedQuizzes;
