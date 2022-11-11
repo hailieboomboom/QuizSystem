@@ -5,10 +5,13 @@ import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
+import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
 import com.fdmgroup.QuizSystem.service.QuizService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.model.Role;
@@ -18,6 +21,8 @@ import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +51,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Autowired
     private TagService tagService;
+    
   
 
     @Override
@@ -176,7 +182,7 @@ public class DataLoader implements ApplicationRunner {
         tagService.save(tag15);
         tagService.save(tag16);
 
-        questionService.save(mcq1);
+        mcq1 = (MultipleChoiceQuestion) questionService.save(mcq1);
         questionService.save(sa1);
         questionService.save(sa2);
         questionService.save(sa3);
@@ -186,10 +192,34 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco3);
 
         ////////// Load Quizzes ////////////
+//        QuizQuestionGrade qqg1 = new QuizQuestionGrade();
+//        QuizQuestionGradeKey qqgKey = new QuizQuestionGradeKey((long) 1, (long) 1);
+//        qqg1.setKey(qqgKey);
+//        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
+//        qqgList.add(qqg1);
+//        
+        Quiz quiz1 = new Quiz();
+        quiz1.setCreator(trainer);
+        quiz1.setName("course quiz 1");
+        quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quiz1 = quizService.save(quiz1);
+       
+        quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+        System.out.println("--------SAVE QUIZ1 DONE-------");
+        quizService.removeQuestionFromQuiz(mcq1, quiz1);
+//        
+////        quiz1.setQuizQuestionsGrade(qqgList);
+////        
+////        mcq1.setQuizQuestionsGrade(qqgList);
+//        quizService.addQuestion(mcq1, quiz1);
+// 
+//        
+//        questionService.save(mcq1);
+//        quizService.save(quiz1);
 
 
-        Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
-        quizService.save(courseQuiz1);
+//        Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
+//        quizService.save(courseQuiz1);
         log.info("--------------- All users ------------------------");
         log.info(quizService.getAllQuizzes());
 

@@ -9,6 +9,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
@@ -26,8 +29,12 @@ public class Question {
     @ManyToOne
     private User creator;
     
-    @ManyToMany(mappedBy="questions")
-    private List<Quiz> quizzes;
+//    @ManyToMany(mappedBy="questions")
+//    private List<Quiz> quizzes;
+    
+    @OneToMany(mappedBy = "question")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<QuizQuestionGrade> quizQuestionsGrade;
     
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "QUESTION_Tag",
