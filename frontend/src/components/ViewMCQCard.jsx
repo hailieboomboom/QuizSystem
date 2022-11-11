@@ -8,8 +8,10 @@ import Typography from '@mui/material/Typography';
 
 import '../styles/ViewQuestionsCard.css';
 import QuestionData from '../data/QuestionData';
+import { ShuffleAnswers } from '../components/ShuffleAnswer';
 
 import axios from "axios";
+import questions from "../pages/Questions";
 
 const bull = (
     <Box
@@ -19,13 +21,10 @@ const bull = (
     </Box>
 );
 
-
 export default function ViewMCQCard(props) {
+    // const [question, setQuestion] = React.useState([]);
+
     console.log(QuestionData)
-    const [question, setQuestion] = React.useState([]);
-
-    console.log(question)
-
     const changeStyle = () => {
 
     }
@@ -38,17 +37,12 @@ export default function ViewMCQCard(props) {
                             <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
                                 {props.questionCard.question}
                             </Typography>
-                            <Typography className={"questionString"} variant="h5" component="div">
-
-
-                            </Typography>
+                            <Typography className={"questionString"} variant="h5" component="div"></Typography>
                         </div>
                         <div className={"answerSection"}>
-                            <button className={"correctAnswer"}>{props.questionCard.correctAnswer}</button>
-                            <div className="divider"/>
-
-                            {props.questionCard.incorrectAnswers.map((answer) => (<button className={"button"}>{answer}</button>))}
-
+                            {ShuffleAnswers(props.questionCard).map((shuffledAnswer) =>
+                                <button className={"button"}>{shuffledAnswer}</button>)
+                            }
                         </div>
                     </div>
 
