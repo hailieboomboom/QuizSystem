@@ -11,19 +11,47 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import {useState} from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+    const navigate = useNavigate();
+    const[username,setUsername] = useState('');
+    const[password,setPassword] = useState('');
+    const [errorMsg, setErrorMsg] = useState(null);
+
+  const handleClick = (event) => {
+      setErrorMsg("");
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+      const user={password,username}
+      console.log(user)
+      fetch("http://localhost:8088/QuizSystem/auth/login",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(user)
+
+      }).then((res)=>{
+          if(res.status === 200) return res.text();
+          else if(res.status === 401 || res.status === 403){
+              setErrorMsg("Invalid username or password");
+          }else {
+              setErrorMsg(
+                  "Something went wrong, try again later or reach out to trevor@coderscampus.com"
+              );
+          }
+          console.log("Hello Student Logged in")
+      })
+          // .then((data) => {
+          //     if (data) {
+          //         user.setJwt(data);
+          //         navigate("/dashboard");
+          //     }
+          // });
   };
 
   return (
-   
+      <form noValidate autoComplete="off">
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -40,7 +68,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={12} square>
           <Box
             sx={{
               my: 8,
@@ -56,17 +84,17 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-              />
+
+                <TextField
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(e)=>setUsername(e.target.value)}
+                />
               <TextField
                 margin="normal"
                 required
@@ -75,20 +103,21 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={handleClick}
               >
                 Sign In
               </Button>
+                {username}
+                {password}
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
@@ -101,11 +130,9 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-             
-            </Box>
           </Box>
         </Grid>
       </Grid>
-    
+      </form>
   );
 }
