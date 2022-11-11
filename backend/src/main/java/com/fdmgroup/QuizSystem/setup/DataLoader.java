@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.setup;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,6 +32,21 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import javax.swing.*;
+import javax.transaction.Transactional;
+
+import com.fdmgroup.QuizSystem.model.*;
+import com.fdmgroup.QuizSystem.service.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +57,10 @@ public class DataLoader implements ApplicationRunner {
 
     private final SalesService salesService;
 
+
 	private final QuizRepository quizRepository;
+
+    private final StudentService studentService;
 
     private final PasswordEncoder passwordEncoder;
     private final QuestionService questionService;
@@ -58,7 +77,7 @@ public class DataLoader implements ApplicationRunner {
         ////////// Load Users ////////////
         Trainer trainer = new Trainer();
         trainer.setUsername("Jason");
-        trainer.setPassword(passwordEncoder.encode("123"));
+        trainer.setPassword(passwordEncoder.encode("1"));
         trainer.setEmail("123@gmail.com");
         trainer.setFirstName("JHJ");
         trainer.setLastName("Liu");
@@ -68,14 +87,41 @@ public class DataLoader implements ApplicationRunner {
         
         Sales sales = new Sales();
         sales.setUsername("Yutta");
-        sales.setPassword(passwordEncoder.encode("321"));
+        sales.setPassword(passwordEncoder.encode("1"));
         sales.setEmail("321@gmail.com");
         sales.setFirstName("Yutta");
         sales.setLastName("Karima");
         sales.setRole(Role.AUTHORISED_SALES);
         salesService.save(sales);
         System.out.println(salesService.findByUsername("Yutta"));
-        
+
+        Trainer unauthorisedTrainer = new Trainer();
+        unauthorisedTrainer.setUsername("ut");
+        unauthorisedTrainer.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer.setEmail("1234@gmail.com");
+        unauthorisedTrainer.setFirstName("JHJ");
+        unauthorisedTrainer.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer);
+        System.out.println(trainerService.findByUsername("ut"));
+
+        Sales unauthorisedSales = new Sales();
+        unauthorisedSales.setUsername("us");
+        unauthorisedSales.setPassword(passwordEncoder.encode("1"));
+        unauthorisedSales.setEmail("3210@gmail.com");
+        unauthorisedSales.setFirstName("Yutta");
+        unauthorisedSales.setLastName("Karima");
+        salesService.save(unauthorisedSales);
+        System.out.println(salesService.findByUsername("us"));
+
+        Student student1 = new Student();
+        student1.setUsername("ts");
+        student1.setPassword(passwordEncoder.encode("1"));
+        student1.setEmail("student1@gmail.com");
+        student1.setFirstName("student1");
+        student1.setLastName("Karima");
+        studentService.save(student1);
+        System.out.println(salesService.findByUsername("us"));
+
         log.info("Finished setup");
 
 
