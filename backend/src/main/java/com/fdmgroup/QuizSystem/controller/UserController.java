@@ -3,8 +3,6 @@ import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
 import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
 import com.fdmgroup.QuizSystem.exception.RoleIsOutOfScopeException;
 import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.Student;
-import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
@@ -13,10 +11,8 @@ import com.fdmgroup.QuizSystem.util.ModelToDTO;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -32,30 +28,42 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ModelToDTO modelToDTO;
 
-    @ApiOperation(value = "get user by id")
-    @GetMapping("/{id}")
-    public UserOutputDTO getUserById(@PathVariable long id){
-        return modelToDTO.userToOutput(userService.getUserById(id));
-    }
-
-    @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
-    @PutMapping("/{id}")
-    public UserOutputDTO updateUserById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
-        modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
-        return modelToDTO.userToOutput(userService.updateUser(id, modifiedUser));
-    }
-
     @ApiOperation(value = "get student by id")
     @GetMapping("/students/{id}")
     public UserOutputDTO getStudentById(@PathVariable long id){
         return modelToDTO.userToOutput(studentService.findStudentById(id));
     }
-
     @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
     @PutMapping("/students/{id}")
     public UserOutputDTO updateStudentById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
         modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
         return modelToDTO.userToOutput(studentService.updateStudent(id, modifiedUser));
+    }
+
+    @ApiOperation(value = "get trainer by id")
+    @GetMapping("/trainers/{id}")
+    public UserOutputDTO getTrainerById(@PathVariable long id){
+        return modelToDTO.userToOutput(trainerService.getTrainerById(id));
+    }
+
+    @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
+    @PutMapping("/trainer/{id}")
+    public UserOutputDTO updateTrainerById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedTrainer){
+        modifiedTrainer.setPassword(passwordEncoder.encode(modifiedTrainer.getPassword()));
+        return modelToDTO.userToOutput(trainerService.updateTrainer(id, modifiedTrainer));
+    }
+
+    @ApiOperation(value = "get sales by id")
+    @GetMapping("/sales/{id}")
+    public UserOutputDTO getSalesById(@PathVariable long id){
+        return modelToDTO.userToOutput(salesService.getSalesById(id));
+    }
+
+    @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
+    @PutMapping("/sales/{id}")
+    public UserOutputDTO updateSalesById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedSales){
+        modifiedSales.setPassword(passwordEncoder.encode(modifiedSales.getPassword()));
+        return modelToDTO.userToOutput(salesService.updateSales(id, modifiedSales));
     }
     
     @ApiOperation(value = "get all unauthorised trainers.")
