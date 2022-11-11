@@ -48,41 +48,34 @@ public class StudentService {
         return studentRepository.save(student);
     }
     
-    public Student updateStudent(long id, UserUpdateDTO modifiedUser) {
+    public Student updateStudent(long id, UserUpdateDTO modifiedStudent) {
         Optional<Student> maybeStudent = studentRepository.findById(id);
+
         if(maybeStudent.isEmpty()){
             throw new UserNotFoundException();
         }
-        if (studentRepository.existsByUsername(modifiedUser.getUsername())) {
-            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
+
+        if (studentRepository.existsByUsername(modifiedStudent.getUsername()) && ! maybeStudent.get().getUsername().equals(modifiedStudent.getUsername())) {
+            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedStudent.getUsername()));
         }
 
-        if (studentRepository.existsByEmail(modifiedUser.getEmail())) {
-            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedUser.getEmail()));
+        if (studentRepository.existsByEmail(modifiedStudent.getEmail()) && ! maybeStudent.get().getEmail().equals(modifiedStudent.getEmail())) {
+            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedStudent.getEmail()));
         }
+
         // Update user with new attributes
         Student student = maybeStudent.get();
-        student.setUsername(modifiedUser.getUsername());
-        student.setPassword(modifiedUser.getPassword());
-        student.setEmail(modifiedUser.getEmail());
-        student.setFirstName(modifiedUser.getFirstName());
-        student.setLastName(modifiedUser.getLastName());
+        student.setUsername(modifiedStudent.getUsername());
+        student.setPassword(modifiedStudent.getPassword());
+        student.setEmail(modifiedStudent.getEmail());
+        student.setFirstName(modifiedStudent.getFirstName());
+        student.setLastName(modifiedStudent.getLastName());
         // Role?
         return studentRepository.save(student);
     }
 	public List<Student> getAllStudents(){
         return studentRepository.findAll();
     }
-
-    public Student update(Student modifiedStudent){
-        Optional<Student> maybeStudent = studentRepository.findStudentByUsername(modifiedStudent.getUsername());
-        if (maybeStudent.isEmpty()) {
-            throw new UserNotFoundException("Student is not found!");
-        }
-        modifiedStudent.setId(maybeStudent.get().getId());
-        return studentRepository.save(modifiedStudent);
-    }
-
 
     public Student save(Student student){
         return studentRepository.save(student);

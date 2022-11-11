@@ -38,10 +38,9 @@ public class WebSecurityConfig {
                         // -- Swagger UI v3 (OpenAPI)
                         "/v3/api-docs/**",
                         "/swagger-ui/**").permitAll()
-                .antMatchers("/users/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
-                .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
-                .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
-                .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
+                .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+                .antMatchers("/users/sales/**").hasAuthority("AUTHORISED_SALES")
+                .antMatchers("/users/trainers/**").hasAuthority("AUTHORISED_TRAINER")
                 .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
                 .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .anyRequest().authenticated();

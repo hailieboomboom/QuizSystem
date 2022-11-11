@@ -4,6 +4,7 @@ import com.fdmgroup.QuizSystem.dto.LoginRequest;
 import com.fdmgroup.QuizSystem.dto.SignUpRequest;
 import com.fdmgroup.QuizSystem.exception.RoleIsOutOfScopeException;
 import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
+import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.*;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
@@ -44,6 +45,10 @@ public class AuthController {
     @ApiOperation(value = "log in using username and password")
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest){
+        User user = userService.getUserByUsername(loginRequest.getUsername());
+        if(user.getRole().equals(Role.UNAUTHORISED_SALES) || user.getRole().equals(Role.UNAUTHORISED_TRAINER) || user.getRole().equals(Role.ABSENT)) {
+            throw new UserUnauthorisedError("Your account is not authorised. Please contact an authorised staff");
+        }
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
         return new AuthResponse(token);
     }

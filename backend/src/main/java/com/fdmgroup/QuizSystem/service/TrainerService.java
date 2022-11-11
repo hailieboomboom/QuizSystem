@@ -1,6 +1,9 @@
 package com.fdmgroup.QuizSystem.service;
+import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
+import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
 import com.fdmgroup.QuizSystem.model.Role;
+import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.TrainerRepository;
@@ -19,6 +22,14 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
 
+    public Trainer getTrainerById(long id) {
+        Optional<Trainer> maybeTrainer = trainerRepository.findById(id);
+        if (maybeTrainer.isEmpty()) {
+            throw new UserNotFoundException("Trainer is not found!");
+        }
+        return maybeTrainer.get();
+    }
+
     public Trainer findByUsername(String username){
 
         Optional<Trainer> maybeTrainer = trainerRepository.findByUsername(username);
@@ -28,10 +39,27 @@ public class TrainerService {
         return maybeTrainer.get();
     }
 
-    public Trainer update(Trainer modifiedTrainer) {
-        Trainer trainer = findByUsername(modifiedTrainer.getUsername());
-        modifiedTrainer.setId(trainer.getId());
-        return trainerRepository.save(modifiedTrainer);
+    public Trainer updateTrainer(long id, UserUpdateDTO modifiedTrainer) {
+        Optional<Trainer> maybeTrainer = trainerRepository.findById(id);
+        if(maybeTrainer.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        if (trainerRepository.existsByUsername(modifiedTrainer.getUsername()) && ! maybeTrainer.get().getUsername().equals(modifiedTrainer.getUsername())) {
+            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedTrainer.getUsername()));
+        }
+
+        if (trainerRepository.existsByEmail(modifiedTrainer.getEmail()) && ! maybeTrainer.get().getEmail().equals(modifiedTrainer.getEmail())) {
+            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedTrainer.getEmail()));
+        }
+        // Update user with new attributes
+        Trainer trainer = maybeTrainer.get();
+        trainer.setUsername(modifiedTrainer.getUsername());
+        trainer.setPassword(modifiedTrainer.getPassword());
+        trainer.setEmail(modifiedTrainer.getEmail());
+        trainer.setFirstName(modifiedTrainer.getFirstName());
+        trainer.setLastName(modifiedTrainer.getLastName());
+        // Role?
+        return trainerRepository.save(trainer);
     }
 
     public Trainer authoriseTrainer(String username) {
