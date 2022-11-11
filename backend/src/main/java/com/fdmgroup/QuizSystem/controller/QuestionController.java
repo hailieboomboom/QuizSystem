@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.QuizSystem.common.ApiResponse;
+import com.fdmgroup.QuizSystem.dto.QuestionDto;
 import com.fdmgroup.QuizSystem.dto.SAQDto;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
@@ -37,6 +38,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/questions") // http://localhost:8088/QuestionSystem/questions
 public class QuestionController {
+	
+	public final String COURSETAG = "course";
+	public final String INTERVIEWTAG = "interview";
 
 	@Autowired
 	private QuestionService questionService;
@@ -52,6 +56,18 @@ public class QuestionController {
 	
 	@PostMapping("/saqs")
 	public ResponseEntity<ApiResponse> postShortAnswerQuestion(@RequestBody SAQDto saqDto) {
+		
+		//check if question with same questionDetails exists
+		boolean ifExists = saqService.ifShortAnswerQuestionExists(saqDto.getQuestionDetails());
+		if(ifExists) {
+			return new ResponseEntity<>(new ApiResponse(false, "question already exists"), HttpStatus.BAD_REQUEST);
+		}
+		
+		// check if tag contains interview/course
+		if((saqDto.getTags().contains(COURSETAG) == false)
+				&& (saqDto.getTags().contains(INTERVIEWTAG) == false)) {
+			return new ResponseEntity<>(new ApiResponse(false, "please tag question with course or interview"), HttpStatus.BAD_REQUEST);
+		}
 		
 		ShortAnswerQuestion saq = new ShortAnswerQuestion();
 		User creator = userService.getUserById(saqDto.getUserId());
@@ -74,13 +90,6 @@ public class QuestionController {
 		
 		
 		return new ResponseEntity<>(new ApiResponse(true, "create short answer question success"), HttpStatus.CREATED);
-	}
-	
-	
-	// get all questions
-	@GetMapping
-	public List<Question> getAllQuestion(){
-		return questionService.findAllQuestions();
 	}
 	
 	// get one saq  by id
@@ -128,6 +137,24 @@ public class QuestionController {
 	public ResponseEntity<ApiResponse> updateShortAnswerQuestion(@RequestBody SAQDto saqDto, @PathVariable Long id){
 		
 		ShortAnswerQuestion saq = saqService.findById(id);
+		
+		//check if question with same questionDetails exists
+		boolean ifExists = saqService.ifShortAnswerQuestionExists(saqDto.getQuestionDetails());
+		if(ifExists) {
+			Question foundQuestion = saqService.getByQuestionDetails(saqDto.getQuestionDetails());
+			
+			// if different question has same details with updated one, terminate the update
+			if(foundQuestion.getId() != id) {
+				return new ResponseEntity<>(new ApiResponse(false, "question already exists"), HttpStatus.BAD_REQUEST);
+			}
+		}
+		
+		// check if tag contains interview/course
+		if((saqDto.getTags().contains(COURSETAG) == false)
+				&& (saqDto.getTags().contains(INTERVIEWTAG) == false)) {
+			return new ResponseEntity<>(new ApiResponse(false, "please tag question with course or interview"), HttpStatus.BAD_REQUEST);
+		}
+		
 		saq.setCorrectAnswer(saqDto.getCorrectAnswer());
 		saq.setQuestionDetails(saqDto.getQuestionDetails());
 		
@@ -176,7 +203,37 @@ public class QuestionController {
 		
 	}
 	
-	// view all questions (just view question body)
+	// view all questions (just view question details without viewing its answers)
+	@GetMapping
+	public List<QuestionDto> getAllQuestions(){
+		List<Question> questions = questionService.findAllQuestions();
+		List<QuestionDto> questionDTOs = new ArrayList<QuestionDto>();
+		
+		for(Question q: questions) {
+			QuestionDto qDto = new QuestionDto();
+			qDto.setQuestionId(q.getId());
+			qDto.setUserId(q.getCreator().getId());
+			qDto.setQuestionDetails(q.getQuestionDetails());
+			List<String> tagnames = new ArrayList<String>();
+			for(Tag t: q.getTags()) {
+				tagnames.add(t.getTagName());
+			}
+			qDto.setTags(tagnames);
+			questionDTOs.add(qDto);
+		}
+		
+		return questionDTOs;
+	}
 	
+	// view all short answer questions created by a user
+//	@GetMapping("/{userId}/saqs")
+//	public List<SAQDto> getAllShortAnswerQuestionsByCreator(@PathVariable Long userId){
+//		
+//		User creator = userService.getUserById(userId);
+//		List<Question> questionsByUser = questionService.findQuestionsByCreator(creator);
+//		for(Question q: questionsByUser) {
+//			
+//		}
+//	}
 
 }

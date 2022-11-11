@@ -3,6 +3,8 @@ package com.fdmgroup.QuizSystem.model;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -24,6 +26,9 @@ public class Question {
     @ManyToOne
     private User creator;
     
+    @ManyToMany(mappedBy="questions")
+    private List<Quiz> quizzes;
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "QUESTION_Tag",
             joinColumns = { @JoinColumn(name = "question_id") },
@@ -43,5 +48,25 @@ public class Question {
     	
     }
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, questionDetails);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		return id == other.id && Objects.equals(questionDetails, other.questionDetails);
+	}
+	
+	
+
+    
     
 }

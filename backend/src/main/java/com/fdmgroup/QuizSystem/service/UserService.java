@@ -23,14 +23,14 @@ public class UserService {
      * @param id User id.
      * @return   User.
      */
-//    public User getUserById(long id){
-//
-//        Optional<User> maybeUser = studentRepository.findById(id);
-//        if(maybeUser.isEmpty()){
-//            throw new UserNotFoundException();
-//        }
-//        return maybeUser.get();
-//    }
+    public User getUserById(long id){
+
+        Optional<User> maybeUser = userRepository.findById(id);
+        if(maybeUser.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        return maybeUser.get();
+    }
 
     /**
      * Get user by the name.
@@ -97,10 +97,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-	public User getUserById(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 //
 //    /**
 //     * Persist user to the database.

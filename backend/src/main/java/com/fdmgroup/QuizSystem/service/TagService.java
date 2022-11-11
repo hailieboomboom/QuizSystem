@@ -19,6 +19,11 @@ public class TagService {
 	@Autowired
 	private TagRepository tagRepo;
 	
+	public TagService(TagRepository tagRepo) {
+		super();
+		this.tagRepo = tagRepo;
+	}
+
 	public Tag save(Tag tag) {
 		return this.tagRepo.save(tag);
 	}

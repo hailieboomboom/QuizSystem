@@ -103,11 +103,43 @@ public class DataLoader implements ApplicationRunner {
         sa2.setQuestionDetails("who is the best leader");
         sa2.setCorrectAnswer("bts");
         sa2.setCreator(trainer);
+        
+         // tag: interview course python java web springboot sql unix ood jpa spring react javascript proskill other
+		
 
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
+        Tag tag3 = new Tag();
+        Tag tag4 = new Tag();
+        Tag tag5 = new Tag();
+        Tag tag6 = new Tag();
+        Tag tag7 = new Tag();
+        Tag tag8 = new Tag();
+        Tag tag9 = new Tag();
+        Tag tag10 = new Tag();
+        Tag tag11 = new Tag();
+        Tag tag12 = new Tag();
+        Tag tag13 = new Tag();
+        Tag tag14 = new Tag();
+        Tag tag15 = new Tag();
+        Tag tag16 = new Tag();
         tag1.setTagName("course");
         tag2.setTagName("interview");
+        tag3.setTagName("java");
+        tag4.setTagName("python");
+        tag5.setTagName("springboot");
+        tag6.setTagName("sql");
+        tag7.setTagName("unix");
+        tag8.setTagName("ood");
+        tag9.setTagName("jpa");
+        tag10.setTagName("spring");
+        tag11.setTagName("react");
+        tag12.setTagName("javascript");
+        tag13.setTagName("proskill");
+        tag14.setTagName("web");
+        tag15.setTagName("agile");
+        tag16.setTagName("other");
+        
         
         tag1.addOneQuestion(mcq1);
         tag1.addOneQuestion(sa1);
@@ -121,6 +153,20 @@ public class DataLoader implements ApplicationRunner {
 
         tagService.save(tag1);
         tagService.save(tag2);
+        tagService.save(tag3);
+        tagService.save(tag4);
+        tagService.save(tag5);
+        tagService.save(tag6);
+        tagService.save(tag7);
+        tagService.save(tag8);
+        tagService.save(tag9);
+        tagService.save(tag10);
+        tagService.save(tag11);
+        tagService.save(tag12);
+        tagService.save(tag13);
+        tagService.save(tag14);
+        tagService.save(tag15);
+        tagService.save(tag16);
 
         questionService.save(mcq1);
         questionService.save(sa1);
