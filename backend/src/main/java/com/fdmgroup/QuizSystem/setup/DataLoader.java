@@ -81,25 +81,39 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
+        mcq1.setCreator(sales);
 
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
-        sa1.setQuestionDetails("short answer");
-        sa1.setCorrectAnswer("test answer");
+        sa1.setQuestionDetails("what is the best colour");
+        sa1.setCorrectAnswer("green is the best");
+        sa1.setCreator(trainer);
+        
+        ShortAnswerQuestion sa2 = new ShortAnswerQuestion();
+        sa2.setQuestionDetails("who is the best leader");
+        sa2.setCorrectAnswer("bts");
+        sa2.setCreator(trainer);
 
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
         tag1.setTagName("course");
         tag2.setTagName("interview");
+        
+        tag1.addOneQuestion(mcq1);
+        tag1.addOneQuestion(sa1);
+        tag1.addOneQuestion(sa2);
+        tag2.addOneQuestion(sa1);
 
         mcq1.addOneTag(tag1);
         sa1.addOneTag(tag2);
         sa1.addOneTag(tag1);
+        sa2.addOneTag(tag1);
 
         tagService.save(tag1);
         tagService.save(tag2);
 
         questionService.save(mcq1);
         questionService.save(sa1);
+        questionService.save(sa2);
         mcoService.save(mco1);
         mcoService.save(mco2);
         mcoService.save(mco3);

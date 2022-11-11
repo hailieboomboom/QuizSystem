@@ -1,0 +1,61 @@
+
+.card{
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none
+}
+
+.questionCard{
+    background-color: #ebe1f2;
+    min-height: 200px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
+    align-content: center;
+}
+
+.questionCardContent{
+    background-color: #ebe1f2;
+    padding: 20px;
+    display: inline-flex;
+}
+
+.questionTitle{
+    font-size: 20px;
+    text-align-last: left;
+}
+
+.questionString{
+    font-size: 15px;
+    text-align: left;
+}
+.headerTest{
+    color: red;
+}
+
+.answerSection {
+    width: 100%;
+}
+
+.divider{
+    width: auto;
+    height:5px;
+    display:block;
+}
+
+button {
+    width: 100%;
+    background-color: #ebe1f2;
+    padding: 5px;
+
+}
+
+button:hover {
+    background-color: #c9b6d6;
+    border-radius: 15px;
+}
+
+button:focus {
+    outline: none;
+}
