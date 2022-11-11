@@ -2,7 +2,6 @@ package com.fdmgroup.QuizSystem.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,40 +28,43 @@ public class Quiz {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	private String name;
 	private QuizCategory quizCategory;
 
+//	@ManyToMany(fetch = FetchType.EAGER)
 	@ManyToMany
-	@JoinTable(name="QUIZ_QUESTION", 
-		    joinColumns=@JoinColumn(name="quiz_id"),
-		    inverseJoinColumns= @JoinColumn(name="question_id"))
+	@JsonIgnore
+	@JoinTable(name = "quiz_question", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions;
-	
+
 	@ManyToOne
 	private User creator;
 
-
-	public Quiz(QuizCategory quizCategory, List<Question> questions) {
+	
+	public Quiz(String name, QuizCategory quizCategory, List<Question> questions, User creator) {
 		super();
+		this.name = name;
 		this.quizCategory = quizCategory;
-		this.questions = questions; // Constructor of owning side include inverse side
-//		this.creator = creator; 
+		this.questions = questions;
+		this.creator = creator;
+	}
+	
+	public void addQuestion(Question question) {
+		this.questions.add(question);
+	}
+	
+	public void removeQuestion(Question question) {
+		this.questions.remove(question);
 	}
 
-	@Override
-	public String toString() {
-		return "Quiz [id=" + id + ", quizCategory=" + quizCategory + "]";
-	}
-
+	
 }
-
-
 
 // TODO: Need to implement following to other classes
 //// User.java
-//@OneToMany(mappedBy="user")
-//private List<Quiz> quizzes;
+//@OneToMany(mappedBy="creator", cascade=CascadeType.ALL)
+//private List<Quiz> createdQuizzes;
 //
 //// Question.java
-//@ManyToMany(mappedBy="questions")
+//@ManyToMany(mappedBy="questions", fetch = FetchType.EAGER?)
 //private List<Quiz> quizzes;
