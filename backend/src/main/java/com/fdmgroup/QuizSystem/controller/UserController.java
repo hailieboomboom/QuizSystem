@@ -45,6 +45,19 @@ public class UserController {
         return modelToDTO.userToOutput(userService.updateUser(id, modifiedUser));
     }
 
+    @ApiOperation(value = "get student by id")
+    @GetMapping("/students/{id}")
+    public UserOutputDTO getStudentById(@PathVariable long id){
+        return modelToDTO.userToOutput(studentService.findStudentById(id));
+    }
+
+    @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
+    @PutMapping("/students/{id}")
+    public UserOutputDTO updateStudentById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
+        modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
+        return modelToDTO.userToOutput(studentService.updateStudent(id, modifiedUser));
+    }
+    
     @ApiOperation(value = "get all unauthorised trainers.")
     @GetMapping("/trainers/unauthorised")
     public List<UserOutputDTO> getAllUnauthorisedTrainer(){
