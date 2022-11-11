@@ -38,12 +38,6 @@ public class UserController {
         return modelToDTO.userToOutput(userService.getUserById(id));
     }
 
-    @ApiOperation(value = "delete user by id")
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable long id){
-        userService.deleteUserById(id);
-    }
-
     @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
     @PutMapping("/{id}")
     public UserOutputDTO updateUserById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
@@ -79,7 +73,8 @@ public class UserController {
     }
 
     private Role mapStringToRole(String role) {
-        switch (role) {
+
+        switch (role.toUpperCase()) {
             case "ABSENT" -> {return Role.ABSENT; }
             case "TRAINING" -> { return Role.TRAINING; }
             case "POND" -> { return Role.POND; }
