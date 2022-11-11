@@ -1,7 +1,6 @@
 package com.fdmgroup.QuizSystem.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.QuizSystem.common.ApiResponse;
-import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.model.User;
+import com.fdmgroup.QuizSystem.dto.QuizRequest;
+import com.fdmgroup.QuizSystem.dto.QuizResponse;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import com.fdmgroup.QuizSystem.service.QuizService;
 
@@ -34,10 +33,10 @@ public class QuizController {
 	private UserRepository userRepository;
 
 	@PostMapping("/api/quizzes")
-	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizDto quizDto) {
+	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizRequest quizRequest) {
 		
 //		// TODO do we need this? or do we need to check if the 
-//		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
+//		Optional<User> optionalUser = userRepository.findById(quizRequest.getCreatorId());
 //
 //		// check if user exists
 //		if (optionalUser.isEmpty()) {
@@ -46,47 +45,46 @@ public class QuizController {
 //		}
 
 		// create quiz in database
-		quizService.createQuiz(quizDto);
+		quizService.createQuiz(quizRequest);
+		
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_QUIZ_HAS_BEEN_CREATED),
 				HttpStatus.CREATED);
 	}
 	
+//	@GetMapping("/api/quizzes")
+//	public ResponseEntity<List<QuizRequest>> getAllQuizzes() {
+//		List<QuizRequest> quizRequests = quizService.getAllQuizzes();
+//		return new ResponseEntity<>(quizRequests, HttpStatus.OK);
+//	}
+	
 	@GetMapping("/api/quizzes")
-	public ResponseEntity<List<QuizDto>> getAllQuizzes() {
-		List<QuizDto> quizDtos = quizService.getAllQuizzes();
-		return new ResponseEntity<>(quizDtos, HttpStatus.OK);
+	public ResponseEntity<List<QuizResponse>> getAllQuizzes() {
+		List<QuizResponse> quizResponses = quizService.getAllQuizzes();
+		return new ResponseEntity<>(quizResponses, HttpStatus.OK);
 	}
 	
-    /**
-     * Get quiz DTO by its id.
-     * @param id Quiz id.
-     * @return   Quiz DTO.
-     */
+	
 	@GetMapping("/api/quizzes/{id}")
-	public ResponseEntity<QuizDto> getQuizById(@PathVariable("id") long id){
+	public ResponseEntity<QuizResponse> getQuizById(@PathVariable("id") long id){
 		
-		QuizDto quizDto = quizService.getQuizById(id);
+		QuizResponse quizResponse = quizService.getQuizById(id);
 		
-		return new ResponseEntity<>(quizDto, HttpStatus.OK);
+		return new ResponseEntity<>(quizResponse, HttpStatus.OK);
 	}
 
-//	@GetMapping("/api/content-quizzes")
-//	public ResponseEntity<List<QuizDto>> getContentQuizzes(){
-//
-//		List<QuizDto> contentQuizDtos = quizService.getContentQuizzes();
-//		
-//		return new ResponseEntity<>(contentQuizDtos, HttpStatus.OK);
-//	}
 
 	@PutMapping("/api/quizzes/{id}")
-	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @RequestBody QuizDto quizDto) {
+	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @RequestBody QuizRequest quizRequest) {
 
-		quizService.updateQuiz(id, quizDto);
+		quizService.updateQuiz(id, quizRequest);
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_UPDATED), HttpStatus.OK);
 	}
+	
+//	@PutMapping("/api/quizzes/{id}/details")
+//	@PutMapping("/api/quizzes/{id}/questions")
 
 	//TODO to be completed
-	@DeleteMapping
+	@DeleteMapping("/api/quizzes/{id}")
 	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable long id) {
 		
 		quizService.deleteQuizById(id);
