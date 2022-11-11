@@ -1,11 +1,25 @@
 package com.fdmgroup.QuizSystem.model;
 
-import lombok.*;
-
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -24,7 +38,11 @@ public class Question {
     @ManyToOne
     private User creator;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+
+	@ManyToMany(mappedBy="questions")
+	private List<Quiz> quizzes;
+    
+    @ManyToMany
     @JoinTable(name = "QUESTION_Tag",
             joinColumns = { @JoinColumn(name = "question_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") })
