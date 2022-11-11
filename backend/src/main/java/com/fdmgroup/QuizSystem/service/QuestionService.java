@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.model.Question;
+import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 
 @Service
@@ -17,6 +18,16 @@ public class QuestionService {
 	@Autowired
     private QuestionRepository questionRepository;
 	
+	
+	public QuestionService(QuestionRepository questionRepository) {
+		super();
+		this.questionRepository = questionRepository;
+	}
+	
+	public Question save(Question question) {
+	        return questionRepository.save(question);
+	}
+
 	public List<Question> findAllQuestions(){
 		return questionRepository.findAll();
 	}
@@ -31,6 +42,10 @@ public class QuestionService {
 	
 	public void remove(Question question) {
 		questionRepository.delete(question);
+	}
+	
+	public List<Question> findQuestionsByCreator(User creator){
+		return questionRepository.findByCreator(creator);
 	}
 
 
@@ -89,7 +104,5 @@ public class QuestionService {
 //    }
 //
 //   
-    public Question save(Question question) {
-        return questionRepository.save(question);
-    }
+   
 }

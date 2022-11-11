@@ -9,6 +9,7 @@ import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Tag {
     private long id;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "tags")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "tags")
     @JsonIgnore
     private Set<Question> tutorials = new HashSet<>();
 
@@ -42,5 +43,24 @@ public class Tag {
     		this.tutorials.remove(question);
     	}
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, tagName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tag other = (Tag) obj;
+		return id == other.id && Objects.equals(tagName, other.tagName);
+	}
+    
+    
 
 }

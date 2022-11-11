@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.dto.QuizRequest;
 import com.fdmgroup.QuizSystem.dto.QuizResponse;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
+import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
+import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
+import com.fdmgroup.QuizSystem.repository.QuestionRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 
@@ -22,8 +29,18 @@ import lombok.AllArgsConstructor;
 @Transactional
 public class QuizService {
 
+	@Autowired
 	private QuizRepository quizRepository;
+	
+	@Autowired
+	private QuizQuestionGradeService qqgService;
+	
+	@Autowired
+	private QuestionRepository questionRepo;
+
+	@Autowired
 	private UserRepository userRepository;
+
 
 	public void createQuiz(QuizRequest quizRequest) {
 		
@@ -60,6 +77,10 @@ public class QuizService {
 //	
 //	return quizDtos;
 //}
+	public Quiz save(Quiz quiz) {
+		return quizRepository.save(quiz);
+	}
+	
 	
 	
 	public QuizResponse getQuizResponse(Quiz quiz) {
@@ -150,7 +171,35 @@ public class QuizService {
 	public List<Quiz> getQuizzesByQuizCategory(QuizCategory quizCategory) {
 		return quizRepository.findByQuizCategory(quizCategory);
 
+		
 	}
+	
+	public void addQuestionIntoQuiz(Question question, Quiz quiz, Float grade) {
+		System.out.println("----ENTER ADDQUESTION: question id is "+question.getId()+" quiz id is "+ quiz.getId());
+		
+		question = questionRepo.findById(question.getId()).get();
+		quiz = quizRepository.findById(quiz.getId()).get();
+		QuizQuestionGradeKey qqgkey = new QuizQuestionGradeKey(quiz.getId(), question.getId());
+		QuizQuestionGrade quizQuestion = new QuizQuestionGrade();
+		quizQuestion.setKey(qqgkey);
+		quizQuestion.setGrade(grade);
+		quizQuestion.setQuestion(question);
+		quizQuestion.setQuiz(quiz);
+		System.out.println("after setkey try to get key: "+quizQuestion.getKey().getQuestionId()+"  "+quizQuestion.getKey().getQuizId());
+		qqgService.save(quizQuestion);
+	}
+
+	public void removeQuestionFromQuiz(Question question, Quiz quiz) {
+		QuizQuestionGradeKey qqgkey = new QuizQuestionGradeKey(quiz.getId(), question.getId());
+		QuizQuestionGrade quizQuestion = qqgService.findById(qqgkey);
+		if(quizQuestion != null) {
+			qqgService.remove(quizQuestion);
+		}
+	}
+
+
+
+	
 	
 //  // TODO: to be completed
 //	public List<QuizResponse> getContentQuizzes() {
@@ -163,7 +212,7 @@ public class QuizService {
 //		}
 //		return contentQuizResponses;
 //	}
-	
+
+}	
 
 
-}

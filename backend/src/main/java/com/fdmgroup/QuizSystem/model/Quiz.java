@@ -10,9 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,34 +37,40 @@ public class Quiz {
 	private String name;
 	private QuizCategory quizCategory;
 
-//	@ManyToMany(fetch = FetchType.EAGER)
-	@ManyToMany
-	@JsonIgnore
-	@JoinTable(name = "quiz_question", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
-	private List<Question> questions;
 
+//	@ManyToMany
+//	@JoinTable(name="QUIZ_QUESTION", 
+//		    joinColumns=@JoinColumn(name="quiz_id"),
+//		    inverseJoinColumns= @JoinColumn(name="question_id"))
+//	private List<Question> questions;
+	
+	@OneToMany(mappedBy = "quiz")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<QuizQuestionGrade> quizQuestionsGrade;
+	
 	@ManyToOne
 	private User creator;
 
-	
-	public Quiz(String name, QuizCategory quizCategory, List<Question> questions, User creator) {
+	public Quiz(String name, QuizCategory quizCategory, List<QuizQuestionGrade> quizQuestionsGrade, User creator) {
 		super();
 		this.name = name;
 		this.quizCategory = quizCategory;
-		this.questions = questions;
+		this.quizQuestionsGrade = quizQuestionsGrade;
 		this.creator = creator;
 	}
-	
-	public void addQuestion(Question question) {
-		this.questions.add(question);
-	}
-	
-	public void removeQuestion(Question question) {
-		this.questions.remove(question);
+    
+
+	@Override
+	public String toString() {
+		return "Quiz [id=" + id + ", quizCategory=" + quizCategory + "]";
+
 	}
 
 	
 }
+
+
+
 
 // TODO: Need to implement following to other classes
 //// User.java

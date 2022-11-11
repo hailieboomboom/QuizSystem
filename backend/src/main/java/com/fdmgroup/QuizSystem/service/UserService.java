@@ -110,6 +110,7 @@ public class UserService {
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
+
 //
 //    /**
 //     * Persist user to the database.
