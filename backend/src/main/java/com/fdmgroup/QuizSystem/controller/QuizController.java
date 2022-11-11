@@ -27,6 +27,7 @@ public class QuizController {
 		return "Get quiz was called";
 	}
 	
+
 	@PostMapping
 	public Quiz createQuiz(@RequestBody Quiz quiz) {
 
