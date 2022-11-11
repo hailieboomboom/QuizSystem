@@ -53,7 +53,7 @@ public class DataLoader implements ApplicationRunner {
         ////////// Load Users ////////////
         Trainer trainer = new Trainer();
         trainer.setUsername("Jason");
-        trainer.setPassword("123");
+        trainer.setPassword(passwordEncoder.encode("123"));
         trainer.setEmail("123@gmail.com");
         trainer.setFirstName("JHJ");
         trainer.setLastName("Liu");
@@ -63,7 +63,7 @@ public class DataLoader implements ApplicationRunner {
         
         Sales sales = new Sales();
         sales.setUsername("Yutta");
-        sales.setPassword("321");
+        sales.setPassword(passwordEncoder.encode("321"));
         sales.setEmail("321@gmail.com");
         sales.setFirstName("Yutta");
         sales.setLastName("Karima");

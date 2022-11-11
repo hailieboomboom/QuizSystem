@@ -45,6 +45,7 @@ public class UserController {
         return modelToDTO.userToOutput(userService.updateUser(id, modifiedUser));
     }
 
+
     @ApiOperation(value = "get all unauthorised trainers.")
     @GetMapping("/trainers/unauthorised")
     public List<UserOutputDTO> getAllUnauthorisedTrainer(){
