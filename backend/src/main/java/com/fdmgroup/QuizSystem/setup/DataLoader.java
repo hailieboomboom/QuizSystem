@@ -1,58 +1,90 @@
 package com.fdmgroup.QuizSystem.setup;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
+
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
+
+import com.fdmgroup.QuizSystem.model.Role;
+import com.fdmgroup.QuizSystem.model.Sales;
+
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
 import com.fdmgroup.QuizSystem.model.Tag;
+import com.fdmgroup.QuizSystem.model.Trainer;
+import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
 import com.fdmgroup.QuizSystem.service.QuizService;
-import com.fdmgroup.QuizSystem.service.TagService;
-import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.Sales;
-import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.service.SalesService;
+import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import javax.swing.*;
+import javax.transaction.Transactional;
+
+import com.fdmgroup.QuizSystem.model.*;
+import com.fdmgroup.QuizSystem.service.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
  
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class DataLoader implements ApplicationRunner {
-     @Autowired
-    private TrainerService trainerService;
-    @Autowired
-    private SalesService salesService;
-    private Log log = LogFactory.getLog(DataLoader.class);
 
-    @Autowired
-    private QuestionService questionService;
+    private final TrainerService trainerService;
 
-    @Autowired
-    private QuizService quizService;
+    private final SalesService salesService;
 
-    @Autowired
-    private MultipleChoiceOptionService mcoService;
 
-    @Autowired
-    private TagService tagService;
+	private final QuizRepository quizRepository;
+
+    private final StudentService studentService;
+
+    private final PasswordEncoder passwordEncoder;
+    private final QuestionService questionService;
+    private final QuizService quizService;
+    private final MultipleChoiceOptionService mcoService;
+    private final TagService tagService;
+
     
-  
+ 
 
     @Override
     @Transactional
@@ -62,24 +94,51 @@ public class DataLoader implements ApplicationRunner {
         ////////// Load Users ////////////
         Trainer trainer = new Trainer();
         trainer.setUsername("Jason");
-        trainer.setPassword("123");
+        trainer.setPassword(passwordEncoder.encode("1"));
         trainer.setEmail("123@gmail.com");
-        trainer.setFirstname("JHJ");
-        trainer.setLastname("Liu");
+        trainer.setFirstName("JHJ");
+        trainer.setLastName("Liu");
         trainer.setRole(Role.AUTHORISED_TRAINER);
         trainerService.save(trainer);
         System.out.println(trainerService.findByUsername("Jason"));
         
         Sales sales = new Sales();
         sales.setUsername("Yutta");
-        sales.setPassword("321");
+        sales.setPassword(passwordEncoder.encode("1"));
         sales.setEmail("321@gmail.com");
-        sales.setFirstname("Yutta");
-        sales.setLastname("Karima");
+        sales.setFirstName("Yutta");
+        sales.setLastName("Karima");
         sales.setRole(Role.AUTHORISED_SALES);
         salesService.save(sales);
         System.out.println(salesService.findByUsername("Yutta"));
-        
+
+        Trainer unauthorisedTrainer = new Trainer();
+        unauthorisedTrainer.setUsername("ut");
+        unauthorisedTrainer.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer.setEmail("1234@gmail.com");
+        unauthorisedTrainer.setFirstName("JHJ");
+        unauthorisedTrainer.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer);
+        System.out.println(trainerService.findByUsername("ut"));
+
+        Sales unauthorisedSales = new Sales();
+        unauthorisedSales.setUsername("us");
+        unauthorisedSales.setPassword(passwordEncoder.encode("1"));
+        unauthorisedSales.setEmail("3210@gmail.com");
+        unauthorisedSales.setFirstName("Yutta");
+        unauthorisedSales.setLastName("Karima");
+        salesService.save(unauthorisedSales);
+        System.out.println(salesService.findByUsername("us"));
+
+        Student student1 = new Student();
+        student1.setUsername("ts");
+        student1.setPassword(passwordEncoder.encode("1"));
+        student1.setEmail("student1@gmail.com");
+        student1.setFirstName("student1");
+        student1.setLastName("Karima");
+        studentService.save(student1);
+        System.out.println(salesService.findByUsername("us"));
+
         log.info("Finished setup");
 
 
@@ -192,6 +251,7 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco3);
 
         ////////// Load Quizzes ////////////
+
 //        QuizQuestionGrade qqg1 = new QuizQuestionGrade();
 //        QuizQuestionGradeKey qqgKey = new QuizQuestionGradeKey((long) 1, (long) 1);
 //        qqg1.setKey(qqgKey);
@@ -221,7 +281,31 @@ public class DataLoader implements ApplicationRunner {
 //        Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
 //        quizService.save(courseQuiz1);
         log.info("--------------- All users ------------------------");
-        log.info(quizService.getAllQuizzes());
+//        log.info(quizService.getAllQuizzes());
+
+        // TO SUMMER: QUIZ CONSTRUCTOR HAS BEEN UPDATED
+//		Quiz courseQuiz1 = new Quiz("course quiz 1", QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)), trainer);
+//		Quiz interviewQuiz1 = new Quiz("interview quiz 1", QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)), sales);
+//		quizRepository.save(courseQuiz1);
+//		quizRepository.save(interviewQuiz1);
+
+
+//		// let question know about quiz
+//		mcq1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1,interviewQuiz1 )));
+//		sa1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1 )));
+//		questionService.save(mcq1);
+//		questionService.save(sa1);
+		
+//		// let user know about quiz
+//		trainer.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1)));
+//		sales.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1)));
+//		userService.save(trainer);
+//		userService.save(sales);
+
+//        log.info("--------------- All users ------------------------");
+//        log.info(quizService.getAllQuizzes());
+
+
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

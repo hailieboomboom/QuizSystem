@@ -2,7 +2,6 @@ package com.fdmgroup.QuizSystem.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +36,7 @@ public class Quiz {
 	private long id;
 	private String name;
 	private QuizCategory quizCategory;
+
 
 //	@ManyToMany
 //	@JoinTable(name="QUIZ_QUESTION", 
@@ -59,16 +63,20 @@ public class Quiz {
 	@Override
 	public String toString() {
 		return "Quiz [id=" + id + ", quizCategory=" + quizCategory + "]";
+
 	}
 
+	
 }
+
+
 
 
 // TODO: Need to implement following to other classes
 //// User.java
-//@OneToMany(mappedBy="user")
-//private List<Quiz> quizzes;
+//@OneToMany(mappedBy="creator", cascade=CascadeType.ALL)
+//private List<Quiz> createdQuizzes;
 //
 //// Question.java
-//@ManyToMany(mappedBy="questions")
+//@ManyToMany(mappedBy="questions", fetch = FetchType.EAGER?)
 //private List<Quiz> quizzes;

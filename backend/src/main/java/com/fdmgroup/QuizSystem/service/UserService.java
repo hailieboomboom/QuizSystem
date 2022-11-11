@@ -1,13 +1,16 @@
 package com.fdmgroup.QuizSystem.service;
+import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
+import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -15,6 +18,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final TrainerService trainerService;
 
     /**
      * Get user by id.
@@ -24,9 +29,11 @@ public class UserService {
     public User getUserById(long id){
 
         Optional<User> maybeUser = userRepository.findById(id);
+
         if(maybeUser.isEmpty()){
             throw new UserNotFoundException();
         }
+
         return maybeUser.get();
     }
 
@@ -47,15 +54,15 @@ public class UserService {
      * Delete user.
      * @param id User id.
      */
-//    public void deleteUserById(long id){
-//        if(userRepository.existsById(id)){
-//            userRepository.deleteById(id);
-//        }
-//        else {
-//            throw new UserNotFoundException();
-//        }
-//
-//    }
+    public void deleteUserById(long id){
+        if(userRepository.existsById(id)){
+            userRepository.deleteById(id);
+        }
+        else {
+            throw new UserNotFoundException();
+        }
+
+    }
 
     /**
      * Update user.
@@ -63,19 +70,28 @@ public class UserService {
      * @param modifiedUser Updated information.
      * @return             User.
      */
-//    public User updateUser(long id, User modifiedUser) {
-//        Optional<User> maybeUser = userRepository.findById(id);
-//        if(maybeUser.isEmpty()){
-//            throw new UserNotFoundException();
-//        }
-//        // Update user with new attributes
-//        User user = maybeUser.get();
-////        user.setAvatar(input.getAvatar());
-//        user.setUsername(modifiedUser.getUsername());
-//        user.setPassword(modifiedUser.getPassword());
-//        user.setEmail(modifiedUser.getEmail());
-//        return userRepository.save(user);
-//    }
+    public User updateUser(long id, UserUpdateDTO modifiedUser) {
+        Optional<User> maybeUser = userRepository.findById(id);
+        if(maybeUser.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        if (existsByUsername(modifiedUser.getUsername())) {
+            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
+        }
+
+        if (existsByEmail(modifiedUser.getEmail())) {
+            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedUser.getEmail()));
+        }
+        // Update user with new attributes
+        User user = maybeUser.get();
+        user.setUsername(modifiedUser.getUsername());
+        user.setPassword(modifiedUser.getPassword());
+        user.setEmail(modifiedUser.getEmail());
+        user.setFirstName(modifiedUser.getFirstName());
+        user.setLastName(modifiedUser.getLastName());
+        // Role?
+        return userRepository.save(user);
+    }
 
     /**
      * Check user's existence by username.
@@ -94,7 +110,6 @@ public class UserService {
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
-
 
 //
 //    /**

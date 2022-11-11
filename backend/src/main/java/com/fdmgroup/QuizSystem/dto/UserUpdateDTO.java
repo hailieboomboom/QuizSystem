@@ -1,10 +1,12 @@
 package com.fdmgroup.QuizSystem.dto;
-import com.fdmgroup.QuizSystem.model.Role;
 import lombok.Data;
-import javax.validation.constraints.Email;
+import lombok.NonNull;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 @Data
-public class SignUpRequest {
+public class UserUpdateDTO {
 
     @NotBlank
     private String username;
@@ -12,7 +14,7 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
-    @Email
+    @NotBlank
     private String email;
 
     @NotBlank
@@ -21,6 +23,4 @@ public class SignUpRequest {
     @NotBlank
     private String lastName;
 
-    @NotBlank
-    private String role;
 }
