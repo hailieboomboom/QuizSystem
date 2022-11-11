@@ -26,7 +26,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
-
+ 
 @Component
 public class DataLoader implements ApplicationRunner {
      @Autowired
@@ -94,7 +94,17 @@ public class DataLoader implements ApplicationRunner {
         ShortAnswerQuestion sa2 = new ShortAnswerQuestion();
         sa2.setQuestionDetails("who is the best leader");
         sa2.setCorrectAnswer("bts");
-        sa2.setCreator(trainer);
+        sa2.setCreator(sales);
+        
+        ShortAnswerQuestion sa3 = new ShortAnswerQuestion();
+        sa3.setQuestionDetails("where is the best city");
+        sa3.setCorrectAnswer("nyc");
+        sa3.setCreator(sales);
+        
+        ShortAnswerQuestion sa4 = new ShortAnswerQuestion();
+        sa4.setQuestionDetails("what is the best language");
+        sa4.setCorrectAnswer("java");
+        sa4.setCreator(trainer);
         
          // tag: interview course python java web springboot sql unix ood jpa spring react javascript proskill other
 		
@@ -136,12 +146,18 @@ public class DataLoader implements ApplicationRunner {
         tag1.addOneQuestion(mcq1);
         tag1.addOneQuestion(sa1);
         tag1.addOneQuestion(sa2);
+        tag1.addOneQuestion(sa3);
+        tag1.addOneQuestion(sa4);
         tag2.addOneQuestion(sa1);
+        tag2.addOneQuestion(sa4);
 
         mcq1.addOneTag(tag1);
         sa1.addOneTag(tag2);
         sa1.addOneTag(tag1);
         sa2.addOneTag(tag1);
+        sa3.addOneTag(tag1);
+        sa4.addOneTag(tag1);
+        sa4.addOneTag(tag2);
 
         tagService.save(tag1);
         tagService.save(tag2);
@@ -163,6 +179,8 @@ public class DataLoader implements ApplicationRunner {
         questionService.save(mcq1);
         questionService.save(sa1);
         questionService.save(sa2);
+        questionService.save(sa3);
+        questionService.save(sa4);
         mcoService.save(mco1);
         mcoService.save(mco2);
         mcoService.save(mco3);

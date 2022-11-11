@@ -29,7 +29,7 @@ public class Question {
     @ManyToMany(mappedBy="questions")
     private List<Quiz> quizzes;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "QUESTION_Tag",
             joinColumns = { @JoinColumn(name = "question_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") })

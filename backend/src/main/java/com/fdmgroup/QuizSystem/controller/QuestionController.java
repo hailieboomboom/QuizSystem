@@ -226,14 +226,36 @@ public class QuestionController {
 	}
 	
 	// view all short answer questions created by a user
-//	@GetMapping("/{userId}/saqs")
-//	public List<SAQDto> getAllShortAnswerQuestionsByCreator(@PathVariable Long userId){
-//		
-//		User creator = userService.getUserById(userId);
-//		List<Question> questionsByUser = questionService.findQuestionsByCreator(creator);
-//		for(Question q: questionsByUser) {
-//			
-//		}
-//	}
+	@GetMapping("/{userId}/saqs")
+	public List<SAQDto> getAllShortAnswerQuestionsByCreator(@PathVariable Long userId){
+		
+		List<SAQDto> saqDtos = new ArrayList<SAQDto>();
+		
+		User creator = userService.getUserById(userId);
+		// get all questions created by users
+		// go through the questions and check if question is an saq
+		// add all saqs to the returned saqDto list
+		List<Question> questionsByUser = questionService.findQuestionsByCreator(creator);
+		List<Long> saqIds = saqService.getAllSaqIds();
+		
+		for(Question q: questionsByUser) {
+			if(saqIds.contains(q.getId())) {
+				ShortAnswerQuestion saq = saqService.findById(q.getId());
+				SAQDto saqDto = new SAQDto();
+				saqDto.setUserId(q.getCreator().getId());
+				saqDto.setCorrectAnswer(saq.getCorrectAnswer());
+				saqDto.setQuestionDetails(saq.getQuestionDetails());
+				saqDto.setSaqId(saq.getId());
+				List<String> tagnames = new ArrayList<String>();
+				for(Tag t: saq.getTags()) {
+					tagnames.add(t.getTagName());
+				}
+				saqDto.setTags(tagnames);
+				saqDtos.add(saqDto);
+			}
+		}
+		
+		return saqDtos;
+	}
 
 }

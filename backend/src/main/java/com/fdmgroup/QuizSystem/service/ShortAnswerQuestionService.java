@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,16 @@ public class ShortAnswerQuestionService {
 			return null;
 		}
 		return foundQ.get();
+	}
+	
+	public List<Long> getAllSaqIds(){
+		List<Long> saqIds = new ArrayList<Long>();
+		List<ShortAnswerQuestion> saqs = findAll();
+		for(ShortAnswerQuestion saq : saqs) {
+			Long id = saq.getId();
+			saqIds.add(id);
+		}
+		return saqIds;
 	}
 
 }

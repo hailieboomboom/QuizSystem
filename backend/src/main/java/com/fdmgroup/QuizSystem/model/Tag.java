@@ -21,7 +21,7 @@ public class Tag {
     private long id;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "tags")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "tags")
     @JsonIgnore
     private Set<Question> tutorials = new HashSet<>();
 
