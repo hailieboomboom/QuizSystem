@@ -1,8 +1,18 @@
 package com.fdmgroup.QuizSystem.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
+import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
+import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
+import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
+import com.fdmgroup.QuizSystem.repository.McqRepository;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +27,15 @@ public class QuestionService {
 
 	@Autowired
     private QuestionRepository questionRepository;
+
+	@Autowired
+	private McqRepository mcqRepository;
+	@Autowired
+	private TagService tagService;
+	@Autowired
+	private MultipleChoiceOptionService multipleChoiceOptionService;
+	@Autowired
+	private UserRepository userRepository;
 	
 	
 	public QuestionService(QuestionRepository questionRepository) {
@@ -47,6 +66,137 @@ public class QuestionService {
 	public List<Question> findQuestionsByCreator(User creator){
 		return questionRepository.findByCreator(creator);
 	}
+
+
+
+	public void createMCQ(AddMcqDto addMcqDto) {
+
+
+		Optional<User> userOptional = userRepository.findById(addMcqDto.getUserId());
+		if (!userOptional.isPresent())
+			throw new NoDataFoundException("Error, user doesn't exists");
+
+		MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion();
+		newQuestion.setCreator(userOptional.get());
+		newQuestion.setQuestionDetails(addMcqDto.getQuestionDetails());
+		newQuestion = (MultipleChoiceQuestion) save(newQuestion);
+		newQuestion.
+				setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
+		newQuestion.
+				setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion)
+				);
+		this.save(newQuestion);
+
+	}
+
+
+	public void updateMCQ(AddMcqDto addMcqDto, long mcqId) {
+		MultipleChoiceQuestion originalMcq = findMcqById(mcqId);
+
+		List<MultipleChoiceOption> updatedOptions = multipleChoiceOptionService.updateMcqOption(addMcqDto.getOptions(), originalMcq.getId());
+		originalMcq.setQuestionDetails(addMcqDto.getQuestionDetails());
+		originalMcq = (MultipleChoiceQuestion) save(originalMcq);
+
+		Long userId = findCreatorIdOfAQuestion(originalMcq.getId());
+		User user = userRepository.findById(userId).get();
+
+		originalMcq.setCreator(user);
+		originalMcq.setMcoptions(updatedOptions);
+		originalMcq.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
+		this.save(originalMcq);
+	}
+
+
+	public List<ReturnMcqDto> getAllMcqQuestion() {
+		var mcqQuestions = mcqRepository.findAll();
+
+		List<ReturnMcqDto> mcqDtoList = new ArrayList<>();
+
+		for (MultipleChoiceQuestion question : mcqQuestions)
+			mcqDtoList.add(getReturnMcqDto(question));
+
+		return mcqDtoList;
+	}
+
+	public List<ReturnMcqDto> getAllMcqCreatedByAnUser(long userId) {
+		Optional<User> userOptional = userRepository.findById(userId);
+		//Logic
+		if (!userOptional.isPresent())
+			throw new NoDataFoundException("User Not Found");
+		User user = userOptional.get();
+		List<Question> mcqQuestions = questionRepository.
+				findAllByCreatorId(user.getId());
+		List<ReturnMcqDto> mcqDtoList = new ArrayList<>();
+		for (Question question : mcqQuestions) {
+			if (!isMultipleChoiceQuestion(question.getId()))
+				continue;
+			mcqDtoList.add(getReturnMcqDto(question));
+		}
+		return mcqDtoList;
+	}
+
+	private ReturnMcqDto getReturnMcqDto(Question question) {
+		ReturnMcqDto returnMcqDto = new ReturnMcqDto();
+		returnMcqDto.setQuestionId(question.getId());
+		returnMcqDto.setQuestionDetail(question.getQuestionDetails());
+		returnMcqDto.setTags(question.getTags().stream().map(tag -> tag.getTagName()).toList());
+		returnMcqDto.setMcqOptionDtoList(multipleChoiceOptionService.listOptionsForMcq(question.getId()));
+		return returnMcqDto;
+	}
+
+
+	public AddMcqDto getMcqDto(Long questionId) {
+
+
+		Question mcq = findMcqById(questionId);
+		List<String> tagList = mcq.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList());
+		List<McqOptionDto> optionList = multipleChoiceOptionService.listOptionsForMcq(questionId);
+		AddMcqDto addMcqDto = new AddMcqDto();
+		addMcqDto.setQuestionDetails(mcq.getQuestionDetails());
+		addMcqDto.setUserId(addMcqDto.getUserId());
+		addMcqDto.setTags(tagList);
+		addMcqDto.setOptions(optionList);
+
+		return addMcqDto;
+	}
+
+
+	@Transactional
+	public void deleteOneMcq(Long questionId) {
+
+		MultipleChoiceQuestion mcq = findMcqById(questionId);
+		mcq.setTags(null);
+		var returned = questionRepository.save(mcq);
+		multipleChoiceOptionService.deleteQuestionOptions(questionId);
+		questionRepository.delete(returned);
+
+	}
+
+	//
+	public MultipleChoiceQuestion findMcqById(Long questionId) {
+		if(!isMultipleChoiceQuestion(questionId)){
+			throw new NoDataFoundException("Question Not Found");
+		}
+
+		Optional<Question> optionalMCQ = questionRepository.findById(questionId);
+
+
+		return (MultipleChoiceQuestion) optionalMCQ.get();
+	}
+
+	public Long findCreatorIdOfAQuestion(long userId) {
+		Optional<Long> optionalId = questionRepository.findCreatorIdOfQuestion(userId);
+		if (!optionalId.isPresent())
+			throw new NoDataFoundException("You can't modify this question, because we couldn't find the creator of this question");
+		return optionalId.get();
+	}
+
+
+	public Boolean isMultipleChoiceQuestion(long questionId) {
+		Optional<MultipleChoiceQuestion> mcqOptional = mcqRepository.findById(questionId);
+		return mcqOptional.isPresent();
+	}
+
 
 
 //    public Question getQuestionById(long id){
