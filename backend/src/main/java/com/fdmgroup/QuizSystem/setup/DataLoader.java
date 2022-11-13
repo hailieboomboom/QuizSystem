@@ -150,6 +150,14 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
         mcq1.setCreator(sales);
+        
+
+        MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
+        mcq2.setQuestionDetails("test mcq2");
+        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1",true,mcq2);
+        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2",false,mcq2);
+        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3",false,mcq2);
+        mcq2.setCreator(sales);
 
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("what is the best colour");
@@ -249,6 +257,12 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco1);
         mcoService.save(mco2);
         mcoService.save(mco3);
+        
+        
+        mcq2 = (MultipleChoiceQuestion) questionService.save(mcq2);
+        mcoService.save(mco11);
+        mcoService.save(mco12);
+        mcoService.save(mco13);
 
         ////////// Load Quizzes ////////////
 
@@ -265,10 +279,13 @@ public class DataLoader implements ApplicationRunner {
         quiz1 = quizService.save(quiz1);
        
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+        
+        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
         System.out.println("--------SAVE QUIZ1 DONE-------");
-        quizService.removeQuestionFromQuiz(mcq1, quiz1);
-        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
-//        
+//        quizService.removeQuestionFromQuiz(mcq1, quiz1);
+//        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
+//
+
 ////        quiz1.setQuizQuestionsGrade(qqgList);
 ////        
 ////        mcq1.setQuizQuestionsGrade(qqgList);

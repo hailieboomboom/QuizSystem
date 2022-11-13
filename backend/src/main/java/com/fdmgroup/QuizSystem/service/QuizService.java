@@ -44,6 +44,9 @@ public class QuizService {
 	@Autowired
 	private QuizQuestionGradeService quizQuestionGradeService;
 
+	@Autowired
+	private QuizQuestionGradeRepository qqgRepository;
+	
 
 	public void createQuiz(QuizRequest quizRequest) {
 		
@@ -59,7 +62,7 @@ public class QuizService {
 		quizRepository.save(quizEntity);
 	}
 
-//  // TODO: To be deleted once confirm everything works
+//  // TODO: This method turns Entity into DTO -> To be deleted once confirm everything works
 //	public QuizDto getQuizDto(Quiz quiz) {
 //		QuizDto quizDto = new QuizDto();
 //		quizDto.setQuizId(quiz.getId());
@@ -150,8 +153,18 @@ public class QuizService {
 //			questionRepository.save(managedQuestion);
 //		}
 		
-		quizRepository.deleteById(id);
+		System.out.println(quizRepository.findById(id));
+//	
+//		// find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
+//		List<QuizQuestionGrade> qqgsToRemove = qqgRepository.findByQuizId(id);
+//		for(QuizQuestionGrade qqg: qqgsToRemove) {
+//			qqgRepository.delete(qqg);
+//		}
 		
+//		quizRepository.deleteById(id);
+		quizRepository.delete(managedQuiz);
+		
+		System.out.println(quizRepository.findById(id));
 		// TODO or can it be simplify in this way?
 //		if (quizRepository.existsById(id)) {
 //			quizRepository.deleteById(id);

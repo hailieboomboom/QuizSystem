@@ -11,6 +11,7 @@ import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 public interface QuizQuestionGradeRepository extends JpaRepository<QuizQuestionGrade, Long>{
 	
 	Optional<QuizQuestionGrade> findByKey(QuizQuestionGradeKey key);
-
 	List<QuizQuestionGrade> findAllByQuizId(long quiz_id);
+//	List<QuizQuestionGrade> findByQuizId(long quizId);
+
 }

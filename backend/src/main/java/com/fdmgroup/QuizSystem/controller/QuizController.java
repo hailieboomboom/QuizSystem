@@ -45,16 +45,6 @@ public class QuizController {
 	@PostMapping("/api/quizzes")
 	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizRequest quizRequest) {
 
-//		// TODO do we need this? or do we need to check if the 
-//		Optional<User> optionalUser = userRepository.findById(quizRequest.getCreatorId());
-//
-//		// check if user exists
-//		if (optionalUser.isEmpty()) {
-//			return new ResponseEntity<ApiResponse>(new ApiResponse(false, ERROR_USER_DOES_NOT_EXIST),
-//					HttpStatus.BAD_REQUEST);
-//		}
-
-		// create quiz in database
 		quizService.createQuiz(quizRequest);
 
 		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_QUIZ_HAS_BEEN_CREATED),
