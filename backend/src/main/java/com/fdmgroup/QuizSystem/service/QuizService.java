@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fdmgroup.QuizSystem.dto.QuizRequest;
-import com.fdmgroup.QuizSystem.dto.QuizResponse;
+
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
+import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
@@ -48,13 +48,13 @@ public class QuizService {
 	private QuizQuestionGradeRepository qqgRepository;
 	
 
-	public void createQuiz(QuizRequest quizRequest) {
+	public void createQuiz(QuizDto quizDto) {
 		
 		Quiz quizEntity = new Quiz();
-		quizEntity.setName(quizRequest.getName());
-		quizEntity.setQuizCategory(quizRequest.getQuizCategory());
-//		quizEntity.setQuestions(quizRequest.getQuestions());
-		quizEntity.setCreator(userRepository.findById(quizRequest.getCreatorId()).get());
+		quizEntity.setName(quizDto.getName());
+		quizEntity.setQuizCategory(quizDto.getQuizCategory());
+//		quizEntity.setQuestions(quizDto.getQuestions());
+		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
 		
 		// TODO: !!!!
 		// let user know about quiz addition, but no need to let question know the Quiz
@@ -62,55 +62,36 @@ public class QuizService {
 		quizRepository.save(quizEntity);
 	}
 
-//  // TODO: This method turns Entity into DTO -> To be deleted once confirm everything works
-//	public QuizDto getQuizDto(Quiz quiz) {
-//		QuizDto quizDto = new QuizDto();
-//		quizDto.setQuizId(quiz.getId());
-//		quizDto.setCreatorId(quiz.getCreator().getId());
-//		quizDto.setName(quiz.getName());
-//		quizDto.setQuizCategory(quiz.getQuizCategory());
-////		quizDto.setQuestions(quiz.getQuestions());
-//		return quizDto;
-//	}
-//	
-//	public List<QuizDto> getAllQuizzes() {
-//	List<Quiz> allQuizzes = quizRepository.findAll();
-//	
-//	List<QuizDto> quizDtos = new ArrayList<>();
-//	for (Quiz quiz : allQuizzes) {
-//		quizDtos.add(getQuizDto(quiz));
-//	}
-//	
-//	return quizDtos;
-//}
+
 	public Quiz save(Quiz quiz) {
 		return quizRepository.save(quiz);
 	}
 	
 	
 	
-	public QuizResponse getQuizResponse(Quiz quiz) {
-		QuizResponse quizResponse = new QuizResponse();
-		quizResponse.setQuizId(quiz.getId());
-		quizResponse.setCreatorId(quiz.getCreator().getId());
-		quizResponse.setName(quiz.getName());
-		quizResponse.setQuizCategory(quiz.getQuizCategory());
-//		quizResponse.setQuestions(quiz.getQuestions());
-		return quizResponse;
+	public QuizDto getQuizDto(Quiz quiz) {
+		QuizDto quizDto = new QuizDto();
+		quizDto.setQuizId(quiz.getId());
+		quizDto.setCreatorId(quiz.getCreator().getId());
+		quizDto.setName(quiz.getName());
+		quizDto.setQuizCategory(quiz.getQuizCategory());
+//		quizDto.setQuestions(quiz.getQuestions());
+		return quizDto;
 	}
 
 	
-	public List<QuizResponse> getAllQuizzes() {
+	public List<QuizDto> getAllQuizzes() {
 		List<Quiz> allQuizzes = quizRepository.findAll();
 		
-		List<QuizResponse> quizResponses = new ArrayList<>();
+		List<QuizDto> quizDtos = new ArrayList<>();
 		for (Quiz quiz : allQuizzes) {
-			quizResponses.add(getQuizResponse(quiz));
+			quizDtos.add(getQuizDto(quiz));
 		}
-		return quizResponses;
+		return quizDtos;
 	}
 	
-	public void updateQuiz(long id, QuizRequest quizRequest){
+	// update quiz details (not including questions)
+	public void updateQuiz(long id, QuizDto quizDto){
 		
 		// Check if quiz exists
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
@@ -120,13 +101,11 @@ public class QuizService {
 
 		
 		Quiz quiz = optionalQuiz.get();
-		quiz.setName(quizRequest.getName());
-		quiz.setQuizCategory(quizRequest.getQuizCategory());
-//		quiz.setQuestions(quizRequest.getQuestions());
-		quiz.setCreator(userRepository.findById(quizRequest.getCreatorId()).get());
+		quiz.setName(quizDto.getName());
+		quiz.setQuizCategory(quizDto.getQuizCategory());
+//		quiz.setQuestions(quizDto.getQuestions());
+		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
 		
-		// TODO !!!!!!!!
-		// UPDATE QUETION LIST !!!! 
 		
 		quizRepository.save(quiz);
 	}
@@ -138,9 +117,10 @@ public class QuizService {
 		if(optionalQuiz.isEmpty()) {
 			throw new QuizNotFoundException();
 		}
-		Quiz managedQuiz = optionalQuiz.get();
 		
-	// TODO is it necessary to do these steps?	
+//	    // TODO For Summer: is it necessary to do these steps?	
+//		Quiz managedQuiz = optionalQuiz.get();
+		
 //		// let user know about quiz removal
 //		User managedUser = managedQuiz.getCreator();
 //		managedUser.removeQuiz(managedQuiz);
@@ -153,24 +133,15 @@ public class QuizService {
 //			questionRepository.save(managedQuestion);
 //		}
 		
-		System.out.println(quizRepository.findById(id));
 //	
-//		// find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
+//		// TODO To be deleted by Summer: find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
 //		List<QuizQuestionGrade> qqgsToRemove = qqgRepository.findByQuizId(id);
 //		for(QuizQuestionGrade qqg: qqgsToRemove) {
 //			qqgRepository.delete(qqg);
 //		}
 		
-//		quizRepository.deleteById(id);
-		quizRepository.delete(managedQuiz);
+		quizRepository.deleteById(id); 
 		
-		System.out.println(quizRepository.findById(id));
-		// TODO or can it be simplify in this way?
-//		if (quizRepository.existsById(id)) {
-//			quizRepository.deleteById(id);
-//		} else {
-//			throw new QuizNotFoundException();
-//		}
 	}
 	
 
@@ -214,25 +185,20 @@ public class QuizService {
 		}
 	}
 
-//	public List<Question> getAllQuestionsByQuizId(long quizId) {
-//		QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.
-//	}
+	public List<QuizDto> getQuizzesByCreatorId(long creatorId) {
+		//TODO why warning here
+		User creator = userRepository.getById(creatorId);
+		System.out.println(creator);
+		List<Quiz> quizzes = quizRepository.findByCreator(creator);
+		System.out.println(quizzes);
+		
+		List<QuizDto> quizDtos = new ArrayList<>();
+		for(Quiz quiz: quizzes) {
+			quizDtos.add(getQuizDto(quiz));
+		}
+		return quizDtos;
+	}
 
-
-
-	
-	
-//  // TODO: to be completed
-//	public List<QuizResponse> getContentQuizzes() {
-//		
-//		List<Quiz> contentQuizzes = quizRepository.findByQuizCategory(QuizCategory.COURSE_QUIZ);
-//		
-//		List<QuizResponse> contentQuizResponses = new ArrayList<>();
-//		for (Quiz quiz : contentQuizzes) {
-//			contentQuizResponses.add(getQuizResponse(quiz));
-//		}
-//		return contentQuizResponses;
-//	}
 
 }	
 
