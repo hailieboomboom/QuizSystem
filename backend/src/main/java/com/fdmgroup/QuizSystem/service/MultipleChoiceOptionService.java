@@ -40,7 +40,7 @@ public class MultipleChoiceOptionService {
 		List<MultipleChoiceOption> optionList = new ArrayList<>();
 		int numberOfCorrectOption = 0;
 
-		if (optionList.size() <= 1)
+		if (mcqOptionDtoList.size() <= 1)
 			throw new McqOptionNotValidException("Please provide at least more than one option");
 
 		for(McqOptionDto mcqOption: mcqOptionDtoList) {
