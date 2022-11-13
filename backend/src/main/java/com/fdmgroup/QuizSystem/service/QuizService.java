@@ -213,6 +213,9 @@ public class QuizService {
 			qqgService.remove(quizQuestion);
 		}
 	}
+	
+	//TODO: delete a quiz
+	// 
 
 //	public List<Question> getAllQuestionsByQuizId(long quizId) {
 //		QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.
