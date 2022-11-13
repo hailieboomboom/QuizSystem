@@ -2,13 +2,11 @@ package com.fdmgroup.QuizSystem.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
-import com.fdmgroup.QuizSystem.repository.QuestionRepository;
-import com.fdmgroup.QuizSystem.repository.QuizRepository;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
 import com.fdmgroup.QuizSystem.util.ModelToDTO;
@@ -101,30 +99,44 @@ public class QuizController {
 //
 //		return new ResponseEntity<>(new ApiResponse(true, "Successfully add questions to quizzes"), HttpStatus.OK);
 //	}
-//	@PostMapping("/api/quizzes/{quiz_id}/questions")
-//	public ResponseEntity<ApiResponse> addQuestionToQuiz(@PathVariable long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeList) {
-//
-//		Quiz quiz = quizService.getQuizById(quiz_id);
-//
-//		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
-//		// Database
-//		Set<Long> questionIdSet = quizQuestionGradeList.stream().map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
-//		Set<Long> questionIdInputSet = questionGradeList.stream().map(QuestionGradeDTO::getQuestionId).collect(Collectors.toSet());
-//
-//		for (QuestionGradeDTO questionGradeDTO : questionGradeList) {
-//			if(!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
-//				Question question = questionService.findById(questionGradeDTO.getQuestionId());
-//				float grade = questionGradeDTO.getGrade();
-//				quizService.addQuestionIntoQuiz(question, quiz, grade);
-//			}
-//		}
-//
-//
-//	}
+	@PostMapping("/api/quizzes/{quiz_id}/questions")
+	public ResponseEntity<ApiResponse> updateQuestionsToQuiz(@PathVariable long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeList) {
+
+		Quiz quiz = quizService.getQuizById(quiz_id);
+
+		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
+		// Database
+		Set<Long> questionIdSet = quizQuestionGradeList.stream().map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
+		Set<Long> questionIdInputSet = questionGradeList.stream().map(QuestionGradeDTO::getQuestionId).collect(Collectors.toSet());
+
+		for (QuestionGradeDTO questionGradeDTO : questionGradeList) {
+
+			if(!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
+				Question question = questionService.findById(questionGradeDTO.getQuestionId());
+				float grade = questionGradeDTO.getGrade();
+				quizService.addQuestionIntoQuiz(question, quiz, grade);
+			}
+			else if(! questionGradeDTO.getGrade().equals(quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())){
+				QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId()));
+				quizQuestionGrade.setGrade(questionGradeDTO.getGrade());
+				quizQuestionGradeService.save(quizQuestionGrade);
+			}
+		}
+
+		for(Long id : questionIdSet) {
+			if(!questionIdInputSet.contains(id)) {
+				Question question = questionService.findById(id);
+				quizService.removeQuestionFromQuiz(question, quiz);
+			}
+		}
+
+		return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
+	}
 
 	@GetMapping("/api/quizzes/{id}/questions")
-	public ResponseEntity<List<QuizQuestionGrade>> getAllQuestionsByQuizId(@PathVariable long id) {
-		return new ResponseEntity<>(quizQuestionGradeService.findAllByQuizId(id), HttpStatus.OK);
+	public ResponseEntity<List<QuestionGradeDTO>> getAllQuestionsByQuizId(@PathVariable long id) {
+		List<QuestionGradeDTO> resultList = quizQuestionGradeService.findAllByQuizId(id).stream().map(modelToDTO::qqgToQg).toList();
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
 	}
 
 }

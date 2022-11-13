@@ -14,4 +14,5 @@ public interface QuizQuestionGradeRepository extends JpaRepository<QuizQuestionG
 	List<QuizQuestionGrade> findAllByQuizId(long quiz_id);
 //	List<QuizQuestionGrade> findByQuizId(long quizId);
 
+
 }

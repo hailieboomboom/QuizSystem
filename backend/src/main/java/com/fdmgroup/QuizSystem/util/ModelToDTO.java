@@ -1,8 +1,10 @@
 package com.fdmgroup.QuizSystem.util;
 
+import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.QuizResponse;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
 import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,10 @@ public class ModelToDTO {
 
         modelMapper.typeMap(User.class, UserOutputDTO.class)
                 .addMapping(User::getRole, UserOutputDTO::setRole);
+
+        modelMapper.typeMap(QuizQuestionGrade.class, QuestionGradeDTO.class)
+                .addMapping(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId(), QuestionGradeDTO::setQuestionId)
+                .addMapping(QuizQuestionGrade::getGrade, QuestionGradeDTO::setGrade);
     }
 
     public UserOutputDTO userToOutput(User user){
@@ -32,6 +38,10 @@ public class ModelToDTO {
 
     public QuizResponse quizToOutput(Quiz quiz) {
         return modelMapper.map(quiz, QuizResponse.class);
+    }
+
+    public QuestionGradeDTO qqgToQg(QuizQuestionGrade quizQuestionGrade){
+        return modelMapper.map(quizQuestionGrade, QuestionGradeDTO.class);
     }
 
 }
