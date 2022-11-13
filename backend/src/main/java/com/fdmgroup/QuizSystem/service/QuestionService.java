@@ -149,11 +149,13 @@ public class QuestionService {
 
 
 		Question mcq = findMcqById(questionId);
+		Long userId = findCreatorIdOfAQuestion(questionId);
+
 		List<String> tagList = mcq.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList());
 		List<McqOptionDto> optionList = multipleChoiceOptionService.listOptionsForMcq(questionId);
 		AddMcqDto addMcqDto = new AddMcqDto();
 		addMcqDto.setQuestionDetails(mcq.getQuestionDetails());
-		addMcqDto.setUserId(addMcqDto.getUserId());
+		addMcqDto.setUserId(userId);
 		addMcqDto.setTags(tagList);
 		addMcqDto.setOptions(optionList);
 

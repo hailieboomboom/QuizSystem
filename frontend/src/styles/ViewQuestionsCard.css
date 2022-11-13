@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none
+    border: none;
 }
 
 .questionCard{
@@ -12,13 +12,16 @@
     min-height: 200px;
     border-radius: 15px;
     box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
-    align-content: center;
+    margin: 20px;
+}
+.questionCard:hover{
+    transform: scale(1.1, 1.1);
+
 }
 
 .questionCardContent{
     background-color: #ebe1f2;
-    padding: 20px;
-    display: inline-flex;
+    display: inline;
 }
 
 .questionTitle{
@@ -37,7 +40,9 @@
 .answerSection {
     width: 100%;
 }
-
+.correctAnswer{
+    background-color: green;
+}
 .divider{
     width: auto;
     height:5px;
