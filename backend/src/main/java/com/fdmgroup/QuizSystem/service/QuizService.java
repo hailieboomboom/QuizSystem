@@ -184,6 +184,9 @@ public class QuizService {
 			qqgService.remove(quizQuestion);
 		}
 	}
+	
+	//TODO: delete a quiz
+	// 
 
 	public List<QuizDto> getQuizzesByCreatorId(long creatorId) {
 		//TODO why warning here
