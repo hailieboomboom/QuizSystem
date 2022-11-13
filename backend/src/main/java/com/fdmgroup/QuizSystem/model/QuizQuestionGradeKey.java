@@ -20,7 +20,6 @@ public class QuizQuestionGradeKey implements Serializable{
 	@Column(name = "question_id")
 	Long questionId;
 	
-	
 
 	@Override
 	public int hashCode() {

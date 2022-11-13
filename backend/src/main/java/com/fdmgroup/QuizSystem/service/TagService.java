@@ -60,8 +60,7 @@ public class TagService {
 		Optional<Tag> tagOptional = tagRepo.findByTagName(tagName.toLowerCase());
 		if (tagOptional.isEmpty())
 			throw new NoDataFoundException( tagName + " doesn't exists, please select another one or create a tag first");
-		Tag tag = tagOptional.get();
-		return tag;
+		return tagOptional.get();
 	}
 
 
