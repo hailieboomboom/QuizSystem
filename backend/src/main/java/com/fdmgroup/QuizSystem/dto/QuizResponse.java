@@ -2,6 +2,7 @@ package com.fdmgroup.QuizSystem.dto;
 
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
+import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,6 @@ public class QuizResponse {
 	private long creatorId;
 	private String name;
 	private QuizCategory quizCategory;
+
 
 }

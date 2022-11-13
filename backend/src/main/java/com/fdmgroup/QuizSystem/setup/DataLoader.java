@@ -267,6 +267,7 @@ public class DataLoader implements ApplicationRunner {
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
         System.out.println("--------SAVE QUIZ1 DONE-------");
         quizService.removeQuestionFromQuiz(mcq1, quiz1);
+        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
 //        
 ////        quiz1.setQuizQuestionsGrade(qqgList);
 ////        

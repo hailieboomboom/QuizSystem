@@ -41,6 +41,9 @@ public class QuizService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private QuizQuestionGradeService quizQuestionGradeService;
+
 
 	public void createQuiz(QuizRequest quizRequest) {
 		
@@ -158,13 +161,13 @@ public class QuizService {
 	}
 	
 
-	public QuizResponse getQuizById(long id) {
+	public Quiz getQuizById(long id) {
 
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if (optionalQuiz.isEmpty()) {
 			throw new QuizNotFoundException();
 		}
-		return getQuizResponse(optionalQuiz.get());
+		return optionalQuiz.get();
 	}
 	
 
@@ -173,7 +176,8 @@ public class QuizService {
 
 		
 	}
-	
+
+	//TODO: parameters can be just Ids instead of entities? (from Yutta and Jason)
 	public void addQuestionIntoQuiz(Question question, Quiz quiz, Float grade) {
 		System.out.println("----ENTER ADDQUESTION: question id is "+question.getId()+" quiz id is "+ quiz.getId());
 		
@@ -196,6 +200,10 @@ public class QuizService {
 			qqgService.remove(quizQuestion);
 		}
 	}
+
+//	public List<Question> getAllQuestionsByQuizId(long quizId) {
+//		QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.
+//	}
 
 
 

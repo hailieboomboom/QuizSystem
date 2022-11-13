@@ -49,10 +49,11 @@ public class Question {
 
 //    @ManyToMany(mappedBy="questions")
 //    private List<Quiz> quizzes;
-    
-    @OneToMany(mappedBy = "question")
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<QuizQuestionGrade> quizQuestionsGrade;
+
+	// To Haile, Jason and Yutta think we don't need this part of code because it already exists in the quiz model.
+//    @OneToMany(mappedBy = "question")
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	private List<QuizQuestionGrade> quizQuestionsGrade;
     
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "QUESTION_Tag",

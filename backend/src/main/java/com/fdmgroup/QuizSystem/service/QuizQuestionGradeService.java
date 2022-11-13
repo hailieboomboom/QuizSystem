@@ -3,6 +3,7 @@ package com.fdmgroup.QuizSystem.service;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +15,11 @@ import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class QuizQuestionGradeService {
-	
-	@Autowired
-	private QuizQuestionGradeRepository qqgRepo;
-	
+
+	private final QuizQuestionGradeRepository qqgRepo;
+
 	public QuizQuestionGrade save(QuizQuestionGrade qqg) {
 		return qqgRepo.save(qqg);
 	}
@@ -29,6 +30,10 @@ public class QuizQuestionGradeService {
 			return null;
 		}
 		return foundQqg.get();
+	}
+
+	public List<QuizQuestionGrade> findAllByQuizId(long quizId) {
+		return qqgRepo.findAllByQuizId(quizId);
 	}
 	
 	public void remove(QuizQuestionGrade qqg) {
