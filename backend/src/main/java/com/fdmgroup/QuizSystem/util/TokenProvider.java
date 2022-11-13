@@ -50,7 +50,7 @@ public class TokenProvider {
                 // of a JWT unless it is encrypted.
                 .claim("userId", user.getId())
                 .claim("username", user.getUsername())
-                .claim("email", user.getEmail())
+//                .claim("email", user.getEmail())
                 .compact();
     }
 

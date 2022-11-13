@@ -4,6 +4,7 @@ import com.fdmgroup.QuizSystem.dto.LoginRequest;
 import com.fdmgroup.QuizSystem.dto.SignUpRequest;
 import com.fdmgroup.QuizSystem.exception.RoleIsOutOfScopeException;
 import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
+import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.*;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
@@ -44,6 +45,10 @@ public class AuthController {
     @ApiOperation(value = "log in using username and password")
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest){
+        User user = userService.getUserByUsername(loginRequest.getUsername());
+        if(user.getRole().equals(Role.UNAUTHORISED_SALES) || user.getRole().equals(Role.UNAUTHORISED_TRAINER) || user.getRole().equals(Role.ABSENT)) {
+            throw new UserUnauthorisedError("Your account is not authorised. Please contact an authorised staff");
+        }
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
         return new AuthResponse(token);
     }
@@ -69,7 +74,6 @@ public class AuthController {
         mapSignUpRequestToUserAndSave(signUpRequest);
         log.info("user with role {}, username {} and email {} and password {} is signed up successfully", signUpRequest.getRole(), signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword());
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        log.info(token);
         return new AuthResponse(token);
     }
 
@@ -94,6 +98,7 @@ public class AuthController {
      * @param signUpRequest Signup request object
      * @return              User object
      */
+    @ApiOperation(value = "Map SignUpRequest to specific user based on the role value")
     private void mapSignUpRequestToUserAndSave(SignUpRequest signUpRequest) {
 
         switch (signUpRequest.getRole()) {
@@ -102,8 +107,8 @@ public class AuthController {
                 student.setEmail(signUpRequest.getEmail());
                 student.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 student.setUsername(signUpRequest.getUsername());
-                student.setFirstname(signUpRequest.getFirstname());
-                student.setLastname(signUpRequest.getLastname());
+                student.setFirstName(signUpRequest.getFirstName());
+                student.setLastName(signUpRequest.getLastName());
                 studentService.save(student);
             }
             case "trainer" -> {
@@ -111,8 +116,8 @@ public class AuthController {
                 trainer.setEmail(signUpRequest.getEmail());
                 trainer.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 trainer.setUsername(signUpRequest.getUsername());
-                trainer.setFirstname(signUpRequest.getFirstname());
-                trainer.setLastname(signUpRequest.getLastname());
+                trainer.setFirstName(signUpRequest.getFirstName());
+                trainer.setLastName(signUpRequest.getLastName());
                 trainerService.save(trainer);
             }
             case "sales" -> {
@@ -120,8 +125,8 @@ public class AuthController {
                 sales.setEmail(signUpRequest.getEmail());
                 sales.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
                 sales.setUsername(signUpRequest.getUsername());
-                sales.setFirstname(signUpRequest.getFirstname());
-                sales.setLastname(signUpRequest.getLastname());
+                sales.setFirstName(signUpRequest.getFirstName());
+                sales.setLastName(signUpRequest.getLastName());
                 salesService.save(sales);
             }
             default -> throw new RoleIsOutOfScopeException();

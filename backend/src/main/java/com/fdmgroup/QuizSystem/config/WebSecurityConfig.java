@@ -27,15 +27,25 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-//                .antMatchers("/api/**").authenticated()
                 .antMatchers( "/auth/**").permitAll()
-                .antMatchers("/students").hasAnyAuthority("TRAINING", "POND", "BEACHED", "ABSENT")
-                .antMatchers("/sales").hasAuthority("AUTHORISED_SALES")
-                .antMatchers("/trainers").hasAuthority("AUTHORISED_TRAINER")
+                .antMatchers("/v2/api-docs",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        // -- Swagger UI v3 (OpenAPI)
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**").permitAll()
+                .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+                .antMatchers("/users/sales/**").hasAuthority("AUTHORISED_SALES")
+                .antMatchers("/users/trainers/**").hasAuthority("AUTHORISED_TRAINER")
                 .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
                 .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
-                .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/api/questions/**").permitAll()
                 .anyRequest().permitAll();
+
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

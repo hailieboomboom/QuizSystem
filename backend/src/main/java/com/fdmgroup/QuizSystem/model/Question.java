@@ -1,11 +1,33 @@
 package com.fdmgroup.QuizSystem.model;
 
-import lombok.*;
-
 import java.util.HashSet;
+import java.util.List;
+
+import java.util.Objects;
+
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -24,7 +46,16 @@ public class Question {
     @ManyToOne
     private User creator;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+
+//    @ManyToMany(mappedBy="questions")
+//    private List<Quiz> quizzes;
+
+	// To Haile, Jason and Yutta think we don't need this part of code because it already exists in the quiz model.
+//    @OneToMany(mappedBy = "question")
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	private List<QuizQuestionGrade> quizQuestionsGrade;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "QUESTION_Tag",
             joinColumns = { @JoinColumn(name = "question_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") })
@@ -43,5 +74,25 @@ public class Question {
     	
     }
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, questionDetails);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		return id == other.id && Objects.equals(questionDetails, other.questionDetails);
+	}
+	
+	
+
+    
     
 }
