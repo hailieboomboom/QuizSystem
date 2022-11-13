@@ -1,7 +1,7 @@
 package com.fdmgroup.QuizSystem.util;
 
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
-import com.fdmgroup.QuizSystem.dto.QuizResponse;
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
@@ -18,11 +18,11 @@ public class ModelToDTO {
     @Autowired
     public ModelToDTO(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        modelMapper.typeMap(Quiz.class, QuizResponse.class)
-                .addMapping(Quiz::getQuizCategory, QuizResponse::setQuizCategory)
-                .addMapping(Quiz::getName, QuizResponse::setName)
-                .addMapping(Quiz::getId, QuizResponse::setQuizId)
-                .addMapping(quiz -> quiz.getCreator().getId(), QuizResponse::setCreatorId);
+        modelMapper.typeMap(Quiz.class, QuizDto.class)
+                .addMapping(Quiz::getQuizCategory, QuizDto::setQuizCategory)
+                .addMapping(Quiz::getName, QuizDto::setName)
+                .addMapping(Quiz::getId, QuizDto::setQuizId)
+                .addMapping(quiz -> quiz.getCreator().getId(), QuizDto::setCreatorId);
 
         modelMapper.typeMap(User.class, UserOutputDTO.class)
                 .addMapping(User::getRole, UserOutputDTO::setRole);
@@ -36,8 +36,8 @@ public class ModelToDTO {
         return modelMapper.map(user, UserOutputDTO.class);
     }
 
-    public QuizResponse quizToOutput(Quiz quiz) {
-        return modelMapper.map(quiz, QuizResponse.class);
+    public QuizDto quizToOutput(Quiz quiz) {
+        return modelMapper.map(quiz, QuizDto.class);
     }
 
     public QuestionGradeDTO qqgToQg(QuizQuestionGrade quizQuestionGrade){
