@@ -14,4 +14,5 @@ import javax.persistence.Entity;
 public class Student extends User{
 
     private Role role = Role.TRAINING;
+
 }

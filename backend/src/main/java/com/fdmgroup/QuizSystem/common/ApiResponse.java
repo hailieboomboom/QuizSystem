@@ -32,4 +32,6 @@ public class ApiResponse {
     public int hashCode() {
         return Objects.hash(isSuccess(), getMessage());
     }
+
 }
+
