@@ -28,18 +28,6 @@ export default function QuizShortAnswerCard() {
                 </Typography>
                 <TextField  fullWidth id="standard-basic" label="Answer" variant="standard"/>
             </CardContent>
-            <CardActions>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-end"
-                >
-                    <Grid item/>
-                    <Button size="small">Submit</Button>
-                </Grid>
-
-            </CardActions>
         </Card>
 
 

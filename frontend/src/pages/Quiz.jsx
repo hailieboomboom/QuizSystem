@@ -5,23 +5,27 @@ import QuizMsqCard from "../components/QuizMsqCard";
 import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
+import { useRecoilState } from 'recoil';
+import { attemptQuizState } from '../recoil/Atoms'
+import Button from "@mui/material/Button";
 
 
 const Quiz = () => {
 
-    const [quiz, setQuiz] = React.useState("");
-
-    React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuiz(response.data);
-
-
-        });
-    }, []);
+    // const [quiz, setQuiz] = React.useState("");
+    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
     console.log(quiz);
+    console.log("asb");
 
-
-    if (!quiz) return null;
+    // React.useEffect(() => {
+    //     axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
+    //         setQuiz(response.data);
+    //     });
+    // }, []);
+    // console.log(quiz);
+    //
+    //
+    // if (!quiz) return null;
     return (
         <div>
             <h1>Quiz</h1>
@@ -30,6 +34,7 @@ const Quiz = () => {
                 direction="column"
                 justifyContent="flex-start"
                 alignItems="center"
+                spacing={3}
             >
                 <Grid item>
                     <QuizHeaderCard/>
@@ -54,6 +59,19 @@ const Quiz = () => {
                 <Grid item>
                     <QuizMsqCard/>
                 </Grid>
+                <Grid
+                    item
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-end" sx={{width: 700}}
+                >
+                    <Grid item/>
+                    <Grid item>
+                        <Button variant="outlined" size="large">Submit</Button>
+                    </Grid>
+
+                </Grid>
+                <Grid item/>
                 {/*<Grid item>*/}
                 {/*    <QuizMcqCard/>*/}
                 {/*</Grid>*/}
