@@ -8,8 +8,11 @@ import Typography from '@mui/material/Typography';
 
 import '../styles/ViewQuestionsCard.css';
 import QuestionData from '../data/QuestionData';
+import { ShuffleAnswers } from '../components/ShuffleAnswer';
+import Answer from "../components/QuestionAnswer";
 
 import axios from "axios";
+import questions from "../pages/Questions";
 
 const bull = (
     <Box
@@ -19,15 +22,28 @@ const bull = (
     </Box>
 );
 
-
 export default function ViewMCQCard(props) {
-    console.log(QuestionData)
-    const [question, setQuestion] = React.useState([]);
+    // const [question, setQuestion] = React.useState([]);
 
-    console.log(question)
 
     const changeStyle = () => {
 
+    }
+
+
+    function correctAnswer(correctAnswer) {
+        console.log(correctAnswer)
+    }
+
+    function changeColor() {
+        const answer = [
+            props.questionCard.correctAnswer,
+        ];
+
+
+        console.log(answer)
+
+        // questionCard.correctAnswerforEach(correctAnswer)
     }
 
     return (
@@ -38,25 +54,21 @@ export default function ViewMCQCard(props) {
                             <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
                                 {props.questionCard.question}
                             </Typography>
-                            <Typography className={"questionString"} variant="h5" component="div">
-
-
-                            </Typography>
+                            <Typography className={"questionString"} variant="h5" component="div"></Typography>
                         </div>
                         <div className={"answerSection"}>
-                            <button className={"correctAnswer"}>{props.questionCard.correctAnswer}</button>
-                            <div className="divider"/>
-
-                            {props.questionCard.incorrectAnswers.map((answer) => (<button className={"button"}>{answer}</button>))}
+                            {ShuffleAnswers(props.questionCard).map((shuffledAnswer, index) => (
+                                <button value={shuffledAnswer}> {shuffledAnswer}</button>))
+                            }
 
                         </div>
                     </div>
 
-
                 </CardContent>
+
                 <CardActions>
                     <Button size="small">Edit</Button>
-                    <Button onClick={changeStyle} size="small">Show Answer</Button>
+                    <Button onClick={changeColor} size="small">Show Answer</Button>
                 </CardActions>
             </Card>
 
