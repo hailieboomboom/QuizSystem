@@ -16,10 +16,10 @@ public class SignUpRequest {
     private String email;
 
     @NotBlank
-    private String firstname;
+    private String firstName;
 
     @NotBlank
-    private String lastname;
+    private String lastName;
 
     @NotBlank
     private String role;

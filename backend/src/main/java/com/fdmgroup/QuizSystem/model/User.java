@@ -24,9 +24,9 @@ public class User {
     @Column( unique = true, length = 45, nullable = false)
     private String email;
 
-    private String firstname;
+    private String firstName;
 
-    private String lastname;
+    private String lastName;
 
     private Role role;
 
