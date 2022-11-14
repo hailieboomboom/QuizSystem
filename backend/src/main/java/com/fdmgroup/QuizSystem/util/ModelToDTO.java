@@ -3,7 +3,9 @@ package com.fdmgroup.QuizSystem.util;
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
+import com.fdmgroup.QuizSystem.dto.Attempt.QuizAttemptDTO;
 import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.model.QuizAttempt;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.User;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,7 @@ public class ModelToDTO {
         modelMapper.typeMap(QuizQuestionGrade.class, QuestionGradeDTO.class)
                 .addMapping(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId(), QuestionGradeDTO::setQuestionId)
                 .addMapping(QuizQuestionGrade::getGrade, QuestionGradeDTO::setGrade);
+
     }
 
     public UserOutputDTO userToOutput(User user){

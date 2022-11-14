@@ -27,6 +27,8 @@ import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.Trainer;
+import com.fdmgroup.QuizSystem.repository.QuizAttemptRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
@@ -72,8 +74,11 @@ public class DataLoader implements ApplicationRunner {
 
     private final SalesService salesService;
 
+	private final QuizAttemptRepository qaRepo;
 
 	private final QuizRepository quizRepository;
+	
+	private final QuizQuestionMCQAttemptRepository mcqAttemptRepository;
 
     private final StudentService studentService;
 
@@ -278,9 +283,9 @@ public class DataLoader implements ApplicationRunner {
         quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
         quiz1 = quizService.save(quiz1);
        
-//        quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
-//
-//        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
+        quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+
+        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
 //
         System.out.println("--------SAVE QUIZ1 DONE-------");
 //        quizService.removeQuestionFromQuiz(mcq1, quiz1);
@@ -324,7 +329,25 @@ public class DataLoader implements ApplicationRunner {
 //        log.info("--------------- All users ------------------------");
 //        log.info(quizService.getAllQuizzes());
 
-
+        ////// quiz attempt //////
+        
+        QuizAttempt qa1 = new QuizAttempt();
+        qa1.setQuiz(quiz1);
+        qa1.setUser(student1);
+        qa1.setAttemptNo(1);
+        qa1.setTotalAwarded(0);
+        qaRepo.save(qa1);
+        
+        
+        QuizQuestionMCQAttemptKey mcqAttemptKey = new QuizQuestionMCQAttemptKey(qa1.getId(), mcq1.getId());
+        QuizQuestionMCQAttempt mcqAttempt1 = new QuizQuestionMCQAttempt();
+        mcqAttempt1.setKey(mcqAttemptKey);
+        mcqAttempt1.setAwarded_grade(0);
+        mcqAttempt1.setQuizAttempt(qa1);
+        mcqAttempt1.setMultipleChoiceQuestion(mcq1);
+        mcqAttempt1.setSelectedOption(mco1);
+        mcqAttemptRepository.save(mcqAttempt1);
+        
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

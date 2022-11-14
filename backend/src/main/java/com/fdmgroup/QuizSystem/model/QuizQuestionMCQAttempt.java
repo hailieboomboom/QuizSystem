@@ -17,23 +17,19 @@ public class QuizQuestionMCQAttempt {
     QuizQuestionMCQAttemptKey key;
 
     @ManyToOne
-    @MapsId("quizId")
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
+    @MapsId("quizAttemptId")
+    @JoinColumn(name = "quiz_attempt_id")
+    private QuizAttempt quizAttempt;
 
     @ManyToOne
     @MapsId("questionId")
     @JoinColumn(name = "mcq_id")
     private MultipleChoiceQuestion multipleChoiceQuestion;
 
-    @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id")
-    private User user;
 
     private float awarded_grade;
 
     @ManyToOne
-    private MultipleChoiceOption multipleChoiceOption;
+    private MultipleChoiceOption selectedOption;
 
 }
