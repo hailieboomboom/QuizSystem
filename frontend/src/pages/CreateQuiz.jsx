@@ -11,45 +11,44 @@ import Button from '@mui/material/Button';
 import {Container} from '@mui/material';
 import {Link} from "react-router-dom";
 import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
-
 import { useRecoilState } from 'recoil';
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
 
-function numQuestions(value) {
-    return `${value}°C`;
-}
-
 const CreateQuiz = () => {
     const [category, setCategory] = useState('');
-    const [difficulty, setDifficulty] = useState('');
-    const [type, setType] = useState('');
+    const [name, setName] = useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
-
     React.useEffect(() => {
         axios.get("http://localhost:8088/QuizSystem/api/questions/mcqs/").then((response) => {
             setquizAllQuestions(response.data);
-            console.log(quizAllQuestions)
         }).catch(function (error) {
             console.log(error);
         });
     }, []);
-
+    const postQuiz = () => {
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes", {
+            "creatorId": 1,
+            "name": name,
+            "quizCategory": category
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    const handleCreate = () =>{
+        postQuiz();
+    }
     // const [createQuizSelectedQuestions, setCreateQuizSelectedQuestions] = useRecoilState([]);
-
+    const handleName = (event) => {
+        setName(event.target.value);
+    };
     const handleCategory = (event) => {
         setCategory(event.target.value);
-
-    };
-    const handleDifficulty = (event) => {
-
-        setDifficulty(event.target.value);
-
-    };
-    const handleType = (event) => {
-
-        setType(event.target.value);
     };
     return (
             <Grid
@@ -77,6 +76,8 @@ const CreateQuiz = () => {
                                 fullWidth
                                 autoComplete="quiz-name"
                                 variant="standard"
+                                value={name}
+                                onChange={handleName}
                             />
                         </FormControl>
                     </Grid>
@@ -95,61 +96,17 @@ const CreateQuiz = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    {/*<Grid item xs={12}>*/}
-                    {/*    <FormControl variant="standard" fullWidth>*/}
-                    {/*        <InputLabel id="demo-simple-select-standard-label">Dificulty Level</InputLabel>*/}
-                    {/*        <Select*/}
-                    {/*            labelId="difficulty"*/}
-                    {/*            id="difficulty"*/}
-                    {/*            value={difficulty}*/}
-                    {/*            onChange={handleDifficulty}*/}
-                    {/*            label="Dificulty"*/}
-                    {/*        >*/}
-                    {/*            <MenuItem value="">*/}
-                    {/*                <em>None</em>*/}
-                    {/*            </MenuItem>*/}
-                    {/*            <MenuItem value={10}>Easy</MenuItem>*/}
-                    {/*            <MenuItem value={20}>Medium</MenuItem>*/}
-                    {/*            <MenuItem value={30}>Hard</MenuItem>*/}
-                    {/*        </Select>*/}
-                    {/*    </FormControl>*/}
-                    {/*</Grid>*/}
-                    {/*<Grid item xs={12}>*/}
-                    {/*    <FormControl variant="standard" fullWidth>*/}
-                    {/*        <InputLabel id="demo-simple-select-standard-label">Quiz Type</InputLabel>*/}
-                    {/*        <Select*/}
-                    {/*            labelId="questionType"*/}
-                    {/*            id="questionType"*/}
-                    {/*            value={type}*/}
-                    {/*            onChange={handleType}*/}
-                    {/*            label="Quiz Type"*/}
-
-                    {/*        >*/}
-                    {/*            <MenuItem value="">*/}
-                    {/*                <em>None</em>*/}
-                    {/*            </MenuItem>*/}
-                    {/*            <MenuItem value={10}>Multiple Choice</MenuItem>*/}
-                    {/*            <MenuItem value={20}>True or False</MenuItem>*/}
-                    {/*            <MenuItem value={30}>Short Answer</MenuItem>*/}
-                    {/*        </Select>*/}
-                    {/*    </FormControl>*/}
-                    {/*</Grid>*/}
                     <Grid item>
                         <QuizSelectedQuestionsTable/>
                     </Grid>
-
                     <Grid item xs={1}>
-
-                        <Button variant="outlined" as={Link} to="/viewQuestions">
+                        <Button onClick={handleCreate} variant="outlined" as={Link} to="/viewQuestions">
                             Create
                         </Button>
                     </Grid>
-
                     <Grid item>
                         <QuizAllQuestionsTable/>
                     </Grid>
-
-
                 </Grid>
             </Grid>
     )
