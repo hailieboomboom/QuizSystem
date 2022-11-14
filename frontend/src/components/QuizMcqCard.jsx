@@ -11,14 +11,28 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 export default function QuizMcqCard(props) {
-    const [value, setValue] = React.useState();
+
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
 
+    React.useEffect(() => {
+        axios.get("http://localhost:8088/QuizSystem/api/questions/mcqs/"+props.questionId+"").then((response) => {
+            setQuestion(response.data);
+            console.log(question)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }, []);
+
+    const [value, setValue] = React.useState("");
+    const [question, setQuestion] = React.useState();
+
+    if (!question) return null;
     return (
         <Card className={"cardContent"} sx={{width: 700}}>
             <CardContent>
@@ -26,16 +40,15 @@ export default function QuizMcqCard(props) {
                     Question:
                 </Typography>
                 <Typography className={"questionString"} variant="h5" component="div">
-                    {props.question}
+                    {question.questionDetails}
                 </Typography>
                 <RadioGroup
                     className={"radioGroup"}
                     value={value}
                     onChange={handleChange}
                 >
-                    <FormControlLabel value="Option 1" control={<Radio/>} label={props.rightAnswer}/>
-                    {props.wrongAnswers.map(answer => {
-                        return <FormControlLabel key={answer} value={answer} control={<Radio/>} label={answer}/>;
+                    {question.options.map(answer => {
+                        return <FormControlLabel key={answer.optionDescription} value={answer.optionDescription} control={<Radio/>} label={answer.optionDescription}/>;
                     })}
 
                     {/*<FormControlLabel value="Option 3" control={<Radio/>} label="Option 3"/>*/}
