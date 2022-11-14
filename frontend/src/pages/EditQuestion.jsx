@@ -17,7 +17,7 @@ const EditQuestion = () => {
     const [question, setQuestion] = useState('');
 
     function handleSaveQuestion() {
-
+        const url = "http://localhost:8088/QuizSystem/api/questions/mcqs";
     }
 
     return (
