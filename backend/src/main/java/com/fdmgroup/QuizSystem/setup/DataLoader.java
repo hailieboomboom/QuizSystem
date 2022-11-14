@@ -83,8 +83,6 @@ public class DataLoader implements ApplicationRunner {
     private final MultipleChoiceOptionService mcoService;
     private final TagService tagService;
 
-    
- 
 
     @Override
     @Transactional

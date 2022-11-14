@@ -2,12 +2,10 @@ package com.fdmgroup.QuizSystem.service;
 import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
 import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
-import com.fdmgroup.QuizSystem.model.Trainer;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -72,23 +70,36 @@ public class UserService {
      */
     public User updateUser(long id, UserUpdateDTO modifiedUser) {
         Optional<User> maybeUser = userRepository.findById(id);
+
         if(maybeUser.isEmpty()){
             throw new UserNotFoundException();
         }
-        if (existsByUsername(modifiedUser.getUsername())) {
+
+        if (userRepository.existsByUsername(modifiedUser.getUsername())) {
             throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
         }
 
-        if (existsByEmail(modifiedUser.getEmail())) {
+        if (userRepository.existsByEmail(modifiedUser.getEmail())) {
             throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedUser.getEmail()));
         }
+
         // Update user with new attributes
         User user = maybeUser.get();
-        user.setUsername(modifiedUser.getUsername());
-        user.setPassword(modifiedUser.getPassword());
-        user.setEmail(modifiedUser.getEmail());
-        user.setFirstName(modifiedUser.getFirstName());
-        user.setLastName(modifiedUser.getLastName());
+        if(modifiedUser.getPassword() != null) {
+            user.setPassword(modifiedUser.getPassword());
+        }
+        if(modifiedUser.getUsername() != null) {
+            user.setUsername(modifiedUser.getUsername());
+        }
+        if(modifiedUser.getFirstName() != null) {
+            user.setFirstName(modifiedUser.getFirstName());
+        }
+        if(modifiedUser.getLastName() != null) {
+            user.setLastName(modifiedUser.getLastName());
+        }
+        if(modifiedUser.getEmail() != null) {
+            user.setEmail(modifiedUser.getEmail());
+        }
         // Role?
         return userRepository.save(user);
     }

@@ -39,29 +39,6 @@ public class TrainerService {
         return maybeTrainer.get();
     }
 
-    public Trainer updateTrainer(long id, UserUpdateDTO modifiedTrainer) {
-        Optional<Trainer> maybeTrainer = trainerRepository.findById(id);
-        if(maybeTrainer.isEmpty()){
-            throw new UserNotFoundException();
-        }
-        if (trainerRepository.existsByUsername(modifiedTrainer.getUsername()) && ! maybeTrainer.get().getUsername().equals(modifiedTrainer.getUsername())) {
-            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedTrainer.getUsername()));
-        }
-
-        if (trainerRepository.existsByEmail(modifiedTrainer.getEmail()) && ! maybeTrainer.get().getEmail().equals(modifiedTrainer.getEmail())) {
-            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedTrainer.getEmail()));
-        }
-        // Update user with new attributes
-        Trainer trainer = maybeTrainer.get();
-        trainer.setUsername(modifiedTrainer.getUsername());
-        trainer.setPassword(modifiedTrainer.getPassword());
-        trainer.setEmail(modifiedTrainer.getEmail());
-        trainer.setFirstName(modifiedTrainer.getFirstName());
-        trainer.setLastName(modifiedTrainer.getLastName());
-        // Role?
-        return trainerRepository.save(trainer);
-    }
-
     public Trainer authoriseTrainer(String username) {
         Trainer trainer = findByUsername(username);
         trainer.setRole(Role.AUTHORISED_TRAINER);
