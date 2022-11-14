@@ -12,12 +12,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useState} from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getCookie, setCookie } from '../utils/cookies';
+import { getCookie, setCookie, getUserRole } from '../utils/cookies';
 import { apis } from '../utils/apis';
-import { ConstructionOutlined } from '@mui/icons-material';
-import {getUserId, isLoggedIn} from '../utils/cookies.js';
+import jwt_decode from "jwt-decode";
+
 
 export default function SignInSide() {
     const navigate = useNavigate();
@@ -29,13 +28,34 @@ export default function SignInSide() {
           event.preventDefault();
 
           apis.login(username, password).then(res => {
-              console.log(res.data)
-              setCookie('token', res.data.accessToken, 30)
-              console.log(getCookie('token'))
+
+              setCookie('token', res.data.token, 30)
+              //console.log(getCookie('token'))
+              const payload = jwt_decode(res.data.token)
+              const role = payload.role[0].authority;
+
+              if (role === "TRAINING"){
+                  document.location.href = '/dashboard';
+                  console.log("Student dashboard")
+              }
+
+              if (role === "TRAINING"){
+                  document.location.href = '/dashboard';
+                  console.log("Student dashboard")
+              }
+
+              console.log(payload.role[0].authority)
+
               document.location.href = '/dashboard';
           }).catch(err => {
-              alert("Either username or password is not correct. Please try again.")
-              console.log(err)
+              if (err.response.status === 401){
+                  alert("Either username or password is not correct. Please try again.")
+                  console.log(err)
+              }
+              if (err.response.status === 403){
+                  alert("You are unauthorized!!")
+                  console.log(err)
+              }
           })
       }
 

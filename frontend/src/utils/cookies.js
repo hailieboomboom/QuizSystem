@@ -44,6 +44,13 @@ export function getUserId(){
     return null;
 }
 
+export function getUserRole(){
+
+        const payload = jwt_decode(getCookie('token'))
+        return payload.role;
+
+}
+
 export function isLoggedIn(){
     return getCookie('token') !== '';
 }

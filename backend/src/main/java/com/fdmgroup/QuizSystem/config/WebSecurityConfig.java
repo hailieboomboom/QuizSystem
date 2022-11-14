@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                 .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/users/sales/**").hasAuthority("AUTHORISED_SALES")
                 .antMatchers("/users/trainers/**").hasAuthority("AUTHORISED_TRAINER")
+                .antMatchers("/users/categories/**").hasAnyAuthority("AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
                 .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
                 .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/api/questions/**").permitAll()

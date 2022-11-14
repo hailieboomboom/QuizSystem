@@ -2,22 +2,28 @@ package com.fdmgroup.QuizSystem.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
+import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
-import com.fdmgroup.QuizSystem.util.ModelToDTO;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.fdmgroup.QuizSystem.common.ApiResponse;
-import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
 import com.fdmgroup.QuizSystem.service.QuizService;
+import com.fdmgroup.QuizSystem.util.ModelToDTO;
 
 import lombok.AllArgsConstructor;
 
@@ -33,20 +39,18 @@ public class QuizController {
 	private final ModelToDTO modelToDTO;
 	private final QuizService quizService;
 
-
-
 	private final QuestionService questionService;
 
-	private QuizQuestionGradeService quizQuestionGradeService;
+	private final QuizQuestionGradeService quizQuestionGradeService;
 
 	@PostMapping("/api/quizzes")
-	public ResponseEntity<ApiResponse> createQuiz(@RequestBody QuizDto quizDto) {
+	public ResponseEntity<QuizDto> createQuiz(@RequestBody QuizDto quizDto) {
 
-		quizService.createQuiz(quizDto);
+		QuizDto quizDtoResponse =  quizService.createQuiz(quizDto);
 
-		return new ResponseEntity<ApiResponse>(new ApiResponse(true, SUCCESS_QUIZ_HAS_BEEN_CREATED),
-				HttpStatus.CREATED);
+		return new ResponseEntity<QuizDto>(quizDtoResponse, HttpStatus.CREATED);
 	}
+
 
 	@GetMapping("/api/quizzes")
 	public ResponseEntity<List<QuizDto>> getAllQuizzes() {
@@ -76,9 +80,9 @@ public class QuizController {
 		quizService.deleteQuizById(id);
 		return new ResponseEntity<>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_DELETED), HttpStatus.OK);
 	}
-
-	@PostMapping("/api/quizzes/{quiz_id}/questions")
-	public ResponseEntity<ApiResponse> updateQuestionsToQuiz(@PathVariable long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeList) {
+	
+	@PostMapping("/api/quizzes/{id}/questions")
+	public ResponseEntity<ApiResponse> updateQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeList) {
 
 		Quiz quiz = quizService.getQuizById(quiz_id);
 
@@ -101,9 +105,9 @@ public class QuizController {
 			}
 		}
 		// if user remove existing questions
-		for(Long id : questionIdSet) {
-			if(!questionIdInputSet.contains(id)) {
-				Question question = questionService.findById(id);
+		for(Long questionId : questionIdSet) {
+			if(!questionIdInputSet.contains(questionId)) {
+				Question question = questionService.findById(questionId);
 				quizService.removeQuestionFromQuiz(question, quiz);
 			}
 		}
@@ -118,21 +122,14 @@ public class QuizController {
 	}
 	
 	
-//	// View quizzes created by a user
-//	@GetMapping("/api/quizzes") // GET /api/quizzes?creator=1
-//	public ResponseEntity<List<QuizDto>> getQuizzesByCreatorId(@RequestParam(value="creator", required = false) String creatorId){
-//		
-////		if(creatorId == null) {
-////			
-////			List<QuizDto> quizDtos = quizService.getAllQuizzes();
-////			return new ResponseEntity<>(quizDtos, HttpStatus.OK);
-////			
-////		}else {
-//			
-//			List<QuizDto> quizDtos = quizService.getQuizzesByCreatorId(Long.parseLong(creatorId));
-//			return new ResponseEntity<>(quizDtos, HttpStatus.OK);
-//		
-////		}
-//	}
+	// View quizzes created by a user
+	@GetMapping("/api/quizzes/users/{id}")
+	public ResponseEntity<List<QuizDto>> getQuizzesByCreatorId(@PathVariable("id") long creatorId){
+
+			List<QuizDto> quizDtos = quizService.getQuizzesByCreatorId(creatorId);
+			return new ResponseEntity<>(quizDtos, HttpStatus.OK);
+		
+
+	}
 
 }
