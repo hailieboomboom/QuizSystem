@@ -83,8 +83,6 @@ public class DataLoader implements ApplicationRunner {
     private final MultipleChoiceOptionService mcoService;
     private final TagService tagService;
 
-    
- 
 
     @Override
     @Transactional
@@ -278,10 +276,10 @@ public class DataLoader implements ApplicationRunner {
         quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
         quiz1 = quizService.save(quiz1);
        
-//        quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
-//
-//        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
-//
+        quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+
+        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
+
         System.out.println("--------SAVE QUIZ1 DONE-------");
 //        quizService.removeQuestionFromQuiz(mcq1, quiz1);
 //        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
