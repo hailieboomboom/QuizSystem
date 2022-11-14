@@ -87,10 +87,12 @@ public class QuestionService {
 			newQuestion.
 					setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion)
 					);
+			newQuestion = (MultipleChoiceQuestion) save(newQuestion);
 		} catch (TagNotValidException e) {
-			// TODO: handle exception
+			System.out.println("bad tags");
+			questionRepository.delete(newQuestion);
+			throw new TagNotValidException("The question must contains at least a course or interview tag");
 		}
-		this.save(newQuestion);
 
 	}
 
