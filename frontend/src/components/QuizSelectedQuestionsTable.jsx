@@ -11,6 +11,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
+import TextField from "@mui/material/TextField";
 
 export default function QuizSelectedQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -28,6 +29,7 @@ export default function QuizSelectedQuestionsTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Selected Questions</TableCell>
+                        <TableCell align="right">Mark</TableCell>
                         <TableCell align="right">Action</TableCell>
                     </TableRow>
                 </TableHead>
@@ -39,6 +41,16 @@ export default function QuizSelectedQuestionsTable() {
                         >
                             <TableCell component="th" scope="row">
                                 <Typography variant="body">{question.questionDetail}</Typography>
+                            </TableCell>
+                            <TableCell align="right" component="th" scope="row">
+                                <TextField
+                                    type="number"
+                                    name="Grade"
+                                    label="Grade"
+                                    InputProps={{ inputProps: { min: 0, max: 10 } }}
+                                    variant="filled"
+
+                                />
                             </TableCell>
                             <TableCell component="th" scope="row"s>
                                 <Button variant="outlined" onClick={()=>hanldleRemove(question)} >Remove</Button>

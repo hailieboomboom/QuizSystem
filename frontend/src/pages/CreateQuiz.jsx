@@ -12,7 +12,7 @@ import {Container} from '@mui/material';
 import {Link} from "react-router-dom";
 import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
 import { useRecoilState } from 'recoil';
-import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
+import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
 
@@ -43,6 +43,7 @@ const CreateQuiz = () => {
     const handleCreate = () =>{
         postQuiz();
     }
+
     // const [createQuizSelectedQuestions, setCreateQuizSelectedQuestions] = useRecoilState([]);
     const handleName = (event) => {
         setName(event.target.value);
