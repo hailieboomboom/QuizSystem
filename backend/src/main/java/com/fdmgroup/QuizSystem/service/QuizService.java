@@ -8,14 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
+import com.fdmgroup.QuizSystem.exception.SalesCantCreateCourseQuizException;
+import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
+import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
@@ -47,8 +49,18 @@ public class QuizService {
 	@Autowired
 	private QuizQuestionGradeRepository qqgRepository;
 	
-
-	public void createQuiz(QuizDto quizDto) {
+	
+	public QuizDto createQuiz(QuizDto quizDto) {
+		
+		// Make sure Sales unable to make Course Quiz
+		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
+		if(optionalUser.isEmpty()) {
+			throw new UserNotFoundException();
+		}
+		QuizCategory quizCategory = quizDto.getQuizCategory();
+		if(optionalUser.get()instanceof Sales && quizCategory == QuizCategory.COURSE_QUIZ ) {
+			throw new SalesCantCreateCourseQuizException();
+		}
 		
 		Quiz quizEntity = new Quiz();
 		quizEntity.setName(quizDto.getName());
@@ -56,10 +68,12 @@ public class QuizService {
 //		quizEntity.setQuestions(quizDto.getQuestions());
 		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
 		
-		// TODO: !!!!
+		// TODO for Summer !!!!
 		// let user know about quiz addition, but no need to let question know the Quiz
 		
-		quizRepository.save(quizEntity);
+		Quiz managedQuiz = quizRepository.save(quizEntity);
+		quizDto.setQuizId(managedQuiz.getId());
+		return quizDto;
 	}
 
 
@@ -117,24 +131,9 @@ public class QuizService {
 		if(optionalQuiz.isEmpty()) {
 			throw new QuizNotFoundException();
 		}
-		
-//	    // TODO For Summer: is it necessary to do these steps?	
-//		Quiz managedQuiz = optionalQuiz.get();
-		
-//		// let user know about quiz removal
-//		User managedUser = managedQuiz.getCreator();
-//		managedUser.removeQuiz(managedQuiz);
-//		userRepo.save(managedUser);
-//		
-//		// let questions know about quiz removal
-//		List<Question> managedQuestions = managedQuiz.getQuestions();
-//		for(Question managedQuestion: managedQuestions) {
-//			managedQuestion.removeQuiz(managedQuiz);
-//			questionRepository.save(managedQuestion);
-//		}
-		
-//	
-//		// TODO To be deleted by Summer: find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
+			
+//		// TODO This part is handled by CascadeType.REMOVE on Quiz.java
+//		// To be deleted by Summer: find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
 //		List<QuizQuestionGrade> qqgsToRemove = qqgRepository.findByQuizId(id);
 //		for(QuizQuestionGrade qqg: qqgsToRemove) {
 //			qqgRepository.delete(qqg);
@@ -184,17 +183,17 @@ public class QuizService {
 			qqgService.remove(quizQuestion);
 		}
 	}
-	
-	//TODO: delete a quiz
-	// 
 
 	public List<QuizDto> getQuizzesByCreatorId(long creatorId) {
-		//TODO why warning here
-		User creator = userRepository.getById(creatorId);
-		System.out.println(creator);
-		List<Quiz> quizzes = quizRepository.findByCreator(creator);
-		System.out.println(quizzes);
 		
+		Optional<User> optionalCreator = userRepository.findById(creatorId);
+		
+		if (optionalCreator.isEmpty()) {
+			 throw new UserNotFoundException();
+		}
+		
+		List<Quiz> quizzes = quizRepository.findByCreator(optionalCreator.get());
+
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for(Quiz quiz: quizzes) {
 			quizDtos.add(getQuizDto(quiz));

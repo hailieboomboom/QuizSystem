@@ -37,29 +37,6 @@ public class SalesService {
     	return maybeSales.get();
     }
 
-    public Sales updateSales(long id, UserUpdateDTO modifiedSales) {
-        Optional<Sales> maybeSales = salesRepository.findById(id);
-        if(maybeSales.isEmpty()){
-            throw new UserNotFoundException();
-        }
-        if (salesRepository.existsByUsername(modifiedSales.getUsername()) && ! maybeSales.get().getUsername().equals(modifiedSales.getUsername())) {
-            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedSales.getUsername()));
-        }
-
-        if (salesRepository.existsByEmail(modifiedSales.getEmail()) && ! maybeSales.get().getEmail().equals(modifiedSales.getEmail())) {
-            throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedSales.getEmail()));
-        }
-        // Update user with new attributes
-        Sales sales = maybeSales.get();
-        sales.setUsername(modifiedSales.getUsername());
-        sales.setPassword(modifiedSales.getPassword());
-        sales.setEmail(modifiedSales.getEmail());
-        sales.setFirstName(modifiedSales.getFirstName());
-        sales.setLastName(modifiedSales.getLastName());
-        // Role?
-        return salesRepository.save(sales);
-    }
-
     public List<Sales> getAllUnauthorisedSales(){
         return salesRepository.findAll().stream().filter(sales -> sales.getRole() == Role.UNAUTHORISED_SALES).toList();
     }
