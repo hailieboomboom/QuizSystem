@@ -11,6 +11,9 @@ import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,10 @@ public class QuizQuestionMCQAttemptService {
 
     private final QuizQuestionMCQAttemptRepository quizQuestionMCQAttemptRepository;
 
-	private QuizQuestionMCQAttemptService mcqAttemptService;
-	private QuizAttemptService quizAttemptService;
-	private QuestionService questionService;
-	private QuizQuestionGradeService qqgService;
-	private MultipleChoiceOptionService mcoService;
+	private final QuizAttemptService quizAttemptService;
+	private final QuestionService questionService;
+	private final QuizQuestionGradeService qqgService;
+	private final MultipleChoiceOptionService mcoService;
 	
     private final QuizService quizService;
 
@@ -46,8 +48,13 @@ public class QuizQuestionMCQAttemptService {
 		} else {
 			mcqAttempt.setAwarded_grade(0);
 		}
-		return mcqAttemptService.save(mcqAttempt);
+		return save(mcqAttempt);
 	}
+    
+    public List<QuizQuestionMCQAttempt> findMcqAttemptsByAttemptId(long quizAttemptId){
+    	return quizQuestionMCQAttemptRepository.findByQuizAttemptId(quizAttemptId);
+    }
+    
 //    public QuizQuestionMCQAttempt findById(long quizId, long question_id, long user_id){
 //        Quiz quiz = quizService.getQuizById(quizId);
 //

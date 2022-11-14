@@ -38,4 +38,7 @@ public class QuizAttempt {
     
     private float totalAwarded;
     
+    @OneToMany(mappedBy = "quizAttempt")
+    List<QuizQuestionMCQAttempt> attemptedMCQs;
+    
 }

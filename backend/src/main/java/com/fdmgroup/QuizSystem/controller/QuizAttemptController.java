@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.controller;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,25 +43,37 @@ public class QuizAttemptController {
 	private QuizAttemptService quizAttemptService;
 	private QuizService quizService;
 	private UserService userService;
+	private ModelToDTO modelToDTO;
 
 	// create an quiz attempt (return graded attempt)
 	@PostMapping
 	public ResponseEntity<QuizAttemptDTO> createQuizAttempt(@RequestBody QuizAttemptDTO quizAttemptDTO) {
 		QuizAttempt quizAttempt = new QuizAttempt();
-		quizAttempt.setQuiz(quizService.getQuizById(quizAttemptDTO.getId()));
-		quizAttempt.setUser(userService.getUserById(quizAttemptDTO.getId()));
+		quizAttempt.setQuiz(quizService.getQuizById(quizAttemptDTO.getQuizId()));
+		quizAttempt.setUser(userService.getUserById(quizAttemptDTO.getUserId()));
 		quizAttempt = quizAttemptService.save(quizAttempt);
 		
 		for(MCQAttemptDTO mcqAttemptDTO: quizAttemptDTO.getMCQAttemptList()) {
 			mcqAttemptService.createMCQAttempt(mcqAttemptDTO, quizAttempt.getId(), quizAttempt.getQuiz().getId());
-			
 		}
-		// creat method in quizattemptService to calculate totalawrded
-		// calculate attempt number
 		
+		// creat method in quizattemptService to calculate totalawrded
+//		quizAttemptService.calculateTotalAwarded(quizAttempt);//set total awarded
+		// calculate attempt number
+
+		quizAttempt.setAttemptNo(quizAttemptService.calculateNumberOfAttempts(quizAttempt.getId()));
+		quizAttempt.setTotalAwarded(quizAttemptService.calculateTotalAwarded(quizAttempt.getId()));
 		//TODO map to dto (ask jason)
-		QuizAttemptDTO quizAttemptGradedDTO = new QuizAttemptDTO();
-		return new ResponseEntity<>(quizAttemptGradedDTO,HttpStatus.CREATED);
+		QuizAttemptDTO quizAttemptDTOResponse = modelToDTO.quizAttemptToOutput(quizAttempt);
+		List<MCQAttemptDTO> mcqResponses = new ArrayList<>();
+		for (QuizQuestionMCQAttempt mcqAttempt : mcqAttemptService.findMcqAttemptsByAttemptId(quizAttempt.getId())) {
+			mcqResponses.add(modelToDTO.mcqAttemptToOutput(mcqAttempt));
+		}
+		
+		quizAttemptDTOResponse.setMCQAttemptList(mcqResponses);
+		quizAttempt = quizAttemptService.save(quizAttempt);
+		
+		return new ResponseEntity<>(quizAttemptDTOResponse,HttpStatus.CREATED);
 		
 	}
 
