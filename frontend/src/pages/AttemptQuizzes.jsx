@@ -36,13 +36,12 @@ const AttemptQuizzes = () => {
     ];
 
     React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+        axios.get("http://localhost:8088/QuizSystem/api/quizzes").then((response) => {
+            setQuizzes(response.data);
             setLoading(false);
         });
         }, []);
     console.log(quizzes);
-    console.log(quiz);
 
     if (loading) return(
         <Grid
@@ -99,10 +98,8 @@ const AttemptQuizzes = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
+                                <TableCell align="right">Category</TableCell>
                                 <TableCell align="right">Action</TableCell>
-                                {/*<TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -112,16 +109,14 @@ const AttemptQuizzes = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        This is A Demo Quiz
+                                        {row.name}
                                     </TableCell>
+                                    <TableCell align="right">{row.quizCategory}</TableCell>
                                     <TableCell align="right">
                                         <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
                                             Take Quiz
                                         </Button>
                                     </TableCell>
-                                    {/*<TableCell align="right">{row.fat}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.carbs}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.protein}</TableCell>*/}
                                 </TableRow>
                             ))}
                         </TableBody>
