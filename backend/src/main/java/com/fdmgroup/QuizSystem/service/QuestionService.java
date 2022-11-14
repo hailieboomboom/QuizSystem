@@ -9,6 +9,7 @@ import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
+import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.repository.McqRepository;
@@ -80,11 +81,15 @@ public class QuestionService {
 		newQuestion.setCreator(userOptional.get());
 		newQuestion.setQuestionDetails(addMcqDto.getQuestionDetails());
 		newQuestion = (MultipleChoiceQuestion) save(newQuestion);
-		newQuestion.
-				setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
-		newQuestion.
-				setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion)
-				);
+		try {
+			newQuestion.
+					setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
+			newQuestion.
+					setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion)
+					);
+		} catch (TagNotValidException e) {
+			// TODO: handle exception
+		}
 		this.save(newQuestion);
 
 	}
