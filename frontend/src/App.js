@@ -32,7 +32,7 @@ import {
 function App() {
   return (
     <div className="App">
-
+      <RecoilRoot>
       <BrowserRouter>
         <NavigationBar />
         <Routes>
@@ -54,7 +54,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
-
+      </RecoilRoot>
     </div>
   );
 }

@@ -18,3 +18,7 @@ export const createQuizAllQuestions = atom({
     key: 'createQuizAllQuestionsState', // unique ID (with respect to other atoms/selectors)
     default: QuestionData, // default value (aka initial value)
 });
+export const editQuestionState = atom({
+    key: 'editQuestionState',
+    default: [],
+})
