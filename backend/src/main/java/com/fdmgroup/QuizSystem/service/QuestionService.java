@@ -181,7 +181,9 @@ public class QuestionService {
 		}
 
 		Optional<Question> optionalMCQ = questionRepository.findById(questionId);
-
+		if(optionalMCQ.isEmpty()){
+			throw new NoDataFoundException("Question Not Found");
+		}
 
 		return (MultipleChoiceQuestion) optionalMCQ.get();
 	}

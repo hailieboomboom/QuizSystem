@@ -79,6 +79,10 @@ public class MultipleChoiceOptionService {
 		return mcoRepo.findAllByMcqId(id);
 	}
 
+	public MultipleChoiceOption getMcqOptionById(Long id){
+		return mcoRepo.findById(id).get();// TODO: exception??
+	}
+
 
 	public List<MultipleChoiceOption> updateMcqOption(List<McqOptionDto> mcqOptionDtoList,long macId){
 

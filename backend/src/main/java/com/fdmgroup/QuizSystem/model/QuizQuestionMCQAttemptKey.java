@@ -17,25 +17,22 @@ import java.util.Objects;
 @AllArgsConstructor
 public class QuizQuestionMCQAttemptKey implements Serializable {
 
-    @Column(name = "quiz_id")
-    Long quizId;
+    @Column(name = "quiz_attempt_id")
+    Long quizAttemptId;
 
     @Column(name = "question_id")
     Long questionId;
-
-    @Column(name = "user_id")
-    Long userId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuizQuestionMCQAttemptKey that = (QuizQuestionMCQAttemptKey) o;
-        return quizId.equals(that.quizId) && questionId.equals(that.questionId) && userId.equals(that.userId);
+        return quizAttemptId.equals(that.quizAttemptId) && questionId.equals(that.questionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(quizId, questionId, userId);
+        return Objects.hash(quizAttemptId, questionId);
     }
 }
