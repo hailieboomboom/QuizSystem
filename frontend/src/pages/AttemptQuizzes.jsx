@@ -30,9 +30,18 @@ const AttemptQuizzes = () => {
     });
 
     const quizCategories = [
-        {title: "Interview"},
-        {title: "Skill"},
-        {title: "All"}
+        {
+            title: "Interview Prep",
+            type: "INTERVIEW_QUIZ"
+        },
+        {
+            title: "Course Content",
+            type: "COURSE_QUIZ"
+        },
+        {
+            title: "All",
+            type: ""
+        }
     ];
 
     React.useEffect(() => {
@@ -42,6 +51,26 @@ const AttemptQuizzes = () => {
         });
         }, []);
     console.log(quizzes);
+
+    const [inputCategory, setInputCategory] = React.useState("");
+    let categoryHandler = (e,v) => {
+        //convert input text to lower case
+        console.log(e);
+        console.log(v);
+        var lowerCase = v.type.toLowerCase();
+        setInputCategory(lowerCase);
+    };
+    const filteredData = quizzes.filter((od) => {
+        console.log(od);
+        if (inputCategory === '') {
+            return od;
+        }
+        //return the item which contains the user input
+        else {
+            console.log(od.quizCategory);
+            return od.quizCategory.toLowerCase().includes(inputCategory)
+        }
+    })
 
     if (loading) return(
         <Grid
@@ -85,6 +114,7 @@ const AttemptQuizzes = () => {
                         getOptionLabel={(option) => option.title}
                         filterOptions={filterOptions}
                         sx={{ width: 300 }}
+                        onChange={categoryHandler}
                         renderInput={(params) => <TextField {...params} label="Filter" />}
                     />
                 </Grid>
@@ -103,7 +133,7 @@ const AttemptQuizzes = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quizzes.map((row) => (
+                            {filteredData.map((row) => (
                                 <TableRow
                                     key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
