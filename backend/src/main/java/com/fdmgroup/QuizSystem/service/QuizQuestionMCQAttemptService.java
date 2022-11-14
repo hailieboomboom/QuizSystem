@@ -3,6 +3,7 @@ package com.fdmgroup.QuizSystem.service;
 import com.fdmgroup.QuizSystem.dto.Attempt.MCQAttemptDTO;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.model.QuizAttempt;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttempt;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttemptKey;
@@ -11,6 +12,9 @@ import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,12 +52,16 @@ public class QuizQuestionMCQAttemptService {
 		}
 		return mcqAttemptService.save(mcqAttempt);
 	}
+    
+    public List<QuizQuestionMCQAttempt> getMCQAttemptsByQuizAttempt(QuizAttempt qa){
+    	return quizQuestionMCQAttemptRepository.findByQuizAttempt(qa);
+    }
 //    public QuizQuestionMCQAttempt findById(long quizId, long question_id, long user_id){
 //        Quiz quiz = quizService.getQuizById(quizId);
 //
 //
 //
 //    }
-
+ 
 
 }

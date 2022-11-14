@@ -87,6 +87,7 @@ public class DataLoader implements ApplicationRunner {
     private final QuizService quizService;
     private final MultipleChoiceOptionService mcoService;
     private final TagService tagService;
+    private final QuizAttemptService quizAttemptService;
 
     
  
@@ -332,22 +333,38 @@ public class DataLoader implements ApplicationRunner {
         ////// quiz attempt //////
         
         QuizAttempt qa1 = new QuizAttempt();
+        QuizAttempt qa2 = new QuizAttempt();
         qa1.setQuiz(quiz1);
         qa1.setUser(student1);
         qa1.setAttemptNo(1);
         qa1.setTotalAwarded(0);
+        qa2.setQuiz(quiz1);
+        qa2.setUser(student1);
+        qa2.setAttemptNo(2);
+        qa2.setTotalAwarded(5);
         qaRepo.save(qa1);
-        
+        qaRepo.save(qa2);
         
         QuizQuestionMCQAttemptKey mcqAttemptKey = new QuizQuestionMCQAttemptKey(qa1.getId(), mcq1.getId());
+        QuizQuestionMCQAttemptKey mcqAttemptKey2 = new QuizQuestionMCQAttemptKey(qa2.getId(), mcq1.getId());
+        
         QuizQuestionMCQAttempt mcqAttempt1 = new QuizQuestionMCQAttempt();
+        QuizQuestionMCQAttempt mcqAttempt2 = new QuizQuestionMCQAttempt();
         mcqAttempt1.setKey(mcqAttemptKey);
         mcqAttempt1.setAwarded_grade(0);
         mcqAttempt1.setQuizAttempt(qa1);
         mcqAttempt1.setMultipleChoiceQuestion(mcq1);
         mcqAttempt1.setSelectedOption(mco1);
-        mcqAttemptRepository.save(mcqAttempt1);
         
+        mcqAttempt2.setKey(mcqAttemptKey2);
+        mcqAttempt2.setAwarded_grade(5);
+        mcqAttempt2.setQuizAttempt(qa2);
+        mcqAttempt2.setMultipleChoiceQuestion(mcq1);
+        mcqAttempt2.setSelectedOption(mco2);
+        mcqAttemptRepository.save(mcqAttempt1);
+        mcqAttemptRepository.save(mcqAttempt2);
+        
+//        quizAttemptService.deleteAttempt(qa1);
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

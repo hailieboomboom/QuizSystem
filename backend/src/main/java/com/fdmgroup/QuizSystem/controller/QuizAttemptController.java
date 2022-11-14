@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.controller;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttempt;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttemptKey;
+import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.MultipleChoiceOptionRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
@@ -22,6 +24,8 @@ import com.fdmgroup.QuizSystem.service.QuizAttemptService;
 import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
 import com.fdmgroup.QuizSystem.service.QuizQuestionMCQAttemptService;
 import com.fdmgroup.QuizSystem.util.ModelToDTO;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +59,10 @@ public class QuizAttemptController {
 			mcqAttemptService.createMCQAttempt(mcqAttemptDTO, quizAttempt.getId(), quizAttempt.getQuiz().getId());
 			
 		}
-		// creat method in quizattemptService to calculate totalawrded
+		// create method in quizattemptService to calculate total awarded
+		
 		// calculate attempt number
+		
 		
 		//TODO map to dto (ask jason)
 		QuizAttemptDTO quizAttemptGradedDTO = new QuizAttemptDTO();
@@ -67,9 +73,26 @@ public class QuizAttemptController {
 //	@GetMapping("/{created_by_id}")
 	// view attempts of quizzes created 
 
-//	@GetMapping("/{attempted_by_id}")
-	// view all attempts by user(student) (user, quiz name/attempt, quiz_grade)
 	
-	// delete an attempt (associated with a quiz to be deleted) -> move to quizAttemptService
-
+	// view all attempts by user(student) (user, quiz name/attempt, quiz_grade)
+	@GetMapping("/quizTaker/{attempted_by_id}")
+	public ResponseEntity<List<QuizAttemptDTO>> getAllQuizAttemptsByTaker(@PathVariable long attempted_by_id){
+		List<QuizAttemptDTO> returnedAttemptDTOs = new ArrayList<QuizAttemptDTO>();
+		User user = userService.getUserById(attempted_by_id);
+		List<QuizAttempt> foundAttempts = quizAttemptService.findQuizAttemptByUser(user);
+		
+		for(QuizAttempt qa: foundAttempts) {
+			QuizAttemptDTO qaDto = new QuizAttemptDTO();
+			qaDto.setAttemptNo(qa.getAttemptNo());
+			qaDto.setId(qa.getId());
+			qaDto.setQuizId(qa.getQuiz().getId());
+			qaDto.setTotalAwarded(qa.getTotalAwarded());
+			qaDto.setUserId(qa.getUser().getId());
+			qaDto.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(qa));
+			returnedAttemptDTOs.add(qaDto);
+		}
+		
+		return new ResponseEntity<>(returnedAttemptDTOs, HttpStatus.OK);
+	}
+	
 }
