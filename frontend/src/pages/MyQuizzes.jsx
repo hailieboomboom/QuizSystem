@@ -135,7 +135,7 @@ const MyQuizzes = () => {
             </Grid>
 
             <Grid item sx={{ width:650 }}>
-                <Button fullWidth color="success" variant="outlined" size="large">Create Quiz</Button>
+                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
 
         </Grid>
