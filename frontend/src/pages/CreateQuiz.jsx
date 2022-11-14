@@ -90,8 +90,8 @@ const CreateQuiz = () => {
                                 onChange={handleCategory}
                                 label="Category"
                             >
-                                <MenuItem value="Course Content">Course Content</MenuItem>
-                                <MenuItem value="Interview Prep">Interview Prep</MenuItem>
+                                <MenuItem value="COURSE_QUIZ">Course Content</MenuItem>
+                                <MenuItem value="INTERVIEW_QUIZ">Interview Prep</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
