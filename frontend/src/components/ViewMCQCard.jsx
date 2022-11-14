@@ -30,20 +30,12 @@ const bull = (
 
 export default function ViewMCQCard(props) {
     const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState)
+    const [question, setQuestion] = React.useState([]);
 
-    // React.useEffect(() => {
-    //     const url = "http://localhost:8088/QuizSystem/api/questions/" + quiz.quizId + "/questions";
-    //     axios.get(url).then((response) => {
-    //         setQuizQuestions(response.data);
-    //         console.log(quizQuestions);
-    //         // setQuiz(response.data);
-    //     });
-    // }, []);
 
-    const [questions, setQuestions] = React.useState([]);
+    console.log("dasdad")
+    console.log(question)
 
-    // const [question, setQuestion] = React.useState([]);
-    console.log(props.questionCard)
     const [show, setShow] = useState(false);
     const changeStyle = () => {
 
@@ -51,17 +43,19 @@ export default function ViewMCQCard(props) {
 
     function handleOnClick(){
         setEditQuestions(props.questionCard)
-        editQuestion()
     }
 
     function editQuestion() {
         const question = [
-            props.questionCard.question,
+            props.questionCard
         ];
         console.log(question)
     }
-
+if(!setQuestion){
+    return null;
+}
     return (
+
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
                     <div className={"questionCardContent"}>
