@@ -18,7 +18,7 @@ export default function QuizAllQuestionsTable() {
 
     function hanldleAdd (current) {
         setquizAllQuestions((questions) =>
-            questions.filter((question) => question.question !== current.question)
+            questions.filter((question) => question.questionId !== current.questionId)
         );
         setquizSelectQuestions([...quizSelectedQuestions,current]);
     }
@@ -38,11 +38,11 @@ export default function QuizAllQuestionsTable() {
                 <TableBody>
                     {quizAllQuestions.map((question) => (
                         <TableRow
-                            key={question.question}
+                            key={question.questionId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                <Typography variant="body">{question.question}</Typography>
+                                <Typography variant="body">{question.questionDetail}</Typography>
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <Button variant="outlined" onClick={()=>hanldleAdd(question)} >Add</Button>

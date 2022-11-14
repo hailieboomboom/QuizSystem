@@ -18,7 +18,7 @@ export default function QuizSelectedQuestionsTable() {
 
     function hanldleRemove (current) {
         setquizSelectQuestions((questions) =>
-            questions.filter((question) => question.question !== current.question)
+            questions.filter((question) => question.questionId !== current.questionId)
         );
         setquizAllQuestions([...quizAllQuestions,current]);
     }
@@ -34,11 +34,11 @@ export default function QuizSelectedQuestionsTable() {
                 <TableBody>
                     {quizSelectedQuestions.map((question) => (
                         <TableRow
-                            key={question.question}
+                            key={question.questionId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                <Typography variant="body">{question.question}</Typography>
+                                <Typography variant="body">{question.questionDetail}</Typography>
                             </TableCell>
                             <TableCell component="th" scope="row"s>
                                 <Button variant="outlined" onClick={()=>hanldleRemove(question)} >Remove</Button>

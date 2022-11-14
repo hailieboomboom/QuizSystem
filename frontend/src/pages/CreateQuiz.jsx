@@ -15,6 +15,7 @@ import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
 import { useRecoilState } from 'recoil';
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
+import axios from "axios";
 
 function numQuestions(value) {
     return `${value}°C`;
@@ -25,6 +26,15 @@ const CreateQuiz = () => {
     const [difficulty, setDifficulty] = useState('');
     const [type, setType] = useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
+
+    React.useEffect(() => {
+        axios.get("http://localhost:8088/QuizSystem/api/questions/mcqs/").then((response) => {
+            setquizAllQuestions(response.data);
+            console.log(quizAllQuestions)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }, []);
 
     // const [createQuizSelectedQuestions, setCreateQuizSelectedQuestions] = useRecoilState([]);
 
