@@ -14,6 +14,10 @@ import Typography from '@mui/material/Typography';
 import {useState} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getCookie, setCookie } from '../utils/cookies';
+import { apis } from '../utils/apis';
+import { ConstructionOutlined } from '@mui/icons-material';
+import {getUserId, isLoggedIn} from '../utils/cookies.js';
 
 export default function SignInSide() {
     const navigate = useNavigate();
@@ -22,36 +26,21 @@ export default function SignInSide() {
     const [errorMsg, setErrorMsg] = useState(null);
 
   const handleClick = (event) => {
-      setErrorMsg("");
-    event.preventDefault();
-      const user={password,username}
-      console.log(user)
-      fetch("http://localhost:8088/QuizSystem/auth/login",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify(user)
+          event.preventDefault();
 
-      }).then((res)=>{
-          if(res.status === 200) return res.text();
-          else if(res.status === 401 || res.status === 403){
-              setErrorMsg("Invalid username or password");
-          }else {
-              setErrorMsg(
-                  "Something went wrong, try again later or reach out to trevor@coderscampus.com"
-              );
-          }
-          console.log("Hello Student Logged in")
-      })
-          // .then((data) => {
-          //     if (data) {
-          //         user.setJwt(data);
-          //         navigate("/dashboard");
-          //     }
-          // });
-  };
+          apis.login(username, password).then(res => {
+              console.log(res.data)
+              setCookie('token', res.data.accessToken, 30)
+              console.log(getCookie('token'))
+              document.location.href = '/dashboard';
+          }).catch(err => {
+              alert("Either username or password is not correct. Please try again.")
+              console.log(err)
+          })
+      }
 
   return (
-      <form noValidate autoComplete="off">
+
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -84,7 +73,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-
+              <Box
+                  component="form"
+                  noValidate
+                  sx={{ mt: 3 }}
+              >
                 <TextField
                     required
                     fullWidth
@@ -131,8 +124,9 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
           </Box>
+          </Box>
         </Grid>
       </Grid>
-      </form>
+
   );
 }

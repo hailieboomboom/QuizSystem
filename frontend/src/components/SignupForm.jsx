@@ -15,8 +15,8 @@ import {useEffect, useState} from "react";
 
 export default function Signup() {
   const[username,setUsername] = useState('');
-    const[firstname,setFirstname] = useState('');
-    const[lastname,setLastname] = useState('');
+    const[firstName,setFirstname] = useState('');
+    const[lastName,setLastname] = useState('');
     const[email,setEmail] = useState('');
     const[password,setPassword] = useState('');
     const[role,setRole] = useState('');
@@ -24,26 +24,30 @@ export default function Signup() {
 
     const handleClick=(e)=>{
         e.preventDefault()
-        const user={username,firstname,lastname,email,password,role}
+        const user={username,firstName,lastName,email,password,role}
         console.log(user)
         fetch("http://localhost:8088/QuizSystem/auth/signup",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(user)
 
-        }).then(()=>{
-            console.log("New Student added")
+        }).then((res)=>{
+
+                return res.json()
         })
+            .then((response) => {
+               return response
+            })
     }
 
-    useEffect(()=>{
-        fetch("http://localhost:8088/student/getAll")
-            .then(res=>res.json())
-            .then((result)=>{
-                    setUser(result);
-                }
-            )
-    },[])
+    // useEffect(()=>{
+    //     fetch("http://localhost:8088/student/getAll")
+    //         .then(res=>res.json())
+    //         .then((result)=>{
+    //                 setUser(result);
+    //             }
+    //         )
+    // },[])
 
   return (
 
@@ -66,7 +70,7 @@ export default function Signup() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-            <form noValidate autoComplete="off">
+
           <Box
             component="form"
             noValidate
@@ -98,7 +102,7 @@ export default function Signup() {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  value={firstname}
+                  value={firstName}
                   onChange={(e)=>setFirstname(e.target.value)}
                 />
               </Grid>
@@ -110,7 +114,7 @@ export default function Signup() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
-                  value={lastname}
+                  value={lastName}
                   onChange={(e)=>setLastname(e.target.value)}
                 />
               </Grid>
@@ -170,7 +174,7 @@ export default function Signup() {
               </Grid>
             </Grid>
           </Box>
-            </form>
+
         </Box>
       </Grid>
       <Grid
