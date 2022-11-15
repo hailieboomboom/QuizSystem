@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.service.*;
 import io.swagger.annotations.ApiOperation;
@@ -76,6 +77,7 @@ public class QuestionController {
 
 
 
+	
 
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
@@ -124,6 +126,10 @@ public class QuestionController {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestion(),HttpStatus.OK);
 	}
 
+	@GetMapping("/quizCreation/mcqs")
+	public ResponseEntity<List<QuizCreationMCQDto>> getAllMcqforQuizCreation() {
+		return  new ResponseEntity<>(questionService.getAllMcqQuestionforQuizCreation(),HttpStatus.OK);
+	}
 
 	@DeleteMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "delete a multiple choice question based on questionId",

@@ -16,7 +16,7 @@ public class MultipleChoiceOption {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private Long id;
 	private String optionDetail;
 	private boolean isCorrect;
 	

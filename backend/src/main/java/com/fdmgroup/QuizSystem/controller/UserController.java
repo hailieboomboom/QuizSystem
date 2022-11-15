@@ -9,6 +9,7 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 import com.fdmgroup.QuizSystem.service.UserService;
 import com.fdmgroup.QuizSystem.util.ModelToDTO;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,19 +29,34 @@ public class UserController {
     private final StudentService studentService;
     private final PasswordEncoder passwordEncoder;
     private final ModelToDTO modelToDTO;
+    private final UserService userService;
 
     @ApiOperation(value = "get student by id")
     @GetMapping("/students/{id}")
     public ResponseEntity<UserOutputDTO> getStudentById(@PathVariable long id){
         return new ResponseEntity<>(modelToDTO.userToOutput(studentService.findStudentById(id)), HttpStatus.OK);
     }
-
+    @ApiOperation(value = "get all students of all categories")
+    @GetMapping("/students")
+    public ResponseEntity<List<UserOutputDTO>> getAllStudents(){
+        List<UserOutputDTO> resultList = studentService.getAllStudents().stream().map(modelToDTO::userToOutput).toList();
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
 
     @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
     @PutMapping("/students/{id}")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 201, message = "Update successfully"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "User not found"),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email already exists.")
+    }
+    )
     public ResponseEntity<UserOutputDTO> updateStudentById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
-        modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
-        return new ResponseEntity<>(modelToDTO.userToOutput(studentService.updateStudent(id, modifiedUser)), HttpStatus.OK);
+        if(modifiedUser.getPassword() != null) {
+            modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
+        }
+        return new ResponseEntity<>(modelToDTO.userToOutput(userService.updateUser(id, modifiedUser)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "get trainer by id")
@@ -50,10 +66,20 @@ public class UserController {
     }
 
     @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
-    @PutMapping("/trainer/{id}")
-    public ResponseEntity<UserOutputDTO> updateTrainerById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedTrainer){
-        modifiedTrainer.setPassword(passwordEncoder.encode(modifiedTrainer.getPassword()));
-        return new ResponseEntity<>(modelToDTO.userToOutput(trainerService.updateTrainer(id, modifiedTrainer)), HttpStatus.OK);
+    @PutMapping("/trainers/{id}")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 201, message = "Update successfully"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "User not found"),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email already exists.")
+
+    }
+    )
+    public ResponseEntity<UserOutputDTO> updateTrainerById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
+        if(modifiedUser.getPassword() != null) {
+            modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
+        }
+        return new ResponseEntity<>(modelToDTO.userToOutput(userService.updateUser(id, modifiedUser)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "get sales by id")
@@ -64,34 +90,64 @@ public class UserController {
 
     @ApiOperation(value = "update user. If some fields are empty, then original values will be overwritten by empty values.")
     @PutMapping("/sales/{id}")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 201, message = "Update successfully"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "User not found"),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email already exists.")
+
+    }
+    )
     public ResponseEntity<UserOutputDTO> updateSalesById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedSales){
-        modifiedSales.setPassword(passwordEncoder.encode(modifiedSales.getPassword()));
-        return new ResponseEntity<>(modelToDTO.userToOutput(salesService.updateSales(id, modifiedSales)), HttpStatus.OK);
+        if(modifiedSales.getPassword() != null) {
+            modifiedSales.setPassword(passwordEncoder.encode(modifiedSales.getPassword()));
+        }
+        return new ResponseEntity<>(modelToDTO.userToOutput(userService.updateUser(id, modifiedSales)), HttpStatus.OK);
     }
     
     @ApiOperation(value = "get all unauthorised trainers.")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+    }
+    )
     @GetMapping("/trainers/unauthorised")
     public ResponseEntity<List<UserOutputDTO>> getAllUnauthorisedTrainer(){
         return new ResponseEntity<>(trainerService.getAllUnauthorisedTrainers().stream().map(modelToDTO::userToOutput).toList(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "get all unauthorised sales.")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+    }
+    )
     @GetMapping("/sales/unauthorised")
     public ResponseEntity<List<UserOutputDTO>> getAllUnauthorisedSales(){
         return new ResponseEntity<>(salesService.getAllUnauthorisedSales().stream().map(modelToDTO::userToOutput).toList(), HttpStatus.OK);
     }
 
     @PutMapping("/trainers/authorise/{target_username}")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+    }
+    )
     public ResponseEntity<UserOutputDTO> authoriseTrainer(@PathVariable String target_username){
         return new ResponseEntity<>(modelToDTO.userToOutput(trainerService.authoriseTrainer(target_username)), HttpStatus.OK);
     }
 
     @PutMapping("/sales/authorise/{target_username}")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+    }
+    )
     public ResponseEntity<UserOutputDTO> authoriseSales(@PathVariable String target_username) {
         return new ResponseEntity<>(modelToDTO.userToOutput(salesService.authoriseSales(target_username)), HttpStatus.OK);
     }
 
-    @PutMapping("/students/{target_username}/change-category/{category}")
+    @PutMapping("categories/{category}/students/{target_username}/")
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Authorisation failed"),
+    }
+    )
     public ResponseEntity<UserOutputDTO> alterStudentCategory(@PathVariable String target_username, @PathVariable String category){
         return new ResponseEntity<>(modelToDTO.userToOutput(studentService.updateCategory(target_username, mapStringToRole(category))), HttpStatus.OK);
     }
