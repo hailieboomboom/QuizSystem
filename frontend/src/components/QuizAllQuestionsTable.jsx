@@ -19,7 +19,7 @@ export default function QuizAllQuestionsTable() {
 
     function hanldleAdd (current) {
         setquizAllQuestions((questions) =>
-            questions.filter((question) => question.questionId !== current.questionId)
+            questions.filter((question) => question.mcqId !== current.mcqId)
         );
         setquizSelectQuestions([...quizSelectedQuestions,current]);
     }
@@ -36,7 +36,7 @@ export default function QuizAllQuestionsTable() {
         }
         //return the item which contains the user input
         else {
-            return od.questionDetail.toLowerCase().includes(inputText)
+            return od.questionDetails.toLowerCase().includes(inputText)
         }
     })
     console.log(quizAllQuestions);
@@ -64,11 +64,11 @@ export default function QuizAllQuestionsTable() {
                 <TableBody>
                     {filteredData.map((question) => (
                         <TableRow
-                            key={question.questionId}
+                            key={question.mcqId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                <Typography variant="body">{question.questionDetail}</Typography>
+                                <Typography variant="body">{question.questionDetails}</Typography>
                             </TableCell>
                             <TableCell/>
                             <TableCell component="th" scope="row">

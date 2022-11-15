@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
+import QuizSelectedQuestionsTableRow from "./QuizSelectedQuestionsTableRow";
 
 export default function QuizSelectedQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -19,7 +20,7 @@ export default function QuizSelectedQuestionsTable() {
 
     function hanldleRemove (current) {
         setquizSelectQuestions((questions) =>
-            questions.filter((question) => question.questionId !== current.questionId)
+            questions.filter((question) => question.mcqId !== current.mcqId)
         );
         setquizAllQuestions([...quizAllQuestions,current]);
     }
@@ -29,33 +30,13 @@ export default function QuizSelectedQuestionsTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Selected Questions</TableCell>
-                        <TableCell align="right">Mark</TableCell>
+                        <TableCell align="right">Grade</TableCell>
                         <TableCell align="right">Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {quizSelectedQuestions.map((question) => (
-                        <TableRow
-                            key={question.questionId}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                <Typography variant="body">{question.questionDetail}</Typography>
-                            </TableCell>
-                            <TableCell align="right" component="th" scope="row">
-                                <TextField
-                                    type="number"
-                                    name="Grade"
-                                    label="Grade"
-                                    InputProps={{ inputProps: { min: 0, max: 10 } }}
-                                    variant="filled"
-
-                                />
-                            </TableCell>
-                            <TableCell component="th" scope="row"s>
-                                <Button variant="outlined" onClick={()=>hanldleRemove(question)} >Remove</Button>
-                            </TableCell>
-                        </TableRow>
+                        <QuizSelectedQuestionsTableRow question={question}/>
                     ))}
                 </TableBody>
             </Table>

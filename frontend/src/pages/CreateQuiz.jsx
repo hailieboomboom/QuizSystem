@@ -20,9 +20,13 @@ const CreateQuiz = () => {
     const [category, setCategory] = useState('');
     const [name, setName] = useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
+    const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
+    const [quizId, setQuizId] = React.useState('');
+    console.log(quizId)
     React.useEffect(() => {
-        axios.get("http://localhost:8088/QuizSystem/api/questions/mcqs/").then((response) => {
+        axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs").then((response) => {
             setquizAllQuestions(response.data);
+            console.log(response.data);
         }).catch(function (error) {
             console.log(error);
         });
@@ -34,12 +38,32 @@ const CreateQuiz = () => {
             "quizCategory": category
         })
             .then(function (response) {
-                console.log(response);
+                postQuestions(response.data.quizId);
             })
             .catch(function (error) {
                 console.log(error);
-            });
+            }).then(function () {
+            // always executed
+        });
     }
+    const postQuestions = (id) => {
+        console.log(JSON.stringify(quizSelectedQuestions))
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
+            quizSelectedQuestions
+        )
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+            });
+        // axios({
+        //     method: 'post',
+        //     url: "http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
+        //     data: quizSelectedQuestions
+        // });
+    }
+
     const handleCreate = () =>{
         postQuiz();
     }
@@ -101,7 +125,7 @@ const CreateQuiz = () => {
                         <QuizSelectedQuestionsTable/>
                     </Grid>
                     <Grid item xs={1}>
-                        <Button onClick={handleCreate} variant="outlined" as={Link} to="/viewQuestions">
+                        <Button onClick={handleCreate} variant="outlined">
                             Create
                         </Button>
                     </Grid>
