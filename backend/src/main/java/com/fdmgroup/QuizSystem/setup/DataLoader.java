@@ -124,15 +124,24 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
-        mcq1.setCreator(sales);
+        mcq1.setCreator(trainer);
         
 
         MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
         mcq2.setQuestionDetails("test mcq2");
-        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1",true,mcq2);
-        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2",false,mcq2);
-        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3",false,mcq2);
-        mcq2.setCreator(trainer);
+
+        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1 for 2",true,mcq2);
+        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2 for 2",false,mcq2);
+        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3 for 2",false,mcq2);
+        mcq2.setCreator(sales);
+        
+        MultipleChoiceQuestion mcq3 = new MultipleChoiceQuestion();
+        mcq3.setQuestionDetails("test mcq3");
+        MultipleChoiceOption mco111 = new MultipleChoiceOption("op1 for 3",true,mcq3);
+        MultipleChoiceOption mco112 = new MultipleChoiceOption("op2 for 3",false,mcq3);
+        MultipleChoiceOption mco113 = new MultipleChoiceOption("op3 for 3",false,mcq3);
+        mcq3.setCreator(student1);
+
 
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("what is the best colour");
@@ -154,8 +163,6 @@ public class DataLoader implements ApplicationRunner {
         sa4.setCorrectAnswer("java");
         sa4.setCreator(trainer);
         
-         // tag: interview course python java web springboot sql unix ood jpa spring react javascript proskill other
-		
 
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
@@ -173,6 +180,7 @@ public class DataLoader implements ApplicationRunner {
         Tag tag14 = new Tag();
         Tag tag15 = new Tag();
         Tag tag16 = new Tag();
+        Tag tag17 = new Tag();
         tag1.setTagName("course");
         tag2.setTagName("interview");
         tag3.setTagName("java");
@@ -185,10 +193,11 @@ public class DataLoader implements ApplicationRunner {
         tag10.setTagName("spring");
         tag11.setTagName("react");
         tag12.setTagName("javascript");
-        tag13.setTagName("proskill");
+        tag13.setTagName("proskills");
         tag14.setTagName("web");
         tag15.setTagName("agile");
         tag16.setTagName("other");
+        tag17.setTagName("mcq");
         
         
         tag1.addOneQuestion(mcq1);
@@ -200,10 +209,22 @@ public class DataLoader implements ApplicationRunner {
         tag2.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
         tag2.addOneQuestion(sa1);
         tag2.addOneQuestion(sa4);
+        tag2.addOneQuestion(mcq2);
+        tag1.addOneQuestion(mcq3);
+        
+        tag17.addOneQuestion(mcq1);
+        tag17.addOneQuestion(mcq2);
+        tag17.addOneQuestion(mcq3);
 
         mcq1.addOneTag(tag1);
-        mcq2.addOneTag(tag1);  // adding tag1 & tag2 into mcq2
-        mcq2.addOneTag(tag2);  // adding tag1 & tag2 into mcq2
+
+        mcq2.addOneTag(tag2);
+        mcq3.addOneTag(tag1);
+        mcq1.addOneTag(tag17);
+        mcq2.addOneTag(tag17);
+        mcq3.addOneTag(tag17);
+        sa1.addOneTag(tag2);
+
         sa1.addOneTag(tag1);
         sa2.addOneTag(tag1);
         sa3.addOneTag(tag1);
@@ -226,7 +247,8 @@ public class DataLoader implements ApplicationRunner {
         tagService.save(tag14);
         tagService.save(tag15);
         tagService.save(tag16);
-
+        tagService.save(tag17);
+        
         mcq1 = (MultipleChoiceQuestion) questionService.save(mcq1);
         questionService.save(sa1);
         questionService.save(sa2);
@@ -241,6 +263,11 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco11);
         mcoService.save(mco12);
         mcoService.save(mco13);
+        
+        mcq3 = (MultipleChoiceQuestion) questionService.save(mcq3);
+        mcoService.save(mco111);
+        mcoService.save(mco112);
+        mcoService.save(mco113);
 
         ////////// Load Quizzes ////////////
 

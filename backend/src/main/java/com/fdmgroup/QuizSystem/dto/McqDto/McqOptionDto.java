@@ -15,4 +15,10 @@ public class McqOptionDto {
     private String optionDescription;
     @NotBlank
     private boolean isCorrect;
+	@Override
+	public String toString() {
+		return "McqOptionDto [id=" + id + ", optionDescription=" + optionDescription + ", isCorrect=" + isCorrect + "]";
+	}
+    
+    
 }
