@@ -6,11 +6,14 @@ import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
 import { useRecoilState } from 'recoil';
-import { attemptQuizState } from '../recoil/Atoms'
+import {attemptQuizState, quizSelectedAnswersState} from '../recoil/Atoms'
 import Button from "@mui/material/Button";
+import {Link} from "react-router-dom";
 // quizId
 
 const Quiz = () => {
+
+    const [answers, setAnswers] = useRecoilState(quizSelectedAnswersState);
 
     React.useEffect(() => {
         const url = "http://localhost:8088/QuizSystem/api/quizzes/" + quiz.quizId + "/questions";
@@ -25,8 +28,23 @@ const Quiz = () => {
     const [quizQuestions, setQuizQuestions] = React.useState([]);
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
-    //
-    //
+    const submitQuiz = () => {
+        axios.post("http://localhost:8088/QuizSystem/api/quizAttempts", {
+            "mcqattemptList": answers,
+            "quizId": quiz.quizId,
+            "userId": 1
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    const handleSubmit = () =>{
+        submitQuiz();
+    }
+
     if (!quizQuestions) return null;
     return (
         <div>
@@ -39,7 +57,7 @@ const Quiz = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <QuizHeaderCard/>
+                    <QuizHeaderCard quizName={quiz.name} />
                 </Grid>
 
                 {
@@ -53,13 +71,6 @@ const Quiz = () => {
                             </Grid>
                     )
                 }
-
-                <Grid item>
-                    <QuizShortAnswerCard/>
-                </Grid>
-                <Grid item>
-                    <QuizMsqCard/>
-                </Grid>
                 <Grid
                     item
                     direction="row"
@@ -68,15 +79,11 @@ const Quiz = () => {
                 >
                     <Grid item/>
                     <Grid item>
-                        <Button variant="outlined" size="large">Submit</Button>
+                        <Button variant="outlined" size="large" onClick={handleSubmit} as={Link} to="/viewQuizzes">Submit</Button>
                     </Grid>
 
                 </Grid>
                 <Grid item/>
-                {/*<Grid item>*/}
-                {/*    <QuizMcqCard/>*/}
-                {/*</Grid>*/}
-
             </Grid>
 
         </div>
