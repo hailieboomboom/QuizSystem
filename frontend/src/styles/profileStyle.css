@@ -1,0 +1,35 @@
+.profileDiv{
+    background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");
+    height: 91.9vh;
+}
+
+.profileGrid{
+    border: 2px solid purple;
+    height: 91.9vh;
+
+    position: relative;
+    margin: auto;
+}
+
+.profileCenter{
+    border: 1px solid gray;
+    max-width: 400px;
+    max-height: 100px;
+    width: auto;
+
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.profileTitle{
+    color: white;
+}
