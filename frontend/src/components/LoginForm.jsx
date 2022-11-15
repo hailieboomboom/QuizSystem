@@ -42,7 +42,7 @@ export default function SignInSide() {
                   document.location.href = '/trainer';
               }
 
-              if (role === "AUTHORISED_SALEs"){
+              if (role === "AUTHORISED_SALES"){
                   document.location.href = '/sales';
               }
 
