@@ -15,5 +15,6 @@ public class QuizAttemptDTO {
 	private long userId;
 	private int attemptNo;
     private float totalAwarded;
+    private float maxGrade;
     List<MCQAttemptDTO> MCQAttemptList;
 }
