@@ -51,10 +51,10 @@ export default function ViewMCQCard(props) {
         ];
         console.log(question)
     }
-if(!setQuestion){
-    return null;
-}
-    return (
+    if(!setQuestion){
+        return null;
+    }
+        return (
 
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
