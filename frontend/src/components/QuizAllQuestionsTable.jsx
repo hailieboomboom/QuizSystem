@@ -12,6 +12,8 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
+import QuizSelectedQuestionsTableRow from "./QuizSelectedQuestionsTableRow";
+import QuizAllQuestionsTableRow from "./QuizAllQuestionsTableRow";
 
 export default function QuizAllQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -36,7 +38,7 @@ export default function QuizAllQuestionsTable() {
         }
         //return the item which contains the user input
         else {
-            return od.questionDetail.toLowerCase().includes(inputText)
+            return od.questionDetails.toLowerCase().includes(inputText)
         }
     })
     console.log(quizAllQuestions);
@@ -63,18 +65,28 @@ export default function QuizAllQuestionsTable() {
                 </TableHead>
                 <TableBody>
                     {filteredData.map((question) => (
-                        <TableRow
-                            key={question.questionId}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                <Typography variant="body">{question.questionDetail}</Typography>
-                            </TableCell>
-                            <TableCell/>
-                            <TableCell component="th" scope="row">
-                                <Button variant="outlined" onClick={()=>hanldleAdd(question)} >Add</Button>
-                            </TableCell>
-                        </TableRow>
+                        // <TableRow
+                        //     key={question.questionId}
+                        //     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        // >
+                        //     <TableCell component="th" scope="row">
+                        //         <Typography variant="body">{question.questionDetails}</Typography>
+                        //     </TableCell>
+                        //     <TableCell align="right" component="th" scope="row">
+                        //         <TextField
+                        //             type="number"
+                        //             name="Grade"
+                        //             label="Grade"
+                        //             InputProps={{ inputProps: { min: 0, max: 10 } }}
+                        //             variant="filled"
+                        //             value={question.grade}
+                        //         />
+                        //     </TableCell>
+                        //     <TableCell component="th" scope="row">
+                        //         <Button variant="outlined" onClick={()=>hanldleAdd(question)} >Add</Button>
+                        //     </TableCell>
+                        // </TableRow>
+                        <QuizAllQuestionsTableRow question={question}/>
                     ))}
                 </TableBody>
             </Table>

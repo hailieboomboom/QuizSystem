@@ -9,8 +9,9 @@ import { useState } from 'react';
 import { Container } from '@mui/material';
 import { Link } from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {editQuestionState} from "../recoil/Atoms";
+import {editQuestionOptionsState, editQuestionState} from "../recoil/Atoms";
 import axios from "axios";
+import EditQuestionOptions from "../components/EditQuestionOptions";
 const API_URL = 'http://localhost:8088/QuizSystem/api/questions/mcqs'
 
 const EditQuestion = () => {
@@ -18,7 +19,7 @@ const EditQuestion = () => {
 
     const [question, setQuestion] = useState('');
 
-    const [answer, setAnswer] = useState('');
+    const [answers, setAnswers] = useRecoilState(editQuestionOptionsState);
 
     const url = `${API_URL}/${editQuestions.questionId}`
 
@@ -29,25 +30,13 @@ const EditQuestion = () => {
         event.preventDefault(); // 👈️ prevent page refresh
 
     };
-
+    console.log(answers)
     function handleSaveQuestion(){
         console.log(question)
+
         const data = {
 
-            "options": [
-            {
-                "correct": true,
-                "optionDescription": answer
-            },
-            {
-                "correct": false,
-                "optionDescription": answer
-            },
-            {
-                "correct": false,
-                "optionDescription": answer
-            }
-        ],
+            "options": answers,
             "questionDetails": question,
             "tags": [
             "interview"
@@ -101,15 +90,7 @@ const EditQuestion = () => {
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
                             {editQuestions.mcqOptionDtoList.map((option) => (
-                                <TextField
-                                    required
-                                    id={"id"}
-                                    name="questionString"
-                                    fullWidth
-                                    variant="standard"
-                                    defaultValue={option.optionDescription}
-                                    onChange={event => setAnswer(event.target.value)}
-                                > {option.optionDescription} </TextField>
+                                <EditQuestionOptions option={option}/>
                             ))}
 
                         </FormControl>

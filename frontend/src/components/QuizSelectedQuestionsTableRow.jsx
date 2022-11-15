@@ -12,11 +12,13 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
-import QuizSelectedQuestionsTableRow from "./QuizSelectedQuestionsTableRow";
 
-export default function QuizSelectedQuestionsTable() {
+export default function QuizSelectedQuestionsTableRow(props) {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
+    const [grade, setGrade] = React.useState(props.question.grade);
+
+
 
     function handleRemove (current) {
         setquizSelectQuestions((questions) =>
@@ -25,21 +27,20 @@ export default function QuizSelectedQuestionsTable() {
         setquizAllQuestions([...quizAllQuestions,current]);
     }
     return (
-        <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Selected Questions</TableCell>
-                        <TableCell align="right">Grade</TableCell>
-                        <TableCell align="right">Action</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {quizSelectedQuestions.map((question) => (
-                        <QuizSelectedQuestionsTableRow question={question}/>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                        <TableRow
+                            key={props.question.questionId}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                            <TableCell component="th" scope="row">
+                                <Typography variant="body">{props.question.questionDetails}</Typography>
+                            </TableCell>
+                            <TableCell align="right" component="th" scope="row">
+                                <Typography variant="body">{props.question.grade}</Typography>
+                            </TableCell>
+                            <TableCell component="th" scope="row"s>
+                                <Button variant="outlined" onClick={()=>handleRemove(props.question)} >Remove</Button>
+                            </TableCell>
+                        </TableRow>
+
     );
 }

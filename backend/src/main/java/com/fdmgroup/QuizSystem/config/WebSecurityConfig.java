@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/users/role").permitAll()
 //                .antMatchers("/api/questions/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
 //                .antMatchers("/api/quizAttempts/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
 //                .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
