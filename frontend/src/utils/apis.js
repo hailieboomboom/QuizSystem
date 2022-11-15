@@ -5,7 +5,9 @@ export const apis = {
     signup,
     login,
     getUnauthorizedTrainers,
-    authorizeTrainer
+    authorizeTrainer,
+    getUnauthorizedSales,
+    authorizeSales
 }
 
 const config = {
@@ -31,8 +33,15 @@ function getUnauthorizedTrainers(){
     return instance.get('/users/trainers/unauthorised' , config)
 }
 
+function getUnauthorizedSales(){
+    return instance.get('/users/sales/unauthorised' , config)
+}
 function authorizeTrainer(username){
     return instance.put("/users/trainers/authorise/"+ username, {}, config)
+}
+
+function authorizeSales(username){
+    return instance.put("/users/sales/authorise/"+ username, {}, config)
 }
 
 function signup(username, email, password, firstName, lastName,role){
