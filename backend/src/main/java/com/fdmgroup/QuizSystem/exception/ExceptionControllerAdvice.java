@@ -3,6 +3,7 @@ package com.fdmgroup.QuizSystem.exception;
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.exception.McqException.McqOptionNotValidException;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
+import com.fdmgroup.QuizSystem.exception.McqException.NotEnoughAccessException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,11 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(value = McqOptionNotValidException.class)
     public final ResponseEntity<ApiResponse> handleMcqOptionNotValidException(McqOptionNotValidException exception){
         return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = NotEnoughAccessException.class)
+    public final ResponseEntity<ApiResponse> handleNotEnoughAccessException(NotEnoughAccessException exception){
+        return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.FORBIDDEN);
     }
 
 }

@@ -95,8 +95,13 @@ public class MultipleChoiceOptionService {
 		for (MultipleChoiceOption option:originalMcqOption){
 			option.setCorrect(mcqOptionDtoList.get(i).isCorrect());
 			option.setOptionDetail(mcqOptionDtoList.get(i).getOptionDescription());
-			i++;
+			if(option.isCorrect()){
+				i++;
+			}
 		}
+		if(i!=1)
+			throw new McqOptionNotValidException("Please choose only one correct option");
+
 		return originalMcqOption;
 	}
 

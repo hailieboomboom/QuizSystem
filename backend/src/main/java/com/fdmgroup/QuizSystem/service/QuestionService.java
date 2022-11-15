@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.fdmgroup.QuizSystem.exception.McqException.NotEnoughAccessException;
+import com.fdmgroup.QuizSystem.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +17,6 @@ import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.model.Question;
-import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
@@ -46,6 +44,8 @@ public class QuestionService {
 	private MultipleChoiceOptionService multipleChoiceOptionService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private UserService userService;
 	
 	
 	public QuestionService(QuestionRepository questionRepository) {
@@ -79,30 +79,34 @@ public class QuestionService {
 
 
 
-	public void createMCQ(AddMcqDto addMcqDto) {
+	public void createMCQ(AddMcqDto addMcqDto, User user) {
 
 
-		Optional<User> userOptional = userRepository.findById(addMcqDto.getUserId());
-		if (!userOptional.isPresent())
-			throw new NoDataFoundException("Error, user doesn't exists");
 
 		MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion();
-		newQuestion.setCreator(userOptional.get());
+		newQuestion.setCreator(user);
 		newQuestion.setQuestionDetails(addMcqDto.getQuestionDetails());
 		newQuestion = (MultipleChoiceQuestion) save(newQuestion);
 		try {
-			newQuestion.
-					setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
-			newQuestion.
-					setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion)
-					);
+			addMcqDto.getTags().add("mcq");
+			newQuestion.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
+			newQuestion.setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion));
 			newQuestion = (MultipleChoiceQuestion) save(newQuestion);
 		} catch (TagNotValidException e) {
-			System.out.println("bad tags");
 			questionRepository.delete(newQuestion);
-			throw new TagNotValidException("The question must contains at least a course or interview tag");
+			throw new TagNotValidException("The question must contain at least a course or interview tag");
 		}
 
+	}
+
+	public void accessControlCreateMCQ(List<String> tags, Role role) {
+		if(tags==null)
+			throw new TagNotValidException("Please provide at least one tag");
+		if(role.equals(Role.TRAINING)&& tags.contains("interview")){
+			throw new NotEnoughAccessException("Student cannot create interview Questions");
+		} else if( role.equals(Role.AUTHORISED_SALES )&& tags.contains("content")){
+			 throw new NotEnoughAccessException("Sales cannot create course-related Questions");
+		}
 	}
 
 
