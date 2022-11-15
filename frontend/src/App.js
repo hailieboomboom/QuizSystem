@@ -22,6 +22,8 @@ import AttemptedQuizzes from "./pages/AttemptedQuizzes";
 import Dashboard from './pages/Dashboard'
 import SalesDashboard from "./pages/SalesDashboard";
 import TrainerDashboard from "./pages/TrainerDashboard";
+import ErrorPage from "./pages/ErrorPage";
+
 import {
   RecoilRoot,
   atom,
@@ -57,6 +59,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="sales" element={<SalesDashboard />} />
           <Route path="trainer" element={<TrainerDashboard />} />
+          <Route path="errorPage" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
       </RecoilRoot>

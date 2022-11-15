@@ -19,13 +19,13 @@ function NavigationBar() {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+
             <NavDropdown title="Create" id="collasible-nav-dropdown">
-            <NavDropdown.Item as={Link} to="/createQuestion">Create Question</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/createQuiz">
-              Create Quiz
-            </NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/autoGenerate">Auto Generate Quiz</NavDropdown.Item>
-          </NavDropdown>
+              <NavDropdown.Item as={Link} to="/createQuestion">Create Question</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/createQuiz">Create Quiz</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/autoGenerate">Auto Generate Quiz</NavDropdown.Item>
+            </NavDropdown>
+
             <NavDropdown title="Quiz" id="collasible-nav-dropdown">
               <NavDropdown.Item as={Link} to="/viewQuizzes">Take Quiz</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/myQuizzes">Manage Quiz</NavDropdown.Item>
