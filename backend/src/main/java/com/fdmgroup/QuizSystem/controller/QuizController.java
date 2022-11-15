@@ -77,8 +77,9 @@ public class QuizController {
 	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @PathVariable long active_user_id, @RequestBody QuizDto quizDto) {
 		Quiz quiz = quizService.getQuizById(id);
 
-		if(userService.getUserById(active_user_id).getRole() == Role.AUTHORISED_TRAINER && quiz.getQuizCategory() == QuizCategory.COURSE_QUIZ )
-		if (active_user_id != quiz.getCreator().getId() ) {
+		if(userService.getUserById(active_user_id).getRole() == Role.AUTHORISED_TRAINER && quiz.getQuizCategory() != QuizCategory.COURSE_QUIZ ){
+			throw new UserUnauthorisedError("You do not have access to this page!");
+		} else if (active_user_id != quiz.getCreator().getId() ) {
 			throw new UserUnauthorisedError("You do not have access to this page!");
 		}
 		quizService.updateQuiz(id, quizDto);
