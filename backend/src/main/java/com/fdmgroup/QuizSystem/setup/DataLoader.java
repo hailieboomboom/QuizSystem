@@ -1,11 +1,7 @@
 package com.fdmgroup.QuizSystem.setup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,54 +10,31 @@ import org.springframework.stereotype.Component;
 
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
+import com.fdmgroup.QuizSystem.model.QuizAttempt;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
-
-import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
-import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
-
+import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttempt;
+import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttemptKey;
 import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Sales;
-
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
+import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.Trainer;
+import com.fdmgroup.QuizSystem.repository.QuizAttemptRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
-import com.fdmgroup.QuizSystem.service.QuizQuestionGradeService;
+import com.fdmgroup.QuizSystem.service.QuizAttemptService;
 import com.fdmgroup.QuizSystem.service.QuizService;
 import com.fdmgroup.QuizSystem.service.SalesService;
+import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import javax.swing.*;
-import javax.transaction.Transactional;
-
-import com.fdmgroup.QuizSystem.model.*;
-import com.fdmgroup.QuizSystem.service.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
  
 @Component
 @RequiredArgsConstructor
@@ -72,8 +45,11 @@ public class DataLoader implements ApplicationRunner {
 
     private final SalesService salesService;
 
+	private final QuizAttemptRepository qaRepo;
 
 	private final QuizRepository quizRepository;
+	
+	private final QuizQuestionMCQAttemptRepository mcqAttemptRepository;
 
     private final StudentService studentService;
 
@@ -82,9 +58,8 @@ public class DataLoader implements ApplicationRunner {
     private final QuizService quizService;
     private final MultipleChoiceOptionService mcoService;
     private final TagService tagService;
+    private final QuizAttemptService quizAttemptService;
 
-    
- 
 
     @Override
     @Transactional
@@ -279,8 +254,9 @@ public class DataLoader implements ApplicationRunner {
         quiz1 = quizService.save(quiz1);
        
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
-        
+
         quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
+ 
         System.out.println("--------SAVE QUIZ1 DONE-------");
 //        quizService.removeQuestionFromQuiz(mcq1, quiz1);
 //        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
@@ -323,7 +299,41 @@ public class DataLoader implements ApplicationRunner {
 //        log.info("--------------- All users ------------------------");
 //        log.info(quizService.getAllQuizzes());
 
-
+        ////// quiz attempt //////
+        
+        QuizAttempt qa1 = new QuizAttempt();
+        QuizAttempt qa2 = new QuizAttempt();
+        qa1.setQuiz(quiz1);
+        qa1.setUser(student1);
+        qa1.setAttemptNo(1);
+        qa1.setTotalAwarded(0);
+        qa2.setQuiz(quiz1);
+        qa2.setUser(student1);
+        qa2.setAttemptNo(2);
+        qa2.setTotalAwarded(5);
+        qaRepo.save(qa1);
+        qaRepo.save(qa2);
+        
+        QuizQuestionMCQAttemptKey mcqAttemptKey = new QuizQuestionMCQAttemptKey(qa1.getId(), mcq1.getId());
+        QuizQuestionMCQAttemptKey mcqAttemptKey2 = new QuizQuestionMCQAttemptKey(qa2.getId(), mcq1.getId());
+        
+        QuizQuestionMCQAttempt mcqAttempt1 = new QuizQuestionMCQAttempt();
+        QuizQuestionMCQAttempt mcqAttempt2 = new QuizQuestionMCQAttempt();
+        mcqAttempt1.setKey(mcqAttemptKey);
+        mcqAttempt1.setAwarded_grade(0);
+        mcqAttempt1.setQuizAttempt(qa1);
+        mcqAttempt1.setMultipleChoiceQuestion(mcq1);
+        mcqAttempt1.setSelectedOption(mco1);
+        
+        mcqAttempt2.setKey(mcqAttemptKey2);
+        mcqAttempt2.setAwarded_grade(5);
+        mcqAttempt2.setQuizAttempt(qa2);
+        mcqAttempt2.setMultipleChoiceQuestion(mcq1);
+        mcqAttempt2.setSelectedOption(mco2);
+        mcqAttemptRepository.save(mcqAttempt1);
+        mcqAttemptRepository.save(mcqAttempt2);
+        
+//        quizAttemptService.deleteAttempt(qa1);
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

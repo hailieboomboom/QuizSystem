@@ -46,6 +46,7 @@ public class Quiz {
 	@ManyToOne
 	private User creator;
 
+	
 	public Quiz(String name, QuizCategory quizCategory, List<QuizQuestionGrade> quizQuestionsGrade, User creator) {
 		super();
 		this.name = name;
@@ -54,24 +55,10 @@ public class Quiz {
 		this.creator = creator;
 	}
     
-
 	@Override
 	public String toString() {
 		return "Quiz [id=" + id + ", quizCategory=" + quizCategory + "]";
 
 	}
 
-	
 }
-
-
-
-
-// TODO: Need to implement following to other classes
-//// User.java
-//@OneToMany(mappedBy="creator", cascade=CascadeType.ALL)
-//private List<Quiz> createdQuizzes;
-//
-//// Question.java
-//@ManyToMany(mappedBy="questions", fetch = FetchType.EAGER?)
-//private List<Quiz> quizzes;

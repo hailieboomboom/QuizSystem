@@ -11,21 +11,45 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import {useEffect, useState} from "react";
 
 export default function Signup() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const[username,setUsername] = useState('');
+    const[firstname,setFirstname] = useState('');
+    const[lastname,setLastname] = useState('');
+    const[email,setEmail] = useState('');
+    const[password,setPassword] = useState('');
+    const[role,setRole] = useState('');
+    const[user,setUser]=useState([]);
+
+    const handleClick=(e)=>{
+        e.preventDefault()
+        const user={username,firstname,lastname,email,password,role}
+        console.log(user)
+        fetch("http://localhost:8088/QuizSystem/auth/signup",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(user)
+
+        }).then(()=>{
+            console.log("New Student added")
+        })
+    }
+
+    useEffect(()=>{
+        fetch("http://localhost:8088/student/getAll")
+            .then(res=>res.json())
+            .then((result)=>{
+                    setUser(result);
+                }
+            )
+    },[])
 
   return (
+
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
-      
+
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
           sx={{
@@ -42,12 +66,16 @@ export default function Signup() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+            <form noValidate autoComplete="off">
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+
             sx={{ mt: 3 }}
           >
+
+
+
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <TextField
@@ -57,6 +85,8 @@ export default function Signup() {
                         label="Username"
                         name="username"
                         autoComplete="username"
+                        value={username}
+                        onChange={(e)=>setUsername(e.target.value)}
                     />
                 </Grid>
               <Grid item xs={12} sm={6}>
@@ -68,6 +98,8 @@ export default function Signup() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={firstname}
+                  onChange={(e)=>setFirstname(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -78,6 +110,8 @@ export default function Signup() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={lastname}
+                  onChange={(e)=>setLastname(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -88,6 +122,9 @@ export default function Signup() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
+
                 />
               </Grid>
               <Grid item xs={12}>
@@ -99,15 +136,29 @@ export default function Signup() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
               </Grid>
-              
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        fullWidth
+                        name="role"
+                        label="Role"
+                        id="role"
+                        autoComplete="user-role"
+                        value={role}
+                        onChange={(e)=>setRole(e.target.value)}
+                    />
+                </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleClick}
             >
               Sign Up
             </Button>
@@ -119,6 +170,7 @@ export default function Signup() {
               </Grid>
             </Grid>
           </Box>
+            </form>
         </Box>
       </Grid>
       <Grid
@@ -139,5 +191,6 @@ export default function Signup() {
         }}
       />
     </Grid>
+
   );
 }
