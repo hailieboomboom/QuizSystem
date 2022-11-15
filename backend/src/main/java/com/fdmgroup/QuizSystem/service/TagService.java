@@ -46,7 +46,7 @@ public class TagService {
 
 	public Set<Tag> getTagsFromDto(List<String> tagDto) {
 		Set<Tag> tagSet = new HashSet<>();
-		if(tagDto.size()<1)
+		if(tagDto.size()<2)
 			throw new TagNotValidException("Please select at least one tag");
 		if(!tagDto.contains("course")&&!tagDto.contains("interview"))
 			throw new TagNotValidException("The question must contains at least a course or interview tag");

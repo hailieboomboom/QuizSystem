@@ -64,7 +64,7 @@ public class QuestionController {
 	@Autowired
 	private ShortAnswerQuestionService saqService;
 
-	@PostMapping("/mcqs")
+	@PostMapping("/mcqs/{active_user_id}")
 	@ApiOperation(value = "create a multiple choice question",
 			notes = "return success or failure message")
 	@ApiResponses(value = {
@@ -73,8 +73,10 @@ public class QuestionController {
 			@io.swagger.annotations.ApiResponse(code = 400, message = "1. provide more/less than one correct option 2. provide less than one tag/ doesn't contain at least one interview or course tag")
 	}
 		)
-	public ResponseEntity<ApiResponse> createMcq(@RequestBody AddMcqDto addMcqDto) {
-		questionService.createMCQ(addMcqDto);
+	public ResponseEntity<ApiResponse> createMcq(@PathVariable Long active_user_id,@RequestBody AddMcqDto addMcqDto) {
+		User user = userService.getUserById(active_user_id);
+		questionService.accessControlCreateMCQ(addMcqDto.getTags(), user.getRole());
+		questionService.createMCQ(addMcqDto,user);
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
