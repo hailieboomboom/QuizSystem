@@ -15,4 +15,5 @@ public class McqOptionDto {
     private String optionDescription;
     @NotBlank
     private boolean isCorrect;
+
 }
