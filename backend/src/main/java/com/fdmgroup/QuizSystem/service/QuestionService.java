@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
@@ -22,15 +21,21 @@ import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
+
+
+
 
 @Service
 @Transactional
 public class QuestionService {
 
+
+	@Autowired
+	QuizQuestionMCQAttemptRepository quizQuestionMCQAttemptRepository;
 	@Autowired
     private QuestionRepository questionRepository;
-
 	@Autowired
 	private McqRepository mcqRepository;
 	@Autowired
