@@ -89,7 +89,9 @@ public class QuestionService {
 		newQuestion.setQuestionDetails(addMcqDto.getQuestionDetails());
 		newQuestion = (MultipleChoiceQuestion) save(newQuestion);
 		try {
-			addMcqDto.getTags().add("mcq");
+			List<String> mcqTag = addMcqDto.getTags();
+			mcqTag.add("mcq");
+			newQuestion.setTags(tagService.getTagsFromDto(mcqTag));
 			newQuestion.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
 			newQuestion.setMcoptions(multipleChoiceOptionService.createListOfOption(addMcqDto.getOptions(), newQuestion));
 			newQuestion = (MultipleChoiceQuestion) save(newQuestion);
