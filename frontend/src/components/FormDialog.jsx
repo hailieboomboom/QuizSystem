@@ -12,7 +12,6 @@ import {getUserId} from '../utils/cookies';
 
 export default function FormDialog(props) {
  
-    const [username, setUsername] = useState();
     const [email, setEmail] = useState();
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
@@ -34,7 +33,7 @@ export default function FormDialog(props) {
 
         switch(props.role) {
             case "Trainer":
-                apis.updateTrainerInfo(getUserId(), username, password, email, firstName, lastName).then(
+                apis.updateTrainerInfo(getUserId(), password, email, firstName, lastName).then(
                     res => {
                         console.log(res.data)
                         // props.handleRefresh();
@@ -46,7 +45,7 @@ export default function FormDialog(props) {
                 )
                 break;
             case "Sales": 
-                apis.updateSalesInfo(getUserId(), username, password, email, firstName, lastName).then(
+                apis.updateSalesInfo(getUserId(), password, email, firstName, lastName).then(
                     res => {
                         console.log(res.data);
                         setOpen(false);
@@ -59,7 +58,7 @@ export default function FormDialog(props) {
             case "Student(Training)":
             case "Student(Pond)":
             case "Student(Beached)":
-                apis.updateStudentInfo(getUserId(), username, password, email, firstName, lastName).then(
+                apis.updateStudentInfo(getUserId(), password, email, firstName, lastName).then(
                     res => {
                         console.log(res.data);
                         setOpen(false);
@@ -79,16 +78,6 @@ export default function FormDialog(props) {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Update</DialogTitle>
         <DialogContent>
-            <TextField
-            autoFocus
-            margin="dense"
-            id="username"
-            label="Username"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={e => setUsername(e.target.value)}
-            />
             <TextField
             autoFocus
             margin="dense"

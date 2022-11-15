@@ -35,16 +35,16 @@ function getUserById(id){
     }
 }
 
-function updateStudentInfo(id, username, password, email, firstName, lastName){
-    return instance.put("/users/students/" + id, {username, password, email, firstName, lastName}, config);
+function updateStudentInfo(id, password, email, firstName, lastName){
+    return instance.put("/users/students/" + id, {password, email, firstName, lastName}, config);
 }
 
-function updateTrainerInfo(id, username, password, email, firstName, lastName){
-    return instance.put("/users/trainers/" + id, {username, password, email, firstName, lastName}, config);
+function updateTrainerInfo(id, password, email, firstName, lastName){
+    return instance.put("/users/trainers/" + id, {password, email, firstName, lastName}, config);
 }
 
-function updateSalesInfo(id, username, password, email, firstName, lastName){
-    return instance.put("/users/sales/" + id, {username, password, email, firstName, lastName}, config);
+function updateSalesInfo(id, password, email, firstName, lastName){
+    return instance.put("/users/sales/" + id, {password, email, firstName, lastName}, config);
 }
 
 function getUnauthorizedTrainers(){

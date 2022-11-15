@@ -2,6 +2,7 @@ package com.fdmgroup.QuizSystem.service;
 import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
 import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,6 @@ public class UserService {
         else {
             throw new UserNotFoundException();
         }
-
     }
 
     /**
@@ -75,9 +75,9 @@ public class UserService {
             throw new UserNotFoundException();
         }
 
-        if (userRepository.existsByUsername(modifiedUser.getUsername())) {
-            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
-        }
+//        if (userRepository.existsByUsername(modifiedUser.getUsername())) {
+//            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
+//        }
 
         if (userRepository.existsByEmail(modifiedUser.getEmail())) {
             throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedUser.getEmail()));
@@ -88,9 +88,9 @@ public class UserService {
         if(modifiedUser.getPassword() != null) {
             user.setPassword(modifiedUser.getPassword());
         }
-        if(modifiedUser.getUsername() != null) {
-            user.setUsername(modifiedUser.getUsername());
-        }
+//        if(modifiedUser.getUsername() != null) {
+//            user.setUsername(modifiedUser.getUsername());
+//        }
         if(modifiedUser.getFirstName() != null) {
             user.setFirstName(modifiedUser.getFirstName());
         }
@@ -102,6 +102,17 @@ public class UserService {
         }
         // Role?
         return userRepository.save(user);
+    }
+
+    public Role getRoleByUserId(long id){
+
+        Optional<User> maybeUser = userRepository.findById(id);
+
+        if(maybeUser.isEmpty()){
+            throw new UserNotFoundException();
+        }
+
+        return maybeUser.get().getRole();
     }
 
     /**

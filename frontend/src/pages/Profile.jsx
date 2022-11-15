@@ -33,7 +33,7 @@ const Profile = () => {
     )
   }, [])  
 
-  function handleOnClickUpdate(){
+  function handleViewQuestions(){
     console.log("Clicked!")
   }
 
@@ -67,7 +67,7 @@ const Profile = () => {
               <p>Last name: {lastName}</p>
               <p>Email: {email}</p>
               {/* <p>Role: {roleMapper(role)}</p> */}
-              {/* <button onClick={handleOnClick} as={Link} to="/questions" type={"button"}>View Your Questions</button> */}
+              <button onClick={handleViewQuestions} as={Link} to="/questions" type={"button"}>View Your Questions</button>
               {/* <div className={"profileBottom"}>
                   <p>More information:</p>
                   <img className={"downArrow"} src={downArrow}/>
