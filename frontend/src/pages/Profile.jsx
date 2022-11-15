@@ -63,26 +63,19 @@ const Profile = () => {
               <img src={editButton} className={"editIcon"} onClick={()=>setOpenDialog(true)}/>
               <h3>{username}</h3>
               <p>Role: {roleMapper(role)}</p>
-              <p>First name: {firstName}</p>
-              <p>Last name: {lastName}</p>
-              <p>Email: {email}</p>
-              {/* <p>Role: {roleMapper(role)}</p> */}
-              {/* <button onClick={handleOnClick} as={Link} to="/questions" type={"button"}>View Your Questions</button> */}
-              {/* <div className={"profileBottom"}>
-                  <p>More information:</p>
+
+              {/*<p>Role: {roleMapper(role)}</p>*/}
+              <button onClick={handleOnClickUpdate} as={Link} to="/questions" type={"button"}>View Your Questions</button>
+              <div className={"profileBottom"}>
+                  <p>First name: {firstName}</p>
+                  <p>Last name: {lastName}</p>
+                  <p>Email: {email}</p>
                   <img className={"downArrow"} src={downArrow}/>
-              </div> */}
+              </div>
           </div>
           <div>
             <FormDialog role={roleMapper(role)} openNow={openDialog} closeWindow={closeWindow}></FormDialog>
           </div>
-          {/* <Grid className={"profileGrid"}>
-            <Grid item>
-              <div className={"profileCenter"}>
-                <h1 className={"profileTitle"}>This is your profile!</h1>
-              </div>
-            </Grid>
-          </Grid> */}
       </div>
   )
 }
