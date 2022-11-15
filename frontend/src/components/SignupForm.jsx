@@ -12,6 +12,12 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import {FormLabel, Select} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
 
 export default function Signup() {
   const[username,setUsername] = useState('');
@@ -21,6 +27,7 @@ export default function Signup() {
     const[password,setPassword] = useState('');
     const[role,setRole] = useState('');
     const[user,setUser]=useState([]);
+    const [value, setValue] = useState('');
 
     const handleClick=(e)=>{
         e.preventDefault()
@@ -39,15 +46,9 @@ export default function Signup() {
                return response
             })
     }
-
-    // useEffect(()=>{
-    //     fetch("http://localhost:8088/student/getAll")
-    //         .then(res=>res.json())
-    //         .then((result)=>{
-    //                 setUser(result);
-    //             }
-    //         )
-    // },[])
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
 
   return (
 
@@ -144,17 +145,25 @@ export default function Signup() {
                   onChange={(e)=>setPassword(e.target.value)}
                 />
               </Grid>
+
                 <Grid item xs={12}>
-                    <TextField
-                        required
-                        fullWidth
-                        name="role"
-                        label="Role"
-                        id="role"
-                        autoComplete="user-role"
-                        value={role}
-                        onChange={(e)=>setRole(e.target.value)}
-                    />
+
+                    <FormControl>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Role</FormLabel>
+                        <RadioGroup
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            value={role}
+                            onChange={(e)=>setRole(e.target.value)}
+                            row
+                        >
+                            <FormControlLabel value="trainer" control={<Radio />} label="Trainer" />
+                            <FormControlLabel value="sales" control={<Radio />} label="Sale" />
+                            <FormControlLabel value="student" control={<Radio />} label="Student" />
+                        </RadioGroup>
+                    </FormControl>
+
+
                 </Grid>
             </Grid>
             <Button
