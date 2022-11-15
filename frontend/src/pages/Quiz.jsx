@@ -6,26 +6,46 @@ import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
 import axios, * as others from 'axios';
 import { useRecoilState } from 'recoil';
-import { attemptQuizState } from '../recoil/Atoms'
+import {attemptQuizState, quizSelectedAnswersState} from '../recoil/Atoms'
 import Button from "@mui/material/Button";
-
+import {Link} from "react-router-dom";
+// quizId
 
 const Quiz = () => {
 
-    // const [quiz, setQuiz] = React.useState("");
-    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
-    console.log(quiz);
-    console.log("asb");
+    const [answers, setAnswers] = useRecoilState(quizSelectedAnswersState);
 
-    // React.useEffect(() => {
-    //     axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-    //         setQuiz(response.data);
-    //     });
-    // }, []);
-    // console.log(quiz);
-    //
-    //
-    // if (!quiz) return null;
+    React.useEffect(() => {
+        const url = "http://localhost:8088/QuizSystem/api/quizzes/" + quiz.quizId + "/questions";
+        axios.get(url).then((response) => {
+
+            setQuizQuestions(response.data);
+            console.log(quizQuestions);
+            // setQuiz(response.data);
+        });
+    }, []);
+
+    const [quizQuestions, setQuizQuestions] = React.useState([]);
+    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
+
+    const submitQuiz = () => {
+        axios.post("http://localhost:8088/QuizSystem/api/quizAttempts", {
+            "mcqattemptList": answers,
+            "quizId": quiz.quizId,
+            "userId": 1
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    const handleSubmit = () =>{
+        submitQuiz();
+    }
+
+    if (!quizQuestions) return null;
     return (
         <div>
             <h1>Quiz</h1>
@@ -37,28 +57,20 @@ const Quiz = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <QuizHeaderCard/>
+                    <QuizHeaderCard quizName={quiz.name} />
                 </Grid>
 
                 {
-                    quiz.map((questions) =>
-                        <Grid item>
-                            <QuizMcqCard
-                                key={questions.id}
-                                question={questions.question}
-                                rightAnswer={questions.correctAnswer}
-                                wrongAnswers={questions.incorrectAnswers}
-                            />
-                        </Grid>
+                    quizQuestions.map((questions) =>
+                            <Grid item>
+                                <QuizMcqCard
+                                    key={questions.questionId}
+                                    questionId={questions.questionId}
+                                    grade={questions.grade}
+                                />
+                            </Grid>
                     )
                 }
-
-                <Grid item>
-                    <QuizShortAnswerCard/>
-                </Grid>
-                <Grid item>
-                    <QuizMsqCard/>
-                </Grid>
                 <Grid
                     item
                     direction="row"
@@ -67,15 +79,11 @@ const Quiz = () => {
                 >
                     <Grid item/>
                     <Grid item>
-                        <Button variant="outlined" size="large">Submit</Button>
+                        <Button variant="outlined" size="large" onClick={handleSubmit} as={Link} to="/viewQuizzes">Submit</Button>
                     </Grid>
 
                 </Grid>
                 <Grid item/>
-                {/*<Grid item>*/}
-                {/*    <QuizMcqCard/>*/}
-                {/*</Grid>*/}
-
             </Grid>
 
         </div>

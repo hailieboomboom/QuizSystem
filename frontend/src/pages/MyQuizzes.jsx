@@ -18,18 +18,37 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const MyQuizzes = () => {
 
-    const [quizzes, setQuizzes] = React.useState([]);
+    const [quizzes, setQuizzes] = React.useState('');
     const [loading, setLoading] = React.useState(true);
+    const [dummy, setDummy] = React.useState('');
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+        axios.get("http://localhost:8088/QuizSystem/api/quizzes").then((response) => {
+            setQuizzes(response.data);
             setLoading(false);
         });
     }, []);
     console.log(quizzes);
     console.log(quiz);
+
+    const deleteQuiz = (id) => {
+        axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "").then(function (response) {
+                console.log(response);
+                setDummy(id);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+    }
+    const handleDelete = (id) =>{
+        deleteQuiz(id);
+        setQuizzes((quizzes) =>
+            quizzes.filter((quiz) => quiz.quizId !== id)
+        );
+    }
 
 
     if (loading) return(
@@ -78,11 +97,11 @@ const MyQuizzes = () => {
                         <TableBody>
                             {quizzes.map((row) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={row.quizId}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        This is A Demo Quiz
+                                        {row.name}
                                     </TableCell>
                                     <TableCell align="right">
                                         <Grid
@@ -99,7 +118,7 @@ const MyQuizzes = () => {
                                                 </Button>
                                             </Grid>
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                                <Button variant="contained" onClick={() => handleDelete(row.quizId)}>
                                                     Remove
                                                 </Button>
                                             </Grid>
@@ -116,7 +135,7 @@ const MyQuizzes = () => {
             </Grid>
 
             <Grid item sx={{ width:650 }}>
-                <Button fullWidth color="success" variant="outlined" size="large">Create Quiz</Button>
+                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
 
         </Grid>

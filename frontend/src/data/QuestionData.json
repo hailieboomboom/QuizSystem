@@ -1,33 +1,23 @@
 [
+{
+  "questionId": 1,
+  "questionDetail": "Question over here",
+  "tags": [
+    "course"
+  ],
+  "mcqOptionDtoList": [
     {
-        "question": "What does CSS stand for?",
-        "incorrectAnswers": [
-            "Computer Style Sheets",
-            "Creative Style Sheets",
-            "Colorful Style Sheets"
-        ],
-        "correctAnswer": "Cascading Style Sheets"
-    },
-
-    {
-        "question":
-            "Where in an HTML document is the correct place to refer to an external style sheet?",
-        "incorrectAnswers": [
-            "In the <body> section",
-            "At the end of the document",
-            "You can't refer to an external style sheet",
-            "Test Extra Answer"
-        ],
-        "correctAnswer": "In the <head> section"
+      "optionDescription": "correct",
+      "correct": true
     },
     {
-        "question": "Which HTML tag is used to define an internal style sheet?",
-        "incorrectAnswers": ["<script>", "<headStyle>", "<css>"],
-        "correctAnswer": "<style>"
+      "optionDescription": "false",
+      "correct": false
     },
     {
-        "question": "Which HTML attribute is used to define inline styles?",
-        "incorrectAnswers": ["class", "font", "styles"],
-        "correctAnswer": "style"
+      "optionDescription": "false",
+      "correct": false
     }
+  ]
+}
 ]
