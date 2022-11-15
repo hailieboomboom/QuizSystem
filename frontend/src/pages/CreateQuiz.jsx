@@ -39,6 +39,7 @@ const CreateQuiz = () => {
         })
             .then(function (response) {
                 postQuestions(response.data.quizId);
+                setquizSelectQuestions([]);
             })
             .catch(function (error) {
                 console.log(error);
@@ -125,7 +126,7 @@ const CreateQuiz = () => {
                         <QuizSelectedQuestionsTable/>
                     </Grid>
                     <Grid item xs={1}>
-                        <Button onClick={handleCreate} variant="outlined">
+                        <Button onClick={handleCreate} variant="outlined" as={Link} to="/myQuizzes" >
                             Create
                         </Button>
                     </Grid>

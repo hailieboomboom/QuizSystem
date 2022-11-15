@@ -18,9 +18,9 @@ export default function QuizSelectedQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
 
-    function hanldleRemove (current) {
+    function handleRemove (current) {
         setquizSelectQuestions((questions) =>
-            questions.filter((question) => question.mcqId !== current.mcqId)
+            questions.filter((question) => question.questionId !== current.questionId)
         );
         setquizAllQuestions([...quizAllQuestions,current]);
     }

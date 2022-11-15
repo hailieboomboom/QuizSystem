@@ -18,46 +18,27 @@ export default function QuizSelectedQuestionsTableRow(props) {
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
     const [grade, setGrade] = React.useState(props.question.grade);
 
-    const handleChange = (event) => {
-        setGrade(event.target.value);
-        if(quizSelectedQuestions){
-            setquizSelectQuestions((answers) =>
-                answers.filter((answer) => answer.mcqId !== props.question.mcqId)
-            );}
-        setquizSelectQuestions(oldArray => [...oldArray,{
-            "mcqId": props.question.mcqId,
-            "grade": parseInt(event.target.value)
-        }] );
 
-    };
 
-    function hanldleRemove (current) {
+    function handleRemove (current) {
         setquizSelectQuestions((questions) =>
-            questions.filter((question) => question.mcqId !== current.mcqId)
+            questions.filter((question) => question.questionId !== current.questionId)
         );
         setquizAllQuestions([...quizAllQuestions,current]);
     }
     return (
                         <TableRow
-                            key={props.question.mcqId}
+                            key={props.question.questionId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
                                 <Typography variant="body">{props.question.questionDetails}</Typography>
                             </TableCell>
                             <TableCell align="right" component="th" scope="row">
-                                <TextField
-                                    type="number"
-                                    name="Grade"
-                                    label="Grade"
-                                    InputProps={{ inputProps: { min: 0, max: 10 } }}
-                                    variant="filled"
-                                    value={grade}
-                                    onChange={handleChange}
-                                />
+                                <Typography variant="body">{props.question.grade}</Typography>
                             </TableCell>
                             <TableCell component="th" scope="row"s>
-                                <Button variant="outlined" onClick={()=>hanldleRemove(props.question)} >Remove</Button>
+                                <Button variant="outlined" onClick={()=>handleRemove(props.question)} >Remove</Button>
                             </TableCell>
                         </TableRow>
 
