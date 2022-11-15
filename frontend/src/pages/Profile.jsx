@@ -5,11 +5,17 @@ import profilePicture from '../styles/profilePicture.png'
 import downArrow from '../styles/downArrow.png'
 
 import Grid from "@mui/material/Grid";
+import {Link} from "react-router-dom";
 
 
 
 
 const Profile = () => {
+
+    function handleOnClick(){
+        console.log("Clicked!")
+    }
+
   return (
       <div className={"profileContainer"}>
           <div className={"profileBox"}>
@@ -17,7 +23,7 @@ const Profile = () => {
               <img src={editButton} className={"editIcon"}/>
               <h3>Name</h3>
               <p>Welcome to your personal page!</p>
-              <button type={"button"}>View Your Questions</button>
+              <button onClick={handleOnClick} as={Link} to="/questions" type={"button"}>View Your Questions</button>
               <div className={"profileBottom"}>
                   <p>More information:</p>
                   <img className={"downArrow"} src={downArrow}/>
