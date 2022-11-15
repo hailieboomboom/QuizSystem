@@ -3,6 +3,7 @@ package com.fdmgroup.QuizSystem.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Question;
+import com.fdmgroup.QuizSystem.model.Role;
+import com.fdmgroup.QuizSystem.model.Student;
+import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
@@ -122,6 +126,52 @@ public class QuestionService {
 		this.save(originalMcq);
 		deleteAttempt(mcqId);
 	}
+	
+	public void updateMCQByRole(AddMcqDto addMcqDto, long mcqId, long activeUserId) {
+		MultipleChoiceQuestion originalMcq = findMcqById(mcqId);
+		Set<Tag> originalMCQTags = originalMcq.getTags();
+		boolean  isUserValid = false;
+		// get user role
+		User currentUser = userRepository.findById(activeUserId).get();
+		// if current user is a student, he can only update his created question
+		if(currentUser instanceof Student) {
+			Long creatorId = findCreatorIdOfAQuestion(originalMcq.getId());
+			if(!creatorId.equals(activeUserId)) {
+				throw new NoDataFoundException("You can't modify this question, because you are not the creator");
+			}else {
+				updateMCQ(addMcqDto, mcqId);
+			}
+		}
+		// if current user is a trainer, he can only update questions of course content type
+		else if(currentUser.getRole().equals(Role.AUTHORISED_TRAINER)) {
+			// check question contains interview tag
+			for(Tag t:originalMCQTags) {
+				if(t.getTagName().equals("course")) {
+					isUserValid = true;
+				}
+			}
+			if(isUserValid) {
+				updateMCQ(addMcqDto, mcqId);
+			}else {
+				throw new NoDataFoundException("You can't modify this question, because trainer can only modify course content questions");
+			}
+		}
+		// if current user is a sales, he can only update questions of interview content type
+		else if(currentUser.getRole().equals(Role.AUTHORISED_SALES)) {
+			// check question contains interview tag
+			for(Tag t:originalMCQTags) {
+				if(t.getTagName().equals("interview")) {
+					isUserValid = true;
+				}
+			}
+			if(isUserValid) {
+				updateMCQ(addMcqDto, mcqId);
+			}else {
+				throw new NoDataFoundException("You can't modify this question, because sales can only modify interview questions");
+			}
+		}
+		
+	}
 
 	public List<QuestionGradeDTO> getAllMcqQuestionforQuizCreation() {
 		var mcqQuestions = mcqRepository.findAll();
@@ -220,8 +270,53 @@ public class QuestionService {
 		questionRepository.delete(returned);
 
 	}
+	
+	public void deleteOneMcqByRole(Long questionId, Long activeUserId) {
+		MultipleChoiceQuestion originalMcq = findMcqById(questionId);
+		Set<Tag> originalMCQTags = originalMcq.getTags();
+		boolean  isUserValid = false;
+		// get user role
+		User currentUser = userRepository.findById(activeUserId).get();
+		// if current user is a student, he can only delete his created question
+		if(currentUser instanceof Student) {
+			Long creatorId = findCreatorIdOfAQuestion(originalMcq.getId());
+			if(!creatorId.equals(activeUserId)) {
+				throw new NoDataFoundException("You can't delete this question, because you are not the creator");
+			}else {
+				deleteOneMcq(questionId);
+			}
+		}
+		// if current user is a trainer, he can only delete questions of course content type
+		else if(currentUser.getRole().equals(Role.AUTHORISED_TRAINER)) {
+			// check question contains interview tag
+			for(Tag t:originalMCQTags) {
+				if(t.getTagName().equals("course")) {
+					isUserValid = true;
+				}
+			}
+			if(isUserValid) {
+				deleteOneMcq(questionId);
+			}else {
+				throw new NoDataFoundException("You can't delete this question, because trainer can only delete course content questions");
+			}
+		}
+		// if current user is a sales, he can only delete questions of interview content type
+		else if(currentUser.getRole().equals(Role.AUTHORISED_SALES)) {
+			// check question contains interview tag
+			for(Tag t:originalMCQTags) {
+				if(t.getTagName().equals("interview")) {
+					isUserValid = true;
+				}
+			}
+			if(isUserValid) {
+				deleteOneMcq(questionId);
+			}else {
+				throw new NoDataFoundException("You can't delete this question, because sales can only delete interview questions");
+			}
+		}
+	}
 
-	//
+	
 	public MultipleChoiceQuestion findMcqById(Long questionId) {
 		if(!isMultipleChoiceQuestion(questionId)){
 			throw new NoDataFoundException("Question Not Found");

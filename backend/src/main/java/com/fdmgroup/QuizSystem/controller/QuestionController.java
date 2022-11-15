@@ -23,6 +23,7 @@ import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.SAQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
@@ -145,6 +146,15 @@ public class QuestionController {
 
 		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
+	
+	
+	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
+	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
+	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
+		questionService.deleteOneMcqByRole(mcqId, active_user_id);
+
+		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
+	}
 
 
 	@PutMapping("/mcqs/{mcqId}")
@@ -157,10 +167,21 @@ public class QuestionController {
 
 	})
 	public ResponseEntity<ApiResponse> updateOneMcqById(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto) {
-
+		System.out.println("DEBUG FLAG--------------------");
+		for(McqOptionDto mcoDto:addMcqDto.getOptions()) {
+			System.out.println(mcoDto.toString());
+		}
 		questionService.updateMCQ(addMcqDto,mcqId);
 		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
+	
+	//HAILIE NOTE: UPDATE MCQ: ADD LOGGED IN USER ID INTO PATH
+	@PutMapping("/mcqs/{mcqId}/{active_user_id}")
+	public ResponseEntity<ApiResponse> updateOneMcqByIdVer2(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto, @PathVariable Long active_user_id) {
+		questionService.updateMCQByRole(addMcqDto, mcqId, active_user_id);
+		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
+	}
+	
 
 	@GetMapping("/questionBank/{questionBankType}")
 	@ApiOperation(value = "get interview/question question bank ",

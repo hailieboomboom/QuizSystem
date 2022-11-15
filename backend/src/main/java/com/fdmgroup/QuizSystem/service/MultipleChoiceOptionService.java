@@ -86,7 +86,7 @@ public class MultipleChoiceOptionService {
 
 
 	public List<MultipleChoiceOption> updateMcqOption(List<McqOptionDto> mcqOptionDtoList,long macId){
-
+		System.out.println("DEBUG:==---------- MCQ ID IS "+macId);
 		List<MultipleChoiceOption> originalMcqOption = mcoRepo.findAllByMcqId(macId);
 		if(originalMcqOption.size()!=mcqOptionDtoList.size()){
 			throw new McqOptionNotValidException("You can't change the number of options after creating it");
