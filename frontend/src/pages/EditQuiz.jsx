@@ -33,6 +33,8 @@ const EditQuiz = () => {
     const handleCategory = (event) => {
         setCategory(event.target.value);
     };
+
+    console.log(editQuiz);
     return (
         <Grid
             container
@@ -42,7 +44,7 @@ const EditQuiz = () => {
         >
             <Grid item>
                 <Typography variant="h6" gutterBottom>
-                    Create Quiz
+                    Edit Quiz
                 </Typography>
             </Grid>
             <Grid item container
@@ -70,7 +72,7 @@ const EditQuiz = () => {
                         <Select
                             labelId="questionCategory"
                             id="questionCategory"
-                            value={editQuiz.category}
+                            value={editQuiz.quizCategory}
                             onChange={handleCategory}
                             label="Category"
                         >
