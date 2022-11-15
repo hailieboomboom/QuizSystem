@@ -45,12 +45,14 @@ export function getUserId(){
 }
 
 export function getUserRole(){
-
+    if(isLoggedIn()){
         const payload = jwt_decode(getCookie('token'))
-        return payload.role;
-
+        return payload.role[0]["authority"];
+    }
+    return null;
 }
 
 export function isLoggedIn(){
     return getCookie('token') !== '';
 }
+

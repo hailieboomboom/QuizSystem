@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { getCookie, setCookie, getUserRole } from '../utils/cookies';
+import {setCookie} from '../utils/cookies';
 import { apis } from '../utils/apis';
 import jwt_decode from "jwt-decode";
 
@@ -42,7 +42,7 @@ export default function SignInSide() {
                   document.location.href = '/trainer';
               }
 
-              if (role === "AUTHORISED_SALEs"){
+              if (role === "AUTHORISED_SALES"){
                   document.location.href = '/sales';
               }
 

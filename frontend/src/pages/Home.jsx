@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 const Home = () => {
     return (
 
-        <div class={"homeDiv"}>
+        <div className={"homeDiv"}>
             <Grid className={"homeGrid"}>
                 <Stack
                     direction="row"
