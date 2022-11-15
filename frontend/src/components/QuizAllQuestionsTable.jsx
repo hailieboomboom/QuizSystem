@@ -10,7 +10,8 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
-import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
+import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
+import TextField from "@mui/material/TextField";
 
 export default function QuizAllQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -22,9 +23,24 @@ export default function QuizAllQuestionsTable() {
         );
         setquizSelectQuestions([...quizSelectedQuestions,current]);
     }
+    const [inputText, setInputText] = React.useState("");
+    let inputHandler = (e) => {
+        //convert input text to lower case
+        var lowerCase = e.target.value.toLowerCase();
+        setInputText(lowerCase);
+    };
+    const filteredData = quizAllQuestions.filter((od) => {
+        //if no input the return the original
+        if (inputText === '') {
+            return od;
+        }
+        //return the item which contains the user input
+        else {
+            return od.questionDetail.toLowerCase().includes(inputText)
+        }
+    })
     console.log(quizAllQuestions);
     console.log(quizSelectedQuestions);
-
 
     return (
         <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
@@ -32,11 +48,21 @@ export default function QuizAllQuestionsTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Select from Questions</TableCell>
+                        <TableCell>
+                            <TextField
+                                id="outlined-basic"
+                                onChange={inputHandler}
+                                variant="filled"
+                                fullWidth
+                                size="small"
+                                label="Search"
+                            />
+                        </TableCell>
                         <TableCell align="right">Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {quizAllQuestions.map((question) => (
+                    {filteredData.map((question) => (
                         <TableRow
                             key={question.questionId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -44,6 +70,7 @@ export default function QuizAllQuestionsTable() {
                             <TableCell component="th" scope="row">
                                 <Typography variant="body">{question.questionDetail}</Typography>
                             </TableCell>
+                            <TableCell/>
                             <TableCell component="th" scope="row">
                                 <Button variant="outlined" onClick={()=>hanldleAdd(question)} >Add</Button>
                             </TableCell>

@@ -62,6 +62,7 @@ public class MultipleChoiceOptionService {
 		McqOptionDto mcqOptionDto = new McqOptionDto();
 		mcqOptionDto.setOptionDescription(option.getOptionDetail());
 		mcqOptionDto.setCorrect(option.isCorrect());
+		mcqOptionDto.setId(option.getId());
 		return mcqOptionDto;
 
 	}
@@ -77,6 +78,10 @@ public class MultipleChoiceOptionService {
 
 	public List<MultipleChoiceOption> getMcqOption(Long id){
 		return mcoRepo.findAllByMcqId(id);
+	}
+
+	public MultipleChoiceOption getMcqOptionById(Long id){
+		return mcoRepo.findById(id).get();// TODO: exception??
 	}
 
 
