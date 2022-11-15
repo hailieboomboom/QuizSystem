@@ -9,25 +9,22 @@ import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
-import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.repository.McqRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
+import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
+import com.fdmgroup.QuizSystem.model.*;
+import com.fdmgroup.QuizSystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fdmgroup.QuizSystem.model.Question;
-import com.fdmgroup.QuizSystem.model.User;
-import com.fdmgroup.QuizSystem.repository.QuestionRepository;
-
 @Service
 @Transactional
 public class QuestionService {
-
+	@Autowired
+	QuizQuestionMCQAttemptRepository quizQuestionMCQAttemptRepository;
 	@Autowired
     private QuestionRepository questionRepository;
-
+	@Autowired
+	QuizAttemptService quizAttemptService;
 	@Autowired
 	private McqRepository mcqRepository;
 	@Autowired
@@ -104,6 +101,16 @@ public class QuestionService {
 		originalMcq.setMcoptions(updatedOptions);
 		originalMcq.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
 		this.save(originalMcq);
+//		System.out.println("Hi there" + originalMcq.getId());
+		deleteAttempt(originalMcq.getId());
+	}
+
+	private void deleteAttempt(Long questionId) {
+		var mcqAttemptList= quizQuestionMCQAttemptRepository.findByMcqId(questionId);
+		for (Long attempt : mcqAttemptList){
+			var result = quizAttemptService.findQuizAttemptByQuizId(attempt);
+			result.forEach(quizAttempt -> quizAttemptService.deleteAttempt(quizAttempt));
+		}
 	}
 
 
@@ -137,11 +144,24 @@ public class QuestionService {
 
 	private ReturnMcqDto getReturnMcqDto(Question question) {
 		ReturnMcqDto returnMcqDto = new ReturnMcqDto();
-		returnMcqDto.setQuestionId(question.getId());
 		returnMcqDto.setQuestionDetail(question.getQuestionDetails());
 		returnMcqDto.setTags(question.getTags().stream().map(tag -> tag.getTagName()).toList());
 		returnMcqDto.setMcqOptionDtoList(multipleChoiceOptionService.listOptionsForMcq(question.getId()));
 		return returnMcqDto;
+	}
+
+	public List<ReturnMcqDto> getMcqBank(String type) {
+		if(!type.equals("course")&&!type.equals("interview"))
+			throw new TagNotValidException("The question bank " + type + " doesn't exist.");
+		List<MultipleChoiceQuestion> mcqQuestions = mcqRepository.findAll();
+		List<ReturnMcqDto> mcqDtoList = new ArrayList<>();
+		ReturnMcqDto returnMcqDto = new ReturnMcqDto();
+		for (MultipleChoiceQuestion question : mcqQuestions){
+			returnMcqDto = getReturnMcqDto(question);
+			if( returnMcqDto.getTags().stream().anyMatch(tag-> tag.equals(type)))
+				mcqDtoList.add(returnMcqDto) ;
+		}
+		return mcqDtoList;
 	}
 
 
@@ -165,12 +185,13 @@ public class QuestionService {
 
 	@Transactional
 	public void deleteOneMcq(Long questionId) {
-
+        deleteAttempt(questionId);
 		MultipleChoiceQuestion mcq = findMcqById(questionId);
 		mcq.setTags(null);
 		var returned = questionRepository.save(mcq);
 		multipleChoiceOptionService.deleteQuestionOptions(questionId);
 		questionRepository.delete(returned);
+
 
 	}
 
