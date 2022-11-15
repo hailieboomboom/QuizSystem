@@ -27,7 +27,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers( "/auth/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
+//                .antMatchers("/api/questions/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+//                .antMatchers("/api/quizAttempts/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+//                .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+                .antMatchers("/users/sales/**").hasAuthority("AUTHORISED_SALES")
+                .antMatchers("/users/trainers/**").hasAuthority("AUTHORISED_TRAINER")
+                .antMatchers("/users/categories/**").hasAnyAuthority("AUTHORISED_SALES", "AUTHORISED_TRAINER")
+                .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
+                .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
+                .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/api/questions/**", "/api/quizAttempts/**").permitAll()
                 .antMatchers("/v2/api-docs",
                         "/swagger-resources",
                         "/swagger-resources/**",
@@ -38,13 +47,6 @@ public class WebSecurityConfig {
                         // -- Swagger UI v3 (OpenAPI)
                         "/v3/api-docs/**",
                         "/swagger-ui/**").permitAll()
-                .antMatchers("/users/students/**").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
-                .antMatchers("/users/sales/**").hasAuthority("AUTHORISED_SALES")
-                .antMatchers("/users/trainers/**").hasAuthority("AUTHORISED_TRAINER")
-                .antMatchers("/users/categories/**").hasAnyAuthority("AUTHORISED_SALES", "AUTHORISED_TRAINER")
-                .antMatchers("/create-question").hasAnyAuthority("TRAINING", "POND", "BEACHED", "AUTHORISED_TRAINER")
-                .antMatchers("/create-interview-question").hasAnyAuthority("POND", "BEACHED", "AUTHORISED_SALES", "AUTHORISED_TRAINER")
-                .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/api/questions/**", "/api/quizAttempts/**").permitAll()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

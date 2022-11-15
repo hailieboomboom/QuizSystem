@@ -62,8 +62,8 @@ public class QuizAttemptController {
 		for (QuizQuestionMCQAttempt mcqAttempt : mcqAttemptService.findMcqAttemptsByAttemptId(quizAttempt.getId())) {
 			mcqResponses.add(modelToDTO.mcqAttemptToOutput(mcqAttempt));
 		}
-		
 		quizAttemptDTOResponse.setMCQAttemptList(mcqResponses);
+		quizAttemptDTOResponse.setMaxGrade(quizService.getMaxGrade(quizAttemptDTO.getQuizId()));
 		quizAttempt = quizAttemptService.save(quizAttempt);
 		
 		return new ResponseEntity<>(quizAttemptDTOResponse,HttpStatus.CREATED);
