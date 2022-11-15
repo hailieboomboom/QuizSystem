@@ -83,16 +83,36 @@ public class QuizController {
 	}
 	
 	@PostMapping("/api/quizzes/{id}/questions")
-	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
-
+	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id,
+			@RequestBody List<QuestionGradeDTO> questionGradeList) {
 		Quiz quiz = quizService.getQuizById(quiz_id);
-		
-		for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
-			Question question = questionService.findById(questionGradeDTO.getQuestionId());
-			float grade = questionGradeDTO.getGrade();
-			quizService.addQuestionIntoQuiz(question, quiz, grade);
+		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
+		// Database
+		Set<Long> questionIdSet = quizQuestionGradeList.stream()
+				.map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
+		Set<Long> questionIdInputSet = questionGradeList.stream().map(QuestionGradeDTO::getQuestionId)
+				.collect(Collectors.toSet());
+		// if user adds new questions
+		for (QuestionGradeDTO questionGradeDTO : questionGradeList) {
+			if (!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
+				Question question = questionService.findById(questionGradeDTO.getQuestionId());
+				float grade = questionGradeDTO.getGrade();
+				quizService.addQuestionIntoQuiz(question, quiz, grade);
+			} else if (!questionGradeDTO.getGrade().equals(quizQuestionGradeService
+					.findById(new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())) {
+				QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService
+						.findById(new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId()));
+				quizQuestionGrade.setGrade(questionGradeDTO.getGrade());
+				quizQuestionGradeService.save(quizQuestionGrade);
+			}
 		}
-		
+		// if user remove existing questions
+		for (Long questionId : questionIdSet) {
+			if (!questionIdInputSet.contains(questionId)) {
+				Question question = questionService.findById(questionId);
+				quizService.removeQuestionFromQuiz(question, quiz);
+			}
+		}
 		return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
 	}
 	

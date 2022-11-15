@@ -45,6 +45,7 @@ function App() {
           <Route path="logout" element={<Logout />} />
           <Route path="register" element={<Register />} />
           <Route path="quiz" element={<Quiz />} />
+          <Route path="editQuizzes" element={<EditQuiz/>} />
           <Route path="viewQuizzes" element={<AttemptQuizzes/>} />
           <Route path="attemptedQuizzes" element={<AttemptedQuizzes/>} />
           <Route path="myQuizzes" element={<MyQuizzes/>} />
