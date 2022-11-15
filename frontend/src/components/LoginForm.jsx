@@ -15,7 +15,6 @@ import { getCookie, setCookie, getUserRole } from '../utils/cookies';
 import { apis } from '../utils/apis';
 import jwt_decode from "jwt-decode";
 
-
 export default function SignInSide() {
     const navigate = useNavigate();
     const[username,setUsername] = useState('');
@@ -35,7 +34,6 @@ export default function SignInSide() {
               if (role === "TRAINING"){
                   console.log("Student dashboard")
                   document.location.href = '/dashboard';
-
               }
 
               if (role === "AUTHORISED_TRAINER"){
@@ -128,8 +126,7 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
-                {username}
-                {password}
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

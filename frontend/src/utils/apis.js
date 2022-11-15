@@ -7,7 +7,9 @@ export const apis = {
     getUnauthorizedTrainers,
     authorizeTrainer,
     getUnauthorizedSales,
-    authorizeSales
+    authorizeSales,
+    isLoggedIn,
+    getCooks
 }
 
 const config = {
@@ -31,6 +33,14 @@ const instance = axios.create({
 
 function getUnauthorizedTrainers(){
     return instance.get('/users/trainers/unauthorised' , config)
+}
+
+function isLoggedIn(){
+    return getCookie('token');
+}
+
+function getCooks(){
+    return getCookie();
 }
 
 function getUnauthorizedSales(){

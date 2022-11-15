@@ -12,9 +12,9 @@ import Typography from "@mui/material/Typography";
 import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
+import Grid from "@mui/material/Grid";
 
 export default function TrainerDashboard(){
-    const [data, setData] = useState([]);
     const [rowData, setRowdata] = useState([]);
     const [username, setUsername] = useState();
     useEffect(() => {
@@ -36,42 +36,54 @@ export default function TrainerDashboard(){
         ).catch(
             err => console.log(err)
         )
-
     }
 
     return (
-        <TableContainer component={Paper}>
-            <Table aria-label="simple table" stickyHeader>
-                <TableHead>
-                    <TableRow>
+        <Container>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography component="h1" variant="h4">
+                        Welcome Trainer, The users below need to get authorized by you!
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <TableContainer component={Paper}>
+                        <Table aria-label="simple table" stickyHeader>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell >Username</TableCell>
+                                    <TableCell >First Name</TableCell>
+                                    <TableCell >Last Name</TableCell>
+                                    <TableCell >Email</TableCell>
+                                    <TableCell >Role</TableCell>
+                                    <TableCell ></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rowData.map((row) => (
+                                    <TableRow key={row.username}>
+                                        <TableCell component="th" scope="row" key={row.id}>
+                                            {row.username}
+                                        </TableCell>
+                                        <TableCell >{row.firstName}</TableCell>
+                                        <TableCell >{row.lastName}</TableCell>
+                                        <TableCell >{row.email}</TableCell>
+                                        <TableCell >{row.role}</TableCell>
+                                        <TableCell >
+                                            <Button variant="outlined" onClick={()=>{handleAuthorise(row.username)}}>Authorize</Button>
+                                        </TableCell>
 
-                        <TableCell align="right">Username</TableCell>
-                        <TableCell align="right">First Name</TableCell>
-                        <TableCell align="right">Last Name</TableCell>
-                        <TableCell align="right">Email</TableCell>
-                        <TableCell align="right">Role</TableCell>
-                        <TableCell align="right">Authorize</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rowData.map((row) => (
-                        <TableRow key={row.username}>
-                            <TableCell component="th" scope="row" key={row.id}>
-                                {row.username}
-                            </TableCell>
-                            <TableCell align="right" key={row.id}>{row.firstName}</TableCell>
-                            <TableCell align="right" key={row.id}>{row.lastName}</TableCell>
-                            <TableCell align="right" key={row.id}>{row.email}</TableCell>
-                            <TableCell align="right" key={row.id}>{row.role}</TableCell>
-                            <TableCell align="right" key={row.id}>
-                                <Button variant="outlined" onClick={()=>{handleAuthorise(row.username)}}>Authorize</Button>
-                            </TableCell>
-                        
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+            </Grid>
+
+
+        </Container>
+
     
     );
 }

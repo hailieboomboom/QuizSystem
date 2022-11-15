@@ -29,6 +29,8 @@ export default function Signup() {
     const[user,setUser]=useState([]);
     const [value, setValue] = useState('');
 
+
+
     const handleClick=(e)=>{
         e.preventDefault()
         const user={username,firstName,lastName,email,password,role}
@@ -39,12 +41,12 @@ export default function Signup() {
             body:JSON.stringify(user)
 
         }).then((res)=>{
-
                 return res.json()
         })
             .then((response) => {
                return response
             })
+        document.location.href = '/login';
     }
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -172,8 +174,10 @@ export default function Signup() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleClick}
+              href="/login"
+
             >
-              Sign Up
+              Sign up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
