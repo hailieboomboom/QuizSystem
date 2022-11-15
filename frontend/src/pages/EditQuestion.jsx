@@ -8,17 +8,23 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { Container } from '@mui/material';
 import { Link } from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {editQuestionState} from "../recoil/Atoms";
 
 const EditQuestion = () => {
+    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState)
 
     const [question, setQuestion] = useState('');
 
+    function handleSaveQuestion() {
+        const url = "http://localhost:8088/QuizSystem/api/questions/mcqs";
+    }
 
     return (
         <React.Fragment>
             <Container>
                 <Typography variant="h6" gutterBottom>
-                    Edit Question
+                    Edit Question: {editQuestions.questionDetail}
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -29,56 +35,31 @@ const EditQuestion = () => {
                                 name="questionString"
                                 label="Question"
                                 fullWidth
-                                autoComplete="choice"
                                 variant="standard"
                             />
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
-                            <TextField
-                                required
-                                id="answer1"
-                                name="answer1String"
-                                label="Answer1"
-                                fullWidth
-                                autoComplete="choice"
-                                variant="standard"
-                            />
+                            {editQuestions.mcqOptionDtoList.map((option) => (
+                                <TextField
+                                    required
+                                    id="Answer"
+                                    name="questionString"
+                                    fullWidth
+                                    variant="standard"
+                                    defaultValue={option.optionDescription}
+                                > {option.optionDescription} </TextField>
+                            ))}
 
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
-                        <FormControl variant="standard"  fullWidth>
-                            <TextField
-                                required
-                                id="answer2"
-                                name="answer2String"
-                                label="Answer2"
-                                fullWidth
-                                autoComplete="choice"
-                                variant="standard"
-                            />
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl variant="standard"  fullWidth>
-                        <TextField
-                            required
-                            id="answer3"
-                            name="answer3String"
-                            label="Answer3"
-                            fullWidth
-                            autoComplete="choice"
-                            variant="standard"
-                        />
-                    </FormControl>
+
                 </Grid>
 
                     <Grid item xs={1}>
 
-                        <Button  variant="outlined" as={Link} to="/EditQuestions">
+                        <Button  onClick={handleSaveQuestion} variant="outlined" as={Link} to="/successEditQuestion">
                             Edit Question
                         </Button>
                     </Grid>

@@ -8,24 +8,26 @@ import axios, * as others from 'axios';
 import { useRecoilState } from 'recoil';
 import { attemptQuizState } from '../recoil/Atoms'
 import Button from "@mui/material/Button";
-
+// quizId
 
 const Quiz = () => {
 
-    // const [quiz, setQuiz] = React.useState("");
-    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
-    console.log(quiz);
-    console.log("asb");
+    React.useEffect(() => {
+        const url = "http://localhost:8088/QuizSystem/api/quizzes/" + quiz.quizId + "/questions";
+        axios.get(url).then((response) => {
 
-    // React.useEffect(() => {
-    //     axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-    //         setQuiz(response.data);
-    //     });
-    // }, []);
-    // console.log(quiz);
+            setQuizQuestions(response.data);
+            console.log(quizQuestions);
+            // setQuiz(response.data);
+        });
+    }, []);
+
+    const [quizQuestions, setQuizQuestions] = React.useState([]);
+    const [quiz, setQuiz] = useRecoilState(attemptQuizState);
+
     //
     //
-    // if (!quiz) return null;
+    if (!quizQuestions) return null;
     return (
         <div>
             <h1>Quiz</h1>
@@ -41,15 +43,14 @@ const Quiz = () => {
                 </Grid>
 
                 {
-                    quiz.map((questions) =>
-                        <Grid item>
-                            <QuizMcqCard
-                                key={questions.id}
-                                question={questions.question}
-                                rightAnswer={questions.correctAnswer}
-                                wrongAnswers={questions.incorrectAnswers}
-                            />
-                        </Grid>
+                    quizQuestions.map((questions) =>
+                            <Grid item>
+                                <QuizMcqCard
+                                    key={questions.questionId}
+                                    questionId={questions.questionId}
+                                    grade={questions.grade}
+                                />
+                            </Grid>
                     )
                 }
 

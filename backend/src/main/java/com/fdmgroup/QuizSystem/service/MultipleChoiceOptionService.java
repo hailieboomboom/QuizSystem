@@ -62,7 +62,7 @@ public class MultipleChoiceOptionService {
 		McqOptionDto mcqOptionDto = new McqOptionDto();
 		mcqOptionDto.setOptionDescription(option.getOptionDetail());
 		mcqOptionDto.setCorrect(option.isCorrect());
-		mcqOptionDto.setQuestionId(option.getId());
+		mcqOptionDto.setId(option.getId());
 		return mcqOptionDto;
 
 	}

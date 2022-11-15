@@ -13,6 +13,12 @@ import Answer from "../components/QuestionAnswer";
 
 import axios from "axios";
 import questions from "../pages/Questions";
+import {useState} from "react";
+import Grid from "@mui/material/Grid";
+import {Link} from "react-router-dom";
+import {editQuestionState} from "../recoil/Atoms";
+import {useRecoilState} from "recoil";
+
 
 const bull = (
     <Box
@@ -23,52 +29,78 @@ const bull = (
 );
 
 export default function ViewMCQCard(props) {
-    // const [question, setQuestion] = React.useState([]);
+    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState)
+    const [question, setQuestion] = React.useState([]);
 
 
+    console.log("dasdad")
+    console.log(question)
+
+    const [show, setShow] = useState(false);
     const changeStyle = () => {
 
     }
 
-
-    function correctAnswer(correctAnswer) {
-        console.log(correctAnswer)
+    function handleOnClick(){
+        setEditQuestions(props.questionCard)
     }
 
-    function changeColor() {
-        const answer = [
-            props.questionCard.correctAnswer,
+    function editQuestion() {
+        const question = [
+            props.questionCard
         ];
-
-
-        console.log(answer)
-
-        // questionCard.correctAnswerforEach(correctAnswer)
+        console.log(question)
     }
-
+if(!setQuestion){
+    return null;
+}
     return (
+
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
                     <div className={"questionCardContent"}>
                         <div>
                             <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
-                                {props.questionCard.question}
+                                {props.questionCard.questionDetail}
                             </Typography>
                             <Typography className={"questionString"} variant="h5" component="div"></Typography>
                         </div>
-                        <div className={"answerSection"}>
-                            {ShuffleAnswers(props.questionCard).map((shuffledAnswer, index) => (
-                                <button value={shuffledAnswer}> {shuffledAnswer}</button>))
-                            }
 
-                        </div>
+                            {/*<Grid container spacing={1} direction="column"  >*/}
+                            {/*{ShuffleAnswers(props.questionCard).map((shuffledAnswer, index) => (*/}
+                            {/*    <Grid item>*/}
+                            {/*        <button value={shuffledAnswer} > {shuffledAnswer}</button>*/}
+
+                            {/*    </Grid>*/}
+                            {/*))}*/}
+                            {/*</Grid>*/}
+
+                        <Grid container spacing={1} direction="column"  >
+
+                            {props.questionCard.mcqOptionDtoList.map((option) => (
+                                <button> {option.optionDescription} </button>
+                            ))}
+
+                        </Grid>
+
                     </div>
-
                 </CardContent>
 
+                <Grid spacing={1} container direction="column" justifyContent="center" alignItems="center">
+
+                    {/*{show && <Grid item>*/}
+                    {/*<span className="checkmark"><div className="checkmark_circle"></div><div className="checkmark_stem"></div><div className="checkmark_kick"></div></span>*/}
+                    {/*</Grid>}*/}
+                    {show && <Grid item>
+                        Correct Answer: {props.questionCard.correctAnswer}
+                    </Grid>}
+
+
+                </Grid>
                 <CardActions>
-                    <Button size="small">Edit</Button>
-                    <Button onClick={changeColor} size="small">Show Answer</Button>
+                    <Button onClick={handleOnClick} as={Link} to="/editQuestion" size="small">Edit</Button>
+                    <Button size="small" onClick={()=>setShow(!show)}>{show === true ? 'Hide Answer' : 'Show Answer'}</Button>
+
                 </CardActions>
             </Card>
 
