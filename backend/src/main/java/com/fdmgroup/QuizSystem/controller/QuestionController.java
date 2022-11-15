@@ -14,11 +14,17 @@ import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuestionDto;
@@ -152,18 +158,6 @@ public class QuestionController {
 
 		questionService.updateMCQ(addMcqDto,mcqId);
 		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
-	}
-
-	@GetMapping("/questionBank/{questionBankType}")
-	@ApiOperation(value = "get interview/question question bank ",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = UPDATED_QUESTION_SUCCESS,response = ReturnMcqDto.class, responseContainer = "List"),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question bank not found")
-
-	})
-	public ResponseEntity<List> getInterviewQuestionBank(@NonNull @PathVariable String questionBankType){
-		return  new ResponseEntity<>(questionService.getMcqBank(questionBankType),HttpStatus.OK);
 	}
 
 
