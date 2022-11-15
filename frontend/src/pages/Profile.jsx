@@ -1,21 +1,6 @@
 import React from 'react'
-import '../styles/profileStyle.css'
-import editButton from '../styles/editButton.png'
-import profilePicture from '../styles/profilePicture.png'
-import downArrow from '../styles/downArrow.png'
-
-import Grid from "@mui/material/Grid";
-import {Link} from "react-router-dom";
-
-
-
 
 const Profile = () => {
-
-    function handleOnClick(){
-        console.log("Clicked!")
-    }
-
   return (
       <div className={"profileContainer"}>
           <div className={"profileBox"}>
