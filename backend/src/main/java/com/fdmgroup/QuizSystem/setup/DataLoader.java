@@ -252,8 +252,8 @@ public class DataLoader implements ApplicationRunner {
 //        
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
-        quiz1.setName("course quiz 1");
-        quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type 
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
        
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
