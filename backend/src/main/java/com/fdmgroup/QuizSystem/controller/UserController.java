@@ -1,8 +1,10 @@
 package com.fdmgroup.QuizSystem.controller;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
+import com.fdmgroup.QuizSystem.dto.UserTokenDTO;
 import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
 import com.fdmgroup.QuizSystem.exception.RoleIsOutOfScopeException;
 import com.fdmgroup.QuizSystem.model.Role;
+import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -30,6 +33,8 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ModelToDTO modelToDTO;
     private final UserService userService;
+
+    private final AuthenticationManager authenticationManager;
 
     @ApiOperation(value = "get student by id")
     @GetMapping("/students/{id}")
@@ -56,6 +61,15 @@ public class UserController {
         if(modifiedUser.getPassword() != null) {
             modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
         }
+        User user = userService.updateUser(id, modifiedUser);
+
+        UserTokenDTO userTokenDTO = new UserTokenDTO();
+        userTokenDTO.setUsername(user.getUsername());
+        userTokenDTO.setRole(user.getRole().toString());
+        userTokenDTO.setEmail(user.getEmail());
+        userTokenDTO.setFirstName(user.getFirstName());
+        userTokenDTO.setLastName(user.getLastName());
+//        userTokenDTO.setToken();
         return new ResponseEntity<>(modelToDTO.userToOutput(userService.updateUser(id, modifiedUser)), HttpStatus.OK);
     }
 

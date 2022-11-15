@@ -43,15 +43,11 @@ export function getUserId(){
     }
     return null;
 }
-export function getUserRole(){
-        const payload = jwt_decode(getCookie('token'))
-        return payload.role;
-}
 
-export function getUserFlatRole(){
+export function getUserRole(){
     if(isLoggedIn()){
         const payload = jwt_decode(getCookie('token'))
-        return payload.role[0]["authorities"];
+        return payload.role[0]["authority"];
     }
     return null;
 }

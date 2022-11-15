@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getUserFlatRole } from './cookies';
+import { getCookie, getUserRole} from './cookies';
 
 export const apis = {
     signup,
@@ -7,7 +7,11 @@ export const apis = {
     getUnauthorizedTrainers,
     authorizeTrainer,
     getUnauthorizedSales,
-    authorizeSales
+    authorizeSales,
+    getUserById,
+    updateStudentInfo,
+    updateTrainerInfo,
+    updateSalesInfo
 }
 
 const config = {
@@ -18,16 +22,30 @@ const instance = axios.create({
 })
 
 
-// function getUserById(id){
-//     switch(getUserFlatRole()){
-//         case "TRAINING":
-//         case "POND":
-//         case "BEACHED":
-//             return instance.get("/users/students/" + id, config);
-//         case "AUTHORISED_TRAINER":
+function getUserById(id){
+    switch(getUserRole()){
+        case "TRAINING":
+        case "POND":
+        case "BEACHED":
+            return instance.get("/users/students/" + id, config);
+        case "AUTHORISED_TRAINER":
+            return instance.get("/users/trainers/" + id, config);
+        case "AUTHORISED_SALES":
+            return instance.get("/users/sales/" + id, config);
+    }
+}
 
-//     }
-// }
+function updateStudentInfo(id, username, password, email, firstName, lastName){
+    return instance.put("/users/students/" + id, {username, password, email, firstName, lastName}, config);
+}
+
+function updateTrainerInfo(id, username, password, email, firstName, lastName){
+    return instance.put("/users/trainers/" + id, {username, password, email, firstName, lastName}, config);
+}
+
+function updateSalesInfo(id, username, password, email, firstName, lastName){
+    return instance.put("/users/sales/" + id, {username, password, email, firstName, lastName}, config);
+}
 
 function getUnauthorizedTrainers(){
     return instance.get('/users/trainers/unauthorised' , config)
