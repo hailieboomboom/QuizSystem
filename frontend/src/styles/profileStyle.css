@@ -1,6 +1,10 @@
-.profileDiv{
-    background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");
+.profileContainer{
+    /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    background-color: #5e548e;
     height: 91.9vh;
+}
+.profileBox{
+    /*background: #9f86c0;*/
 }
 
 .profileGrid{
