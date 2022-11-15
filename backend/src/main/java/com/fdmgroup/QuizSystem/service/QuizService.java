@@ -1,7 +1,9 @@
 package com.fdmgroup.QuizSystem.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -204,20 +206,39 @@ public class QuizService {
 		return maxGrade;
 	}
 
+//  // TODO for Summer: to be deleted once confirmed everything works
+//	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
+//
+//		Role activeUserRole = userService.getUserById(activeUserId).getRole();
+//
+//		// Sales only have access to interview quizzes, but not course quizzes
+//		if (requestQuizCategory == QuizCategory.COURSE_QUIZ && activeUserRole == Role.AUTHORISED_SALES) {
+//			throw new UserUnauthorisedError("You do not have access to create, update or delete course quizzes!");
+//		}
+//		// Training students only have access to course quizzes, but not interview
+//		// quizzes
+//		if (requestQuizCategory == QuizCategory.INTERVIEW_QUIZ && activeUserRole == Role.TRAINING) {
+//			throw new UserUnauthorisedError("You do not have access to create, update or delete interview quizzes!");
+//		}
+//	}
 	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
 
+		HashMap<QuizCategory, Set<Role>> quizRoleMap = new HashMap<>();
+		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<Role>(Arrays.asList(
+				Role.AUTHORISED_TRAINER,
+				Role.POND,Role.BEACHED,
+				Role.TRAINING)));
+		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<Role>(Arrays.asList(
+				Role.AUTHORISED_TRAINER,
+				Role.POND,Role.BEACHED,
+				Role.AUTHORISED_SALES)));
+		
 		Role activeUserRole = userService.getUserById(activeUserId).getRole();
-
-		// Sales only have access to interview quizzes, but not course quizzes
-		if (requestQuizCategory == QuizCategory.COURSE_QUIZ && activeUserRole == Role.AUTHORISED_SALES) {
-			throw new UserUnauthorisedError("You do not have access to create, update or delete course quizzes!");
+		Set<Role> requiredRoleSet = quizRoleMap.get(requestQuizCategory);
+		
+		if(!requiredRoleSet.contains(activeUserRole)) {
+			throw new UserUnauthorisedError("You do not have access to create, update or delete " + requestQuizCategory + " quizzes!");
 		}
-		// Training students only have access to course quizzes, but not interview
-		// quizzes
-		if (requestQuizCategory == QuizCategory.INTERVIEW_QUIZ && activeUserRole == Role.TRAINING) {
-			throw new UserUnauthorisedError("You do not have access to create, update or delete interview quizzes!");
-		}
-		// TODO: Trainer have access to both types of quizzes
 	}
 
 	// Only the quiz creator edit its own quiz, or trainer/sales can edit others'
