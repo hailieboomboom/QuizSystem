@@ -30,6 +30,10 @@ export const editQuestionState = atom({
     key: 'editQuestionState',
     default: [],
 })
+export const editQuestionOptionsState = atom({
+    key: 'editQuestionOptionsState',
+    default: [],
+})
 export const quizSelectedAnswersState = atom({
     key: 'quizSelectedAnswersState',
     default: [],

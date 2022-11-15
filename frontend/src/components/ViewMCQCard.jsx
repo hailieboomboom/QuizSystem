@@ -16,7 +16,7 @@ import questions from "../pages/Questions";
 import {useState} from "react";
 import Grid from "@mui/material/Grid";
 import {Link} from "react-router-dom";
-import {editQuestionState} from "../recoil/Atoms";
+import {editQuestionOptionsState, editQuestionState} from "../recoil/Atoms";
 import {useRecoilState} from "recoil";
 
 
@@ -29,7 +29,8 @@ const bull = (
 );
 
 export default function ViewMCQCard(props) {
-    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState)
+    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState);
+    const [answers, setAnswers] = useRecoilState(editQuestionOptionsState);
     const [question, setQuestion] = React.useState([]);
 
 
@@ -42,7 +43,8 @@ export default function ViewMCQCard(props) {
     }
 
     function handleOnClick(){
-        setEditQuestions(props.questionCard)
+        setEditQuestions(props.questionCard);
+        setAnswers(props.questionCard.mcqOptionDtoList)
     }
 
     function editQuestion() {
