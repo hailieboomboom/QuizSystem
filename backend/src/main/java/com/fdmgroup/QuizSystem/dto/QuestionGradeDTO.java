@@ -5,7 +5,9 @@ import lombok.Data;
 @Data
 public class QuestionGradeDTO {
 
-    private Long questionId;
+    private long questionId;
+	private String questionDetails;
+    private float grade;
+    
 
-    private Float grade;
 }
