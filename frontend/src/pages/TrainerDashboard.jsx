@@ -44,7 +44,6 @@ export default function TrainerDashboard(){
             <Table aria-label="simple table" stickyHeader>
                 <TableHead>
                     <TableRow>
-
                         <TableCell align="right">Username</TableCell>
                         <TableCell align="right">First Name</TableCell>
                         <TableCell align="right">Last Name</TableCell>
