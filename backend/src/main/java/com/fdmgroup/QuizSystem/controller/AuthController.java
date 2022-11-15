@@ -12,9 +12,11 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 import com.fdmgroup.QuizSystem.service.UserService;
 import com.fdmgroup.QuizSystem.util.TokenProvider;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,13 +46,18 @@ public class AuthController {
 
     @ApiOperation(value = "log in using username and password")
     @PostMapping("/login")
-    public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest){
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Either username or password is incorrect!"),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "You are not authorised. Please contact admin."),
+    }
+    )
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
         User user = userService.getUserByUsername(loginRequest.getUsername());
         if(user.getRole().equals(Role.UNAUTHORISED_SALES) || user.getRole().equals(Role.UNAUTHORISED_TRAINER) || user.getRole().equals(Role.ABSENT)) {
             throw new UserUnauthorisedError("Your account is not authorised. Please contact an authorised staff");
         }
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
-        return new AuthResponse(token);
+        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
     }
 
     /**
@@ -61,7 +68,11 @@ public class AuthController {
     @ApiOperation(value = "sign up using username, email and password")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email is used.")
+    }
+    )
+    public ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         log.info("user is currently signing up");
         if (userService.existsByUsername(signUpRequest.getUsername())) {
             throw new UserAlreadyExistsException(String.format("Username %s already been used", signUpRequest.getUsername()));
@@ -74,7 +85,7 @@ public class AuthController {
         mapSignUpRequestToUserAndSave(signUpRequest);
         log.info("user with role {}, username {} and email {} and password {} is signed up successfully", signUpRequest.getRole(), signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword());
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        return new AuthResponse(token);
+        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
     }
 
     /**

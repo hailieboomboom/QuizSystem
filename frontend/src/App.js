@@ -19,7 +19,9 @@ import EditQuestion from "./pages/EditQuestion";
 import AttemptQuizzes from "./pages/AttemptQuizzes";
 import MyQuizzes from "./pages/MyQuizzes";
 import AttemptedQuizzes from "./pages/AttemptedQuizzes";
-
+import Dashboard from './pages/Dashboard'
+import SalesDashboard from "./pages/SalesDashboard";
+import TrainerDashboard from "./pages/TrainerDashboard";
 import {
   RecoilRoot,
   atom,
@@ -50,6 +52,9 @@ function App() {
           <Route path="viewQuestions" element={<ViewQuestions />} />
           <Route path="autoGenerate" element={<AutogenerateQuiz />} />
           <Route path="editQuestion" element={<EditQuestion/>} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="sales" element={<SalesDashboard />} />
+          <Route path="trainer" element={<TrainerDashboard />} />
         </Routes>
       </BrowserRouter>
       </RecoilRoot>

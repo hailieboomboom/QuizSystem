@@ -30,19 +30,47 @@ const AttemptQuizzes = () => {
     });
 
     const quizCategories = [
-        {title: "Interview"},
-        {title: "Skill"},
-        {title: "All"}
+        {
+            title: "Interview Prep",
+            type: "INTERVIEW_QUIZ"
+        },
+        {
+            title: "Course Content",
+            type: "COURSE_QUIZ"
+        },
+        {
+            title: "All",
+            type: ""
+        }
     ];
 
     React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+        axios.get("http://localhost:8088/QuizSystem/api/quizzes").then((response) => {
+            setQuizzes(response.data);
             setLoading(false);
         });
         }, []);
     console.log(quizzes);
-    console.log(quiz);
+
+    const [inputCategory, setInputCategory] = React.useState("");
+    let categoryHandler = (e,v) => {
+        //convert input text to lower case
+        console.log(e);
+        console.log(v);
+        var lowerCase = v.type.toLowerCase();
+        setInputCategory(lowerCase);
+    };
+    const filteredData = quizzes.filter((od) => {
+        console.log(od);
+        if (inputCategory === '') {
+            return od;
+        }
+        //return the item which contains the user input
+        else {
+            console.log(od.quizCategory);
+            return od.quizCategory.toLowerCase().includes(inputCategory)
+        }
+    })
 
     if (loading) return(
         <Grid
@@ -86,6 +114,7 @@ const AttemptQuizzes = () => {
                         getOptionLabel={(option) => option.title}
                         filterOptions={filterOptions}
                         sx={{ width: 300 }}
+                        onChange={categoryHandler}
                         renderInput={(params) => <TextField {...params} label="Filter" />}
                     />
                 </Grid>
@@ -99,29 +128,25 @@ const AttemptQuizzes = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
+                                <TableCell align="right">Category</TableCell>
                                 <TableCell align="right">Action</TableCell>
-                                {/*<TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quizzes.map((row) => (
+                            {filteredData.map((row) => (
                                 <TableRow
                                     key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        This is A Demo Quiz
+                                        {row.name}
                                     </TableCell>
+                                    <TableCell align="right">{row.quizCategory}</TableCell>
                                     <TableCell align="right">
                                         <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
                                             Take Quiz
                                         </Button>
                                     </TableCell>
-                                    {/*<TableCell align="right">{row.fat}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.carbs}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.protein}</TableCell>*/}
                                 </TableRow>
                             ))}
                         </TableBody>
