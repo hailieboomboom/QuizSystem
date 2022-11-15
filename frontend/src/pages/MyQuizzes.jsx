@@ -113,7 +113,7 @@ const MyQuizzes = () => {
                                             spacing={1}
                                         >
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                                <Button variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
                                                     Edit
                                                 </Button>
                                             </Grid>

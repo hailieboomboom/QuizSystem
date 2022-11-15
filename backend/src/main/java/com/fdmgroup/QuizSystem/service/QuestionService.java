@@ -5,31 +5,39 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.repository.McqRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.User;
+import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
+
+
+
 
 @Service
 @Transactional
 public class QuestionService {
 
 	@Autowired
-    private QuestionRepository questionRepository;
+	QuizAttemptService quizAttemptService;
 
+	@Autowired
+	QuizQuestionMCQAttemptRepository quizQuestionMCQAttemptRepository;
+	@Autowired
+    private QuestionRepository questionRepository;
 	@Autowired
 	private McqRepository mcqRepository;
 	@Autowired
@@ -112,17 +120,18 @@ public class QuestionService {
 		originalMcq.setMcoptions(updatedOptions);
 		originalMcq.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
 		this.save(originalMcq);
+		deleteAttempt(mcqId);
 	}
 
-	public List<QuizCreationMCQDto> getAllMcqQuestionforQuizCreation() {
+	public List<QuestionGradeDTO> getAllMcqQuestionforQuizCreation() {
 		var mcqQuestions = mcqRepository.findAll();
 
-		List<QuizCreationMCQDto> mcqDtoList = new ArrayList<QuizCreationMCQDto>();
+		List<QuestionGradeDTO> mcqDtoList = new ArrayList<QuestionGradeDTO>();
 
 		for (MultipleChoiceQuestion question : mcqQuestions) {
-			QuizCreationMCQDto mcqDto = new QuizCreationMCQDto();
+			QuestionGradeDTO mcqDto = new QuestionGradeDTO();
 			mcqDto.setGrade(0);
-			mcqDto.setMcqId(question.getId());
+			mcqDto.setQuestionId(question.getId());
 			mcqDto.setQuestionDetails(question.getQuestionDetails());
 			mcqDtoList.add(mcqDto);		
 		}
@@ -185,10 +194,25 @@ public class QuestionService {
 		return addMcqDto;
 	}
 
+	public List<ReturnMcqDto> getMcqBank(String type) {
+		if(!type.equals("course")&&!type.equals("interview"))
+			throw new TagNotValidException("The question bank " + type + " doesn't exist.");
+		List<MultipleChoiceQuestion> mcqQuestions = mcqRepository.findAll();
+		List<ReturnMcqDto> mcqDtoList = new ArrayList<>();
+		ReturnMcqDto returnMcqDto = new ReturnMcqDto();
+		for (MultipleChoiceQuestion question : mcqQuestions){
+			returnMcqDto = getReturnMcqDto(question);
+			if( returnMcqDto.getTags().stream().anyMatch(tag-> tag.equals(type)))
+				mcqDtoList.add(returnMcqDto) ;
+		}
+		return mcqDtoList;
+	}
+
+
 
 	@Transactional
 	public void deleteOneMcq(Long questionId) {
-
+        deleteAttempt(questionId);
 		MultipleChoiceQuestion mcq = findMcqById(questionId);
 		mcq.setTags(null);
 		var returned = questionRepository.save(mcq);
@@ -224,62 +248,13 @@ public class QuestionService {
 		return mcqOptional.isPresent();
 	}
 
+	private void deleteAttempt(Long questionId) {
+		var mcqAttemptList = quizQuestionMCQAttemptRepository.findByMcqId(questionId);
+		for (Long attempt : mcqAttemptList) {
+			var result = quizAttemptService.findQuizAttemptByQuizId(attempt);
+			result.forEach(quizAttempt -> quizAttemptService.deleteAttempt(quizAttempt));
+		}
+	}
 
-
-//    public Question getQuestionById(long id){
-//
-//        Optional<Question> maybeQuestion = questionRepository.findById(id);
-//        if(maybeQuestion.isEmpty()){
-//            throw new QuestionNotFoundException();
-//        }
-//        return maybeQuestion.get();
-//    }
-//
-//
-//    public Question getQuestionByQuestionname(String questionname){
-//        Optional<Question> maybe_question = questionRepository.findQuestionByQuestionname(questionname);
-//        if(maybe_question.isEmpty()){
-//            throw new QuestionNotFoundException();
-//        }
-//        return maybe_question.get();
-//    }
-//
-//    
-//    public void deleteQuestionById(long id){
-//        if(questionRepository.existsById(id)){
-//            questionRepository.deleteById(id);
-//        }
-//        else {
-//            throw new QuestionNotFoundException();
-//        }
-//
-//    }
-//
-//    
-//    public Question updateQuestion(long id, Question modifiedQuestion) {
-//        Optional<Question> maybeQuestion = questionRepository.findById(id);
-//        if(maybeQuestion.isEmpty()){
-//            throw new QuestionNotFoundException();
-//        }
-//        // Update question with new attributes
-//        Question question = maybeQuestion.get();
-////        question.setAvatar(input.getAvatar());
-//        question.setQuestionname(modifiedQuestion.getQuestionname());
-//        question.setPassword(modifiedQuestion.getPassword());
-//        question.setEmail(modifiedQuestion.getEmail());
-//        return questionRepository.save(question);
-//    }
-//
-//    
-//    public boolean existsByQuestionname(String questionname){
-//        return questionRepository.existsByQuestionname(questionname);
-//    }
-//
-//    
-//    public boolean existsByEmail(String email){
-//        return questionRepository.existsByEmail(email);
-//    }
-//
-//   
    
 }

@@ -14,6 +14,10 @@ export const createQuizSelectedQuestions = atom({
     key: 'createQuizSelectedQuestionsState', // unique ID (with respect to other atoms/selectors)
     default: [], // default value (aka initial value)
 });
+export const createQuizSelectedQuestionsSend = atom({
+    key: 'createQuizSelectedQuestionsSendState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+});
 export const createQuizAllQuestions = atom({
     key: 'createQuizAllQuestionsState', // unique ID (with respect to other atoms/selectors)
     default: [], // default value (aka initial value)

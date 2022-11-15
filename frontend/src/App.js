@@ -31,6 +31,7 @@ import {
   useRecoilState,
   useRecoilValue,
 } from 'recoil';
+import EditQuiz from "./pages/EditQuiz";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="logout" element={<Logout />} />
           <Route path="register" element={<Register />} />
           <Route path="quiz" element={<Quiz />} />
+          <Route path="editQuiz" element={<EditQuiz/>} />
           <Route path="viewQuizzes" element={<AttemptQuizzes/>} />
           <Route path="attemptedQuizzes" element={<AttemptedQuizzes/>} />
           <Route path="myQuizzes" element={<MyQuizzes/>} />
