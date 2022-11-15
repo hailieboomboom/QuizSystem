@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
@@ -113,7 +114,22 @@ public class QuestionService {
 		this.save(originalMcq);
 	}
 
+	public List<QuizCreationMCQDto> getAllMcqQuestionforQuizCreation() {
+		var mcqQuestions = mcqRepository.findAll();
 
+		List<QuizCreationMCQDto> mcqDtoList = new ArrayList<QuizCreationMCQDto>();
+
+		for (MultipleChoiceQuestion question : mcqQuestions) {
+			QuizCreationMCQDto mcqDto = new QuizCreationMCQDto();
+			mcqDto.setGrade(0);
+			mcqDto.setMcqId(question.getId());
+			mcqDto.setQuestionDetails(question.getQuestionDetails());
+			mcqDtoList.add(mcqDto);		
+		}
+
+		return mcqDtoList;
+	}
+	
 	public List<ReturnMcqDto> getAllMcqQuestion() {
 		var mcqQuestions = mcqRepository.findAll();
 
