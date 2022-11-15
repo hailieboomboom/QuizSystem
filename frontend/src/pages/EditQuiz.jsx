@@ -16,17 +16,67 @@ import { useRecoilState } from 'recoil';
 import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const EditQuiz = () => {
     const location = useLocation();
     const { editQuiz } = location.state;
-    const [category, setCategory] = useState('');
-    const [name, setName] = useState('');
+    const [category, setCategory] = useState(editQuiz.quizCategory);
+    const [loading, setLoading] = React.useState(true);
+    const [name, setName] = useState(editQuiz.name);
+    const [dummy, setDummy] = useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
     const [quizId, setQuizId] = React.useState('');
 
-    // const [createQuizSelectedQuestions, setCreateQuizSelectedQuestions] = useRecoilState([]);
+    React.useEffect(() => {
+        quizAllQuestions.forEach(function get(currentValue) {
+            quizSelectedQuestions.forEach(function countEntry(entry) {
+                if(currentValue.questionId === entry.questionId){
+                    setquizAllQuestions((questions) =>
+                        questions.filter((question) => question.questionId !== currentValue.questionId)
+
+                    );
+                }
+            })
+        })
+    }, []);
+    //
+    //     const filterAll = () => {
+    //         results[0].data.forEach(function get(currentValue) {
+    //             console.log(currentValue);
+    //             results[1].data.forEach(function countEntry(entry) {
+    //                 if(currentValue.questionId === entry.questionId){
+    //                     setquizAllQuestions((questions) =>
+    //                         questions.filter((question) => question.questionId !== currentValue.questionId)
+    //
+    //                     );
+    //                 }
+    //             })
+    //         })
+    //     }
+    //
+    //
+    //
+    // function getAll(currentValue) {
+    //     console.log(currentValue);
+    //     console.log(this);
+    //
+    //
+    // }
+    //
+    // function getAllQuestions() {
+    //     return axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs")
+    //
+    // }
+    //
+    //
+    // function getQuizQuestions() {
+    //     return  axios.get("http://localhost:8088/QuizSystem/api/quizzes/"+ editQuiz.quizId +"/questions")
+    // }
+
+
+
     const handleName = (event) => {
         setName(event.target.value);
     };
@@ -35,6 +85,20 @@ const EditQuiz = () => {
     };
 
     console.log(editQuiz);
+
+    if (!quizAllQuestions) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Wait...</Typography>
+                <CircularProgress />
+            </Grid>
+        </Grid>
+
+    );
     return (
         <Grid
             container
@@ -61,7 +125,7 @@ const EditQuiz = () => {
                             fullWidth
                             autoComplete="quiz-name"
                             variant="standard"
-                            value={editQuiz.name}
+                            value={name}
                             onChange={handleName}
                         />
                     </FormControl>
@@ -72,7 +136,7 @@ const EditQuiz = () => {
                         <Select
                             labelId="questionCategory"
                             id="questionCategory"
-                            value={editQuiz.quizCategory}
+                            value={category}
                             onChange={handleCategory}
                             label="Category"
                         >
