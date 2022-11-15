@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { Link } from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -35,18 +33,19 @@ export default function SignInSide() {
               const role = payload.role[0].authority;
 
               if (role === "TRAINING"){
-                  document.location.href = '/dashboard';
                   console.log("Student dashboard")
+                  document.location.href = '/dashboard';
+
               }
 
-              if (role === "TRAINING"){
-                  document.location.href = '/dashboard';
-                  console.log("Student dashboard")
+              if (role === "AUTHORISED_TRAINER"){
+                  document.location.href = '/trainer';
               }
 
-              console.log(payload.role[0].authority)
+              if (role === "AUTHORISED_SALEs"){
+                  document.location.href = '/sales';
+              }
 
-              document.location.href = '/dashboard';
           }).catch(err => {
               if (err.response.status === 401){
                   alert("Either username or password is not correct. Please try again.")
@@ -147,6 +146,5 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
-
   );
 }

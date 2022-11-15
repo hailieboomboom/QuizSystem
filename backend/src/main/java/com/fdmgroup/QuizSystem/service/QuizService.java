@@ -200,6 +200,15 @@ public class QuizService {
 		}
 		return quizDtos;
 	}
+	
+	public float getMaxGrade (Long quizId) {
+		Quiz quiz = getQuizById(quizId);
+		float maxGrade = 0;
+		for (QuizQuestionGrade qqg : quiz.getQuizQuestionsGrade()) {
+			maxGrade += qqg.getGrade();
+		}
+		return maxGrade;
+	}
 
 
 }	

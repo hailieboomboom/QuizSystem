@@ -10,7 +10,7 @@ function NavigationBar() {
         <Navbar.Brand as={Link} to="/">
           <img src="https://surveymonkey-assets.s3.amazonaws.com/survey/182409455/e1ca79ba-8544-401a-b369-7cd97429a630.png" width="84" height="50"
                className="d-inline-block align-content-center" alt=""/>
-              
+
     Quizz App
 
           </Navbar.Brand>
@@ -20,11 +20,15 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
             <NavDropdown title="Create" id="collasible-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/createQuestion">Create Question</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/createQuiz">
-                Create Quiz
-              </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/autoGenerate">Auto Generate Quiz</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/createQuestion">Create Question</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/createQuiz">
+              Create Quiz
+            </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/autoGenerate">Auto Generate Quiz</NavDropdown.Item>
+          </NavDropdown>
+            <NavDropdown title="Quiz" id="collasible-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/viewQuizzes">Take Quiz</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/myQuizzes">Manage Quiz</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
