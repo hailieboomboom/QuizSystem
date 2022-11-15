@@ -12,38 +12,43 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import {FormLabel, Select} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
 
 export default function Signup() {
   const[username,setUsername] = useState('');
-    const[firstname,setFirstname] = useState('');
-    const[lastname,setLastname] = useState('');
+    const[firstName,setFirstname] = useState('');
+    const[lastName,setLastname] = useState('');
     const[email,setEmail] = useState('');
     const[password,setPassword] = useState('');
     const[role,setRole] = useState('');
     const[user,setUser]=useState([]);
+    const [value, setValue] = useState('');
 
     const handleClick=(e)=>{
         e.preventDefault()
-        const user={username,firstname,lastname,email,password,role}
+        const user={username,firstName,lastName,email,password,role}
         console.log(user)
         fetch("http://localhost:8088/QuizSystem/auth/signup",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(user)
 
-        }).then(()=>{
-            console.log("New Student added")
-        })
-    }
+        }).then((res)=>{
 
-    useEffect(()=>{
-        fetch("http://localhost:8088/student/getAll")
-            .then(res=>res.json())
-            .then((result)=>{
-                    setUser(result);
-                }
-            )
-    },[])
+                return res.json()
+        })
+            .then((response) => {
+               return response
+            })
+    }
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
 
   return (
 
@@ -66,7 +71,7 @@ export default function Signup() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-            <form noValidate autoComplete="off">
+
           <Box
             component="form"
             noValidate
@@ -98,7 +103,7 @@ export default function Signup() {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  value={firstname}
+                  value={firstName}
                   onChange={(e)=>setFirstname(e.target.value)}
                 />
               </Grid>
@@ -110,7 +115,7 @@ export default function Signup() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
-                  value={lastname}
+                  value={lastName}
                   onChange={(e)=>setLastname(e.target.value)}
                 />
               </Grid>
@@ -140,17 +145,25 @@ export default function Signup() {
                   onChange={(e)=>setPassword(e.target.value)}
                 />
               </Grid>
+
                 <Grid item xs={12}>
-                    <TextField
-                        required
-                        fullWidth
-                        name="role"
-                        label="Role"
-                        id="role"
-                        autoComplete="user-role"
-                        value={role}
-                        onChange={(e)=>setRole(e.target.value)}
-                    />
+
+                    <FormControl>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Role</FormLabel>
+                        <RadioGroup
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            value={role}
+                            onChange={(e)=>setRole(e.target.value)}
+                            row
+                        >
+                            <FormControlLabel value="trainer" control={<Radio />} label="Trainer" />
+                            <FormControlLabel value="sales" control={<Radio />} label="Sale" />
+                            <FormControlLabel value="student" control={<Radio />} label="Student" />
+                        </RadioGroup>
+                    </FormControl>
+
+
                 </Grid>
             </Grid>
             <Button
@@ -170,7 +183,7 @@ export default function Signup() {
               </Grid>
             </Grid>
           </Box>
-            </form>
+
         </Box>
       </Grid>
       <Grid

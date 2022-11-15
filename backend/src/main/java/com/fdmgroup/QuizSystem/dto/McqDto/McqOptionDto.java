@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class McqOptionDto {
+	private Long id;
     @NotBlank
     private String optionDescription;
     @NotBlank

@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { Link } from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,8 +10,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {useState} from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getCookie, setCookie, getUserRole } from '../utils/cookies';
+import { apis } from '../utils/apis';
+import jwt_decode from "jwt-decode";
+
 
 export default function SignInSide() {
     const navigate = useNavigate();
@@ -22,36 +23,43 @@ export default function SignInSide() {
     const [errorMsg, setErrorMsg] = useState(null);
 
   const handleClick = (event) => {
-      setErrorMsg("");
-    event.preventDefault();
-      const user={password,username}
-      console.log(user)
-      fetch("http://localhost:8088/QuizSystem/auth/login",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify(user)
+          event.preventDefault();
 
-      }).then((res)=>{
-          if(res.status === 200) return res.text();
-          else if(res.status === 401 || res.status === 403){
-              setErrorMsg("Invalid username or password");
-          }else {
-              setErrorMsg(
-                  "Something went wrong, try again later or reach out to trevor@coderscampus.com"
-              );
-          }
-          console.log("Hello Student Logged in")
-      })
-          // .then((data) => {
-          //     if (data) {
-          //         user.setJwt(data);
-          //         navigate("/dashboard");
-          //     }
-          // });
-  };
+          apis.login(username, password).then(res => {
+
+              setCookie('token', res.data.token, 30)
+              //console.log(getCookie('token'))
+              const payload = jwt_decode(res.data.token)
+              const role = payload.role[0].authority;
+
+              if (role === "TRAINING"){
+                  console.log("Student dashboard")
+                  document.location.href = '/dashboard';
+
+              }
+
+              if (role === "AUTHORISED_TRAINER"){
+                  document.location.href = '/trainer';
+              }
+
+              if (role === "AUTHORISED_SALEs"){
+                  document.location.href = '/sales';
+              }
+
+          }).catch(err => {
+              if (err.response.status === 401){
+                  alert("Either username or password is not correct. Please try again.")
+                  console.log(err)
+              }
+              if (err.response.status === 403){
+                  alert("You are unauthorized!!")
+                  console.log(err)
+              }
+          })
+      }
 
   return (
-      <form noValidate autoComplete="off">
+
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -84,7 +92,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-
+              <Box
+                  component="form"
+                  noValidate
+                  sx={{ mt: 3 }}
+              >
                 <TextField
                     required
                     fullWidth
@@ -131,8 +143,8 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
           </Box>
+          </Box>
         </Grid>
       </Grid>
-      </form>
   );
 }
