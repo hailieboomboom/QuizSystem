@@ -1,10 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
 .profileContainer{
     /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    width: 100%;
+    height: 100vh;
     background-color: #5e548e;
-    height: 91.9vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .profileBox{
-    /*background: #9f86c0;*/
+    background: #9f86c0;
+    text-align: center;
+    padding: 40px 90px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+}
+
+.profileBox button{
+    background: #fff;
+    color: #ff574a;
+    border: none;
+    outline: none;
+    box-shadow: 0 5px 10px rgba(244, 67, 54, 0.5);
+    padding: 15px 60px;
+    cursor: pointer;
+    border-radius: 30px;
+    margin-bottom: -50px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.profileBox h3{
+    font-size: 22px;
+    margin-top: 20px;
+    font-weight: 500;
+}
+
+img{
+    width: 100px;
+}
+
+.editIcon{
+    width: 25px;
+    position: absolute;
+    right: 40px;
+    top: 40px;
+}
+
+.profilePic{
+    width: 150px;
+    border-radius: 50%;
+    background: white;
+    margin-top: 40px;
 }
 
 .profileGrid{
@@ -37,3 +93,21 @@
 .profileTitle{
     color: white;
 }
+
+.profileBottom{
+    background: white;
+    color: #999;
+    padding: 60px 0;
+    margin-right: -90px;
+    margin-left: -90px;
+    margin-bottom: -40px;
+    border-radius: 20px;
+    margin-top: -10px;
+}
+
+.profileBottom img{
+    width: 20px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
