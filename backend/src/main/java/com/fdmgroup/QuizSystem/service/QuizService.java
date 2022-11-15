@@ -3,21 +3,25 @@ package com.fdmgroup.QuizSystem.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.exception.SalesCantCreateCourseQuizException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
+import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
-import com.fdmgroup.QuizSystem.model.Sales;
+import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
@@ -49,19 +53,14 @@ public class QuizService {
 	@Autowired
 	private QuizQuestionGradeRepository qqgRepository;
 	
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private QuestionService questionService;
+	
 	
 	public QuizDto createQuiz(QuizDto quizDto) {
-		
-		// Make sure Sales unable to make Course Quiz
-		Optional<User> optionalUser = userRepository.findById(quizDto.getCreatorId());
-		if(optionalUser.isEmpty()) {
-			throw new UserNotFoundException();
-		}
-		QuizCategory quizCategory = quizDto.getQuizCategory();
-		if(optionalUser.get()instanceof Sales && quizCategory == QuizCategory.COURSE_QUIZ ) {
-			throw new SalesCantCreateCourseQuizException();
-		}
-		
+
 		Quiz quizEntity = new Quiz();
 		quizEntity.setName(quizDto.getName());
 		quizEntity.setQuizCategory(quizDto.getQuizCategory());
@@ -110,9 +109,8 @@ public class QuizService {
 		// Check if quiz exists
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if (optionalQuiz.isEmpty()) {
-			 throw new QuizNotFoundException();
+			 throw new QuizNotFoundException("Quiz not found");
 		}
-
 		
 		Quiz quiz = optionalQuiz.get();
 		quiz.setName(quizDto.getName());
@@ -129,7 +127,7 @@ public class QuizService {
 		
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if(optionalQuiz.isEmpty()) {
-			throw new QuizNotFoundException();
+			throw new QuizNotFoundException("Quiz not found");
 		}
 			
 //		// TODO This part is handled by CascadeType.REMOVE on Quiz.java
@@ -139,7 +137,7 @@ public class QuizService {
 //			qqgRepository.delete(qqg);
 //		}
 		
-		quizRepository.deleteById(id); 
+		quizRepository.deleteById(id); // related QuizQuestionGrade list will be removed behind the scene for "cascade = CascadeType.REMOVE"
 		
 	}
 	
@@ -148,7 +146,7 @@ public class QuizService {
 
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if (optionalQuiz.isEmpty()) {
-			throw new QuizNotFoundException();
+			throw new QuizNotFoundException("Quiz not found");
 		}
 		return optionalQuiz.get();
 	}
@@ -162,6 +160,8 @@ public class QuizService {
 
 	//TODO: parameters can be just Ids instead of entities? (from Yutta and Jason)
 	public void addQuestionIntoQuiz(Question question, Quiz quiz, Float grade) {
+		
+		// TODO for Summer: need to check tag of questions (question type) match with quiz type	
 		System.out.println("----ENTER ADDQUESTION: question id is "+question.getId()+" quiz id is "+ quiz.getId());
 		
 		question = questionRepo.findById(question.getId()).get();
@@ -189,7 +189,7 @@ public class QuizService {
 		Optional<User> optionalCreator = userRepository.findById(creatorId);
 		
 		if (optionalCreator.isEmpty()) {
-			 throw new UserNotFoundException();
+			 throw new UserNotFoundException("User not found");
 		}
 		
 		List<Quiz> quizzes = quizRepository.findByCreator(optionalCreator.get());
@@ -210,7 +210,85 @@ public class QuizService {
 		return maxGrade;
 	}
 
+	
+	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
+		
+		Role activeUserRole = userService.getUserById(activeUserId).getRole();
+		
+		// Sales only have access to interview quizzes, but not course quizzes 
+		if(requestQuizCategory == QuizCategory.COURSE_QUIZ && activeUserRole == Role.AUTHORISED_SALES){
+			throw new UserUnauthorisedError("You do not have access to create, update or delete course quizzes!");
+		}	
+		// Training students only have access to course quizzes, but not interview quizzes 
+		if(requestQuizCategory == QuizCategory.INTERVIEW_QUIZ && activeUserRole == Role.TRAINING){
+			throw new UserUnauthorisedError("You do not have access to create, update or delete interview quizzes!");
+		}
+		// TODO: Trainer have access to both types of quizzes
+	}
+	
+	
+	// Only the quiz creator edit its own quiz, or trainer/sales can edit others' quiz
+	public void checkAccessToQuizId(long quizId, long activeUserId) {
+		
+		long quizCreatorId = getQuizById(quizId).getCreator().getId();
+		Role activeUserRole = userService.getUserById(activeUserId).getRole();
+		
+		if(quizCreatorId != activeUserId && activeUserRole != Role.AUTHORISED_TRAINER && activeUserRole != Role.AUTHORISED_SALES){
+			throw new UserUnauthorisedError("You do not have access to update or delete quizzes that is created by other users!");
+		}	
+	}	
+	
+	
+	public void createQuizQuestions(long quiz_id, List<QuestionGradeDTO> questionGradeDtoList ) {
+		
+		Quiz quiz = getQuizById(quiz_id);
+		
+//		// TODO for Summer: to confirm if this step is needed
+//		// check if the quizQuestionGrade record already exists for the given quiz id
+//		List<QuizQuestionGrade> foundQuizQuestionGrades = quizQuestionGradeService.findAllByQuizId(quiz_id);
+//		if(foundQuizQuestionGrades.size() != 0) {
+//			throw new QuizNotFoundException("This quiz already contains questions and grade");
+//		}
+		
+		for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
+			Question question = questionService.findById(questionGradeDTO.getQuestionId());
+			float grade = questionGradeDTO.getGrade();
+			
+			addQuestionIntoQuiz(question, quiz, grade);
+		}
+	}
+	
+	public void updateQuizQuestions(long quiz_id, List<QuestionGradeDTO> questionGradeDtoList) {
+		
+		Quiz quiz = getQuizById(quiz_id);
 
+		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
+		// Database
+		Set<Long> questionIdSet = quizQuestionGradeList.stream().map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
+		Set<Long> questionIdInputSet = questionGradeDtoList.stream().map(QuestionGradeDTO::getQuestionId).collect(Collectors.toSet());
+
+		// if user adds new questions
+		for (QuestionGradeDTO questionGradeDTO : questionGradeDtoList) {
+			if(!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
+				Question question = questionService.findById(questionGradeDTO.getQuestionId());
+				float grade = questionGradeDTO.getGrade();
+				addQuestionIntoQuiz(question, quiz, grade);
+			}
+			else if(questionGradeDTO.getGrade() != (quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())){
+				QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId()));
+				quizQuestionGrade.setGrade(questionGradeDTO.getGrade());
+				quizQuestionGradeService.save(quizQuestionGrade);
+			}
+		}
+		// if user remove existing questions
+		for(Long questionId : questionIdSet) {
+			if(!questionIdInputSet.contains(questionId)) {
+				Question question = questionService.findById(questionId);
+				removeQuestionFromQuiz(question, quiz);
+			}
+		}
+	}
+	
 }	
 
 
