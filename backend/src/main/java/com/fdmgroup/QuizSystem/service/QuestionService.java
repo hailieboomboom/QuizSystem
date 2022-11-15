@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
@@ -13,15 +18,11 @@ import com.fdmgroup.QuizSystem.exception.McqException.NoDataFoundException;
 import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
-import com.fdmgroup.QuizSystem.repository.McqRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.User;
+import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
+import com.fdmgroup.QuizSystem.repository.UserRepository;
 
 @Service
 @Transactional
@@ -114,15 +115,15 @@ public class QuestionService {
 		this.save(originalMcq);
 	}
 
-	public List<QuizCreationMCQDto> getAllMcqQuestionforQuizCreation() {
+	public List<QuestionGradeDTO> getAllMcqQuestionforQuizCreation() {
 		var mcqQuestions = mcqRepository.findAll();
 
-		List<QuizCreationMCQDto> mcqDtoList = new ArrayList<QuizCreationMCQDto>();
+		List<QuestionGradeDTO> mcqDtoList = new ArrayList<QuestionGradeDTO>();
 
 		for (MultipleChoiceQuestion question : mcqQuestions) {
-			QuizCreationMCQDto mcqDto = new QuizCreationMCQDto();
+			QuestionGradeDTO mcqDto = new QuestionGradeDTO();
 			mcqDto.setGrade(0);
-			mcqDto.setMcqId(question.getId());
+			mcqDto.setQuestionId(question.getId());
 			mcqDto.setQuestionDetails(question.getQuestionDetails());
 			mcqDtoList.add(mcqDto);		
 		}

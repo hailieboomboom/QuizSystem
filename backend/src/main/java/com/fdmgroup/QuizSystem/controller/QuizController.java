@@ -90,6 +90,7 @@ public class QuizController {
 		for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
 			Question question = questionService.findById(questionGradeDTO.getQuestionId());
 			float grade = questionGradeDTO.getGrade();
+			
 			quizService.addQuestionIntoQuiz(question, quiz, grade);
 		}
 		
@@ -113,7 +114,7 @@ public class QuizController {
 				float grade = questionGradeDTO.getGrade();
 				quizService.addQuestionIntoQuiz(question, quiz, grade);
 			}
-			else if(! questionGradeDTO.getGrade().equals(quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())){
+			else if(questionGradeDTO.getGrade() != (quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())){
 				QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId()));
 				quizQuestionGrade.setGrade(questionGradeDTO.getGrade());
 				quizQuestionGradeService.save(quizQuestionGrade);

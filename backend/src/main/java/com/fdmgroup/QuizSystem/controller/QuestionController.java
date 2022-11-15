@@ -1,19 +1,10 @@
 package com.fdmgroup.QuizSystem.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.QuizCreationMCQDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
-import com.fdmgroup.QuizSystem.service.*;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuestionDto;
+import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.SAQDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.User;
+import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
+import com.fdmgroup.QuizSystem.service.QuestionService;
+import com.fdmgroup.QuizSystem.service.ShortAnswerQuestionService;
+import com.fdmgroup.QuizSystem.service.TagService;
+import com.fdmgroup.QuizSystem.service.UserService;
 
-import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/questions") // http://localhost:8088/QuestionSystem/questions
@@ -127,7 +128,7 @@ public class QuestionController {
 	}
 
 	@GetMapping("/quizCreation/mcqs")
-	public ResponseEntity<List<QuizCreationMCQDto>> getAllMcqforQuizCreation() {
+	public ResponseEntity<List<QuestionGradeDTO>> getAllMcqforQuizCreation() {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestionforQuizCreation(),HttpStatus.OK);
 	}
 
