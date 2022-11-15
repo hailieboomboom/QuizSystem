@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { getCookie } from './cookies';
+import { getCookie, getUserFlatRole } from './cookies';
 
 export const apis = {
     signup,
     login,
-    getUnauthorizedTrainers
+    getUnauthorizedTrainers,
+    authorizeTrainer
 }
 
 const config = {
@@ -14,13 +15,24 @@ const instance = axios.create({
     baseURL: 'http://localhost:8088/QuizSystem'
 })
 
-function getUnauthorizedTrainers(){
-return instance.get('/users/trainers/unauthorised' , config)
 
+// function getUserById(id){
+//     switch(getUserFlatRole()){
+//         case "TRAINING":
+//         case "POND":
+//         case "BEACHED":
+//             return instance.get("/users/students/" + id, config);
+//         case "AUTHORISED_TRAINER":
+
+//     }
+// }
+
+function getUnauthorizedTrainers(){
+    return instance.get('/users/trainers/unauthorised' , config)
 }
 
 function authorizeTrainer(username){
-    return instance.put("/users/trainers/authorise/"+ username  )
+    return instance.put("/users/trainers/authorise/"+ username, {}, config)
 }
 
 function signup(username, email, password, firstName, lastName,role){

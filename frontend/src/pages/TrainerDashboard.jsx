@@ -16,16 +16,28 @@ import Button from '@mui/material/Button';
 export default function TrainerDashboard(){
     const [data, setData] = useState([]);
     const [rowData, setRowdata] = useState([]);
+    const [username, setUsername] = useState();
     useEffect(() => {
         return () => {
             apis.getUnauthorizedTrainers()
                 .then(res => {
-
                     setRowdata(res.data)
                     console.log(res.data)
                 })
         };
-    }, []);
+    }, [username]);
+
+    const handleAuthorise = (username) => {
+        setUsername(username);
+        apis.authorizeTrainer(username).then(
+            res => {
+                console.log(res.data)
+            }
+        ).catch(
+            err => console.log(err)
+        )
+
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -43,21 +55,23 @@ export default function TrainerDashboard(){
                 </TableHead>
                 <TableBody>
                     {rowData.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
+                        <TableRow key={row.username}>
+                            <TableCell component="th" scope="row" key={row.id}>
                                 {row.username}
                             </TableCell>
-
-                            <TableCell align="right">{row.firstName}</TableCell>
-                            <TableCell align="right">{row.lastName}</TableCell>
-                            <TableCell align="right">{row.email}</TableCell>
-                            <TableCell align="right">{row.role}</TableCell>
-                            <TableCell align="right"><Button
-                                variant="outlined">Authorize</Button></TableCell>
+                            <TableCell align="right" key={row.id}>{row.firstName}</TableCell>
+                            <TableCell align="right" key={row.id}>{row.lastName}</TableCell>
+                            <TableCell align="right" key={row.id}>{row.email}</TableCell>
+                            <TableCell align="right" key={row.id}>{row.role}</TableCell>
+                            <TableCell align="right" key={row.id}>
+                                <Button variant="outlined" onClick={()=>{handleAuthorise(row.username)}}>Authorize</Button>
+                            </TableCell>
+                        
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
         </TableContainer>
+    
     );
 }
