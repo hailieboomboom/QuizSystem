@@ -22,6 +22,7 @@ import AttemptedQuizzes from "./pages/AttemptedQuizzes";
 import Dashboard from './pages/Dashboard'
 import SalesDashboard from "./pages/SalesDashboard";
 import TrainerDashboard from "./pages/TrainerDashboard";
+import ErrorPage from "./pages/ErrorPage";
 import {
   RecoilRoot,
   atom,
@@ -31,33 +32,33 @@ import {
 } from 'recoil';
 import EditQuiz from "./pages/EditQuiz";
 
-const theme = createTheme({
-  palette: {
-    type: 'light',
-    primary: {
-      main: '#6414a8',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-  },
-  transitions: {
-    easing: {
-      // This is the most common easing curve.
-      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      // Objects enter the screen at full velocity from off-screen and
-      // slowly decelerate to a resting point.
-      easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-      // Objects leave the screen at full velocity. They do not decelerate when off-screen.
-      easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-      // The sharp curve is used by objects that may return to the screen at any time.
-      sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-    },
-  },
-})
+// const theme = createTheme({
+//   palette: {
+//     type: 'light',
+//     primary: {
+//       main: '#6414a8',
+//     },
+//     secondary: {
+//       main: '#f50057',
+//     },
+//   },
+//   transitions: {
+//     easing: {
+//       // This is the most common easing curve.
+//       easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+//       // Objects enter the screen at full velocity from off-screen and
+//       // slowly decelerate to a resting point.
+//       easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+//       // Objects leave the screen at full velocity. They do not decelerate when off-screen.
+//       easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+//       // The sharp curve is used by objects that may return to the screen at any time.
+//       sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
+//     },
+//   },
+// })
 function App() {
   return (
-      <ThemeProvider theme={theme}>
+      // <ThemeProvider theme={theme}>
         <div className="App">
 
           <BrowserRouter>
@@ -83,13 +84,11 @@ function App() {
               <Route path="sales" element={<SalesDashboard />} />
               <Route path="trainer" element={<TrainerDashboard />} />
               <Route path="errorPage" element={<ErrorPage />} />
-        </Routes>
+            </Routes>
           </BrowserRouter>
 
         </div>
-      </ThemeProvider>
-
-
+      // </ThemeProvider>
   );
 }
 
