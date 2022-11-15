@@ -132,7 +132,7 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco11 = new MultipleChoiceOption("op1",true,mcq2);
         MultipleChoiceOption mco12 = new MultipleChoiceOption("op2",false,mcq2);
         MultipleChoiceOption mco13 = new MultipleChoiceOption("op3",false,mcq2);
-        mcq2.setCreator(sales);
+        mcq2.setCreator(trainer);
 
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("what is the best colour");
@@ -192,15 +192,18 @@ public class DataLoader implements ApplicationRunner {
         
         
         tag1.addOneQuestion(mcq1);
+        tag1.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
         tag1.addOneQuestion(sa1);
         tag1.addOneQuestion(sa2);
         tag1.addOneQuestion(sa3);
         tag1.addOneQuestion(sa4);
+        tag2.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
         tag2.addOneQuestion(sa1);
         tag2.addOneQuestion(sa4);
 
         mcq1.addOneTag(tag1);
-        sa1.addOneTag(tag2);
+        mcq2.addOneTag(tag1);  // adding tag1 & tag2 into mcq2
+        mcq2.addOneTag(tag2);  // adding tag1 & tag2 into mcq2
         sa1.addOneTag(tag1);
         sa2.addOneTag(tag1);
         sa3.addOneTag(tag1);
@@ -249,8 +252,8 @@ public class DataLoader implements ApplicationRunner {
 //        
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
-        quiz1.setName("course quiz 1");
-        quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type 
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
        
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
