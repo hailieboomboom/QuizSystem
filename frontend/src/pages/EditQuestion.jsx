@@ -44,6 +44,7 @@ const EditQuestion = () => {
             "userId": 1
 
         }
+        console.log(answers)
         axios.put(url, data)
             .then(data => {
                 console.log(data);
