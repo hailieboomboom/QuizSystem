@@ -97,7 +97,7 @@ public class AuthController {
      */
 
     @ApiOperation(value = "authenticate user using username and password, returns token")
-    protected String authenticateAndGetToken(String username, String password) {
+    public String authenticateAndGetToken(String username, String password) {
         // Pass UsernamePasswordAuthenticationToken to the default AuthenticationProvider which will use the userDetails
         // service to get the user based on username and compare the encrypted password
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

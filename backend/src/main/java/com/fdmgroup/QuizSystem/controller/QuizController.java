@@ -99,6 +99,19 @@ public class QuizController {
 	}
 
 	
+//	@PostMapping("/api/quizzes/{id}/questions")
+//	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
+//        Quiz quiz = quizService.getQuizById(quiz_id);
+//        for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
+//            Question question = questionService.findById(questionGradeDTO.getQuestionId());
+//            float grade = questionGradeDTO.getGrade();
+//            quizService.addQuestionIntoQuiz(question, quiz, grade);
+//        }
+//        return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
+//    }
+
+
+	
 	@PostMapping("/api/quizzes/{id}/questions/{active_user_id}")
 	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @PathVariable long active_user_id,  @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
 		
@@ -109,6 +122,7 @@ public class QuizController {
 		quizService.createQuizQuestions(quiz_id, questionGradeDtoList);
 		return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
 	}
+
 	
 	@PutMapping("/api/quizzes/{id}/questions/{active_user_id}")
 	public ResponseEntity<ApiResponse> updateQuizQuestions(@PathVariable("id") long quiz_id, @PathVariable long active_user_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {

@@ -15,8 +15,8 @@ import axios from "axios";
 import questions from "../pages/Questions";
 import {useState} from "react";
 import Grid from "@mui/material/Grid";
-import {Link} from "react-router-dom";
-import {editQuestionState} from "../recoil/Atoms";
+import {Link, useNavigate} from "react-router-dom";
+import {editQuestionOptionsState, editQuestionState} from "../recoil/Atoms";
 import {useRecoilState} from "recoil";
 
 
@@ -29,9 +29,11 @@ const bull = (
 );
 
 export default function ViewMCQCard(props) {
-    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState)
+    const [editQuestions, setEditQuestions] = useRecoilState(editQuestionState);
+    const [answers, setAnswers] = useRecoilState(editQuestionOptionsState);
     const [question, setQuestion] = React.useState([]);
 
+    const navigate = useNavigate();
 
     console.log("dasdad")
     console.log(question)
@@ -42,7 +44,9 @@ export default function ViewMCQCard(props) {
     }
 
     function handleOnClick(){
-        setEditQuestions(props.questionCard)
+        setEditQuestions(props.questionCard);
+        setAnswers(props.questionCard.mcqOptionDtoList)
+        navigate('/editQuestion')
     }
 
     function editQuestion() {
@@ -59,6 +63,7 @@ export default function ViewMCQCard(props) {
             <Card className={"questionCard"} sx={{ minWidth: 275, maxWidth: 500}}>
                 <CardContent>
                     <div className={"questionCardContent"}>
+                        <p className={"questionId"}>Question ID: {props.questionCard.questionId}</p>
                         <div>
                             <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
                                 {props.questionCard.questionDetail}
@@ -97,11 +102,13 @@ export default function ViewMCQCard(props) {
 
 
                 </Grid>
-                <CardActions>
-                    <Button onClick={handleOnClick} as={Link} to="/editQuestion" size="small">Edit</Button>
-                    <Button size="small" onClick={()=>setShow(!show)}>{show === true ? 'Hide Answer' : 'Show Answer'}</Button>
+                <div className={"cardFooterButtons"}>
+                    <CardActions>
+                        <Button onClick={handleOnClick} size="small">Edit Question</Button>
+                        <Button size="small" onClick={()=>setShow(!show)}>{show === true ? 'Hide Answer' : 'Show Answer'}</Button>
 
-                </CardActions>
+                    </CardActions>
+                </div>
             </Card>
 
     );

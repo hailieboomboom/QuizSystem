@@ -10,7 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import { useRecoilState } from 'recoil';
-import { attemptQuizState } from '../recoil/Atoms'
+import {attemptQuizState, createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import '../styles/QuizzesTableStyle.css';
@@ -20,6 +20,8 @@ const MyQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState('');
     const [loading, setLoading] = React.useState(true);
+    const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
+    const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
     const [dummy, setDummy] = React.useState('');
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
@@ -29,8 +31,7 @@ const MyQuizzes = () => {
             setLoading(false);
         });
     }, []);
-    console.log(quizzes);
-    console.log(quiz);
+    console.log(quiz)
 
     const deleteQuiz = (id) => {
         axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "").then(function (response) {
@@ -48,6 +49,42 @@ const MyQuizzes = () => {
         setQuizzes((quizzes) =>
             quizzes.filter((quiz) => quiz.quizId !== id)
         );
+    }
+
+    const handleEdit = (id) =>{
+
+        getQuizQuestions(id);
+        getAllQuestions()
+                filterAll();
+
+    }
+
+    const filterAll = () => {
+        quizAllQuestions.forEach(function get(currentValue) {
+            console.log(currentValue);
+            quizSelectedQuestions.forEach(function countEntry(entry) {
+                if(currentValue.questionId === entry.questionId){
+                    setquizAllQuestions((questions) =>
+                        questions.filter((question) => question.questionId !== currentValue.questionId)
+                    );
+                }
+            })
+        })
+    }
+
+    function getAllQuestions() {
+        axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs").then((response) => {
+            setquizAllQuestions(response.data);
+
+        });
+
+    }
+
+
+    function getQuizQuestions(id) {
+        axios.get("http://localhost:8088/QuizSystem/api/quizzes/"+ id +"/questions").then((response) => {
+            setquizSelectQuestions(response.data);
+        });
     }
 
 
@@ -113,7 +150,7 @@ const MyQuizzes = () => {
                                             spacing={1}
                                         >
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                                <Button variant="contained" onClick={() => handleEdit(row.quizId)} state={{ editQuiz: row }} as={Link} to="/editQuiz" >
                                                     Edit
                                                 </Button>
                                             </Grid>
