@@ -10,7 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import { useRecoilState } from 'recoil';
-import {attemptQuizState, createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
+import {attemptQuizState, createQuizAllQuestions, createQuizSelectedQuestions, editResponseState} from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import '../styles/QuizzesTableStyle.css';
@@ -18,21 +18,26 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const MyQuizzes = () => {
 
+
     const [quizzes, setQuizzes] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
+    const [eMessage, setEMessage] = useRecoilState(editResponseState);
     const [dummy, setDummy] = React.useState('');
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     React.useEffect(() => {
+        fetchQuizzes();
+
+    }, []);
+
+    const fetchQuizzes = () => {
         axios.get("http://localhost:8088/QuizSystem/api/quizzes").then((response) => {
             setQuizzes(response.data);
             setLoading(false);
         });
-    }, []);
-    console.log(quiz)
-
+    }
     const deleteQuiz = (id) => {
         axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "").then(function (response) {
                 console.log(response);
@@ -50,43 +55,6 @@ const MyQuizzes = () => {
             quizzes.filter((quiz) => quiz.quizId !== id)
         );
     }
-
-    const handleEdit = (id) =>{
-
-        getQuizQuestions(id);
-        getAllQuestions()
-                filterAll();
-
-    }
-
-    const filterAll = () => {
-        quizAllQuestions.forEach(function get(currentValue) {
-            console.log(currentValue);
-            quizSelectedQuestions.forEach(function countEntry(entry) {
-                if(currentValue.questionId === entry.questionId){
-                    setquizAllQuestions((questions) =>
-                        questions.filter((question) => question.questionId !== currentValue.questionId)
-                    );
-                }
-            })
-        })
-    }
-
-    function getAllQuestions() {
-        axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs").then((response) => {
-            setquizAllQuestions(response.data);
-
-        });
-
-    }
-
-
-    function getQuizQuestions(id) {
-        axios.get("http://localhost:8088/QuizSystem/api/quizzes/"+ id +"/questions").then((response) => {
-            setquizSelectQuestions(response.data);
-        });
-    }
-
 
     if (loading) return(
         <Grid
@@ -116,7 +84,7 @@ const MyQuizzes = () => {
             </Grid>
             <Grid item>
                 <Typography variant="h4" gutterBottom>
-                    Example 2:Available Quizzes
+                    Example 2:Available Quizzes {eMessage}
                 </Typography>
             </Grid>
             <Grid item>
@@ -126,15 +94,13 @@ const MyQuizzes = () => {
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
                                 <TableCell align="right">Action</TableCell>
-                                {/*<TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quizzes.map((row) => (
+                            {
+                                quizzes.map((row) => (
                                 <TableRow
-                                    key={row.quizId}
+                                    key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
@@ -150,7 +116,7 @@ const MyQuizzes = () => {
                                             spacing={1}
                                         >
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => handleEdit(row.quizId)} state={{ editQuiz: row }} as={Link} to="/editQuiz" >
+                                                <Button variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
                                                     Edit
                                                 </Button>
                                             </Grid>
