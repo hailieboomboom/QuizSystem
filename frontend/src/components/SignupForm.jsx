@@ -35,8 +35,8 @@ export default function Signup() {
 
     const handleClick=(e)=>{
         e.preventDefault()
-        const user={username,firstName,lastName,email,password,role}
-        console.log(user)
+        // const user={username,firstName,lastName,email,password,role}
+        // console.log(user)
         // fetch("http://localhost:8088/QuizSystem/auth/signup",{
         //     method:"POST",
         //     headers:{"Content-Type":"application/json"},
@@ -50,12 +50,17 @@ export default function Signup() {
         //     })
         apis.signup(username, email, password, firstName, lastName, role).then(
           res => {
-            console.log(res.data)
+            console.log(res.data);
+            document.location.href = '/login';
           }
+        
         ).catch(
-          err => console.log(err)
+        
+          err => {
+            console.log(err);
+          }
         )
-        document.location.href = '/login';
+        
     }
     const handleChange = (event) => {
         setValue(event.target.value);
