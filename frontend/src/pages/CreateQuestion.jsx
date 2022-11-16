@@ -7,24 +7,54 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 import { useState } from 'react';
 import { Container } from '@mui/material';
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {createQuestionOptionsState, createQuestionState} from "../recoil/Atoms";
 import axios from "axios";
+import {getUserId} from "../utils/cookies.js";
+import {apis} from "../utils/apis.js";
 import EditQuestionOptions from "../components/EditQuestionOptions";
 import CreateWrongOptions from '../components/CreateWrongOptions';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
+
+
 const API_URL = 'http://localhost:8088/QuizSystem/api/questions/mcqs'
 
 function CreateQuestion () {
+
+    const navigate = useNavigate();
+
     const [editQuestions, setEditQuestions] = useRecoilState(createQuestionState)//from backend
 
     const [question, setQuestion] = useState('');
 
-    const [tags, setTag] = useState([]);
-    const [answers, setAnswers] = useRecoilState(createQuestionOptionsState);
+    const [tags, setTags] = useState([]);
+    // const [tagToDelete, setTagToDelete] = useState("");
+    // const [tagToAdd, setTagToAdd] = useState("");
+    const [allTags, setAllTags] = useState([]);
+
+    const [answers, setAnswers] = useState([
+      {
+       "index": "0",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      },{
+        "index": "1",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      },{
+        "index": "2",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      }]);
     const [correctAnswer, setCorrectAnswer] = useState(
       {
         "correct": true,
@@ -32,7 +62,25 @@ function CreateQuestion () {
         "optionDescription": ""
       });
 
-    const url = `${API_URL}/1`//change to active user id
+    const activeUserId = getUserId();
+    const postUrl = API_URL+"/"+activeUserId //change to active user id
+
+    React.useEffect(()=> {
+      console.log(answers);
+    },[answers]);
+
+    React.useEffect(()=> {
+      apis.getAllTags()
+      .then(response => {
+        console.log(response.data)
+        setAllTags(response.data)
+        // const allTags = response.data
+
+      })
+      .catch((err) =>{
+        console.log(err)
+      })
+    },[]);
 
     // const counter = 0;
 
@@ -48,19 +96,17 @@ function CreateQuestion () {
         const data = {
           "options": [correctAnswer, ...answers],
           "questionDetails": question,
-          "tags": [
-            "course"
-          ],
+          "tags": tags,
           "userId": 1
         }
-        axios.post(url, data)
+        axios.post(postUrl, data)
             .then(data => {
-                console.log(data);
+                console.log(data)
+                navigate('/questions')
             })
             .catch((err) =>{
                 console.log(err)
             });
-        
         
     }
 
@@ -75,10 +121,12 @@ function CreateQuestion () {
       ))
     }
 
-    const handleTag = async() => {
-
+    const deleteWrongOption = async () => {
+      if(answers.length>1){
+        setAnswers(prevState => ([].concat(prevState.slice(0,-1))
+        ))
+      }
     }
-
     // const handleChildChange = async(answerDesciption, index) => {
       
     //   setAnswers((prevState) =>
@@ -108,10 +156,15 @@ function CreateQuestion () {
       ;
     }
 
-    React.useEffect(()=> {
-      console.log(answers);
-    },[answers]);
-
+    const handleTagChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setTags(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
 
     return (
         <React.Fragment>
@@ -173,7 +226,7 @@ function CreateQuestion () {
                           {answers.map((option) => (
                             <TextField
                               required
-                              id="question"
+                              id="incorrect"
                               name={option.index}
                               label="Incorrect Answer"
                               fullWidth
@@ -187,16 +240,27 @@ function CreateQuestion () {
                     </Grid>
                     
                     <Grid item  xs={12}>
+                        {/* {tags.map((usedTag) => (
+                          <p>{usedTag}</p>
+                        ))} */}
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="current tags">Add Tag</InputLabel>
                             <Select
-                                labelId="questionCategory"
-                                id="questionCategory"
-                                value=""
-                                label="AddTag"
+                                labelId=""
+                                id="tags"
+                                multiple
+                                value={tags}
+                                label="Add Tag"
+                                onChange={handleTagChange}
+                                input={<OutlinedInput label="Tag" />}
+                                renderValue={(selected) => selected.join(', ')}
                             >
-                                <MenuItem value="COURSE_QUIZ">Course Content</MenuItem>
-                                <MenuItem value="INTERVIEW_QUIZ">Interview Prep</MenuItem>
+                            {allTags.map((tag) => (
+                              <MenuItem key={tag} value={tag}>
+                                <Checkbox checked={tags.indexOf(tag) > -1} />
+                                <ListItemText primary={tag} />
+                              </MenuItem>
+                            ))}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -205,11 +269,11 @@ function CreateQuestion () {
 
                     <Grid item xs={1}>
                         {/*as={Link} to="/successEditQuestion"*/}
-                        <Button  onClick={handleTag} variant="outlined" >
-                            Add Tag
-                        </Button>
                         <Button  onClick={addWrongOption} variant="outlined" >
                             Add Incorrect Answer
+                        </Button>
+                        <Button  onClick={deleteWrongOption} variant="outlined" >
+                            Remove Incorrect Answer
                         </Button>
                         <Button  onClick={handleSaveQuestion} variant="outlined" >
                             Create Question

@@ -16,7 +16,9 @@ export const apis = {
     getRoleByUserId,
     getAllStudents,
     getAllMCQs,
-    getAllMCQsFromUser
+    getAllMCQsFromUser,
+    getAllTags,
+    getTagById
 }
 
 const config = {
@@ -37,6 +39,15 @@ function getUserById(id){
         case "AUTHORISED_SALES":
             return instance.get("/users/sales/" + id, config);
     }
+}
+
+
+function getAllTags(){
+    return instance.get("/api/questions/tags", config)
+}
+
+function getTagById(id){
+    return instance.get("/api/questions/tags/" + id, config)
 }
 
 function getAllStudents(){
