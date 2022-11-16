@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from "react-router-dom";
 import {apis} from "../utils/apis";
-import {isLoggedIn,setCookie, deleteCookie} from "../utils/cookies"
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {Dropdown, DropdownButton} from "react-bootstrap";
@@ -17,6 +17,29 @@ function NavigationBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [logedOut, setLogout] = useState(false);
+  const [role, setRole] = useState();
+
+  useEffect(()=> {
+    if(isLoggedIn()) {
+      apis.getRoleByUserId(getUserId()).then(
+        res => {
+          console.log("In navigation bar, role is: " + res.data["role"])
+          const role = res.data["role"]
+          if(role === "AUTHORISED_TRAINER") {
+            setRole("trainer")
+          }
+          else if(role === "AUTHORISED_SALES") {
+            setRole("sales")
+          }
+        }
+      ).catch(
+        (err) => {
+          console.log(err)
+        }
+      )
+    }
+  }, [role])
+
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
@@ -106,9 +129,8 @@ console.log(logedOut)
                           onClose={handleClose}
                       >
                         <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/profile">Profile</MenuItem>
-                        <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/">Dashboard</MenuItem>
+                        <MenuItem onClick={() => setLogout(false)} as={Link} to={"/" + role}>Dashboard</MenuItem>
                         <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">Logout</MenuItem>
-
                       </Menu>
                     </div>
                 // <Nav>

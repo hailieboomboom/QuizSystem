@@ -12,7 +12,8 @@ export const apis = {
     getUserById,
     updateStudentInfo,
     updateTrainerInfo,
-    updateSalesInfo
+    updateSalesInfo,
+    getRoleByUserId
 }
 
 const config = {
@@ -56,7 +57,6 @@ function isLoggedIn(){
     return getCookie('token');
 }
 
-
 function getUnauthorizedSales(){
     return instance.get('/users/sales/unauthorised' , config)
 }
@@ -66,6 +66,10 @@ function authorizeTrainer(username){
 
 function authorizeSales(username){
     return instance.put("/users/sales/authorise/"+ username, {}, config)
+}
+
+function getRoleByUserId(id) {
+    return instance.get("/users/" + id + "/role", config)
 }
 
 function signup(username, email, password, firstName, lastName,role){

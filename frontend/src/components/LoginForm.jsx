@@ -33,15 +33,15 @@ export default function SignInSide() {
 
               if (role === "TRAINING"){
                   console.log("Student dashboard")
-                  document.location.href = '/dashboard';
+                  document.location.href = '/profile';
               }
 
               if (role === "AUTHORISED_TRAINER"){
-                  document.location.href = '/trainer';
+                  document.location.href = '/profile';
               }
 
               if (role === "AUTHORISED_SALES"){
-                  document.location.href = '/sales';
+                  document.location.href = '/profile';
               }
 
           }).catch(err => {
