@@ -36,6 +36,16 @@ export default function SignInSide() {
                   document.location.href = '/profile';
               }
 
+              if (role === "POND"){
+                console.log("Student dashboard")
+                document.location.href = '/profile';
+              }
+
+              if (role === "BEACHED"){
+                console.log("Student dashboard")
+                document.location.href = '/profile';
+              }
+
               if (role === "AUTHORISED_TRAINER"){
                   document.location.href = '/profile';
               }

@@ -9,28 +9,40 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useState, useEffect} from 'react';
 import {apis} from '../utils/apis';
 import {getUserId} from '../utils/cookies';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import { Box } from '@mui/system';
+
 
 export default function FormDialog(props) {
  
-    const [email, setEmail] = useState();
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastName] = useState();
-    const [password, setPassword] = useState();
-    const [open, setOpen] = React.useState(false);
+    const [email, setEmail] = useState(null);
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [changeCategory, setChangeCategory] = useState(false);
+    const [category, setCategory] = useState(null);
 
     useEffect(()=>{
         setOpen(props.openNow)
+        setChangeCategory(props.changeCategory)
     }, [props.openNow])
-
 
     const handleClose = () => {
         setOpen(false);
         props.closeWindow();
     };
 
+    const handleCategoryChange = (event) => {
+        setCategory(event.target.value)
+    }
+
     const handleSubmit = () => {
         console.log("update info...")
-
+        mapEmptyToNull()
         switch(props.role) {
             case "Trainer":
                 apis.updateTrainerInfo(getUserId(), password, email, firstName, lastName).then(
@@ -69,8 +81,41 @@ export default function FormDialog(props) {
                 )
                 break;
             default:
-                console.log("No role is matched!(FormDialog)")
-        } 
+                if(changeCategory) {
+                    apis.updateStudentInfoWithRole(props.studentId, password, email, firstName, lastName, category).then(
+                        res => {
+                            console.log(res.data)
+                            // props.handleRefresh();
+                            setOpen(false);
+                            props.closeWindow();
+                        }
+                    ).catch(
+                        err => console.log(err)
+                    )
+                }
+                else {
+                    console.log("No role is matched!(FormDialog)")
+                }
+                
+        }
+    }
+
+    const mapEmptyToNull = () => {
+        if(email === '') {
+            setEmail(null)
+        }
+        if(firstName === '') {
+            setFirstName(null)
+        }
+        if(lastName === '') {
+            setLastName(null)
+        }
+        if(password === '') {
+            setPassword(null)
+        }
+        if(category === '') {
+            setCategory(null)
+        }
     }
 
     return (
@@ -118,6 +163,27 @@ export default function FormDialog(props) {
             variant="standard"
             onChange={e => setLastName(e.target.value)}
             />
+            {/* // visible or hidden */}
+            <Box sx={{visibility: changeCategory}}>
+                <FormControl sx={{ mt: 3, minWidth: 120}}>
+                <InputLabel htmlFor="category">Category</InputLabel>
+                <Select
+                    autoFocus
+                    label="category"
+                    value={category}
+                    onChange={handleCategoryChange}
+                    inputProps={{
+                        name: 'max-width',
+                        id: 'max-width',
+                    }}
+                >
+                    <MenuItem value="TRAINING">Training</MenuItem>
+                    <MenuItem value="POND">Pond</MenuItem>
+                    <MenuItem value="BEACHED">Beached</MenuItem>
+                    <MenuItem value="ABSENT">Absent</MenuItem>
+                </Select>
+                </FormControl>
+            </Box>
         </DialogContent>
         <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

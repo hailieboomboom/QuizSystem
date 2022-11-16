@@ -12,8 +12,10 @@ import Typography from "@mui/material/Typography";
 import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
+import StudentTable from "../components/StudentTable";
 
 export default function TrainerDashboard(){
+
     const [rowData, setRowdata] = useState([]);
     const [students, setStudents] = useState([]);
     const [username, setUsername] = useState();
@@ -24,12 +26,6 @@ export default function TrainerDashboard(){
                     setRowdata(res.data)
                     console.log(res.data)
                 })
-            apis.getAllStudents()
-                .then(resp => {
-                    setStudents(resp.data)
-                    console.log(resp.data)
-                })
-
         };
     }, [username]);
 
@@ -84,38 +80,7 @@ export default function TrainerDashboard(){
             </TableContainer>
             <br/>
             <h1>Student List</h1>
-            <TableContainer component={Paper}>
-
-                <Table aria-label="simple table" stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell >Username</TableCell>
-                            <TableCell >First Name</TableCell>
-                            <TableCell >Last Name</TableCell>
-                            <TableCell >Email</TableCell>
-                            <TableCell >Role</TableCell>
-                            <TableCell >Authorize</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {students.map((student) => (
-                            <TableRow key={student.username}>
-                                <TableCell component="th" scope="row" key={student.username}>
-                                    {student.username}
-                                </TableCell>
-                                <TableCell >{student.firstName}</TableCell>
-                                <TableCell >{student.lastName}</TableCell>
-                                <TableCell >{student.email}</TableCell>
-                                <TableCell >{student.role}</TableCell>
-                                <TableCell >
-                                    <Button variant="outlined" >Edit</Button>
-                                </TableCell>
-
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <StudentTable></StudentTable>
         </div>
     </div>
 </Container>

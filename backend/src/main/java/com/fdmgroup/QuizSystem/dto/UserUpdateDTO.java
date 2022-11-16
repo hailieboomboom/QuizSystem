@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.dto;
+import com.fdmgroup.QuizSystem.model.Role;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -15,5 +16,7 @@ public class UserUpdateDTO {
     private String firstName;
 
     private String lastName;
+
+    private Role role;
 
 }

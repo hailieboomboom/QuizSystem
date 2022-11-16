@@ -100,7 +100,11 @@ public class UserService {
         if(modifiedUser.getEmail() != null) {
             user.setEmail(modifiedUser.getEmail());
         }
-        // Role?
+
+        if(modifiedUser.getRole() != null) {
+            user.setRole(modifiedUser.getRole());
+        }
+
         return userRepository.save(user);
     }
 

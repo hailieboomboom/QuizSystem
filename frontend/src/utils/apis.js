@@ -16,7 +16,8 @@ export const apis = {
     getRoleByUserId,
     getAllStudents,
     getAllMCQs,
-    getAllMCQsFromUser
+    getAllMCQsFromUser,
+    updateStudentInfoWithRole
 }
 
 const config = {
@@ -45,6 +46,10 @@ function getAllStudents(){
 
 function updateStudentInfo(id, password, email, firstName, lastName){
     return instance.put("/users/students/" + id, {password, email, firstName, lastName}, config);
+}
+ 
+function updateStudentInfoWithRole(id, password, email, firstName, lastName, role) {
+    return instance.put("/users/students/" + id, {password, email, firstName, lastName, role}, config);
 }
 
 function updateTrainerInfo(id, password, email, firstName, lastName){
