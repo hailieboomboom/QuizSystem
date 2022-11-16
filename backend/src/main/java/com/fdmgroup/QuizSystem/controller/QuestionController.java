@@ -1,10 +1,8 @@
 package com.fdmgroup.QuizSystem.controller;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuestionDto;
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
@@ -34,7 +31,6 @@ import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.ShortAnswerQuestionService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.UserService;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
@@ -80,9 +76,6 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
-
-
-	
 
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
@@ -154,7 +147,7 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
 	
-	
+	 
 	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
 	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
 	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
