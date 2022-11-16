@@ -42,20 +42,20 @@ export const createQuestionOptionsState = atom({
     key: 'createQuestionOptionsState',
     default: [
         {
+         "index": "0",
           "correct": false,
           "id": 0,
-          "optionDescription": "",
-          "index": 0
+          "optionDescription": ""
         },{
+          "index": "1",
           "correct": false,
           "id": 0,
-          "optionDescription": "",
-          "index": 1
+          "optionDescription": ""
         },{
+          "index": "2",
           "correct": false,
           "id": 0,
-          "optionDescription": "",
-          "index": 2
+          "optionDescription": ""
         }],
 })
 export const quizSelectedAnswersState = atom({

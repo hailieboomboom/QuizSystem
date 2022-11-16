@@ -20,12 +20,16 @@ export default function CreateWrongOptions(props) {
     const [answer, setAnswer] = React.useState(props.option);
     const [answers, setAnswers] = useRecoilState(createQuestionOptionsState);//from backend
 
-    const handleChange = (event) => {
-        setAnswer(event.target.value);
-        props.handleChildChange(answer,props.option.index)
+    // const handleChange = (event) => {
+    //     setAnswer(event.target.value);
+    //     props.handleChildChange(answer,props.option.index)
 
 
-    };
+    // };
+
+    const submitHandler = () => {
+        // setAnswer(target.value);
+    }
 
     React.useEffect(()=> {
         //here you will have correct value in userInput
@@ -49,9 +53,15 @@ export default function CreateWrongOptions(props) {
             fullWidth
             variant="standard"
             value={answer.optionDescription}
-            onChange={handleChange}
+            // onChange={handleChange}
         > {props.option.optionDescription} </TextField>
 
+        <Button variant="outlined" hidden="true">
+            Edit
+        </Button>
+        <Button variant="outlined" onClick={submitHandler} >
+            Submit
+        </Button>
         <Button variant="outlined" >
             Delete
         </Button>
