@@ -17,6 +17,7 @@ import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.dto.Attempt.MCQAttemptDTO;
 import com.fdmgroup.QuizSystem.dto.Attempt.QuizAttemptDTO;
 import com.fdmgroup.QuizSystem.model.QuizAttempt;
+import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttempt;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.service.QuizAttemptService;
@@ -39,8 +40,14 @@ public class QuizAttemptController {
 	private ModelToDTO modelToDTO;
 
 	// create an quiz attempt (return graded attempt)
-	@PostMapping
-	public ResponseEntity<QuizAttemptDTO> createQuizAttempt(@RequestBody QuizAttemptDTO quizAttemptDTO) {
+	@PostMapping("/{active_user_id}")
+	public ResponseEntity<QuizAttemptDTO> createQuizAttempt(@PathVariable long active_user_id,@RequestBody QuizAttemptDTO quizAttemptDTO) {
+		
+		// Added by Summer: check if the active user has authority to take a certain quiz category
+		QuizCategory requestedQuizCategory = quizService.getQuizById(quizAttemptDTO.getQuizId()).getQuizCategory();
+		quizAttemptService.checkAccessToQuizCategory(requestedQuizCategory, active_user_id);
+	
+		
 		QuizAttempt quizAttempt = new QuizAttempt();
 		quizAttempt.setQuiz(quizService.getQuizById(quizAttemptDTO.getQuizId()));
 		quizAttempt.setUser(userService.getUserById(quizAttemptDTO.getUserId()));
