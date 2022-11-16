@@ -1,0 +1,33 @@
+.trainerDashboardContainer{
+    width: 100%;
+    height: fit-content;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.trainerDashboardBox{
+    width: 50%;
+    background: #9f86c0;
+    text-align: center;
+    padding: 10px 10px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.trainerDashboardBox button{
+    background: #fff;
+    color: #8A2BE2;
+    border-style: dashed;
+    outline: none;
+    box-shadow: 0 5px 10px rgba(147, 112, 219, 0.5);
+    padding: 15px 60px;
+    border-radius: 30px;
+    font-weight: 600;
+}

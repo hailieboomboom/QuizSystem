@@ -19,18 +19,7 @@ export default function QuizAllQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
 
-    React.useEffect(() => {
-        quizAllQuestions.forEach(function get(currentValue) {
-            quizSelectedQuestions.forEach(function countEntry(entry) {
-                if(currentValue.questionId === entry.questionId){
-                    setquizAllQuestions((questions) =>
-                        questions.filter((question) => question.questionId !== currentValue.questionId)
 
-                    );
-                }
-            })
-        })
-    }, []);
     function hanldleAdd (current) {
         setquizAllQuestions((questions) =>
             questions.filter((question) => question.questionId !== current.questionId)
@@ -38,7 +27,7 @@ export default function QuizAllQuestionsTable() {
         setquizSelectQuestions([...quizSelectedQuestions,current]);
     }
     const [inputText, setInputText] = React.useState("");
-    let inputHandler = (e) => {
+    let inputHandler = (e) => { 
         //convert input text to lower case
         var lowerCase = e.target.value.toLowerCase();
         setInputText(lowerCase);

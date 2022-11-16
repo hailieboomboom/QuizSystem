@@ -1,10 +1,8 @@
 package com.fdmgroup.QuizSystem.controller;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +14,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fdmgroup.QuizSystem.common.ApiResponse;
 import com.fdmgroup.QuizSystem.dto.QuestionDto;
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.SAQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
+import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
@@ -33,7 +31,6 @@ import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.ShortAnswerQuestionService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.UserService;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
@@ -63,7 +60,7 @@ public class QuestionController {
 	@Autowired
 	private ShortAnswerQuestionService saqService;
 
-	@PostMapping("/mcqs")
+	@PostMapping("/mcqs/{active_user_id}")
 	@ApiOperation(value = "create a multiple choice question",
 			notes = "return success or failure message")
 	@ApiResponses(value = {
@@ -72,14 +69,13 @@ public class QuestionController {
 			@io.swagger.annotations.ApiResponse(code = 400, message = "1. provide more/less than one correct option 2. provide less than one tag/ doesn't contain at least one interview or course tag")
 	}
 		)
-	public ResponseEntity<ApiResponse> createMcq(@RequestBody AddMcqDto addMcqDto) {
-		questionService.createMCQ(addMcqDto);
+	public ResponseEntity<ApiResponse> createMcq(@PathVariable Long active_user_id,@RequestBody AddMcqDto addMcqDto) {
+		User user = userService.getUserById(active_user_id);
+		questionService.accessControlCreateMCQ(addMcqDto.getTags(), user.getRole());
+		questionService.createMCQ(addMcqDto,user);
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
-
-
-	
 
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
@@ -132,6 +128,11 @@ public class QuestionController {
 	public ResponseEntity<List<QuestionGradeDTO>> getAllMcqforQuizCreation() {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestionforQuizCreation(),HttpStatus.OK);
 	}
+	
+	@GetMapping("/quizEdit/{quiz_id}/mcqs")
+	public ResponseEntity<List<QuestionGradeDTO>> getMcqsforQuizEdit(@PathVariable long quiz_id) {
+		return  new ResponseEntity<>(questionService.getMcqDtosforQuizEdit(quiz_id),HttpStatus.OK);
+	}
 
 	@DeleteMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "delete a multiple choice question based on questionId",
@@ -142,6 +143,15 @@ public class QuestionController {
 	)
 	public ResponseEntity<ApiResponse> deleteOneMcqById(@PathVariable Long mcqId) {
 		questionService.deleteOneMcq(mcqId);
+
+		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
+	}
+	
+	
+	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
+	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
+	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
+		questionService.deleteOneMcqByRole(mcqId, active_user_id);
 
 		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
@@ -157,10 +167,21 @@ public class QuestionController {
 
 	})
 	public ResponseEntity<ApiResponse> updateOneMcqById(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto) {
-
+		System.out.println("DEBUG FLAG--------------------");
+		for(McqOptionDto mcoDto:addMcqDto.getOptions()) {
+			System.out.println(mcoDto.toString());
+		}
 		questionService.updateMCQ(addMcqDto,mcqId);
 		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
+	
+	//HAILIE NOTE: UPDATE MCQ: ADD LOGGED IN USER ID INTO PATH
+	@PutMapping("/mcqs/{mcqId}/{active_user_id}")
+	public ResponseEntity<ApiResponse> updateOneMcqByIdVer2(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto, @PathVariable Long active_user_id) {
+		questionService.updateMCQByRole(addMcqDto, mcqId, active_user_id);
+		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
+	}
+	
 
 	@GetMapping("/questionBank/{questionBankType}")
 	@ApiOperation(value = "get interview/question question bank ",
