@@ -47,20 +47,21 @@ export default function TrainerDashboard(){
 
     return (
     <div className={"trainerDashboardContainer"}>
+        <h1 className={"trainerDashboardTitle"}>Trainer Dashboard</h1>
         <div className={"trainerDashboardBox"}>
-            <h1>Trainer Dashboard</h1>
             <br/>
+            <h1>Authorize Trainers</h1>
             <TableContainer component={Paper}>
-                <h1>Authorize Trainers</h1>
-                <Table aria-label="simple table" stickyHeader>
+
+                <Table className={"trainerDashboardTable"} aria-label="simple table" stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell >Username</TableCell>
-                            <TableCell >First Name</TableCell>
-                            <TableCell >Last Name</TableCell>
-                            <TableCell >Email</TableCell>
-                            <TableCell >Role</TableCell>
-                            <TableCell >Authorize</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Username</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>First Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Last Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Email</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Role</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Authorize</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -86,15 +87,15 @@ export default function TrainerDashboard(){
             <h1>Student List</h1>
             <TableContainer component={Paper}>
 
-                <Table aria-label="simple table" stickyHeader>
+                <Table className={"trainerDashboardTable"} aria-label="simple table" stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell >Username</TableCell>
-                            <TableCell >First Name</TableCell>
-                            <TableCell >Last Name</TableCell>
-                            <TableCell >Email</TableCell>
-                            <TableCell >Role</TableCell>
-                            <TableCell >Authorize</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Username</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>First Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Last Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Email</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Role</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Authorize</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
