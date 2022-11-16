@@ -8,10 +8,27 @@ import {isLoggedIn,setCookie, deleteCookie} from "../utils/cookies"
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {Dropdown, DropdownButton} from "react-bootstrap";
+import MenuItem from "@mui/material/MenuItem";
+import {AccountCircle} from "@mui/icons-material";
+import {IconButton, Menu} from "@mui/material";
+import * as React from 'react';
 
 function NavigationBar() {
-
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [logedOut, setLogout] = useState(false);
+  const handleChange = (event) => {
+    setAuth(event.target.checked);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   useEffect(() => {
     return () => {
 
@@ -31,8 +48,7 @@ console.log(logedOut)
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+
             <div className="me-2">
               <Dropdown>
                 <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
@@ -63,11 +79,43 @@ console.log(logedOut)
           </Nav>
 
             {isLoggedIn() ? (
-                <Nav>
-                  <Nav.Link onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">
-                   <Button color="success">Logout</Button>
-                  </Nav.Link>
-                </Nav>
+                    <div>
+                      <IconButton
+                          size="large"
+                          aria-label="account of current user"
+                          aria-controls="menu-appbar"
+                          aria-haspopup="true"
+                          onClick={handleMenu}
+                          color="primary"
+                      >
+                        <AccountCircle />
+                      </IconButton>
+                      <Menu
+                          id="menu-appbar"
+                          anchorEl={anchorEl}
+                          anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                          keepMounted
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                          open={Boolean(anchorEl)}
+                          onClose={handleClose}
+                      >
+                        <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/profile">Profile</MenuItem>
+                        <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/">Dashboard</MenuItem>
+                        <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">Logout</MenuItem>
+
+                      </Menu>
+                    </div>
+                // <Nav>
+                //   <Nav.Link onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">
+                //    <Button color="success">Logout</Button>
+                //   </Nav.Link>
+                // </Nav>
             ) : (
                 <Nav>
                   <Nav.Link as={Link} to="/register" onClick={() =>  setLogout(false)}>Register</Nav.Link>
