@@ -59,6 +59,7 @@ public class MultipleChoiceOptionService {
 			if (mcqOption.isCorrect())
 				numberOfCorrectOption++;
 		}
+		System.out.println(numberOfCorrectOption);
 		if (numberOfCorrectOption !=1)
 			throw new McqOptionNotValidException("Please only choose one correct option");
 	}
@@ -97,13 +98,15 @@ public class MultipleChoiceOptionService {
 			throw new McqOptionNotValidException("You can't change the number of options after creating it");
 		}
 		int i = 0;
+
 		int numberOfCorrectOption = 0;
 		for (MultipleChoiceOption option:originalMcqOption){
 			option.setCorrect(mcqOptionDtoList.get(i).isCorrect());
 			option.setOptionDetail(mcqOptionDtoList.get(i).getOptionDescription());
-			if(option.isCorrect()){
+			if(option.isCorrect() == true){
 				numberOfCorrectOption++;
 			}
+			i++;
 		}
 		if(numberOfCorrectOption!=1)
 			throw new McqOptionNotValidException("Please choose only one correct option");
