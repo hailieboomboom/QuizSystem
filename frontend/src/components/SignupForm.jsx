@@ -18,6 +18,8 @@ import {FormLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
+import {apis} from "../utils/apis";
+import { ApiSharp } from "@mui/icons-material";
 
 export default function Signup() {
   const[username,setUsername] = useState('');
@@ -29,22 +31,31 @@ export default function Signup() {
     const[user,setUser]=useState([]);
     const [value, setValue] = useState('');
 
+
+
     const handleClick=(e)=>{
         e.preventDefault()
         const user={username,firstName,lastName,email,password,role}
         console.log(user)
-        fetch("http://localhost:8088/QuizSystem/auth/signup",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(user)
+        // fetch("http://localhost:8088/QuizSystem/auth/signup",{
+        //     method:"POST",
+        //     headers:{"Content-Type":"application/json"},
+        //     body:JSON.stringify(user)
 
-        }).then((res)=>{
-
-                return res.json()
-        })
-            .then((response) => {
-               return response
-            })
+        // }).then((res)=>{
+        //         return res.json()
+        // })
+        //     .then((response) => {
+        //        return response
+        //     })
+        apis.signup(username, email, password, firstName, lastName, role).then(
+          res => {
+            console.log(res.data)
+          }
+        ).catch(
+          err => console.log(err)
+        )
+        document.location.href = '/login';
     }
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -172,8 +183,10 @@ export default function Signup() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleClick}
+              href="/login"
+
             >
-              Sign Up
+              Sign up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
