@@ -130,7 +130,7 @@ console.log(logedOut)
                       >
                         <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/profile">Profile</MenuItem>
                         <MenuItem onClick={() => setLogout(false)} as={Link} to={"/" + role}>Dashboard</MenuItem>
-                        <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">Logout</MenuItem>
+                        <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/">Logout</MenuItem>
                       </Menu>
                     </div>
                 // <Nav>
