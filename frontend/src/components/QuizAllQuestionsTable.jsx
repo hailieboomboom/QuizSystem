@@ -27,7 +27,7 @@ export default function QuizAllQuestionsTable() {
         setquizSelectQuestions([...quizSelectedQuestions,current]);
     }
     const [inputText, setInputText] = React.useState("");
-    let inputHandler = (e) => { 
+    let inputHandler = (e) => {
         //convert input text to lower case
         var lowerCase = e.target.value.toLowerCase();
         setInputText(lowerCase);
@@ -53,6 +53,7 @@ export default function QuizAllQuestionsTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Select from Questions</TableCell>
+                        <TableCell>Tags</TableCell>
                         <TableCell>
                             <TextField
                                 id="outlined-basic"

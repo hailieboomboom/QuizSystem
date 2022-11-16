@@ -39,6 +39,8 @@ const MyQuizzes = () => {
             setQuizzes(response.data);
             console.log(response.data);
             setLoading(false);
+        }).catch(function (error) {
+            console.log(error);
         });
     }
     const deleteQuiz = (id) => {
@@ -60,7 +62,7 @@ const MyQuizzes = () => {
     }
 
 
-    if (!isLoggedIn) return(
+    if (!getUserId()) return(
         <Grid
             container
             justifyContent="center"
