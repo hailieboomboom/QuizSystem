@@ -23,23 +23,17 @@ const Questions = () => {
     return (
 
         <div className={"mcqCardContainer"}>
-            <Grid
-                container
-                direction="column"
-                justifyContent="space-around"
-                alignItems="center"
-            >
+            <div className={"filterQuestionButton"}>
+                <button>Your Questions</button>
+                <button>All Questions</button>
+            </div>
+            <div className={"viewQuestionsBox"}>
+                <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
+                {
+                    question.map((question) => (<ViewMCQCard questionCard={question}/>))
+                }
+            </div>
 
-                <div className={"viewQuestionsBox"}>
-                    <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
-                    {
-                        question.map((question) => (<ViewMCQCard questionCard={question}/>))
-                    }
-
-
-
-                </div>
-            </Grid>
         </div>
 
     )
