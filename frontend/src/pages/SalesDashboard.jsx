@@ -17,6 +17,7 @@ import Grid from "@mui/material/Grid";
 
 export default function SalesDashboard(){
     const [sales, setSales] = useState([]);
+    const [students, setStudents] = useState([]);
     const [username, setUsername] = useState();
     useEffect(() => {
         return () => {
@@ -24,6 +25,11 @@ export default function SalesDashboard(){
                 .then(res => {
                     setSales(res.data)
                     console.log(res.data)
+                })
+            apis.getAllStudents()
+                .then(resp => {
+                    setStudents(resp.data)
+                    console.log(resp.data)
                 })
         };
     }, [username]);
@@ -43,14 +49,10 @@ export default function SalesDashboard(){
         <>
 
             <Container>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography component="h1" variant="h4">
-                            Welcome Sales, The users below need to get authorized by you!
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
+                <h1>Sales Dashboard</h1>
+                <br/>
                         <TableContainer component={Paper}>
+                            <h1>Authorize Sales</h1>
                             <Table aria-label="simple table" stickyHeader>
                                 <TableHead>
                                     <TableRow>
@@ -82,8 +84,41 @@ export default function SalesDashboard(){
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </Grid>
-                </Grid>
+                        <br/>
+                        <h1>Student List</h1>
+                        <TableContainer component={Paper}>
+
+                            <Table aria-label="simple table" stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell >Username</TableCell>
+                                        <TableCell >First Name</TableCell>
+                                        <TableCell >Last Name</TableCell>
+                                        <TableCell >Email</TableCell>
+                                        <TableCell >Role</TableCell>
+                                        <TableCell >Authorize</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {students.map((student) => (
+                                        <TableRow key={student.username}>
+                                            <TableCell component="th" scope="row" key={student.username}>
+                                                {student.username}
+                                            </TableCell>
+                                            <TableCell >{student.firstName}</TableCell>
+                                            <TableCell >{student.lastName}</TableCell>
+                                            <TableCell >{student.email}</TableCell>
+                                            <TableCell >{student.role}</TableCell>
+                                            <TableCell >
+                                                <Button variant="outlined" >Edit</Button>
+                                            </TableCell>
+
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+
             </Container>
         </>
 

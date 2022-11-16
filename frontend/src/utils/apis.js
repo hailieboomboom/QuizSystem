@@ -13,7 +13,8 @@ export const apis = {
     updateStudentInfo,
     updateTrainerInfo,
     updateSalesInfo,
-    getRoleByUserId
+    getRoleByUserId,
+    getAllStudents
 }
 
 const config = {
@@ -35,6 +36,10 @@ function getUserById(id){
         case "AUTHORISED_SALES":
             return instance.get("/users/sales/" + id, config);
     }
+}
+
+function getAllStudents(){
+    return instance.get("/users/students")
 }
 
 function updateStudentInfo(id, password, email, firstName, lastName){
