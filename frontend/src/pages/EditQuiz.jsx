@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import {Container} from '@mui/material';
 import {Link} from "react-router-dom";
 import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
@@ -18,6 +19,7 @@ import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import {Route} from "@mui/icons-material";
+import ErrorPage from "./ErrorPage";
 
 const EditQuiz = () => {
     const location = useLocation();
@@ -34,6 +36,7 @@ const EditQuiz = () => {
     React.useEffect(() => {
         Promise.all([getAllQuestions(), getQuizQuestions()])
             .then(function (results) {
+                setquizAllQuestions();
                 setquizAllQuestions(results[0].data);
                 setquizSelectQuestions(results[1].data);
             }).then(function (results) {
@@ -42,18 +45,18 @@ const EditQuiz = () => {
     }, []);
 
     function getAllQuestions() {
-        return axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs")
+        return axios.get("http://localhost:8088/QuizSystem/api/questions/quizEdit/"+ editQuiz.quizId +"/mcqs")
 
     }
 
 
     function getQuizQuestions() {
-        return  axios.get("http://localhost:8088/QuizSystem/api/quizzes/"+ editQuiz.quizId +"/questions")
+        return  axios.get("http://localhost:8088/QuizSystem/api/quizzes/" + editQuiz.quizId + "/questions")
     }
 
     const updateQuiz = () => {
-        axios.put("http://localhost:8088/QuizSystem/api/quizzes/"+editQuiz.quizId+"/"+1+"", {
-            "creatorId": 1,
+        axios.put("http://localhost:8088/QuizSystem/api/quizzes/"+editQuiz.quizId+"/"+getUserId()+"", {
+            "creatorId": getUserId(),
             "name": name,
             "quizCategory": category,
             "quizId": editQuiz.quizId
@@ -70,7 +73,7 @@ const EditQuiz = () => {
     }
     const updateQuestions = (id) => {
         console.log(JSON.stringify(quizSelectedQuestions))
-        axios.put("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
+        axios.put("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions/" + getUserId() + "",
             quizSelectedQuestions
         )
             .then(function (response) {
@@ -93,6 +96,10 @@ const EditQuiz = () => {
 
     console.log(editQuiz);
 
+    if (!editQuiz) return(
+        <ErrorPage errorPage="Unauthorized"/>
+
+    );
     if (!quizAllQuestions) return(
         <Grid
             container

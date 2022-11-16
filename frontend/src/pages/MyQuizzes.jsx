@@ -10,6 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import { useRecoilState } from 'recoil';
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import {attemptQuizState, createQuizAllQuestions, createQuizSelectedQuestions, editResponseState} from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -30,11 +31,13 @@ const MyQuizzes = () => {
     React.useEffect(() => {
         fetchQuizzes();
 
+
     }, []);
 
     const fetchQuizzes = () => {
-        axios.get("http://localhost:8088/QuizSystem/api/quizzes").then((response) => {
+        axios.get("http://localhost:8088/QuizSystem/api/quizzes/users/" + getUserId() + "").then((response) => {
             setQuizzes(response.data);
+            console.log(response.data);
             setLoading(false);
         });
     }
@@ -56,6 +59,35 @@ const MyQuizzes = () => {
         );
     }
 
+
+    if (!isLoggedIn) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Log in first.</Typography>
+            </Grid>
+        </Grid>
+
+    );
+
+    if (quizzes.length<1) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Typography variant="h4" gutterBottom>
+                You have not created any quiz. Click below to create.
+            </Typography>
+            <Grid item sx={{ width:650 }}>
+                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
+            </Grid>
+        </Grid>
+
+    );
     if (loading) return(
         <Grid
             container
@@ -79,12 +111,7 @@ const MyQuizzes = () => {
         >
             <Grid item>
                 <Typography variant="h4" gutterBottom>
-                    Example 1 : You have not created any quiz. Click below to create.
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h4" gutterBottom>
-                    Example 2:Available Quizzes {eMessage}
+                    Available Quizzes
                 </Typography>
             </Grid>
             <Grid item>
@@ -127,9 +154,6 @@ const MyQuizzes = () => {
                                             </Grid>
                                         </Grid>
                                     </TableCell>
-                                    {/*<TableCell align="right">{row.fat}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.carbs}</TableCell>*/}
-                                    {/*<TableCell align="right">{row.protein}</TableCell>*/}
                                 </TableRow>
                             ))}
                         </TableBody>

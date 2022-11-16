@@ -192,12 +192,13 @@ public class QuestionService {
 			mcqDto.setGrade(0);
 			mcqDto.setQuestionId(question.getId());
 			mcqDto.setQuestionDetails(question.getQuestionDetails());
+			mcqDto.setTags(question.getTags());
 			mcqDtoList.add(mcqDto);		
 		}
 
 		return mcqDtoList;
 	}
-	
+	 
 	public List<QuestionGradeDTO> getMcqDtosforQuizEdit(long quiz_id){
 		List<QuestionGradeDTO> dtos = new ArrayList<QuestionGradeDTO>();
 		List<MultipleChoiceQuestion> involvedQuestions = new ArrayList<MultipleChoiceQuestion>();
@@ -213,6 +214,7 @@ public class QuestionService {
 				mcqDto.setGrade(0);
 				mcqDto.setQuestionId(mcq.getId());
 				mcqDto.setQuestionDetails(mcq.getQuestionDetails());
+				mcqDto.setTags(mcq.getTags());
 				dtos.add(mcqDto);	
 			}
 		}
