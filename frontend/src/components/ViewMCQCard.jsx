@@ -71,34 +71,31 @@ export default function ViewMCQCard(props) {
                             <Typography className={"questionString"} variant="h5" component="div"></Typography>
                         </div>
 
-                            {/*<Grid container spacing={1} direction="column"  >*/}
-                            {/*{ShuffleAnswers(props.questionCard).map((shuffledAnswer, index) => (*/}
-                            {/*    <Grid item>*/}
-                            {/*        <button value={shuffledAnswer} > {shuffledAnswer}</button>*/}
-
-                            {/*    </Grid>*/}
-                            {/*))}*/}
-                            {/*</Grid>*/}
-
-                        <Grid container spacing={1} direction="column"  >
-
-                            {props.questionCard.mcqOptionDtoList.map((option) => (
-                                <button> {option.optionDescription} </button>
+                            <Grid container spacing={1} direction="column"  >
+                            {ShuffleAnswers(props.questionCard).map((shuffledAnswer, index) => (
+                                <Grid item>
+                                    <button value={shuffledAnswer.optionDescription} > {shuffledAnswer.optionDescription}</button>
+                                </Grid>
                             ))}
-
-                        </Grid>
-
+                            </Grid>
+                        
                     </div>
                 </CardContent>
 
                 <Grid spacing={1} container direction="column" justifyContent="center" alignItems="center">
 
-                    {/*{show && <Grid item>*/}
-                    {/*<span className="checkmark"><div className="checkmark_circle"></div><div className="checkmark_stem"></div><div className="checkmark_kick"></div></span>*/}
-                    {/*</Grid>}*/}
                     {show && <Grid item>
-                        Correct Answer: {props.questionCard.correctAnswer}
+                    <p className={"resultAnswer"}>Answer:</p>
+                    {props.questionCard.mcqOptionDtoList.map((option) => (
+                        <p className={"resultAnswer"} hidden={!option.correct}> {option.optionDescription} </p>
+                    ))}
                     </Grid>}
+                    {/*{show && <Grid item>*/}
+
+
+
+                    {/*    Correct Answer: {props.questionCard.correctAnswer}*/}
+                    {/*</Grid>}*/}
 
 
                 </Grid>
