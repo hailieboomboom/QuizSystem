@@ -35,7 +35,7 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
- 
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +48,7 @@ public class DataLoader implements ApplicationRunner {
 	private final QuizAttemptRepository qaRepo;
 
 	private final QuizRepository quizRepository;
-	
+
 	private final QuizQuestionMCQAttemptRepository mcqAttemptRepository;
 
     private final StudentService studentService;
@@ -64,8 +64,8 @@ public class DataLoader implements ApplicationRunner {
     @Override
     @Transactional
     @Modifying
-    public void run(ApplicationArguments args) throws Exception { 
-        
+    public void run(ApplicationArguments args) throws Exception {
+
         ////////// Load Users ////////////
         Trainer trainer = new Trainer();
         trainer.setUsername("Jason");
@@ -76,7 +76,7 @@ public class DataLoader implements ApplicationRunner {
         trainer.setRole(Role.AUTHORISED_TRAINER);
         trainerService.save(trainer);
         System.out.println(trainerService.findByUsername("Jason"));
-        
+
         Sales sales = new Sales();
         sales.setUsername("Yutta");
         sales.setPassword(passwordEncoder.encode("1"));
@@ -130,9 +130,9 @@ public class DataLoader implements ApplicationRunner {
         student1.setFirstName("student1");
         student1.setLastName("Karima");
         studentService.save(student1);
-       
 
-        // add pond student 
+
+        // add pond student
         Student student2 = new Student();
         student2.setUsername("slong");
         student2.setPassword(passwordEncoder.encode("2"));
@@ -141,9 +141,9 @@ public class DataLoader implements ApplicationRunner {
         student2.setLastName("Long");
         student2.setRole(Role.POND);
         studentService.save(student2);
-      
-        
-        // add beached student 
+
+
+        // add beached student
         Student student3 = new Student();
         student3.setUsername("sbrown");
         student3.setPassword(passwordEncoder.encode("3"));
@@ -152,21 +152,21 @@ public class DataLoader implements ApplicationRunner {
         student3.setLastName("Brown");
         student3.setRole(Role.BEACHED);
         studentService.save(student3);
-        
-       
+
+
         log.info("Finished setup");
 
-       
+
 
         ////////// Load Questions ////////////
-        
+
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
         mcq1.setQuestionDetails("test mcq1");
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
         mcq1.setCreator(trainer);
-        
+
 
         MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
         mcq2.setQuestionDetails("test mcq2");
@@ -175,7 +175,7 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco12 = new MultipleChoiceOption("op2 for 2",false,mcq2);
         MultipleChoiceOption mco13 = new MultipleChoiceOption("op3 for 2",false,mcq2);
         mcq2.setCreator(sales);
-        
+
         MultipleChoiceQuestion mcq3 = new MultipleChoiceQuestion();
         mcq3.setQuestionDetails("test mcq3");
         MultipleChoiceOption mco111 = new MultipleChoiceOption("op1 for 3",true,mcq3);
@@ -188,92 +188,92 @@ public class DataLoader implements ApplicationRunner {
         sa1.setQuestionDetails("what is the best colour");
         sa1.setCorrectAnswer("green is the best");
         sa1.setCreator(trainer);
-        
+
         ShortAnswerQuestion sa2 = new ShortAnswerQuestion();
         sa2.setQuestionDetails("who is the best leader");
         sa2.setCorrectAnswer("bts");
         sa2.setCreator(sales);
-        
+
         ShortAnswerQuestion sa3 = new ShortAnswerQuestion();
         sa3.setQuestionDetails("where is the best city");
         sa3.setCorrectAnswer("nyc");
         sa3.setCreator(sales);
-        
+
         ShortAnswerQuestion sa4 = new ShortAnswerQuestion();
         sa4.setQuestionDetails("what is the best language");
         sa4.setCorrectAnswer("java");
         sa4.setCreator(trainer);
-        
-        
 
-        Tag tag1 = new Tag();
-        Tag tag2 = new Tag();
-        Tag tag3 = new Tag();
-        Tag tag4 = new Tag();
-        Tag tag5 = new Tag();
-        Tag tag6 = new Tag();
-        Tag tag7 = new Tag();
-        Tag tag8 = new Tag();
-        Tag tag9 = new Tag();
-        Tag tag10 = new Tag();
-        Tag tag11 = new Tag();
-        Tag tag12 = new Tag();
-        Tag tag13 = new Tag();
-        Tag tag14 = new Tag();
-        Tag tag15 = new Tag();
-        Tag tag16 = new Tag();
-        Tag tag17 = new Tag();
-        tag1.setTagName("course");
-        tag2.setTagName("interview");
-        tag3.setTagName("java");
-        tag4.setTagName("python");
-        tag5.setTagName("springboot");
-        tag6.setTagName("sql");
-        tag7.setTagName("unix");
-        tag8.setTagName("ood");
-        tag9.setTagName("jpa");
-        tag10.setTagName("spring");
-        tag11.setTagName("react");
-        tag12.setTagName("javascript");
-        tag13.setTagName("proskills");
-        tag14.setTagName("web");
-        tag15.setTagName("agile");
-        tag16.setTagName("other");
-        tag17.setTagName("mcq");
-        
-        
-        tag1.addOneQuestion(mcq1);
-        tag1.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
-        tag1.addOneQuestion(sa1);
-        tag1.addOneQuestion(sa2);
-        tag1.addOneQuestion(sa3);
-        tag1.addOneQuestion(sa4);
-        tag2.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
-        tag2.addOneQuestion(sa1);
-        tag2.addOneQuestion(sa4);
-        tag2.addOneQuestion(mcq2);
-        tag1.addOneQuestion(mcq3);
-        
-        tag17.addOneQuestion(mcq1);
-        tag17.addOneQuestion(mcq2);
-        tag17.addOneQuestion(mcq3);
 
-        mcq1.addOneTag(tag1);
 
-        mcq2.addOneTag(tag2);
-        mcq3.addOneTag(tag1);
-        mcq1.addOneTag(tag17);
-        mcq2.addOneTag(tag17);
-        mcq3.addOneTag(tag17);
-        sa1.addOneTag(tag2);
+        Tag tagCourse = new Tag();
+        Tag tagInterview = new Tag();
+        Tag tagJava = new Tag();
+        Tag tagPython = new Tag();
+        Tag tagSpringBoot = new Tag();
+        Tag tagSql = new Tag();
+        Tag tagUnix = new Tag();
+        Tag tagOod = new Tag();
+        Tag tagJpa = new Tag();
+        Tag tagSpring = new Tag();
+        Tag tagReact = new Tag();
+        Tag tagJavascript = new Tag();
+        Tag tagProskills = new Tag();
+        Tag tagWeb = new Tag();
+        Tag tagAgile = new Tag();
+        Tag tagOther = new Tag();
+        Tag tagMcq = new Tag();
+        tagCourse.setTagName("course");
+        tagInterview.setTagName("interview");
+        tagJava.setTagName("java");
+        tagPython.setTagName("python");
+        tagSpringBoot.setTagName("springboot");
+        tagSql.setTagName("sql");
+        tagUnix.setTagName("unix");
+        tagOod.setTagName("ood");
+        tagJpa.setTagName("jpa");
+        tagSpring.setTagName("spring");
+        tagReact.setTagName("react");
+        tagJavascript.setTagName("javascript");
+        tagProskills.setTagName("proskills");
+        tagWeb.setTagName("web");
+        tagAgile .setTagName("agile");
+        tagOther.setTagName("other");
+        tagMcq.setTagName("mcq");
 
-        sa1.addOneTag(tag1);
-        sa2.addOneTag(tag1);
-        sa3.addOneTag(tag1);
-        sa4.addOneTag(tag1);
-        sa4.addOneTag(tag2);
-        
-        
+
+        tagCourse.addOneQuestion(mcq1);
+        tagCourse.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
+        tagCourse.addOneQuestion(sa1);
+        tagCourse.addOneQuestion(sa2);
+        tagCourse.addOneQuestion(sa3);
+        tagCourse.addOneQuestion(sa4);
+        tagInterview.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
+        tagInterview.addOneQuestion(sa1);
+        tagInterview.addOneQuestion(sa4);
+        tagInterview.addOneQuestion(mcq2);
+        tagCourse.addOneQuestion(mcq3);
+
+        tagMcq.addOneQuestion(mcq1);
+        tagMcq.addOneQuestion(mcq2);
+        tagMcq.addOneQuestion(mcq3);
+
+        mcq1.addOneTag(tagCourse);
+
+        mcq2.addOneTag(tagInterview);
+        mcq3.addOneTag(tagCourse);
+        mcq1.addOneTag(tagMcq);
+        mcq2.addOneTag(tagMcq);
+        mcq3.addOneTag(tagMcq);
+        sa1.addOneTag(tagInterview);
+
+        sa1.addOneTag(tagCourse);
+        sa2.addOneTag(tagCourse);
+        sa3.addOneTag(tagCourse);
+        sa4.addOneTag(tagCourse);
+        sa4.addOneTag(tagInterview);
+
+
         // LOAD MCQ QUESTIONS AND SET TAGS
     	// add more 10 mcq course (5+2+3)
         //2 by beach student
@@ -283,13 +283,13 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco52 = new MultipleChoiceOption("JUnit and Mockito",false,mcq5);
         MultipleChoiceOption mco53 = new MultipleChoiceOption("Mockito",true,mcq5);
         mcq5.setCreator(student2);
-        mcq5.addOneTag(tag17);
-        mcq5.addOneTag(tag1);
-        mcq5.addOneTag(tag8); 
-        tag1.addOneQuestion(mcq5);
-        tag17.addOneQuestion(mcq5);
-        tag8.addOneQuestion(mcq5);
-        
+        mcq5.addOneTag(tagMcq);
+        mcq5.addOneTag(tagCourse);
+        mcq5.addOneTag(tagOod);
+        tagCourse.addOneQuestion(mcq5);
+        tagMcq.addOneQuestion(mcq5);
+        tagOod.addOneQuestion(mcq5);
+
         //2 by pond student
         MultipleChoiceQuestion mcq6 = new MultipleChoiceQuestion();
         mcq6.setQuestionDetails("Which method is not defined in the Object class?");
@@ -297,27 +297,27 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco62 = new MultipleChoiceOption("notify()",false,mcq6);
         MultipleChoiceOption mco63 = new MultipleChoiceOption("compareTo(Object o)",true,mcq6);
         mcq6.setCreator(student2);
-        mcq6.addOneTag(tag17);
-        mcq6.addOneTag(tag1);
-        mcq6.addOneTag(tag8); 
-        tag1.addOneQuestion(mcq6);
-        tag17.addOneQuestion(mcq6);
-        tag8.addOneQuestion(mcq6);
-        
+        mcq6.addOneTag(tagMcq);
+        mcq6.addOneTag(tagCourse);
+        mcq6.addOneTag(tagOod);
+        tagCourse.addOneQuestion(mcq6);
+        tagMcq.addOneQuestion(mcq6);
+        tagOod.addOneQuestion(mcq6);
+
         MultipleChoiceQuestion mcq7 = new MultipleChoiceQuestion();
         mcq7.setQuestionDetails("Is multiple inheritance possible in Java?");
         MultipleChoiceOption mco71 = new MultipleChoiceOption("No",false,mcq7);
         MultipleChoiceOption mco72 = new MultipleChoiceOption("Yes, only with interfaces",true,mcq7);
         MultipleChoiceOption mco73 = new MultipleChoiceOption("Yes, with both classes and interfaces",false,mcq7);
         mcq7.setCreator(student2);
-        mcq7.addOneTag(tag17);
-        mcq7.addOneTag(tag1);
-        mcq7.addOneTag(tag8); 
-        tag1.addOneQuestion(mcq7);
-        tag17.addOneQuestion(mcq7);
-        tag8.addOneQuestion(mcq7);
-        
-        
+        mcq7.addOneTag(tagMcq);
+        mcq7.addOneTag(tagCourse);
+        mcq7.addOneTag(tagOod);
+        tagCourse.addOneQuestion(mcq7);
+        tagMcq.addOneQuestion(mcq7);
+        tagOod.addOneQuestion(mcq7);
+
+
         //1 by student 1
         MultipleChoiceQuestion mcq8 = new MultipleChoiceQuestion();
         mcq8.setQuestionDetails("Where can the static keyword be used?");
@@ -325,34 +325,34 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco82 = new MultipleChoiceOption("On methods",false,mcq8);
         MultipleChoiceOption mco83 = new MultipleChoiceOption("On variables, methods, and classes",true,mcq8);
         mcq8.setCreator(student1);
-        mcq8.addOneTag(tag17);
-        mcq8.addOneTag(tag1);
-        mcq8.addOneTag(tag8); 
-        tag1.addOneQuestion(mcq8);
-        tag17.addOneQuestion(mcq8);
-        tag8.addOneQuestion(mcq8);
-        
-        
+        mcq8.addOneTag(tagMcq);
+        mcq8.addOneTag(tagCourse);
+        mcq8.addOneTag(tagOod);
+        tagCourse.addOneQuestion(mcq8);
+        tagMcq.addOneQuestion(mcq8);
+        tagOod.addOneQuestion(mcq8);
+
+
         // SAVE TAGS and QUESTIONS
 
-        tagService.save(tag1);
-        tagService.save(tag2);
-        tagService.save(tag3);
-        tagService.save(tag4);
-        tagService.save(tag5);
-        tagService.save(tag6);
-        tagService.save(tag7);
-        tagService.save(tag8);
-        tagService.save(tag9);
-        tagService.save(tag10);
-        tagService.save(tag11);
-        tagService.save(tag12);
-        tagService.save(tag13);
-        tagService.save(tag14);
-        tagService.save(tag15);
-        tagService.save(tag16);
-        tagService.save(tag17);
-        
+        tagService.save(tagCourse);
+        tagService.save(tagInterview);
+        tagService.save(tagJava);
+        tagService.save(tagPython);
+        tagService.save(tagSpringBoot);
+        tagService.save(tagSql);
+        tagService.save(tagUnix);
+        tagService.save(tagOod);
+        tagService.save(tagJpa);
+        tagService.save(tagSpring);
+        tagService.save(tagReact);
+        tagService.save(tagJavascript);
+        tagService.save(tagProskills);
+        tagService.save(tagWeb);
+        tagService.save(tagAgile );
+        tagService.save(tagOther);
+        tagService.save(tagMcq);
+
         mcq1 = (MultipleChoiceQuestion) questionService.save(mcq1);
         questionService.save(sa1);
         questionService.save(sa2);
@@ -361,38 +361,38 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco1);
         mcoService.save(mco2);
         mcoService.save(mco3);
-        
-        
+
+
         mcq2 = (MultipleChoiceQuestion) questionService.save(mcq2);
         mcoService.save(mco11);
         mcoService.save(mco12);
         mcoService.save(mco13);
-        
+
         mcq3 = (MultipleChoiceQuestion) questionService.save(mcq3);
         mcoService.save(mco111);
         mcoService.save(mco112);
         mcoService.save(mco113);
-        
+
         mcq5 = (MultipleChoiceQuestion) questionService.save(mcq5);
         mcoService.save(mco51);
         mcoService.save(mco52);
         mcoService.save(mco53);
-        
+
         mcq6 = (MultipleChoiceQuestion) questionService.save(mcq6);
         mcoService.save(mco61);
         mcoService.save(mco62);
         mcoService.save(mco63);
-        
+
         mcq7 = (MultipleChoiceQuestion) questionService.save(mcq7);
         mcoService.save(mco71);
         mcoService.save(mco72);
         mcoService.save(mco73);
-        
+
         mcq8 = (MultipleChoiceQuestion) questionService.save(mcq8);
         mcoService.save(mco81);
         mcoService.save(mco82);
         mcoService.save(mco83);
-        
+
 
 
         ////////// Load Quizzes ////////////
@@ -402,30 +402,30 @@ public class DataLoader implements ApplicationRunner {
 //        qqg1.setKey(qqgKey);
 //        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
 //        qqgList.add(qqg1);
-//      
+//
         // male 2 quizzes
-        
+
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
-        quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type 
+        quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
-       
+
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
 
         quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
- 
+
         System.out.println("--------SAVE QUIZ1 DONE-------");
 //        quizService.removeQuestionFromQuiz(mcq1, quiz1);
 //        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
 //
 
 ////        quiz1.setQuizQuestionsGrade(qqgList);
-////        
+////
 ////        mcq1.setQuizQuestionsGrade(qqgList);
 //        quizService.addQuestion(mcq1, quiz1);
-// 
-//        
+//
+//
 //        questionService.save(mcq1);
 //        quizService.save(quiz1);
 
@@ -447,7 +447,7 @@ public class DataLoader implements ApplicationRunner {
 //		sa1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1 )));
 //		questionService.save(mcq1);
 //		questionService.save(sa1);
-		
+
 //		// let user know about quiz
 //		trainer.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1)));
 //		sales.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1)));
@@ -457,11 +457,11 @@ public class DataLoader implements ApplicationRunner {
 //        log.info("--------------- All users ------------------------");
 //        log.info(quizService.getAllQuizzes());
 
-        
+
         //quiz attempt
-        
+
         ////// quiz attempt //////
-        
+
         QuizAttempt qa1 = new QuizAttempt();
         QuizAttempt qa2 = new QuizAttempt();
         qa1.setQuiz(quiz1);
@@ -474,10 +474,10 @@ public class DataLoader implements ApplicationRunner {
         qa2.setTotalAwarded(5);
         qaRepo.save(qa1);
         qaRepo.save(qa2);
-        
+
         QuizQuestionMCQAttemptKey mcqAttemptKey = new QuizQuestionMCQAttemptKey(qa1.getId(), mcq1.getId());
         QuizQuestionMCQAttemptKey mcqAttemptKey2 = new QuizQuestionMCQAttemptKey(qa2.getId(), mcq1.getId());
-        
+
         QuizQuestionMCQAttempt mcqAttempt1 = new QuizQuestionMCQAttempt();
         QuizQuestionMCQAttempt mcqAttempt2 = new QuizQuestionMCQAttempt();
         mcqAttempt1.setKey(mcqAttemptKey);
@@ -485,7 +485,7 @@ public class DataLoader implements ApplicationRunner {
         mcqAttempt1.setQuizAttempt(qa1);
         mcqAttempt1.setMultipleChoiceQuestion(mcq1);
         mcqAttempt1.setSelectedOption(mco1);
-        
+
         mcqAttempt2.setKey(mcqAttemptKey2);
         mcqAttempt2.setAwarded_grade(5);
         mcqAttempt2.setQuizAttempt(qa2);
@@ -493,11 +493,11 @@ public class DataLoader implements ApplicationRunner {
         mcqAttempt2.setSelectedOption(mco2);
         mcqAttemptRepository.save(mcqAttempt1);
         mcqAttemptRepository.save(mcqAttempt2);
-        
+
 //        quizAttemptService.deleteAttempt(qa1);
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");
-        
+
     }
 }
