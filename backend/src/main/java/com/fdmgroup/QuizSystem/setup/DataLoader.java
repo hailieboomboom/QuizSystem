@@ -243,7 +243,6 @@ public class DataLoader implements ApplicationRunner {
 
 
         tagCourse.addOneQuestion(mcq1);
-        tagCourse.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
         tagCourse.addOneQuestion(sa1);
         tagCourse.addOneQuestion(sa2);
         tagCourse.addOneQuestion(sa3);
@@ -251,7 +250,6 @@ public class DataLoader implements ApplicationRunner {
         tagInterview.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
         tagInterview.addOneQuestion(sa1);
         tagInterview.addOneQuestion(sa4);
-        tagInterview.addOneQuestion(mcq2);
         tagCourse.addOneQuestion(mcq3);
 
         tagMcq.addOneQuestion(mcq1);
@@ -724,19 +722,57 @@ public class DataLoader implements ApplicationRunner {
 //        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
 //        qqgList.add(qqg1);
 //
-        // male 2 quizzes
+        // 2 Quizzes for interview, 2 Quizzes for Course content
 
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
         quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
-
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+        quizService.addQuestionIntoQuiz(mcq3, quiz1, (float)6.0);
+        
+        Quiz quizCourse1 = new Quiz();
+        quizCourse1.setCreator(student1);
+        quizCourse1.setName("Course Quiz 1 by student1 id 7");
+        quizCourse1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quizCourse1 = quizService.save(quizCourse1);
+        quizService.addQuestionIntoQuiz(mcq4, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq6, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq8, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq5, quizCourse1, (float) 5);
+        
+        Quiz quizCourse2 = new Quiz();
+        quizCourse2.setCreator(student2);
+        quizCourse2.setName("Course Quiz 2 by student2 id 8");
+        quizCourse2.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quizCourse2 = quizService.save(quizCourse2);
+        quizService.addQuestionIntoQuiz(mcq9, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq7, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq10, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq12, quizCourse2, (float) 5);
+        
+        Quiz quizInterview1 = new Quiz();
+        quizInterview1.setCreator(sales);
+        quizInterview1.setName("Interview Quiz 1 by sales id 2");
+        quizInterview1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quizInterview1 = quizService.save(quizInterview1);
+        quizService.addQuestionIntoQuiz(mcqIntv1, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv2, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv3, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv5, quizInterview1, (float) 5);
+        
+        Quiz quizInterview2 = new Quiz();
+        quizInterview2.setCreator(student3);
+        quizInterview2.setName("Interview Quiz 2 by student3 id 9");
+        quizInterview2.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quizInterview2 = quizService.save(quizInterview2);
+        quizService.addQuestionIntoQuiz(mcqIntv7, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv6, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv9, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv4, quizInterview2, (float) 5);
 
-        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
-
-        System.out.println("--------SAVE QUIZ1 DONE-------");
+        System.out.println("--------SAVE QUIZ DONE-------");
 //        quizService.removeQuestionFromQuiz(mcq1, quiz1);
 //        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
 //
