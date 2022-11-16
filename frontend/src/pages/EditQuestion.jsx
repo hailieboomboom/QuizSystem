@@ -12,6 +12,8 @@ import {useRecoilState} from "recoil";
 import {editQuestionOptionsState, editQuestionState} from "../recoil/Atoms";
 import axios from "axios";
 import EditQuestionOptions from "../components/EditQuestionOptions";
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
+
 const API_URL = 'http://localhost:8088/QuizSystem/api/questions/mcqs'
 
 const EditQuestion = () => {
@@ -39,9 +41,9 @@ const EditQuestion = () => {
             "options": answers,
             "questionDetails": question,
             "tags": [
-            "interview"
+                editQuestions.tags
         ],
-            "userId": 1
+            "userId": getUserId()
 
         }
         console.log(answers)
@@ -51,6 +53,7 @@ const EditQuestion = () => {
             })
             .catch((err) =>{
                 console.log(err)
+                console.log(err.message)
             });
 
         console.log(data)
