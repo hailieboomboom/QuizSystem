@@ -105,8 +105,6 @@ public class QuizAttemptController {
 		return new ResponseEntity<>(resultList,HttpStatus.OK );
 	
 	}
-
-
 	
 	// view all attempts by user(student) (user, quiz name/attempt, quiz_grade)
 	@GetMapping("/quizTaker/{attempted_by_id}")
@@ -125,7 +123,6 @@ public class QuizAttemptController {
 			qaDto.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(qa));
 			returnedAttemptDTOs.add(qaDto);
 		}
-		
 		return new ResponseEntity<>(returnedAttemptDTOs, HttpStatus.OK);
 	}
 	

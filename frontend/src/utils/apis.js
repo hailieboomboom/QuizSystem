@@ -14,7 +14,9 @@ export const apis = {
     updateTrainerInfo,
     updateSalesInfo,
     getRoleByUserId,
-    getAllStudents
+    getAllStudents,
+    getAllMCQs,
+    getAllMCQsFromUser
 }
 
 const config = {
@@ -23,7 +25,6 @@ const config = {
 const instance = axios.create({
     baseURL: 'http://localhost:8088/QuizSystem'
 })
-
 
 function getUserById(id){
     switch(getUserRole()){
@@ -75,6 +76,14 @@ function authorizeSales(username){
 
 function getRoleByUserId(id) {
     return instance.get("/users/" + id + "/role", config)
+}
+
+function getAllMCQs() {
+    return instance.get("/api/questions/mcqs", config)
+}
+
+function getAllMCQsFromUser(id){
+    return instance.get("/api/questions/" + id + "/mcqs", config)
 }
 
 function signup(username, email, password, firstName, lastName, role){
