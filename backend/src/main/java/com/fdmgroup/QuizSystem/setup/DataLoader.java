@@ -96,6 +96,24 @@ public class DataLoader implements ApplicationRunner {
         trainerService.save(unauthorisedTrainer);
         System.out.println(trainerService.findByUsername("ut"));
 
+        Trainer unauthorisedTrainer1 = new Trainer();
+        unauthorisedTrainer1.setUsername("ut1");
+        unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer1.setEmail("12345@gmail.com");
+        unauthorisedTrainer1.setFirstName("JHJ");
+        unauthorisedTrainer1.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer1);
+        System.out.println(trainerService.findByUsername("ut1"));
+
+        Trainer unauthorisedTrainer2 = new Trainer();
+        unauthorisedTrainer2.setUsername("ut2");
+        unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer2.setEmail("123467@gmail.com");
+        unauthorisedTrainer2.setFirstName("JHJ");
+        unauthorisedTrainer2.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer2);
+        System.out.println(trainerService.findByUsername("ut2"));
+
         Sales unauthorisedSales = new Sales();
         unauthorisedSales.setUsername("us");
         unauthorisedSales.setPassword(passwordEncoder.encode("1"));
