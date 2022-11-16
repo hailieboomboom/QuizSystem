@@ -67,16 +67,19 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         ////////// Load Users ////////////
-        Trainer trainer = new Trainer();
+    
+    	// trainer - id 1
+        Trainer trainer = new Trainer(); 
         trainer.setUsername("Jason");
         trainer.setPassword(passwordEncoder.encode("1"));
         trainer.setEmail("123@gmail.com");
         trainer.setFirstName("JHJ");
         trainer.setLastName("Liu");
         trainer.setRole(Role.AUTHORISED_TRAINER);
-        trainerService.save(trainer);
+        trainerService.save(trainer);  
         System.out.println(trainerService.findByUsername("Jason"));
 
+        // sales - id 2
         Sales sales = new Sales();
         sales.setUsername("Yutta");
         sales.setPassword(passwordEncoder.encode("1"));
@@ -84,45 +87,50 @@ public class DataLoader implements ApplicationRunner {
         sales.setFirstName("Yutta");
         sales.setLastName("Karima");
         sales.setRole(Role.AUTHORISED_SALES);
-        salesService.save(sales);
+        salesService.save(sales);  
         System.out.println(salesService.findByUsername("Yutta"));
 
+        // unauthorisedTrainer - id 3
         Trainer unauthorisedTrainer = new Trainer();
         unauthorisedTrainer.setUsername("ut");
         unauthorisedTrainer.setPassword(passwordEncoder.encode("1"));
         unauthorisedTrainer.setEmail("1234@gmail.com");
         unauthorisedTrainer.setFirstName("JHJ");
         unauthorisedTrainer.setLastName("Liu");
-        trainerService.save(unauthorisedTrainer);
+        trainerService.save(unauthorisedTrainer); 
         System.out.println(trainerService.findByUsername("ut"));
 
+        // unauthorisedTrainer1 - id 4
         Trainer unauthorisedTrainer1 = new Trainer();
         unauthorisedTrainer1.setUsername("ut1");
         unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
         unauthorisedTrainer1.setEmail("12345@gmail.com");
         unauthorisedTrainer1.setFirstName("JHJ");
         unauthorisedTrainer1.setLastName("Liu");
-        trainerService.save(unauthorisedTrainer1);
+        trainerService.save(unauthorisedTrainer1);  
         System.out.println(trainerService.findByUsername("ut1"));
 
+        // unauthorisedTrainer1 - id 5
         Trainer unauthorisedTrainer2 = new Trainer();
         unauthorisedTrainer2.setUsername("ut2");
         unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
         unauthorisedTrainer2.setEmail("123467@gmail.com");
         unauthorisedTrainer2.setFirstName("JHJ");
         unauthorisedTrainer2.setLastName("Liu");
-        trainerService.save(unauthorisedTrainer2);
+        trainerService.save(unauthorisedTrainer2);  
         System.out.println(trainerService.findByUsername("ut2"));
 
+        // unauthorisedSales - id 6
         Sales unauthorisedSales = new Sales();
         unauthorisedSales.setUsername("us");
         unauthorisedSales.setPassword(passwordEncoder.encode("1"));
         unauthorisedSales.setEmail("3210@gmail.com");
         unauthorisedSales.setFirstName("Yutta");
         unauthorisedSales.setLastName("Karima");
-        salesService.save(unauthorisedSales);
+        salesService.save(unauthorisedSales);  
         System.out.println(salesService.findByUsername("us"));
 
+        // trainingStudent - id 7
         Student student1 = new Student();
         student1.setUsername("skarima");
         student1.setPassword(passwordEncoder.encode("1"));
@@ -131,8 +139,7 @@ public class DataLoader implements ApplicationRunner {
         student1.setLastName("Karima");
         studentService.save(student1);
 
-
-        // add pond student
+        // pondStudent - id 8
         Student student2 = new Student();
         student2.setUsername("slong");
         student2.setPassword(passwordEncoder.encode("2"));
@@ -142,8 +149,7 @@ public class DataLoader implements ApplicationRunner {
         student2.setRole(Role.POND);
         studentService.save(student2);
 
-
-        // add beached student
+        // beachedStudent - id 9
         Student student3 = new Student();
         student3.setUsername("sbrown");
         student3.setPassword(passwordEncoder.encode("3"));
@@ -153,13 +159,12 @@ public class DataLoader implements ApplicationRunner {
         student3.setRole(Role.BEACHED);
         studentService.save(student3);
 
-
-        log.info("Finished setup");
-
+        log.info("Finished loading users");
 
 
         ////////// Load Questions ////////////
 
+        // MultipleChoice questions
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
         mcq1.setQuestionDetails("test mcq1");
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1 for 1",true,mcq1);
@@ -167,10 +172,8 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3 for 3",false,mcq1);
         mcq1.setCreator(trainer);
 
-
         MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
         mcq2.setQuestionDetails("test mcq2");
-
         MultipleChoiceOption mco11 = new MultipleChoiceOption("op1 for 2",true,mcq2);
         MultipleChoiceOption mco12 = new MultipleChoiceOption("op2 for 2",false,mcq2);
         MultipleChoiceOption mco13 = new MultipleChoiceOption("op3 for 2",false,mcq2);
@@ -183,7 +186,7 @@ public class DataLoader implements ApplicationRunner {
         MultipleChoiceOption mco113 = new MultipleChoiceOption("op3 for 3",false,mcq3);
         mcq3.setCreator(student1);
 
-
+        // ShortAnswer questions
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("what is the best colour");
         sa1.setCorrectAnswer("green is the best");
@@ -204,50 +207,32 @@ public class DataLoader implements ApplicationRunner {
         sa4.setCorrectAnswer("java");
         sa4.setCreator(trainer);
 
+        // Tags for questions
+        Tag tagCourse = new Tag("course");
+        Tag tagInterview = new Tag("interview");
+        Tag tagJava = new Tag("java");
+        Tag tagPython = new Tag("python");
+        Tag tagSpringBoot = new Tag("springboot");
+        Tag tagSql = new Tag("sql");
+        Tag tagUnix = new Tag("unix");
+        Tag tagOod = new Tag("ood");
+        Tag tagJpa = new Tag("jpa");
+        Tag tagSpring = new Tag("spring");
+        Tag tagReact = new Tag("react");
+        Tag tagJavascript = new Tag("javascript");
+        Tag tagProskills = new Tag("proskills");
+        Tag tagWeb = new Tag("web");
+        Tag tagAgile = new Tag("agile");
+        Tag tagOther = new Tag("other");
+        Tag tagMcq = new Tag("mcq");
 
-
-        Tag tagCourse = new Tag();
-        Tag tagInterview = new Tag();
-        Tag tagJava = new Tag();
-        Tag tagPython = new Tag();
-        Tag tagSpringBoot = new Tag();
-        Tag tagSql = new Tag();
-        Tag tagUnix = new Tag();
-        Tag tagOod = new Tag();
-        Tag tagJpa = new Tag();
-        Tag tagSpring = new Tag();
-        Tag tagReact = new Tag();
-        Tag tagJavascript = new Tag();
-        Tag tagProskills = new Tag();
-        Tag tagWeb = new Tag();
-        Tag tagAgile = new Tag();
-        Tag tagOther = new Tag();
-        Tag tagMcq = new Tag();
-        tagCourse.setTagName("course");
-        tagInterview.setTagName("interview");
-        tagJava.setTagName("java");
-        tagPython.setTagName("python");
-        tagSpringBoot.setTagName("springboot");
-        tagSql.setTagName("sql");
-        tagUnix.setTagName("unix");
-        tagOod.setTagName("ood");
-        tagJpa.setTagName("jpa");
-        tagSpring.setTagName("spring");
-        tagReact.setTagName("react");
-        tagJavascript.setTagName("javascript");
-        tagProskills.setTagName("proskills");
-        tagWeb.setTagName("web");
-        tagAgile .setTagName("agile");
-        tagOther.setTagName("other");
-        tagMcq.setTagName("mcq");
-
-
+        
         tagCourse.addOneQuestion(mcq1);
         tagCourse.addOneQuestion(sa1);
         tagCourse.addOneQuestion(sa2);
         tagCourse.addOneQuestion(sa3);
         tagCourse.addOneQuestion(sa4);
-        tagInterview.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
+        tagInterview.addOneQuestion(mcq2);
         tagInterview.addOneQuestion(sa1);
         tagInterview.addOneQuestion(sa4);
         tagCourse.addOneQuestion(mcq3);
@@ -257,14 +242,13 @@ public class DataLoader implements ApplicationRunner {
         tagMcq.addOneQuestion(mcq3);
 
         mcq1.addOneTag(tagCourse);
-
         mcq2.addOneTag(tagInterview);
         mcq3.addOneTag(tagCourse);
         mcq1.addOneTag(tagMcq);
         mcq2.addOneTag(tagMcq);
         mcq3.addOneTag(tagMcq);
+        
         sa1.addOneTag(tagInterview);
-
         sa1.addOneTag(tagCourse);
         sa2.addOneTag(tagCourse);
         sa3.addOneTag(tagCourse);
@@ -716,13 +700,6 @@ public class DataLoader implements ApplicationRunner {
         
         ////////// Load Quizzes ////////////
 
-//        QuizQuestionGrade qqg1 = new QuizQuestionGrade();
-//        QuizQuestionGradeKey qqgKey = new QuizQuestionGradeKey((long) 1, (long) 1);
-//        qqg1.setKey(qqgKey);
-//        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
-//        qqgList.add(qqg1);
-//
-        // 2 Quizzes for interview, 2 Quizzes for Course content
 
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
@@ -774,44 +751,41 @@ public class DataLoader implements ApplicationRunner {
 
         System.out.println("--------SAVE QUIZ DONE-------");
         
-        log.info("--------------- All users ------------------------");
-
-
-        //quiz attempt
 
         ////// quiz attempt //////
 
         QuizAttempt qa1 = new QuizAttempt();
-        QuizAttempt qa2 = new QuizAttempt();
         qa1.setQuiz(quiz1);
         qa1.setUser(student1);
         qa1.setAttemptNo(1);
         qa1.setTotalAwarded(0);
+        qaRepo.save(qa1);
+        
+        QuizAttempt qa2 = new QuizAttempt();
         qa2.setQuiz(quiz1);
         qa2.setUser(student1);
         qa2.setAttemptNo(2);
         qa2.setTotalAwarded(5);
-        qaRepo.save(qa1);
         qaRepo.save(qa2);
 
         QuizQuestionMCQAttemptKey mcqAttemptKey = new QuizQuestionMCQAttemptKey(qa1.getId(), mcq1.getId());
-        QuizQuestionMCQAttemptKey mcqAttemptKey2 = new QuizQuestionMCQAttemptKey(qa2.getId(), mcq1.getId());
-
         QuizQuestionMCQAttempt mcqAttempt1 = new QuizQuestionMCQAttempt();
-        QuizQuestionMCQAttempt mcqAttempt2 = new QuizQuestionMCQAttempt();
         mcqAttempt1.setKey(mcqAttemptKey);
         mcqAttempt1.setAwarded_grade(0);
         mcqAttempt1.setQuizAttempt(qa1);
         mcqAttempt1.setMultipleChoiceQuestion(mcq1);
         mcqAttempt1.setSelectedOption(mco1);
-
+        mcqAttemptRepository.save(mcqAttempt1);
+        
+        QuizQuestionMCQAttemptKey mcqAttemptKey2 = new QuizQuestionMCQAttemptKey(qa2.getId(), mcq1.getId());
+        QuizQuestionMCQAttempt mcqAttempt2 = new QuizQuestionMCQAttempt();
         mcqAttempt2.setKey(mcqAttemptKey2);
         mcqAttempt2.setAwarded_grade(5);
         mcqAttempt2.setQuizAttempt(qa2);
         mcqAttempt2.setMultipleChoiceQuestion(mcq1);
         mcqAttempt2.setSelectedOption(mco2);
-        mcqAttemptRepository.save(mcqAttempt1);
         mcqAttemptRepository.save(mcqAttempt2);
+        
         
         // QuizAttempt: student2 takes quizCourse1 twice
         QuizAttempt qa_qc1_student2_1 = new QuizAttempt();
@@ -908,7 +882,7 @@ public class DataLoader implements ApplicationRunner {
         qa_qc1_student3_1.setAttemptNo(1);
         qa_qc1_student3_1.setTotalAwarded(20);
         qa_qc1_student3_1 = qaRepo.save(qa_qc1_student3_1);
-        
+
         QuizQuestionMCQAttemptKey qaAttempt1qc1MCQ4Key = new QuizQuestionMCQAttemptKey(qa_qc1_student3_1.getId(), mcq4.getId());
         QuizQuestionMCQAttempt qaAttempt1qc1MCQ4 = new QuizQuestionMCQAttempt();
         qaAttempt1qc1MCQ4.setKey(qaAttempt1qc1MCQ4Key);
@@ -945,6 +919,188 @@ public class DataLoader implements ApplicationRunner {
         qaAttempt1qc1MCQ8.setAwarded_grade(5);
         mcqAttemptRepository.save(qaAttempt1qc1MCQ8);
 
+        // -------- Below is added by Summer --------
+        
+        // student1 quizCourse1 attempt 1  
+        QuizAttempt quizCrse1_stu1_attempt1 = new QuizAttempt();
+        quizCrse1_stu1_attempt1.setQuiz(quizCourse1);
+        quizCrse1_stu1_attempt1.setUser(student1);
+        quizCrse1_stu1_attempt1.setAttemptNo(1);
+        quizCrse1_stu1_attempt1.setTotalAwarded(20);
+        quizCrse1_stu1_attempt1 = qaRepo.save(quizCrse1_stu1_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcq4_stu2_attempt1Key = new QuizQuestionMCQAttemptKey(quizCrse1_stu1_attempt1.getId(), mcq4.getId());
+        QuizQuestionMCQAttempt mcq4_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcq4_stu2_attempt1.setKey(mcq4_stu2_attempt1Key);
+        mcq4_stu2_attempt1.setQuizAttempt(quizCrse1_stu1_attempt1);
+        mcq4_stu2_attempt1.setMultipleChoiceQuestion(mcq4);
+        mcq4_stu2_attempt1.setSelectedOption(mco43);
+        mcq4_stu2_attempt1.setAwarded_grade(5);
+        mcqAttemptRepository.save(mcq4_stu2_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcq5_stu2_attempt1Key = new QuizQuestionMCQAttemptKey(quizCrse1_stu1_attempt1.getId(), mcq5.getId());
+        QuizQuestionMCQAttempt mcq5_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcq5_stu2_attempt1.setKey(mcq5_stu2_attempt1Key);
+        mcq5_stu2_attempt1.setQuizAttempt(quizCrse1_stu1_attempt1);
+        mcq5_stu2_attempt1.setMultipleChoiceQuestion(mcq5);
+        mcq5_stu2_attempt1.setSelectedOption(mco53);
+        mcq5_stu2_attempt1.setAwarded_grade(5);
+        mcqAttemptRepository.save(mcq5_stu2_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcq6_stu2_attempt1Key = new QuizQuestionMCQAttemptKey(quizCrse1_stu1_attempt1.getId(), mcq6.getId());
+        QuizQuestionMCQAttempt mcq6_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcq6_stu2_attempt1.setKey(mcq6_stu2_attempt1Key);
+        mcq6_stu2_attempt1.setQuizAttempt(quizCrse1_stu1_attempt1);
+        mcq6_stu2_attempt1.setMultipleChoiceQuestion(mcq6);
+        mcq6_stu2_attempt1.setSelectedOption(mco63);
+        mcq6_stu2_attempt1.setAwarded_grade(5);
+        mcqAttemptRepository.save(mcq6_stu2_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcq8_stu2_attempt1Key = new QuizQuestionMCQAttemptKey(quizCrse1_stu1_attempt1.getId(), mcq8.getId());
+        QuizQuestionMCQAttempt mcq8_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcq8_stu2_attempt1.setKey(mcq8_stu2_attempt1Key);
+        mcq8_stu2_attempt1.setQuizAttempt(quizCrse1_stu1_attempt1);
+        mcq8_stu2_attempt1.setMultipleChoiceQuestion(mcq8);
+        mcq8_stu2_attempt1.setSelectedOption(mco83);
+        mcq8_stu2_attempt1.setAwarded_grade(5);
+        mcqAttemptRepository.save(mcq8_stu2_attempt1);
+
+        ////// Interview Quiz Attempt /////
+        
+        // student2 (pond student) attempted quizInterview1 twice 
+        QuizAttempt quizIntv1_stu2_attempt1 = new QuizAttempt();
+        quizIntv1_stu2_attempt1.setQuiz(quizInterview1);
+        quizIntv1_stu2_attempt1.setUser(student2);
+        quizIntv1_stu2_attempt1.setAttemptNo(1);
+        quizIntv1_stu2_attempt1.setTotalAwarded(10);
+        qaRepo.save(quizIntv1_stu2_attempt1);
+           
+        QuizQuestionMCQAttemptKey mcqIntv1_stu2_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt1.getId(), mcqIntv1.getId());
+        QuizQuestionMCQAttempt mcqIntv1_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv1_stu2_attempt1.setKey(mcqIntv1_stu2_attempt1_key);
+        mcqIntv1_stu2_attempt1.setAwarded_grade(5);
+        mcqIntv1_stu2_attempt1.setQuizAttempt(quizIntv1_stu2_attempt1);
+        mcqIntv1_stu2_attempt1.setMultipleChoiceQuestion(mcqIntv1);
+        mcqIntv1_stu2_attempt1.setSelectedOption(mcoIntv1_2); 
+        mcqAttemptRepository.save(mcqIntv1_stu2_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcqIntv2_stu2_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt1.getId(), mcqIntv2.getId());
+        QuizQuestionMCQAttempt mcqIntv2_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv2_stu2_attempt1.setKey(mcqIntv2_stu2_attempt1_key);
+        mcqIntv2_stu2_attempt1.setAwarded_grade(0);
+        mcqIntv2_stu2_attempt1.setQuizAttempt(quizIntv1_stu2_attempt1);
+        mcqIntv2_stu2_attempt1.setMultipleChoiceQuestion(mcqIntv2);
+        mcqIntv2_stu2_attempt1.setSelectedOption(mcoIntv2_2); 
+        mcqAttemptRepository.save(mcqIntv2_stu2_attempt1);
+
+        QuizQuestionMCQAttemptKey mcqIntv3_stu2_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt1.getId(), mcqIntv3.getId());
+        QuizQuestionMCQAttempt mcqIntv3_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv3_stu2_attempt1.setKey(mcqIntv3_stu2_attempt1_key);
+        mcqIntv3_stu2_attempt1.setAwarded_grade(5);
+        mcqIntv3_stu2_attempt1.setQuizAttempt(quizIntv1_stu2_attempt1);
+        mcqIntv3_stu2_attempt1.setMultipleChoiceQuestion(mcqIntv3);
+        mcqIntv3_stu2_attempt1.setSelectedOption(mcoIntv3_2); 
+        mcqAttemptRepository.save(mcqIntv3_stu2_attempt1);
+
+        QuizQuestionMCQAttemptKey mcqIntv5_stu2_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt1.getId(), mcqIntv5.getId());
+        QuizQuestionMCQAttempt mcqIntv5_stu2_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv5_stu2_attempt1.setKey(mcqIntv5_stu2_attempt1_key);
+        mcqIntv5_stu2_attempt1.setAwarded_grade(0);
+        mcqIntv5_stu2_attempt1.setQuizAttempt(quizIntv1_stu2_attempt1);
+        mcqIntv5_stu2_attempt1.setMultipleChoiceQuestion(mcqIntv5);
+        mcqIntv5_stu2_attempt1.setSelectedOption(mcoIntv5_1); 
+        mcqAttemptRepository.save(mcqIntv5_stu2_attempt1);
+        
+        // student2 quizInterview1 attempt 2
+        QuizAttempt quizIntv1_stu2_attempt2 = new QuizAttempt();
+        quizIntv1_stu2_attempt2.setQuiz(quizInterview1);
+        quizIntv1_stu2_attempt2.setUser(student2);
+        quizIntv1_stu2_attempt2.setAttemptNo(2);
+        quizIntv1_stu2_attempt2.setTotalAwarded(20);
+        qaRepo.save(quizIntv1_stu2_attempt2);
+             
+        QuizQuestionMCQAttemptKey mcqIntv1_stu2_attempt2_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt2.getId(), mcqIntv1.getId());
+        QuizQuestionMCQAttempt mcqIntv1_stu2_attempt2 = new QuizQuestionMCQAttempt();
+        mcqIntv1_stu2_attempt2.setKey(mcqIntv1_stu2_attempt2_key);
+        mcqIntv1_stu2_attempt2.setAwarded_grade(5);
+        mcqIntv1_stu2_attempt2.setQuizAttempt(quizIntv1_stu2_attempt2);
+        mcqIntv1_stu2_attempt2.setMultipleChoiceQuestion(mcqIntv1);
+        mcqIntv1_stu2_attempt2.setSelectedOption(mcoIntv1_2); 
+        mcqAttemptRepository.save(mcqIntv1_stu2_attempt2);
+        
+        QuizQuestionMCQAttemptKey mcqIntv2_stu2_attempt2_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt2.getId(), mcqIntv2.getId());
+        QuizQuestionMCQAttempt mcqIntv2_stu2_attempt2 = new QuizQuestionMCQAttempt();
+        mcqIntv2_stu2_attempt2.setKey(mcqIntv2_stu2_attempt2_key);
+        mcqIntv2_stu2_attempt2.setAwarded_grade(5);
+        mcqIntv2_stu2_attempt2.setQuizAttempt(quizIntv1_stu2_attempt2);
+        mcqIntv2_stu2_attempt2.setMultipleChoiceQuestion(mcqIntv2);
+        mcqIntv2_stu2_attempt2.setSelectedOption(mcoIntv2_1); 
+        mcqAttemptRepository.save(mcqIntv2_stu2_attempt2);
+        
+        QuizQuestionMCQAttemptKey mcqIntv3_stu2_attempt2_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt2.getId(), mcqIntv3.getId());
+        QuizQuestionMCQAttempt mcqIntv3_stu2_attempt2 = new QuizQuestionMCQAttempt();
+        mcqIntv3_stu2_attempt2.setKey(mcqIntv3_stu2_attempt2_key);
+        mcqIntv3_stu2_attempt2.setAwarded_grade(5);
+        mcqIntv3_stu2_attempt2.setQuizAttempt(quizIntv1_stu2_attempt2);
+        mcqIntv3_stu2_attempt2.setMultipleChoiceQuestion(mcqIntv3);
+        mcqIntv3_stu2_attempt2.setSelectedOption(mcoIntv3_2); 
+        mcqAttemptRepository.save(mcqIntv3_stu2_attempt2);
+        
+        QuizQuestionMCQAttemptKey mcqIntv5_stu2_attempt2_key = new QuizQuestionMCQAttemptKey(quizIntv1_stu2_attempt2.getId(), mcqIntv5.getId());
+        QuizQuestionMCQAttempt mcqIntv5_stu2_attempt2 = new QuizQuestionMCQAttempt();
+        mcqIntv5_stu2_attempt2.setKey(mcqIntv5_stu2_attempt2_key);
+        mcqIntv5_stu2_attempt2.setAwarded_grade(5);
+        mcqIntv5_stu2_attempt2.setQuizAttempt(quizIntv1_stu2_attempt2);
+        mcqIntv5_stu2_attempt2.setMultipleChoiceQuestion(mcqIntv5);
+        mcqIntv5_stu2_attempt2.setSelectedOption(mcoIntv5_4); 
+        mcqAttemptRepository.save(mcqIntv5_stu2_attempt2);
+        
+        
+        // student2 quizInterview2 attempt 1    
+        QuizAttempt quizIntv2_stu3_attempt1 = new QuizAttempt();
+        quizIntv2_stu3_attempt1.setQuiz(quizInterview2);
+        quizIntv2_stu3_attempt1.setUser(student3);
+        quizIntv2_stu3_attempt1.setAttemptNo(1);
+        quizIntv2_stu3_attempt1.setTotalAwarded(15);
+        qaRepo.save(quizIntv2_stu3_attempt1);
+           
+        QuizQuestionMCQAttemptKey mcqIntv7_stu3_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv2_stu3_attempt1.getId(), mcqIntv7.getId());
+        QuizQuestionMCQAttempt mcqIntv7_stu3_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv7_stu3_attempt1.setKey(mcqIntv7_stu3_attempt1_key);
+        mcqIntv7_stu3_attempt1.setAwarded_grade(5);
+        mcqIntv7_stu3_attempt1.setQuizAttempt(quizIntv2_stu3_attempt1);
+        mcqIntv7_stu3_attempt1.setMultipleChoiceQuestion(mcqIntv7);
+        mcqIntv7_stu3_attempt1.setSelectedOption(mcoIntv7_3); 
+        mcqAttemptRepository.save(mcqIntv7_stu3_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcqIntv6_stu3_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv2_stu3_attempt1.getId(), mcqIntv6.getId());
+        QuizQuestionMCQAttempt mcqIntv6_stu3_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv6_stu3_attempt1.setKey(mcqIntv6_stu3_attempt1_key);
+        mcqIntv6_stu3_attempt1.setAwarded_grade(5);
+        mcqIntv6_stu3_attempt1.setQuizAttempt(quizIntv2_stu3_attempt1);
+        mcqIntv6_stu3_attempt1.setMultipleChoiceQuestion(mcqIntv6);
+        mcqIntv6_stu3_attempt1.setSelectedOption(mcoIntv6_3); 
+        mcqAttemptRepository.save(mcqIntv6_stu3_attempt1);
+        
+        QuizQuestionMCQAttemptKey mcqIntv9_stu3_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv2_stu3_attempt1.getId(), mcqIntv9.getId());
+        QuizQuestionMCQAttempt mcqIntv9_stu3_attempt1 = new QuizQuestionMCQAttempt();
+        mcqIntv9_stu3_attempt1.setKey(mcqIntv9_stu3_attempt1_key);
+        mcqIntv9_stu3_attempt1.setAwarded_grade(5);
+        mcqIntv9_stu3_attempt1.setQuizAttempt(quizIntv2_stu3_attempt1);
+        mcqIntv9_stu3_attempt1.setMultipleChoiceQuestion(mcqIntv9);
+        mcqIntv9_stu3_attempt1.setSelectedOption(mcoIntv9_2); 
+        mcqAttemptRepository.save(mcqIntv9_stu3_attempt1);
+        
+		 QuizQuestionMCQAttemptKey mcqIntv4_stu3_attempt1_key = new QuizQuestionMCQAttemptKey(quizIntv2_stu3_attempt1.getId(), mcqIntv4.getId());
+		 QuizQuestionMCQAttempt mcqIntv4_stu3_attempt1 = new QuizQuestionMCQAttempt();
+		 mcqIntv4_stu3_attempt1.setKey(mcqIntv4_stu3_attempt1_key);
+		 mcqIntv4_stu3_attempt1.setAwarded_grade(0);
+		 mcqIntv4_stu3_attempt1.setQuizAttempt(quizIntv2_stu3_attempt1);
+		 mcqIntv4_stu3_attempt1.setMultipleChoiceQuestion(mcqIntv4);
+		 mcqIntv4_stu3_attempt1.setSelectedOption(mcoIntv4_2); 
+		 mcqAttemptRepository.save(mcqIntv4_stu3_attempt1);
+	     
+	     
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");
 
