@@ -86,6 +86,8 @@ public class QuestionService {
 
 
 
+
+	@Transactional
 	public void createMCQ(AddMcqDto addMcqDto, User user) {
 
 

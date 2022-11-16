@@ -38,24 +38,29 @@ public class MultipleChoiceOptionService {
 
 	public List<MultipleChoiceOption> createListOfOption(List<McqOptionDto> mcqOptionDtoList, MultipleChoiceQuestion mcqQuestion){
 		List<MultipleChoiceOption> optionList = new ArrayList<>();
-		int numberOfCorrectOption = 0;
-
-		if (mcqOptionDtoList.size() <= 1)
-			throw new McqOptionNotValidException("Please provide at least more than one option");
+		validateOptions(mcqOptionDtoList);
 
 		for(McqOptionDto mcqOption: mcqOptionDtoList) {
-			if (mcqOption.isCorrect())
-				numberOfCorrectOption++;
 			optionList.add(createMcqOption(mcqOption, mcqQuestion));
 		}
-		if (numberOfCorrectOption !=1)
-			throw new McqOptionNotValidException("Please only choose one correct option");
-
 
 
 
 		return optionList;
 
+	}
+
+	public void validateOptions(List<McqOptionDto> mcqOptionDtoList) {
+		int numberOfCorrectOption = 0;
+
+		if (mcqOptionDtoList.size() <= 1)
+			throw new McqOptionNotValidException("Please provide at least more than one option");
+		for(McqOptionDto mcqOption: mcqOptionDtoList) {
+			if (mcqOption.isCorrect())
+				numberOfCorrectOption++;
+		}
+		if (numberOfCorrectOption !=1)
+			throw new McqOptionNotValidException("Please only choose one correct option");
 	}
 
 	public McqOptionDto getMcqOptionDto(MultipleChoiceOption option){
@@ -86,20 +91,21 @@ public class MultipleChoiceOptionService {
 
 
 	public List<MultipleChoiceOption> updateMcqOption(List<McqOptionDto> mcqOptionDtoList,long macId){
-		System.out.println("DEBUG:==---------- MCQ ID IS "+macId);
+
 		List<MultipleChoiceOption> originalMcqOption = mcoRepo.findAllByMcqId(macId);
 		if(originalMcqOption.size()!=mcqOptionDtoList.size()){
 			throw new McqOptionNotValidException("You can't change the number of options after creating it");
 		}
 		int i = 0;
+		int numberOfCorrectOption = 0;
 		for (MultipleChoiceOption option:originalMcqOption){
 			option.setCorrect(mcqOptionDtoList.get(i).isCorrect());
 			option.setOptionDetail(mcqOptionDtoList.get(i).getOptionDescription());
 			if(option.isCorrect()){
-				i++;
+				numberOfCorrectOption++;
 			}
 		}
-		if(i!=1)
+		if(numberOfCorrectOption!=1)
 			throw new McqOptionNotValidException("Please choose only one correct option");
 
 		return originalMcqOption;
