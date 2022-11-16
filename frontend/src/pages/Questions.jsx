@@ -31,7 +31,7 @@ const Questions = () => {
             >
 
                 <div className={"viewQuestionsBox"}>
-                    <h1>Multiple Choice Questions</h1>
+                    <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
                     {
                         question.map((question) => (<ViewMCQCard questionCard={question}/>))
                     }
