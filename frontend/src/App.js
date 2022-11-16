@@ -60,7 +60,7 @@ function App() {
   return (
       // <ThemeProvider theme={theme}>
         <div className="App">
-
+          <RecoilRoot>
           <BrowserRouter>
             <NavigationBar />
             <Routes>
@@ -86,7 +86,7 @@ function App() {
               <Route path="errorPage" element={<ErrorPage />} />
             </Routes>
           </BrowserRouter>
-
+          </RecoilRoot>
         </div>
       // </ThemeProvider>
   );
