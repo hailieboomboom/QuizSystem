@@ -332,6 +332,157 @@ public class DataLoader implements ApplicationRunner {
         tagMcq.addOneQuestion(mcq8);
         tagOod.addOneQuestion(mcq8);
 
+        
+        // LOAD MCQ QUESTIONS AND SET TAGS
+        // Interview based, tagInterview, tagMcq
+        
+        // 5 by sales
+        MultipleChoiceQuestion mcqIntv1 = new MultipleChoiceQuestion();
+        mcqIntv1.setQuestionDetails("Under which pillar of OOPS do base class and derived class relationships come?");
+        MultipleChoiceOption mcoIntv1_1 = new MultipleChoiceOption("Polymorphism", false, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_2 = new MultipleChoiceOption("Inheritance", true, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_3 = new MultipleChoiceOption("Encapsulation",false, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_4 = new MultipleChoiceOption("Abstraction",false, mcqIntv1);
+        mcqIntv1.setCreator(sales);
+        mcqIntv1.addOneTag(tagMcq);
+        mcqIntv1.addOneTag(tagInterview);
+        mcqIntv1.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv1);
+        tagMcq.addOneQuestion(mcqIntv1);
+        tagOod.addOneQuestion(mcqIntv1);
+
+        
+        MultipleChoiceQuestion mcqIntv2 = new MultipleChoiceQuestion();
+        mcqIntv2.setQuestionDetails("What is the number of parameters that a default constructor requires?");
+        MultipleChoiceOption mcoIntv2_1 = new MultipleChoiceOption("0",true, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_2 = new MultipleChoiceOption("1",false, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_3 = new MultipleChoiceOption("2",false, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_4 = new MultipleChoiceOption("3",false, mcqIntv2);
+        mcqIntv2.setCreator(sales);
+        mcqIntv2.addOneTag(tagMcq);
+        mcqIntv2.addOneTag(tagInterview);
+        mcqIntv2.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv2);
+        tagMcq.addOneQuestion(mcqIntv2);
+        tagOod.addOneQuestion(mcqIntv2);
+
+        MultipleChoiceQuestion mcqIntv3 = new MultipleChoiceQuestion();
+        mcqIntv3.setQuestionDetails("Annotation to find a transaction and then fail, complaining that no Hibernate session’s been bound to the thread.");
+        MultipleChoiceOption mcoIntv3_1 = new MultipleChoiceOption("Transaction", false, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_2 = new MultipleChoiceOption("Transactional", true, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_3 = new MultipleChoiceOption("Transactions",false, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_4 = new MultipleChoiceOption("None of the mentioned",false, mcqIntv3);
+        mcqIntv3.setCreator(sales);
+        mcqIntv3.addOneTag(tagMcq);
+        mcqIntv3.addOneTag(tagInterview);
+        mcqIntv3.addOneTag(tagJpa);
+        tagInterview.addOneQuestion(mcqIntv3);
+        tagMcq.addOneQuestion(mcqIntv3);
+        tagJpa.addOneQuestion(mcqIntv3);
+        
+        MultipleChoiceQuestion mcqIntv4 = new MultipleChoiceQuestion();
+        mcqIntv4.setQuestionDetails("In which access should a constructor be defined, so that object of the class can be created in any function?");
+        MultipleChoiceOption mcoIntv4_1 = new MultipleChoiceOption("Any access specifier will work", false, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_2 = new MultipleChoiceOption("Private", false, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_3 = new MultipleChoiceOption("Public",true, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_4 = new MultipleChoiceOption("Protected",false, mcqIntv4);
+        mcqIntv4.setCreator(sales);
+        mcqIntv4.addOneTag(tagMcq);
+        mcqIntv4.addOneTag(tagInterview);
+        mcqIntv4.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv4);
+        tagMcq.addOneQuestion(mcqIntv4);
+        tagOod.addOneQuestion(mcqIntv4);
+        
+        
+        MultipleChoiceQuestion mcqIntv5 = new MultipleChoiceQuestion();
+        mcqIntv5.setQuestionDetails("Which of the following is used to find and fix bugs in the Java programs?");
+        MultipleChoiceOption mcoIntv5_1 = new MultipleChoiceOption("JVM", false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_2 = new MultipleChoiceOption("JRE", false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_3 = new MultipleChoiceOption("JDK",false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_4 = new MultipleChoiceOption("JDB",true, mcqIntv5);
+        mcqIntv5.setCreator(sales);
+        mcqIntv5.addOneTag(tagMcq);
+        mcqIntv5.addOneTag(tagInterview);
+        mcqIntv5.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv5);
+        tagMcq.addOneQuestion(mcqIntv5);
+        tagJava.addOneQuestion(mcqIntv5);
+        
+        
+        // 2 by pond student
+        MultipleChoiceQuestion mcqIntv6 = new MultipleChoiceQuestion();
+        mcqIntv6.setQuestionDetails("Which method of the Class.class is used to determine the name of a class represented by the class object as a String?");
+        MultipleChoiceOption mcoIntv6_1 = new MultipleChoiceOption("getClass()", false, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_2 = new MultipleChoiceOption("intern()", false, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_3 = new MultipleChoiceOption("getName()",true, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_4 = new MultipleChoiceOption("toString()",false, mcqIntv6);
+        mcqIntv6.setCreator(student2);
+        mcqIntv6.addOneTag(tagMcq);
+        mcqIntv6.addOneTag(tagInterview);
+        mcqIntv6.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv6);
+        tagMcq.addOneQuestion(mcqIntv6);
+        tagJava.addOneQuestion(mcqIntv6);
+        
+        MultipleChoiceQuestion mcqIntv7 = new MultipleChoiceQuestion();
+        mcqIntv7.setQuestionDetails("Which option is false about the final keyword?");
+        MultipleChoiceOption mcoIntv7_1 = new MultipleChoiceOption("A final method cannot be overridden in its subclasses.", false, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_2 = new MultipleChoiceOption("A final class cannot be extended.", false, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_3 = new MultipleChoiceOption("A final class cannot extend other classes.",true, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_4 = new MultipleChoiceOption("A final method can be inherited.",false, mcqIntv7);
+        mcqIntv7.setCreator(student2);
+        mcqIntv7.addOneTag(tagMcq);
+        mcqIntv7.addOneTag(tagInterview);
+        mcqIntv7.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv7);
+        tagMcq.addOneQuestion(mcqIntv7);
+        tagJava.addOneQuestion(mcqIntv7);
+        
+        
+        // 3 by beached student
+        MultipleChoiceQuestion mcqIntv8 = new MultipleChoiceQuestion();
+        mcqIntv8.setQuestionDetails("Who is responsible for sprint meeting?");
+        MultipleChoiceOption mcoIntv8_1 = new MultipleChoiceOption("Product owner", false, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_2 = new MultipleChoiceOption("Scrum team", false, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_3 = new MultipleChoiceOption("Scrum master",true, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_4 = new MultipleChoiceOption("All of the above",false, mcqIntv8);
+        mcqIntv8.setCreator(student3);
+        mcqIntv8.addOneTag(tagMcq);
+        mcqIntv8.addOneTag(tagInterview);
+        mcqIntv8.addOneTag(tagAgile);
+        tagInterview.addOneQuestion(mcqIntv8);
+        tagMcq.addOneQuestion(mcqIntv8);
+        tagAgile.addOneQuestion(mcqIntv8);
+
+        MultipleChoiceQuestion mcqIntv9 = new MultipleChoiceQuestion();
+        mcqIntv9.setQuestionDetails("Who is responsible for sprint meeting?");
+        MultipleChoiceOption mcoIntv9_1 = new MultipleChoiceOption("Sprint planning", false, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_2 = new MultipleChoiceOption("Product backlog", true, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_3 = new MultipleChoiceOption("Sprint retrospective",false, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_4 = new MultipleChoiceOption("Meetings",false, mcqIntv9);
+        mcqIntv9.setCreator(student3);
+        mcqIntv9.addOneTag(tagMcq);
+        mcqIntv9.addOneTag(tagInterview);
+        mcqIntv9.addOneTag(tagAgile);
+        tagInterview.addOneQuestion(mcqIntv9);
+        tagMcq.addOneQuestion(mcqIntv9);
+        tagAgile.addOneQuestion(mcqIntv9);
+
+        MultipleChoiceQuestion mcqIntv10 = new MultipleChoiceQuestion();
+        mcqIntv10.setQuestionDetails("Which class is used to map a database row to a java object in spring?");
+        MultipleChoiceOption mcoIntv10_1 = new MultipleChoiceOption("ResultSet", false, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_2 = new MultipleChoiceOption("RowMapper", true, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_3 = new MultipleChoiceOption("RowSetMapper",false, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_4 = new MultipleChoiceOption("ResultSetMapper",false, mcqIntv10);
+        mcqIntv10.setCreator(student3);
+        mcqIntv10.addOneTag(tagMcq);
+        mcqIntv10.addOneTag(tagInterview);
+        mcqIntv10.addOneTag(tagSpring);
+        tagInterview.addOneQuestion(mcqIntv10);
+        tagMcq.addOneQuestion(mcqIntv10);
+        tagSpring.addOneQuestion(mcqIntv10);
+
 
         // SAVE TAGS and QUESTIONS
 
@@ -392,9 +543,71 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco81);
         mcoService.save(mco82);
         mcoService.save(mco83);
+        
+        
+        // Save interview questions
+        mcqIntv1 = (MultipleChoiceQuestion) questionService.save(mcqIntv1);
+        mcoService.save(mcoIntv1_1);
+        mcoService.save(mcoIntv1_2);
+        mcoService.save(mcoIntv1_3);
+        mcoService.save(mcoIntv1_4);
 
+        mcqIntv2 = (MultipleChoiceQuestion) questionService.save(mcqIntv2);
+        mcoService.save(mcoIntv2_1);
+        mcoService.save(mcoIntv2_2);
+        mcoService.save(mcoIntv2_3);
+        mcoService.save(mcoIntv2_4);
+        
+        mcqIntv3 = (MultipleChoiceQuestion) questionService.save(mcqIntv3);
+        mcoService.save(mcoIntv3_1);
+        mcoService.save(mcoIntv3_2);
+        mcoService.save(mcoIntv3_3);
+        mcoService.save(mcoIntv3_4);
+        
+        mcqIntv4 = (MultipleChoiceQuestion) questionService.save(mcqIntv4);
+        mcoService.save(mcoIntv4_1);
+        mcoService.save(mcoIntv4_2);
+        mcoService.save(mcoIntv4_3);
+        mcoService.save(mcoIntv4_4);
+        
+        mcqIntv5 = (MultipleChoiceQuestion) questionService.save(mcqIntv5);
+        mcoService.save(mcoIntv5_1);
+        mcoService.save(mcoIntv5_2);
+        mcoService.save(mcoIntv5_3);
+        mcoService.save(mcoIntv5_4);
 
-
+        mcqIntv6 = (MultipleChoiceQuestion) questionService.save(mcqIntv6);
+        mcoService.save(mcoIntv6_1);
+        mcoService.save(mcoIntv6_2);
+        mcoService.save(mcoIntv6_3);
+        mcoService.save(mcoIntv6_4);
+        
+        mcqIntv7 = (MultipleChoiceQuestion) questionService.save(mcqIntv7);
+        mcoService.save(mcoIntv7_1);
+        mcoService.save(mcoIntv7_2);
+        mcoService.save(mcoIntv7_3);
+        mcoService.save(mcoIntv7_4);
+        
+        mcqIntv8 = (MultipleChoiceQuestion) questionService.save(mcqIntv8);
+        mcoService.save(mcoIntv8_1);
+        mcoService.save(mcoIntv8_2);
+        mcoService.save(mcoIntv8_3);
+        mcoService.save(mcoIntv8_4);
+        
+        mcqIntv9 = (MultipleChoiceQuestion) questionService.save(mcqIntv9);
+        mcoService.save(mcoIntv9_1);
+        mcoService.save(mcoIntv9_2);
+        mcoService.save(mcoIntv9_3);
+        mcoService.save(mcoIntv9_4);        
+        
+        
+        mcqIntv10 = (MultipleChoiceQuestion) questionService.save(mcqIntv10);
+        mcoService.save(mcoIntv10_1);
+        mcoService.save(mcoIntv10_2);
+        mcoService.save(mcoIntv10_3);
+        mcoService.save(mcoIntv10_4);  
+        
+        
         ////////// Load Quizzes ////////////
 
 //        QuizQuestionGrade qqg1 = new QuizQuestionGrade();
