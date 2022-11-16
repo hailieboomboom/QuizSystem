@@ -78,7 +78,7 @@ export default function ViewMCQCard(props) {
                                 </Grid>
                             ))}
                             </Grid>
-                        
+
                     </div>
                 </CardContent>
 

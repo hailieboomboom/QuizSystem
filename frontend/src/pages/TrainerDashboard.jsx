@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
+import '../styles/trainerDashStyle.css'
 
 export default function TrainerDashboard(){
     const [rowData, setRowdata] = useState([]);
@@ -45,7 +46,6 @@ export default function TrainerDashboard(){
     }
 
     return (
-<Container>
     <div className={"trainerDashboardContainer"}>
         <div className={"trainerDashboardBox"}>
             <h1>Trainer Dashboard</h1>
@@ -118,7 +118,6 @@ export default function TrainerDashboard(){
             </TableContainer>
         </div>
     </div>
-</Container>
 
 
     

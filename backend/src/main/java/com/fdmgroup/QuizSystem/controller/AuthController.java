@@ -143,5 +143,4 @@ public class AuthController {
             default -> throw new RoleIsOutOfScopeException();
         }
     }
-
 }
