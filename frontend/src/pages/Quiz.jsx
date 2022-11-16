@@ -4,21 +4,25 @@ import Grid from "@mui/material/Grid";
 import QuizMsqCard from "../components/QuizMsqCard";
 import QuizMcqCard from "../components/QuizMcqCard";
 import QuizHeaderCard from "../components/QuizHeaderCard";
+import "../styles/QuizCardStyle.css"
 import axios, * as others from 'axios';
 import { useRecoilState } from 'recoil';
 import {attemptQuizState, quizSelectedAnswersState} from '../recoil/Atoms'
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
+import {getUserId} from "../utils/cookies";
+import Typography from "@mui/material/Typography";
 // quizId
 
 const Quiz = () => {
 
     const [answers, setAnswers] = useRecoilState(quizSelectedAnswersState);
+    const [grade, setGrade] = React.useState();
+
 
     React.useEffect(() => {
         const url = "http://localhost:8088/QuizSystem/api/quizzes/" + quiz.quizId + "/questions";
         axios.get(url).then((response) => {
-
             setQuizQuestions(response.data);
             console.log(quizQuestions);
             // setQuiz(response.data);
@@ -29,12 +33,13 @@ const Quiz = () => {
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
 
     const submitQuiz = () => {
-        axios.post("http://localhost:8088/QuizSystem/api/quizAttempts", {
+        axios.post("http://localhost:8088/QuizSystem/api/quizAttempts/" + getUserId() + "", {
             "mcqattemptList": answers,
             "quizId": quiz.quizId,
-            "userId": 1
+            "userId": getUserId()
         })
             .then(function (response) {
+                setGrade(response.data)
                 console.log(response);
             })
             .catch(function (error) {
@@ -46,10 +51,17 @@ const Quiz = () => {
     }
 
     if (!quizQuestions) return null;
+    if (grade) return (
+        <Grid className={"quizContainer"}>
+            <Typography color="warning">Thank you ! Your quiz attempt has been submitted. </Typography>
+            <Typography> You have gained {grade.totalAwarded} marks out of {grade.maxGrade}
+            </Typography>
+        </Grid>
+    );
     return (
-        <div>
-            <h1>Quiz</h1>
+        <div className={"quizContainer"}>
             <Grid
+
                 container
                 direction="column"
                 justifyContent="flex-start"
@@ -62,6 +74,7 @@ const Quiz = () => {
 
                 {
                     quizQuestions.map((questions) =>
+
                             <Grid item>
                                 <QuizMcqCard
                                     key={questions.questionId}
@@ -71,18 +84,11 @@ const Quiz = () => {
                             </Grid>
                     )
                 }
-                <Grid
-                    item
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-end" sx={{width: 700}}
-                >
-                    <Grid item/>
+
                     <Grid item>
-                        <Button variant="outlined" size="large" onClick={handleSubmit} as={Link} to="/viewQuizzes">Submit</Button>
+                        <Button fullWidth className={"submitButton"} onClick={handleSubmit} >Submit</Button>
                     </Grid>
 
-                </Grid>
                 <Grid item/>
             </Grid>
 

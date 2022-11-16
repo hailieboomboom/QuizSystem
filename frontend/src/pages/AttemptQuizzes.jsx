@@ -14,9 +14,10 @@ import { attemptQuizState } from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import '../styles/QuizzesTableStyle.css';
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import "../styles/attemptQuizStyle.css";
+import {getUserId} from "../utils/cookies";
 
 const AttemptQuizzes = () => {
 
@@ -71,7 +72,18 @@ const AttemptQuizzes = () => {
             return od.quizCategory.toLowerCase().includes(inputCategory)
         }
     })
+    if (!getUserId()) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Log in first.</Typography>
+            </Grid>
+        </Grid>
 
+    );
     if (loading) return(
         <Grid
             container
@@ -87,6 +99,7 @@ const AttemptQuizzes = () => {
     );
     return (
         <Grid
+            className={"viewContainer"}
             container
             direction="column"
             justifyContent="flex-start"
@@ -94,7 +107,7 @@ const AttemptQuizzes = () => {
             spacing={3}
         >
             <Grid item>
-                <Typography variant="h2" gutterBottom>
+                <Typography className={"textHeader"} variant="h2" gutterBottom>
                     Available Quizzes
                 </Typography>
             </Grid>
@@ -108,6 +121,7 @@ const AttemptQuizzes = () => {
                 <Grid item />
                 <Grid item>
                     <Autocomplete
+                        className={"filterBox"}
                         disableClearable
                         id="filter-demo"
                         options={quizCategories}
@@ -115,7 +129,9 @@ const AttemptQuizzes = () => {
                         filterOptions={filterOptions}
                         sx={{ width: 300 }}
                         onChange={categoryHandler}
-                        renderInput={(params) => <TextField {...params} label="Filter" />}
+                        renderInput={(params) =>
+                            <TextField variant="standard" color="secondary" focused {...params} label="Filter"
+                            />}
                     />
                 </Grid>
 
@@ -123,7 +139,7 @@ const AttemptQuizzes = () => {
             </Grid>
 
             <Grid item>
-                <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
+                <TableContainer className={"quizTable"} component={Paper} sx={{ width:700 }}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -143,7 +159,7 @@ const AttemptQuizzes = () => {
                                     </TableCell>
                                     <TableCell align="right">{row.quizCategory}</TableCell>
                                     <TableCell align="right">
-                                        <Button variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
+                                        <Button  className={"quizTableButton"}  variant="contained" onClick={() => setQuiz(row)} as={Link} to="/quiz" >
                                             Take Quiz
                                         </Button>
                                     </TableCell>
