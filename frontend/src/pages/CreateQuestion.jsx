@@ -18,6 +18,7 @@ import {createQuestionOptionsState, createQuestionState} from "../recoil/Atoms";
 import axios from "axios";
 import {getUserId} from "../utils/cookies.js";
 import {apis} from "../utils/apis.js";
+import Alert from '@mui/material/Alert';
 import EditQuestionOptions from "../components/EditQuestionOptions";
 import CreateWrongOptions from '../components/CreateWrongOptions';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
@@ -29,13 +30,11 @@ function CreateQuestion () {
 
     const navigate = useNavigate();
 
-    const [editQuestions, setEditQuestions] = useRecoilState(createQuestionState)//from backend
+    // const [editQuestions, setEditQuestions] = useRecoilState(createQuestionState)//from backend
 
     const [question, setQuestion] = useState('');
 
     const [tags, setTags] = useState([]);
-    // const [tagToDelete, setTagToDelete] = useState("");
-    // const [tagToAdd, setTagToAdd] = useState("");
     const [allTags, setAllTags] = useState([]);
 
     const [answers, setAnswers] = useState([
@@ -55,6 +54,7 @@ function CreateQuestion () {
         "id": 0,
         "optionDescription": ""
       }]);
+
     const [correctAnswer, setCorrectAnswer] = useState(
       {
         "correct": true,
@@ -106,6 +106,7 @@ function CreateQuestion () {
             })
             .catch((err) =>{
                 console.log(err)
+                alert(err.response.data.message)
             });
         
     }
@@ -175,7 +176,7 @@ function CreateQuestion () {
 
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <FormControl variant="standard"  fullWidth>
+                        {/* <FormControl variant="standard"  fullWidth>
                             <TextField
                                 id="questionId"
                                 name="questionString"
@@ -183,7 +184,7 @@ function CreateQuestion () {
                                 fullWidth
                                 variant="standard"
                             />
-                        </FormControl>
+                        </FormControl> */}
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
