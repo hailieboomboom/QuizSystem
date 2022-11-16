@@ -24,6 +24,7 @@ const CreateQuiz = () => {
     const [quizId, setQuizId] = React.useState('');
     console.log(quizId)
     React.useEffect(() => {
+        setquizSelectQuestions([]);
         axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs").then((response) => {
             setquizAllQuestions(response.data);
             console.log(response.data);

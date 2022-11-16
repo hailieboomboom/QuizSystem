@@ -3,7 +3,7 @@ import '../styles/profileStyle.css';
 import editButton from '../styles/editButton.png';
 import profilePicture from '../styles/profilePicture.png';
 import downArrow from '../styles/downArrow.png';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import {apis} from "../utils/apis.js";
 import {getUserId} from "../utils/cookies.js";
@@ -18,6 +18,8 @@ const Profile = () => {
   const [lastName, setLastName] = useState();
   const [role, setRole] = useState();
   const [openDialog, setOpenDialog] = useState(false);
+
+  const navigate = useNavigate();
   // const [refresh, s]
 
   useEffect(()=> {
@@ -33,8 +35,8 @@ const Profile = () => {
     )
   }, [])  
 
-  function handleOnClickUpdate(){
-    console.log("Clicked!")
+  function handleViewYourQuestions(){
+    navigate('/questions')
   }
 
   function closeWindow(){
@@ -65,7 +67,7 @@ const Profile = () => {
               <p>Role: {roleMapper(role)}</p>
 
               {/*<p>Role: {roleMapper(role)}</p>*/}
-              <button onClick={handleOnClickUpdate} as={Link} to="/questions" type={"button"}>View Your Questions</button>
+              <button onClick={handleViewYourQuestions} type={"button"}>View Your Questions</button>
               <div className={"profileBottom"}>
                   <p>First name: {firstName}</p>
                   <p>Last name: {lastName}</p>

@@ -124,33 +124,65 @@ public class DataLoader implements ApplicationRunner {
         System.out.println(salesService.findByUsername("us"));
 
         Student student1 = new Student();
-        student1.setUsername("ts");
+        student1.setUsername("skarima");
         student1.setPassword(passwordEncoder.encode("1"));
         student1.setEmail("student1@gmail.com");
         student1.setFirstName("student1");
         student1.setLastName("Karima");
         studentService.save(student1);
-        System.out.println(salesService.findByUsername("us"));
+       
 
+        // add pond student 
+        Student student2 = new Student();
+        student2.setUsername("slong");
+        student2.setPassword(passwordEncoder.encode("2"));
+        student2.setEmail("student2@gmail.com");
+        student2.setFirstName("student2");
+        student2.setLastName("Long");
+        student2.setRole(Role.POND);
+        studentService.save(student2);
+      
+        
+        // add beached student 
+        Student student3 = new Student();
+        student3.setUsername("sbrown");
+        student3.setPassword(passwordEncoder.encode("3"));
+        student3.setEmail("student3@gmail.com");
+        student3.setFirstName("student3");
+        student3.setLastName("Brown");
+        student3.setRole(Role.BEACHED);
+        studentService.save(student3);
+        
+       
         log.info("Finished setup");
 
+       
 
         ////////// Load Questions ////////////
-
+        
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
         mcq1.setQuestionDetails("test mcq1");
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
         MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
         MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
-        mcq1.setCreator(sales);
+        mcq1.setCreator(trainer);
         
 
         MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
         mcq2.setQuestionDetails("test mcq2");
-        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1",true,mcq2);
-        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2",false,mcq2);
-        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3",false,mcq2);
+
+        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1 for 2",true,mcq2);
+        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2 for 2",false,mcq2);
+        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3 for 2",false,mcq2);
         mcq2.setCreator(sales);
+        
+        MultipleChoiceQuestion mcq3 = new MultipleChoiceQuestion();
+        mcq3.setQuestionDetails("test mcq3");
+        MultipleChoiceOption mco111 = new MultipleChoiceOption("op1 for 3",true,mcq3);
+        MultipleChoiceOption mco112 = new MultipleChoiceOption("op2 for 3",false,mcq3);
+        MultipleChoiceOption mco113 = new MultipleChoiceOption("op3 for 3",false,mcq3);
+        mcq3.setCreator(student1);
+
 
         ShortAnswerQuestion sa1 = new ShortAnswerQuestion();
         sa1.setQuestionDetails("what is the best colour");
@@ -172,8 +204,7 @@ public class DataLoader implements ApplicationRunner {
         sa4.setCorrectAnswer("java");
         sa4.setCreator(trainer);
         
-         // tag: interview course python java web springboot sql unix ood jpa spring react javascript proskill other
-		
+        
 
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
@@ -191,6 +222,7 @@ public class DataLoader implements ApplicationRunner {
         Tag tag14 = new Tag();
         Tag tag15 = new Tag();
         Tag tag16 = new Tag();
+        Tag tag17 = new Tag();
         tag1.setTagName("course");
         tag2.setTagName("interview");
         tag3.setTagName("java");
@@ -203,27 +235,105 @@ public class DataLoader implements ApplicationRunner {
         tag10.setTagName("spring");
         tag11.setTagName("react");
         tag12.setTagName("javascript");
-        tag13.setTagName("proskill");
+        tag13.setTagName("proskills");
         tag14.setTagName("web");
         tag15.setTagName("agile");
         tag16.setTagName("other");
+        tag17.setTagName("mcq");
         
         
         tag1.addOneQuestion(mcq1);
+        tag1.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
         tag1.addOneQuestion(sa1);
         tag1.addOneQuestion(sa2);
         tag1.addOneQuestion(sa3);
         tag1.addOneQuestion(sa4);
+        tag2.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
         tag2.addOneQuestion(sa1);
         tag2.addOneQuestion(sa4);
+        tag2.addOneQuestion(mcq2);
+        tag1.addOneQuestion(mcq3);
+        
+        tag17.addOneQuestion(mcq1);
+        tag17.addOneQuestion(mcq2);
+        tag17.addOneQuestion(mcq3);
 
         mcq1.addOneTag(tag1);
+
+        mcq2.addOneTag(tag2);
+        mcq3.addOneTag(tag1);
+        mcq1.addOneTag(tag17);
+        mcq2.addOneTag(tag17);
+        mcq3.addOneTag(tag17);
         sa1.addOneTag(tag2);
+
         sa1.addOneTag(tag1);
         sa2.addOneTag(tag1);
         sa3.addOneTag(tag1);
         sa4.addOneTag(tag1);
         sa4.addOneTag(tag2);
+        
+        
+        // LOAD MCQ QUESTIONS AND SET TAGS
+    	// add more 10 mcq course (5+2+3)
+        //2 by beach student
+        MultipleChoiceQuestion mcq5 = new MultipleChoiceQuestion();
+        mcq5.setQuestionDetails("What testing framework(s) are when() and verify() a part of?");
+        MultipleChoiceOption mco51 = new MultipleChoiceOption("JUnit",false,mcq5);
+        MultipleChoiceOption mco52 = new MultipleChoiceOption("JUnit and Mockito",false,mcq5);
+        MultipleChoiceOption mco53 = new MultipleChoiceOption("Mockito",true,mcq5);
+        mcq5.setCreator(student2);
+        mcq5.addOneTag(tag17);
+        mcq5.addOneTag(tag1);
+        mcq5.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq5);
+        tag17.addOneQuestion(mcq5);
+        tag8.addOneQuestion(mcq5);
+        
+        //2 by pond student
+        MultipleChoiceQuestion mcq6 = new MultipleChoiceQuestion();
+        mcq6.setQuestionDetails("Which method is not defined in the Object class?");
+        MultipleChoiceOption mco61 = new MultipleChoiceOption("hashCode()",false,mcq6);
+        MultipleChoiceOption mco62 = new MultipleChoiceOption("notify()",false,mcq6);
+        MultipleChoiceOption mco63 = new MultipleChoiceOption("compareTo(Object o)",true,mcq6);
+        mcq6.setCreator(student2);
+        mcq6.addOneTag(tag17);
+        mcq6.addOneTag(tag1);
+        mcq6.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq6);
+        tag17.addOneQuestion(mcq6);
+        tag8.addOneQuestion(mcq6);
+        
+        MultipleChoiceQuestion mcq7 = new MultipleChoiceQuestion();
+        mcq7.setQuestionDetails("Is multiple inheritance possible in Java?");
+        MultipleChoiceOption mco71 = new MultipleChoiceOption("No",false,mcq7);
+        MultipleChoiceOption mco72 = new MultipleChoiceOption("Yes, only with interfaces",true,mcq7);
+        MultipleChoiceOption mco73 = new MultipleChoiceOption("Yes, with both classes and interfaces",false,mcq7);
+        mcq7.setCreator(student2);
+        mcq7.addOneTag(tag17);
+        mcq7.addOneTag(tag1);
+        mcq7.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq7);
+        tag17.addOneQuestion(mcq7);
+        tag8.addOneQuestion(mcq7);
+        
+        
+        //1 by student 1
+        MultipleChoiceQuestion mcq8 = new MultipleChoiceQuestion();
+        mcq8.setQuestionDetails("Where can the static keyword be used?");
+        MultipleChoiceOption mco81 = new MultipleChoiceOption("On variables",false,mcq8);
+        MultipleChoiceOption mco82 = new MultipleChoiceOption("On methods",false,mcq8);
+        MultipleChoiceOption mco83 = new MultipleChoiceOption("On variables, methods, and classes",true,mcq8);
+        mcq8.setCreator(student1);
+        mcq8.addOneTag(tag17);
+        mcq8.addOneTag(tag1);
+        mcq8.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq8);
+        tag17.addOneQuestion(mcq8);
+        tag8.addOneQuestion(mcq8);
+        
+        
+        // SAVE TAGS and QUESTIONS
 
         tagService.save(tag1);
         tagService.save(tag2);
@@ -241,7 +351,8 @@ public class DataLoader implements ApplicationRunner {
         tagService.save(tag14);
         tagService.save(tag15);
         tagService.save(tag16);
-
+        tagService.save(tag17);
+        
         mcq1 = (MultipleChoiceQuestion) questionService.save(mcq1);
         questionService.save(sa1);
         questionService.save(sa2);
@@ -256,6 +367,33 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco11);
         mcoService.save(mco12);
         mcoService.save(mco13);
+        
+        mcq3 = (MultipleChoiceQuestion) questionService.save(mcq3);
+        mcoService.save(mco111);
+        mcoService.save(mco112);
+        mcoService.save(mco113);
+        
+        mcq5 = (MultipleChoiceQuestion) questionService.save(mcq5);
+        mcoService.save(mco51);
+        mcoService.save(mco52);
+        mcoService.save(mco53);
+        
+        mcq6 = (MultipleChoiceQuestion) questionService.save(mcq6);
+        mcoService.save(mco61);
+        mcoService.save(mco62);
+        mcoService.save(mco63);
+        
+        mcq7 = (MultipleChoiceQuestion) questionService.save(mcq7);
+        mcoService.save(mco71);
+        mcoService.save(mco72);
+        mcoService.save(mco73);
+        
+        mcq8 = (MultipleChoiceQuestion) questionService.save(mcq8);
+        mcoService.save(mco81);
+        mcoService.save(mco82);
+        mcoService.save(mco83);
+        
+
 
         ////////// Load Quizzes ////////////
 
@@ -264,11 +402,13 @@ public class DataLoader implements ApplicationRunner {
 //        qqg1.setKey(qqgKey);
 //        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
 //        qqgList.add(qqg1);
-//        
+//      
+        // male 2 quizzes
+        
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
-        quiz1.setName("course quiz 1");
-        quiz1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type 
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
        
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
@@ -317,6 +457,9 @@ public class DataLoader implements ApplicationRunner {
 //        log.info("--------------- All users ------------------------");
 //        log.info(quizService.getAllQuizzes());
 
+        
+        //quiz attempt
+        
         ////// quiz attempt //////
         
         QuizAttempt qa1 = new QuizAttempt();
