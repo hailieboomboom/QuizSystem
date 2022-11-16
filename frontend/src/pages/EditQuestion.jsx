@@ -41,7 +41,7 @@ const EditQuestion = () => {
             "tags": [
             "interview"
         ],
-            "userId": 0
+            "userId": 1
 
         }
         axios.put(url, data)
@@ -51,6 +51,8 @@ const EditQuestion = () => {
             .catch((err) =>{
                 console.log(err)
             });
+
+        console.log(data)
     }
 
 
