@@ -1,8 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route,redirect } from "react-router-dom";
 import "./App.css";
 import NavigationBar from "./components/NavigationBar";
-import Header from "./components/Header";
 import SignInSide from "./components/LoginForm";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -22,7 +21,11 @@ import AttemptedQuizzes from "./pages/AttemptedQuizzes";
 import Dashboard from './pages/Dashboard'
 import SalesDashboard from "./pages/SalesDashboard";
 import TrainerDashboard from "./pages/TrainerDashboard";
+import {createTheme, colors, ThemeProvider} from "@mui/material";
+import{isLoggedIn} from "./utils/cookies";
+import Hero from "./components/Hero"
 import ErrorPage from "./pages/ErrorPage";
+
 import {
   RecoilRoot,
   atom,

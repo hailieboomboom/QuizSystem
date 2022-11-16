@@ -8,10 +8,13 @@ export const apis = {
     authorizeTrainer,
     getUnauthorizedSales,
     authorizeSales,
+    isLoggedIn,
     getUserById,
     updateStudentInfo,
     updateTrainerInfo,
-    updateSalesInfo
+    updateSalesInfo,
+    getRoleByUserId,
+    getAllStudents
 }
 
 const config = {
@@ -35,6 +38,10 @@ function getUserById(id){
     }
 }
 
+function getAllStudents(){
+    return instance.get("/users/students")
+}
+
 function updateStudentInfo(id, password, email, firstName, lastName){
     return instance.put("/users/students/" + id, {password, email, firstName, lastName}, config);
 }
@@ -51,6 +58,10 @@ function getUnauthorizedTrainers(){
     return instance.get('/users/trainers/unauthorised' , config)
 }
 
+function isLoggedIn(){
+    return getCookie('token');
+}
+
 function getUnauthorizedSales(){
     return instance.get('/users/sales/unauthorised' , config)
 }
@@ -62,8 +73,12 @@ function authorizeSales(username){
     return instance.put("/users/sales/authorise/"+ username, {}, config)
 }
 
-function signup(username, email, password, firstName, lastName,role){
-    return instance.post('/auth/signup', {email, firstName, lastName, password, role, username})
+function getRoleByUserId(id) {
+    return instance.get("/users/" + id + "/role", config)
+}
+
+function signup(username, email, password, firstName, lastName, role){
+    return instance.post('/auth/signup', {username, email, firstName, lastName, password, role})
 }
 function login(username, password) {
     return instance.post('/auth/login', {username, password})
