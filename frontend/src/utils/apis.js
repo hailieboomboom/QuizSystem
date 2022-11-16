@@ -72,8 +72,8 @@ function getRoleByUserId(id) {
     return instance.get("/users/" + id + "/role", config)
 }
 
-function signup(username, email, password, firstName, lastName,role){
-    return instance.post('/auth/signup', {email, firstName, lastName, password, role, username})
+function signup(username, email, password, firstName, lastName, role){
+    return instance.post('/auth/signup', {username, email, firstName, lastName, password, role})
 }
 function login(username, password) {
     return instance.post('/auth/login', {username, password})
