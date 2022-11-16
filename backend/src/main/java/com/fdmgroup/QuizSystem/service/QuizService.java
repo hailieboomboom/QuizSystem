@@ -234,9 +234,9 @@ public class QuizService {
 				Role.AUTHORISED_SALES)));
 		
 		Role activeUserRole = userService.getUserById(activeUserId).getRole();
-		Set<Role> requiredRoleSet = quizRoleMap.get(requestQuizCategory);
+		Set<Role> authorisedRoleSet = quizRoleMap.get(requestQuizCategory);
 		
-		if(!requiredRoleSet.contains(activeUserRole)) {
+		if(!authorisedRoleSet.contains(activeUserRole)) {
 			throw new UserUnauthorisedError("You do not have access to create, update or delete " + requestQuizCategory + " quizzes!");
 		}
 	}
