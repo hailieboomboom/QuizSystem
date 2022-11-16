@@ -162,9 +162,9 @@ public class DataLoader implements ApplicationRunner {
 
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
         mcq1.setQuestionDetails("test mcq1");
-        MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
-        MultipleChoiceOption mco2 = new MultipleChoiceOption("op2",false,mcq1);
-        MultipleChoiceOption mco3 = new MultipleChoiceOption("op3",false,mcq1);
+        MultipleChoiceOption mco1 = new MultipleChoiceOption("op1 for 1",true,mcq1);
+        MultipleChoiceOption mco2 = new MultipleChoiceOption("op2 for 2",false,mcq1);
+        MultipleChoiceOption mco3 = new MultipleChoiceOption("op3 for 3",false,mcq1);
         mcq1.setCreator(trainer);
 
 
@@ -277,12 +277,25 @@ public class DataLoader implements ApplicationRunner {
         // LOAD MCQ QUESTIONS AND SET TAGS
     	// add more 10 mcq course (5+2+3)
         //2 by beach student
+        MultipleChoiceQuestion mcq4 = new MultipleChoiceQuestion();
+        mcq4.setQuestionDetails("How could you create your own unchecked exception?");
+        MultipleChoiceOption mco41 = new MultipleChoiceOption("create a class that extends Exception",false,mcq4);
+        MultipleChoiceOption mco42 = new MultipleChoiceOption("create a class that extends Throwable",false,mcq4);
+        MultipleChoiceOption mco43 = new MultipleChoiceOption("create a class that extends RuntimeException",true,mcq4);
+        mcq4.setCreator(student3);
+        mcq4.addOneTag(tagMcq);
+        mcq4.addOneTag(tagCourse);
+        mcq4.addOneTag(tagOod);
+        tagCourse.addOneQuestion(mcq4);
+        tagMcq.addOneQuestion(mcq4);
+        tagOod.addOneQuestion(mcq4);
+        
         MultipleChoiceQuestion mcq5 = new MultipleChoiceQuestion();
         mcq5.setQuestionDetails("What testing framework(s) are when() and verify() a part of?");
         MultipleChoiceOption mco51 = new MultipleChoiceOption("JUnit",false,mcq5);
         MultipleChoiceOption mco52 = new MultipleChoiceOption("JUnit and Mockito",false,mcq5);
         MultipleChoiceOption mco53 = new MultipleChoiceOption("Mockito",true,mcq5);
-        mcq5.setCreator(student2);
+        mcq5.setCreator(student3);
         mcq5.addOneTag(tagMcq);
         mcq5.addOneTag(tagCourse);
         mcq5.addOneTag(tagOod);
@@ -331,6 +344,72 @@ public class DataLoader implements ApplicationRunner {
         tagCourse.addOneQuestion(mcq8);
         tagMcq.addOneQuestion(mcq8);
         tagOod.addOneQuestion(mcq8);
+        
+        // 5 by trainer
+        MultipleChoiceQuestion mcq9 = new MultipleChoiceQuestion();
+        mcq9.setQuestionDetails("In which form MYSQL query results are displayed?");
+        MultipleChoiceOption mco91 = new MultipleChoiceOption("Rows and Columns",true,mcq9);
+        MultipleChoiceOption mco92 = new MultipleChoiceOption("Lists and Tuples",false,mcq9);
+        MultipleChoiceOption mco93 = new MultipleChoiceOption("Lists only",true,mcq9);
+        mcq9.setCreator(trainer);
+        mcq9.addOneTag(tagMcq);
+        mcq9.addOneTag(tagCourse);
+        mcq9.addOneTag(tagSql);
+        tagCourse.addOneQuestion(mcq9);
+        tagMcq.addOneQuestion(mcq9);
+        tagSql.addOneQuestion(mcq9);
+        
+        MultipleChoiceQuestion mcq10 = new MultipleChoiceQuestion();
+        mcq10.setQuestionDetails("ALTER command is a type of which SQL command?");
+        MultipleChoiceOption mco101 = new MultipleChoiceOption("DML",false,mcq10);
+        MultipleChoiceOption mco102 = new MultipleChoiceOption("DDL",true,mcq10);
+        MultipleChoiceOption mco103 = new MultipleChoiceOption("DCL",false,mcq10);
+        mcq10.setCreator(trainer);
+        mcq10.addOneTag(tagMcq);
+        mcq10.addOneTag(tagCourse);
+        mcq10.addOneTag(tagSql);
+        tagCourse.addOneQuestion(mcq10);
+        tagMcq.addOneQuestion(mcq10);
+        tagSql.addOneQuestion(mcq10);
+        
+        MultipleChoiceQuestion mcq11 = new MultipleChoiceQuestion();
+        mcq11.setQuestionDetails("Which command is used to sort the lines of data in file in reverse order?");
+        MultipleChoiceOption mco1111 = new MultipleChoiceOption("sort -r",true,mcq11);
+        MultipleChoiceOption mco1112 = new MultipleChoiceOption("sh",false,mcq11);
+        MultipleChoiceOption mco1113 = new MultipleChoiceOption("sort",false,mcq11);
+        mcq11.setCreator(trainer);
+        mcq11.addOneTag(tagMcq);
+        mcq11.addOneTag(tagCourse);
+        mcq11.addOneTag(tagUnix);
+        tagCourse.addOneQuestion(mcq11);
+        tagMcq.addOneQuestion(mcq11);
+        tagUnix.addOneQuestion(mcq11);
+        
+        MultipleChoiceQuestion mcq12 = new MultipleChoiceQuestion();
+        mcq12.setQuestionDetails("Which command is used to display the top of the file?");
+        MultipleChoiceOption mco121 = new MultipleChoiceOption("grep",false,mcq12);
+        MultipleChoiceOption mco122 = new MultipleChoiceOption("head",true,mcq12);
+        MultipleChoiceOption mco123 = new MultipleChoiceOption("more",false,mcq12);
+        mcq12.setCreator(trainer);
+        mcq12.addOneTag(tagMcq);
+        mcq12.addOneTag(tagCourse);
+        mcq12.addOneTag(tagUnix);
+        tagCourse.addOneQuestion(mcq12);
+        tagMcq.addOneQuestion(mcq12);
+        tagUnix.addOneQuestion(mcq12);
+        
+        MultipleChoiceQuestion mcq13 = new MultipleChoiceQuestion();
+        mcq13.setQuestionDetails("What is the maximum length of a Python identifier?");
+        MultipleChoiceOption mco131 = new MultipleChoiceOption("32",false,mcq13);
+        MultipleChoiceOption mco132 = new MultipleChoiceOption("128",false,mcq13);
+        MultipleChoiceOption mco133 = new MultipleChoiceOption("No fixed length specified",true,mcq13);
+        mcq13.setCreator(trainer);
+        mcq13.addOneTag(tagMcq);
+        mcq13.addOneTag(tagCourse);
+        mcq13.addOneTag(tagPython);
+        tagCourse.addOneQuestion(mcq13);
+        tagMcq.addOneQuestion(mcq13);
+        tagPython.addOneQuestion(mcq13);
 
 
         // SAVE TAGS and QUESTIONS
@@ -392,6 +471,31 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco81);
         mcoService.save(mco82);
         mcoService.save(mco83);
+        
+        mcq9 = (MultipleChoiceQuestion) questionService.save(mcq9);
+        mcoService.save(mco91);
+        mcoService.save(mco92);
+        mcoService.save(mco93);
+        
+        mcq10 = (MultipleChoiceQuestion) questionService.save(mcq10);
+        mcoService.save(mco101);
+        mcoService.save(mco102);
+        mcoService.save(mco103);
+        
+        mcq11 = (MultipleChoiceQuestion) questionService.save(mcq11);
+        mcoService.save(mco1111);
+        mcoService.save(mco1112);
+        mcoService.save(mco1113);
+        
+        mcq12 = (MultipleChoiceQuestion) questionService.save(mcq12);
+        mcoService.save(mco121);
+        mcoService.save(mco122);
+        mcoService.save(mco123);
+        
+        mcq13 = (MultipleChoiceQuestion) questionService.save(mcq13);
+        mcoService.save(mco131);
+        mcoService.save(mco132);
+        mcoService.save(mco133);
 
 
 
