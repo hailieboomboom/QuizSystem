@@ -12,7 +12,7 @@ public class QuizAttemptDTO {
 	@NotBlank
 	private long quizId;
 	@NotBlank
-	private long userId;
+	private long userId; // AKA: quiz taker's ID, quiz taker = quiz attempt creator
 	private int attemptNo;
     private float totalAwarded;
     private float maxGrade;
