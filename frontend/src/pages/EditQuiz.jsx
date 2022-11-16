@@ -42,7 +42,7 @@ const EditQuiz = () => {
     }, []);
 
     function getAllQuestions() {
-        return axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs")
+        return axios.get("http://localhost:8088/QuizSystem//api/questions/quizEdit/"+ editQuiz.quizId +"/mcqs")
 
     }
 

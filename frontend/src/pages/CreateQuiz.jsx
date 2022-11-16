@@ -33,7 +33,7 @@ const CreateQuiz = () => {
         });
     }, []);
     const postQuiz = () => {
-        axios.post("http://localhost:8088/QuizSystem/api/quizzes", {
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes/"+ 1 + "", {
             "creatorId": 1,
             "name": name,
             "quizCategory": category
@@ -50,7 +50,7 @@ const CreateQuiz = () => {
     }
     const postQuestions = (id) => {
         console.log(JSON.stringify(quizSelectedQuestions))
-        axios.post("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions/" + 1 + "",
             quizSelectedQuestions
         )
             .then(function (response) {
