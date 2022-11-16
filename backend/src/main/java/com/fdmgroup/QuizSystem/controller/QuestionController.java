@@ -78,7 +78,21 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
-
+	@GetMapping("/tags")
+	public ResponseEntity<List<String>> getAllTags(){
+		List<String> tags = tagService.findAll();
+		
+		return new ResponseEntity<>(tags,HttpStatus.OK);
+	}
+	
+	@GetMapping("/tags/{tag_id}")
+	public ResponseEntity<String> getTagById(@PathVariable long tag_id){
+		String tagName = tagService.getTagById(tag_id);
+		
+		return new ResponseEntity<>(tagName,HttpStatus.OK);
+	}
+	
+	
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
 			notes = "return question along with tags and options")

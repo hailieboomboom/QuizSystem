@@ -1,5 +1,6 @@
 package com.fdmgroup.QuizSystem.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,23 @@ public class TagService {
 			throw new TagNotValidException("The question must contains at least a course or interview tag");
 
 		tagDto.forEach(tagName -> validateTagName(tagName));
+	}
+
+	public List<String> findAll() {
+		List<Tag> tags = tagRepo.findAll();
+		List<String> tagNames = new ArrayList<String>();
+		for(Tag tag: tags) {
+			tagNames.add(tag.getTagName());
+		}
+		return tagNames;
+	}
+	
+	public String getTagById(long id) {
+		Optional<Tag> tagOptional = tagRepo.findById(id);
+		if(tagOptional.isEmpty()) {
+			return "";
+		}
+		return tagOptional.get().getTagName();
 	}
 
 
