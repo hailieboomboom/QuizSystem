@@ -1,6 +1,7 @@
 package com.fdmgroup.QuizSystem.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fdmgroup.QuizSystem.model.Quiz;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.dto.Attempt.MCQAttemptDTO;
+import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.QuizAttempt;
+import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionMCQAttempt;
+import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuizAttemptRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
@@ -31,6 +38,7 @@ public class QuizAttemptService {
 	
 	private final QuizAttemptRepository quizAttemptRepository;
 	private final QuizQuestionMCQAttemptRepository mcqAttemptRepo;
+	private final UserService userService;
 	
 	public QuizAttempt save (QuizAttempt quizAttempt) {
 		return quizAttemptRepository.save(quizAttempt);
@@ -92,4 +100,24 @@ public class QuizAttemptService {
 		
 		return mcqAttemptDtos;
 	}
+
+	// Method added by Summer
+	// check if the active user has the authority to take the quiz
+	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
+		
+		HashMap<QuizCategory, Set<Role>> quizRoleMap = new HashMap<>();
+		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<Role>(Arrays.asList(
+				Role.POND,Role.BEACHED,
+				Role.TRAINING)));
+		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<Role>(Arrays.asList(
+				Role.POND,Role.BEACHED)));
+		
+		Role activeUserRole = userService.getUserById(activeUserId).getRole();
+		Set<Role> authorisedRoleSet = quizRoleMap.get(requestQuizCategory);
+		
+		if(!authorisedRoleSet.contains(activeUserRole)) {
+			throw new UserUnauthorisedError("You do not have access to taking " + requestQuizCategory + " quizzes!");
+		}
+	}
+	
 }

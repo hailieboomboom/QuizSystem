@@ -49,14 +49,17 @@ public class QuizController {
 	private final QuizQuestionGradeService quizQuestionGradeService;
 	private final UserService userService;
 
-	@PostMapping("/api/quizzes")
-	public ResponseEntity<QuizDto> createQuiz(@RequestBody QuizDto quizDto) {
 
+	@PostMapping("/api/quizzes/{active_user_id}")
+	public ResponseEntity<QuizDto> createQuiz(@PathVariable long active_user_id, @RequestBody QuizDto quizDto) {
+
+		// Sales and Training students can only create one type of quizzes
+		quizService.checkAccessToQuizCategory(quizDto.getQuizCategory(), active_user_id);
+		
+		// Others(Trainers, Pond/Beached Students) can create both quizzes 
 		QuizDto quizDtoResponse =  quizService.createQuiz(quizDto);
-
 		return new ResponseEntity<QuizDto>(quizDtoResponse, HttpStatus.CREATED);
 	}
-
 
 	@GetMapping("/api/quizzes")
 	public ResponseEntity<List<QuizDto>> getAllQuizzes() {
@@ -75,69 +78,62 @@ public class QuizController {
 
 	@PutMapping("/api/quizzes/{id}/{active_user_id}")
 	public ResponseEntity<ApiResponse> updateQuiz(@PathVariable long id, @PathVariable long active_user_id, @RequestBody QuizDto quizDto) {
-		Quiz quiz = quizService.getQuizById(id);
-
-		if(userService.getUserById(active_user_id).getRole() == Role.AUTHORISED_TRAINER && quiz.getQuizCategory() != QuizCategory.COURSE_QUIZ ){
-			throw new UserUnauthorisedError("You do not have access to this page!");
-		} else if (active_user_id != quiz.getCreator().getId() ) {
-			throw new UserUnauthorisedError("You do not have access to this page!");
-		}
+		
+		quizService.checkAccessToQuizId(id, active_user_id);	
+		quizService.checkAccessToQuizCategory(quizDto.getQuizCategory(), active_user_id);
+		
 		quizService.updateQuiz(id, quizDto);
 		return new ResponseEntity<>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_UPDATED), HttpStatus.OK);
 	}
 
 	
-	@DeleteMapping("/api/quizzes/{id}")
-	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable long id) {
+	@DeleteMapping("/api/quizzes/{id}/{active_user_id}")
+	public ResponseEntity<ApiResponse> deleteQuiz(@PathVariable long id, @PathVariable long active_user_id) {
+		
+		QuizCategory quizCategory = quizService.getQuizById(id).getQuizCategory();
+		quizService.checkAccessToQuizId(id, active_user_id);	
+		quizService.checkAccessToQuizCategory(quizCategory, active_user_id);
+		
 		quizService.deleteQuizById(id);
 		return new ResponseEntity<>(new ApiResponse(true, SUCCESS_PRODUCT_HAS_BEEN_DELETED), HttpStatus.OK);
 	}
+
 	
-	@PostMapping("/api/quizzes/{id}/questions")
-	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
-        Quiz quiz = quizService.getQuizById(quiz_id);
-        for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
-            Question question = questionService.findById(questionGradeDTO.getQuestionId());
-            float grade = questionGradeDTO.getGrade();
-            quizService.addQuestionIntoQuiz(question, quiz, grade);
-        }
-        return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
-    }
+//	@PostMapping("/api/quizzes/{id}/questions")
+//	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
+//        Quiz quiz = quizService.getQuizById(quiz_id);
+//        for(QuestionGradeDTO questionGradeDTO : questionGradeDtoList ) {
+//            Question question = questionService.findById(questionGradeDTO.getQuestionId());
+//            float grade = questionGradeDTO.getGrade();
+//            quizService.addQuestionIntoQuiz(question, quiz, grade);
+//        }
+//        return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
+//    }
+
+
 	
-	@PutMapping("/api/quizzes/{id}/questions")
-	public ResponseEntity<ApiResponse> updateQuizQuestions(@PathVariable("id") long quiz_id, @RequestBody List<QuestionGradeDTO> questionGradeList) {
+	@PostMapping("/api/quizzes/{id}/questions/{active_user_id}")
+	public ResponseEntity<ApiResponse> createQuizQuestions(@PathVariable("id") long quiz_id, @PathVariable long active_user_id,  @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
+		
+		QuizCategory quizCategory = quizService.getQuizById(quiz_id).getQuizCategory();
+		quizService.checkAccessToQuizId(quiz_id, active_user_id);	
+		quizService.checkAccessToQuizCategory(quizCategory, active_user_id);
 
-		Quiz quiz = quizService.getQuizById(quiz_id);
-
-		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
-		// Database
-		Set<Long> questionIdSet = quizQuestionGradeList.stream().map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
-		Set<Long> questionIdInputSet = questionGradeList.stream().map(QuestionGradeDTO::getQuestionId).collect(Collectors.toSet());
-
-		// if user adds new questions
-		for (QuestionGradeDTO questionGradeDTO : questionGradeList) {
-			if(!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
-				Question question = questionService.findById(questionGradeDTO.getQuestionId());
-				float grade = questionGradeDTO.getGrade();
-				quizService.addQuestionIntoQuiz(question, quiz, grade);
-			}
-			else if(questionGradeDTO.getGrade() != (quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())){
-				QuizQuestionGrade quizQuestionGrade = quizQuestionGradeService.findById( new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId()));
-				quizQuestionGrade.setGrade(questionGradeDTO.getGrade());
-				quizQuestionGradeService.save(quizQuestionGrade);
-			}
-		}
-		// if user remove existing questions
-		for(Long questionId : questionIdSet) {
-			if(!questionIdInputSet.contains(questionId)) {
-				Question question = questionService.findById(questionId);
-				quizService.removeQuestionFromQuiz(question, quiz);
-			}
-		}
-
+		quizService.createQuizQuestions(quiz_id, questionGradeDtoList);
 		return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
 	}
 
+	
+	@PutMapping("/api/quizzes/{id}/questions/{active_user_id}")
+	public ResponseEntity<ApiResponse> updateQuizQuestions(@PathVariable("id") long quiz_id, @PathVariable long active_user_id, @RequestBody List<QuestionGradeDTO> questionGradeDtoList) {
+
+		QuizCategory quizCategory = quizService.getQuizById(quiz_id).getQuizCategory();
+		quizService.checkAccessToQuizId(quiz_id, active_user_id);	
+		quizService.checkAccessToQuizCategory(quizCategory, active_user_id);
+
+		quizService.updateQuizQuestions(quiz_id,questionGradeDtoList);
+		return new ResponseEntity<>(new ApiResponse(true, "Successfully update questions to quiz"), HttpStatus.OK);
+	}
 
 	@GetMapping("/api/quizzes/{id}/questions")
 	public ResponseEntity<List<QuestionGradeDTO>> getAllQuestionsByQuizId(@PathVariable long id) {
@@ -153,7 +149,6 @@ public class QuizController {
 			List<QuizDto> quizDtos = quizService.getQuizzesByCreatorId(creatorId);
 			return new ResponseEntity<>(quizDtos, HttpStatus.OK);
 		
-
 	}
 
 }
