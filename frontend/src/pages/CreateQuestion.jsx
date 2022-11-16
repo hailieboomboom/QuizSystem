@@ -22,20 +22,7 @@ function CreateQuestion () {
     const [question, setQuestion] = useState('');
 
     const [tags, setTag] = useState([]);
-    const [answers, setAnswers] = useState([
-    {
-      "correct": false,
-      "id": 0,
-      "optionDescription": ""
-    },{
-      "correct": false,
-      "id": 0,
-      "optionDescription": ""
-    },{
-      "correct": false,
-      "id": 0,
-      "optionDescription": ""
-    }]);
+    const [answers, setAnswers] = useRecoilState(createQuestionOptionsState);
 
     const url = `${API_URL}/${editQuestions.questionId}`
 
@@ -48,6 +35,8 @@ function CreateQuestion () {
     };
     // console.log(answers)
     function handleSaveQuestion(){
+
+
         console.log(question)
 
         const data = {
@@ -65,6 +54,8 @@ function CreateQuestion () {
             .catch((err) =>{
                 console.log(err)
             });
+        
+        
     }
 
     const addWrongOption = async () => {
@@ -72,13 +63,31 @@ function CreateQuestion () {
         [...prevState,{
           "correct": false,
           "id": 0,
-          "optionDescription": ""
+          "optionDescription": "",
+          "index": prevState.length+1
         } ]
       ))
     }
 
+    const handleChildChange = async(answerDesciption, index) => {
+      
+      setAnswers((prevState) =>
+          prevState.filter((oldAnswer) => oldAnswer.index !== index))
+      ;
+      setAnswers(prevState => (
+        [...prevState,{
+          "correct": false,
+          "id": 0,
+          "optionDescription": answerDesciption,
+          "index": prevState.length+1
+        } ]
+      ));
+    }
+
     React.useEffect(()=> {
+      console.log(answers);
     },[answers]);
+
 
 
 
@@ -117,7 +126,7 @@ function CreateQuestion () {
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
                             {answers.map((option) => (
-                              <CreateWrongOptions option={option}/>
+                              <CreateWrongOptions option={option} handleChildChange={handleChildChange}/>
                             ))}
                         </FormControl>
                     </Grid>

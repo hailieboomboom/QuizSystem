@@ -10,34 +10,37 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
-import {createQuizAllQuestions, createQuizSelectedQuestions, editQuestionOptionsState} from '../recoil/Atoms'
+import {createQuizAllQuestions, createQuizSelectedQuestions, createQuestionOptionsState} from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
 import QuizSelectedQuestionsTableRow from "./QuizSelectedQuestionsTableRow";
+import FormControl from '@mui/material/FormControl';
+
 
 export default function CreateWrongOptions(props) {
     const [answer, setAnswer] = React.useState(props.option);
-    const [answers, setAnswers] = useRecoilState(editQuestionOptionsState);//from backend
+    const [answers, setAnswers] = useRecoilState(createQuestionOptionsState);//from backend
 
     const handleChange = (event) => {
         setAnswer(event.target.value);
+        props.handleChildChange(answer,props.option.index)
 
 
     };
 
     React.useEffect(()=> {
         //here you will have correct value in userInput
-        setAnswers((answer) =>
-            answer.filter((answer) => answer.id !== props.option.id)
-        );
-        setAnswers(oldArray => [{
-            "correct": props.option.correct,
-            "id": props.option.id,
-            "optionDescription": answer
-        },...oldArray] );
-    },[answer]);
+        // setAnswers((answer) =>
+        //     answer.filter((answer) => answer.id !== props.option.id)
+        // );
+        // setAnswers(oldArray => [{
+        //     "correct": props.option.correct,
+        //     "id": props.option.id,
+        //     "optionDescription": answer
+        // },...oldArray] );
+    },[]);
 
     return (
-        <> 
+        <FormControl variant="standard"  fullWidth>
         <TextField
             required
             id={props.option.id}
@@ -52,6 +55,6 @@ export default function CreateWrongOptions(props) {
         <Button variant="outlined" >
             Delete
         </Button>
-        </>
+        </FormControl>
     );
 }
