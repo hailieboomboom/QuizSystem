@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
 
 export default function QuizAllQuestionsTableRow(props) {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -46,6 +47,14 @@ export default function QuizAllQuestionsTableRow(props) {
         >
             <TableCell component="th" scope="row">
                 <Typography variant="body">{props.question.questionDetails}</Typography>
+            </TableCell>
+            <TableCell component="th" scope="row">
+                {props.question.tags.map((tag) => (
+
+
+                    <Chip label={tag.tagName} color="primary" size="small" />
+                ))}
+
             </TableCell>
             <TableCell align="right" component="th" scope="row">
                 <TextField

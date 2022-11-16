@@ -34,3 +34,4 @@ build/
 .gitignore
 
 
+/.apt_generated_tests/

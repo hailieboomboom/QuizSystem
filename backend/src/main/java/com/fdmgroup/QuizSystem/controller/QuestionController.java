@@ -71,6 +71,8 @@ public class QuestionController {
 		)
 	public ResponseEntity<ApiResponse> createMcq(@PathVariable Long active_user_id,@RequestBody AddMcqDto addMcqDto) {
 		User user = userService.getUserById(active_user_id);
+		mcoService.validateOptions(addMcqDto.getOptions());
+		tagService.validateTagsFromDto(addMcqDto.getTags());
 		questionService.accessControlCreateMCQ(addMcqDto.getTags(), user.getRole());
 		questionService.createMCQ(addMcqDto,user);
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
@@ -97,6 +99,7 @@ public class QuestionController {
 			@io.swagger.annotations.ApiResponse(code = 404, message = "Question Not Found")}
 	)
 	public ResponseEntity<CorrectOptionDto> getCorrectOption(@PathVariable Long mcqId) {
+
 		return  new ResponseEntity<>(mcoService.getRightOption(mcqId),HttpStatus.OK);
 	}
 
@@ -147,7 +150,7 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
 	
-	
+	 
 	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
 	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
 	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
