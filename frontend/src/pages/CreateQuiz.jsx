@@ -183,7 +183,7 @@ const CreateQuiz = () => {
                             >
                                 {
                                     categories.map((category) => (
-                                        <MenuItem value={category.type} >{category.title}</MenuItem>
+                                        <MenuItem key={category.type} value={category.type} >{category.title}</MenuItem>
                                     ))}
 
                             </Select>

@@ -73,6 +73,19 @@ const MyQuizzes = () => {
 
     );
 
+    if (loading) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Wait...</Typography>
+                <CircularProgress />
+            </Grid>
+        </Grid>
+
+    );
     if (quizzes.length<1) return(
         <Grid
             container
@@ -88,19 +101,7 @@ const MyQuizzes = () => {
         </Grid>
 
     );
-    if (loading) return(
-        <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-        >
-            <Grid item>
-                <Typography>Please Wait...</Typography>
-                <CircularProgress />
-            </Grid>
-        </Grid>
 
-    );
     return (
         <Grid
             container
