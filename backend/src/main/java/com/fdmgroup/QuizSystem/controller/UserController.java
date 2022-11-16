@@ -1,10 +1,9 @@
 package com.fdmgroup.QuizSystem.controller;
+import com.fdmgroup.QuizSystem.dto.RoleDTO;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
-import com.fdmgroup.QuizSystem.dto.UserTokenDTO;
 import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
 import com.fdmgroup.QuizSystem.exception.RoleIsOutOfScopeException;
 import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
@@ -34,8 +33,6 @@ public class UserController {
     private final ModelToDTO modelToDTO;
     private final UserService userService;
 
-    private final AuthenticationManager authenticationManager;
-
     @ApiOperation(value = "get student by id")
     @GetMapping("/students/{id}")
     public ResponseEntity<UserOutputDTO> getStudentById(@PathVariable long id){
@@ -57,19 +54,11 @@ public class UserController {
             @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email already exists.")
     }
     )
+
     public ResponseEntity<UserOutputDTO> updateStudentById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
         if(modifiedUser.getPassword() != null) {
             modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));
         }
-        User user = userService.updateUser(id, modifiedUser);
-
-        UserTokenDTO userTokenDTO = new UserTokenDTO();
-        userTokenDTO.setUsername(user.getUsername());
-        userTokenDTO.setRole(user.getRole().toString());
-        userTokenDTO.setEmail(user.getEmail());
-        userTokenDTO.setFirstName(user.getFirstName());
-        userTokenDTO.setLastName(user.getLastName());
-//        userTokenDTO.setToken();
         return new ResponseEntity<>(modelToDTO.userToOutput(userService.updateUser(id, modifiedUser)), HttpStatus.OK);
     }
 
@@ -166,6 +155,18 @@ public class UserController {
         return new ResponseEntity<>(modelToDTO.userToOutput(studentService.updateCategory(target_username, mapStringToRole(category))), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/role")
+    public ResponseEntity<RoleDTO> getRoleByUserId(@PathVariable long id){
+        return new ResponseEntity<>(mapRoleToDTO(userService.getRoleByUserId(id)), HttpStatus.OK);
+    }
+
+    private RoleDTO mapRoleToDTO(Role role){
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setRole(role);
+        return roleDTO;
+    }
+
+
     private Role mapStringToRole(String role) {
 
         switch (role.toUpperCase()) {
@@ -176,9 +177,4 @@ public class UserController {
             default -> {throw new RoleIsOutOfScopeException();}
         }
     }
-
-
-
-
-
 }

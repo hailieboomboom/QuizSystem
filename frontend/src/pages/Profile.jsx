@@ -70,7 +70,6 @@ const Profile = () => {
                   <p>First name: {firstName}</p>
                   <p>Last name: {lastName}</p>
                   <p>Email: {email}</p>
-                  <img className={"downArrow"} src={downArrow}/>
               </div>
           </div>
           <div>
