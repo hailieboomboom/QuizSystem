@@ -8,10 +8,15 @@ export const apis = {
     authorizeTrainer,
     getUnauthorizedSales,
     authorizeSales,
+    isLoggedIn,
     getUserById,
     updateStudentInfo,
     updateTrainerInfo,
-    updateSalesInfo
+    updateSalesInfo,
+    getRoleByUserId,
+    getAllStudents,
+    getAllMCQs,
+    getAllMCQsFromUser
 }
 
 const config = {
@@ -20,7 +25,6 @@ const config = {
 const instance = axios.create({
     baseURL: 'http://localhost:8088/QuizSystem'
 })
-
 
 function getUserById(id){
     switch(getUserRole()){
@@ -33,6 +37,10 @@ function getUserById(id){
         case "AUTHORISED_SALES":
             return instance.get("/users/sales/" + id, config);
     }
+}
+
+function getAllStudents(){
+    return instance.get("/users/students")
 }
 
 function updateStudentInfo(id, password, email, firstName, lastName){
@@ -51,6 +59,10 @@ function getUnauthorizedTrainers(){
     return instance.get('/users/trainers/unauthorised' , config)
 }
 
+function isLoggedIn(){
+    return getCookie('token');
+}
+
 function getUnauthorizedSales(){
     return instance.get('/users/sales/unauthorised' , config)
 }
@@ -62,8 +74,20 @@ function authorizeSales(username){
     return instance.put("/users/sales/authorise/"+ username, {}, config)
 }
 
-function signup(username, email, password, firstName, lastName,role){
-    return instance.post('/auth/signup', {email, firstName, lastName, password, role, username})
+function getRoleByUserId(id) {
+    return instance.get("/users/" + id + "/role", config)
+}
+
+function getAllMCQs() {
+    return instance.get("/api/questions/mcqs", config)
+}
+
+function getAllMCQsFromUser(id){
+    return instance.get("/api/questions/" + id + "/mcqs", config)
+}
+
+function signup(username, email, password, firstName, lastName, role){
+    return instance.post('/auth/signup', {username, email, firstName, lastName, password, role})
 }
 function login(username, password) {
     return instance.post('/auth/login', {username, password})

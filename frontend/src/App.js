@@ -1,8 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {BrowserRouter, Routes, Route, redirect, Navigate} from "react-router-dom";
 import "./App.css";
 import NavigationBar from "./components/NavigationBar";
-import Header from "./components/Header";
 import SignInSide from "./components/LoginForm";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -22,7 +21,12 @@ import AttemptedQuizzes from "./pages/AttemptedQuizzes";
 import Dashboard from './pages/Dashboard'
 import SalesDashboard from "./pages/SalesDashboard";
 import TrainerDashboard from "./pages/TrainerDashboard";
+import {createTheme, colors, ThemeProvider} from "@mui/material";
+import{isLoggedIn} from "./utils/cookies";
+import Hero from "./components/Hero"
 import ErrorPage from "./pages/ErrorPage";
+import {apis} from "./utils/apis";
+
 import {
   RecoilRoot,
   atom,
@@ -31,6 +35,11 @@ import {
   useRecoilValue,
 } from 'recoil';
 import EditQuiz from "./pages/EditQuiz";
+function ProtectedRoute(){
+    if (isLoggedIn()) {
+        return <Navigate to="/" replace />;
+    }
+};
 
 // const theme = createTheme({
 //   palette: {
@@ -57,34 +66,113 @@ import EditQuiz from "./pages/EditQuiz";
 //   },
 // })
 function App() {
+  let routes;
+
+  if(isLoggedIn()){
+    routes = (
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="createQuestion" element={<CreateQuestion />} />
+            <Route path="createQuiz" element={<CreateQuiz />} />
+            <Route path="login" element={<Login />} />
+            <Route path="logout" element={<Logout />} />
+            <Route path="register" element={<Register />} />
+            <Route path="quiz" element={<Quiz />} />
+            <Route path="editQuiz" element={<EditQuiz/>} />
+            <Route path="viewQuizzes" element={<AttemptQuizzes/>} />
+            <Route path="attemptedQuizzes" element={<AttemptedQuizzes/>} />
+            <Route path="myQuizzes" element={<MyQuizzes/>} />
+            <Route path="questions" element={<Questions />} />
+            <Route path="viewQuestions" element={<ViewQuestions />} />
+            <Route path="autoGenerate" element={<AutogenerateQuiz />} />
+            <Route path="editQuestion" element={<EditQuestion/>} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="sales" element={<SalesDashboard />} />
+            <Route path="trainer" element={<TrainerDashboard />} />
+
+            <Route path="errorPage" element={<ErrorPage />} />
+        </Routes>
+    )
+  }else{
+    routes =(
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route
+                path="createQuestion"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="profile"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="createQuiz"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="viewQuizzes"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="editQuiz"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="quiz"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="attemptedQuizzes"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="myQuizzes"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="questions"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="viewQuestions"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="autoGenerate"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="editQuestion"
+
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="dashboard"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="sales"
+                element={ <Navigate to="/" /> }
+            />
+            <Route
+                path="trainer"
+                element={ <Navigate to="/" /> }
+            />
+            <Route path="errorPage" element={<ErrorPage />} />
+        </Routes>
+    )
+  }
+
   return (
       // <ThemeProvider theme={theme}>
         <div className="App">
           <RecoilRoot>
           <BrowserRouter>
             <NavigationBar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="createQuestion" element={<CreateQuestion />} />
-              <Route path="createQuiz" element={<CreateQuiz />} />
-              <Route path="login" element={<Login />} />
-              <Route path="logout" element={<Logout />} />
-              <Route path="register" element={<Register />} />
-              <Route path="quiz" element={<Quiz />} />
-              <Route path="editQuiz" element={<EditQuiz/>} />
-              <Route path="viewQuizzes" element={<AttemptQuizzes/>} />
-              <Route path="attemptedQuizzes" element={<AttemptedQuizzes/>} />
-              <Route path="myQuizzes" element={<MyQuizzes/>} />
-              <Route path="questions" element={<Questions />} />
-              <Route path="viewQuestions" element={<ViewQuestions />} />
-              <Route path="autoGenerate" element={<AutogenerateQuiz />} />
-              <Route path="editQuestion" element={<EditQuestion/>} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="sales" element={<SalesDashboard />} />
-              <Route path="trainer" element={<TrainerDashboard />} />
-              <Route path="errorPage" element={<ErrorPage />} />
-            </Routes>
+              {routes}
           </BrowserRouter>
           </RecoilRoot>
         </div>

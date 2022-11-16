@@ -11,19 +11,28 @@ import Button from '@mui/material/Button';
 import {Container} from '@mui/material';
 import {Link} from "react-router-dom";
 import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import { useRecoilState } from 'recoil';
 import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
+import {useEffect} from "react";
+import {apis} from "../utils/apis";
+import Autocomplete from "@mui/material/Autocomplete";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 const CreateQuiz = () => {
     const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]);
     const [name, setName] = useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
     const [quizId, setQuizId] = React.useState('');
-    console.log(quizId)
+    const [role, setRole] = useState();
+    console.log(getUserId())
     React.useEffect(() => {
+        setquizSelectQuestions([]);
         axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs").then((response) => {
             setquizAllQuestions(response.data);
             console.log(response.data);
@@ -31,9 +40,33 @@ const CreateQuiz = () => {
             console.log(error);
         });
     }, []);
+    React.useEffect(()=> {
+        if(isLoggedIn()) {
+            apis.getRoleByUserId(getUserId()).then(
+                res => {
+                    console.log("In create, role is: " + res.data["role"])
+                    const role = res.data["role"]
+                    if(role === "AUTHORISED_TRAINER" || role === "POND" || role === "BEACHED") {
+                        setCategories(quizCategoriesA);
+                    }
+                    else if(role === "TRAINING") {
+                        setCategories(quizCategoriesB);
+                    }
+                    else if(role === "AUTHORISED_SALES") {
+                        setCategories(quizCategoriesC);
+                    }
+                }
+            ).catch(
+                (err) => {
+                    console.log(err)
+                }
+            )
+        }
+    }, [role])
+
     const postQuiz = () => {
-        axios.post("http://localhost:8088/QuizSystem/api/quizzes", {
-            "creatorId": 1,
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes/"+ getUserId() + "", {
+            "creatorId": getUserId(),
             "name": name,
             "quizCategory": category
         })
@@ -49,7 +82,7 @@ const CreateQuiz = () => {
     }
     const postQuestions = (id) => {
         console.log(JSON.stringify(quizSelectedQuestions))
-        axios.post("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
+        axios.post("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions/" + getUserId() + "",
             quizSelectedQuestions
         )
             .then(function (response) {
@@ -58,11 +91,7 @@ const CreateQuiz = () => {
             .catch(function (error) {
                 console.log(error.response.data);
             });
-        // axios({
-        //     method: 'post',
-        //     url: "http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions",
-        //     data: quizSelectedQuestions
-        // });
+
     }
 
     const handleCreate = () =>{
@@ -76,6 +105,41 @@ const CreateQuiz = () => {
     const handleCategory = (event) => {
         setCategory(event.target.value);
     };
+
+    const quizCategoriesA = [
+        {
+            title: "Interview Prep",
+            type: "INTERVIEW_QUIZ"
+        },
+        {
+            title: "Course Content",
+            type: "COURSE_QUIZ"
+        }
+    ];
+    const quizCategoriesB = [
+        {
+            title: "Course Content",
+            type: "COURSE_QUIZ"
+        }
+    ];
+    const quizCategoriesC = [
+        {
+            title: "Interview Prep",
+            type: "INTERVIEW_QUIZ"
+        }
+    ];
+    if (!isLoggedIn) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Log in first.</Typography>
+            </Grid>
+        </Grid>
+
+    );
     return (
             <Grid
                 container
@@ -117,8 +181,11 @@ const CreateQuiz = () => {
                                 onChange={handleCategory}
                                 label="Category"
                             >
-                                <MenuItem value="COURSE_QUIZ">Course Content</MenuItem>
-                                <MenuItem value="INTERVIEW_QUIZ">Interview Prep</MenuItem>
+                                {
+                                    categories.map((category) => (
+                                        <MenuItem key={category.type} value={category.type} >{category.title}</MenuItem>
+                                    ))}
+
                             </Select>
                         </FormControl>
                     </Grid>

@@ -9,14 +9,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import {Container} from '@mui/material';
 import {Link} from "react-router-dom";
 import QuizAllQuestionsTable from "../components/QuizAllQuestionsTable";
 import { useRecoilState } from 'recoil';
-import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
+import {createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import {Route} from "@mui/icons-material";
+import ErrorPage from "./ErrorPage";
 
 const EditQuiz = () => {
     const location = useLocation();
@@ -25,57 +28,64 @@ const EditQuiz = () => {
     const [loading, setLoading] = React.useState(true);
     const [name, setName] = useState(editQuiz.name);
     const [dummy, setDummy] = useState('');
+    const [eMessage, setEMessage] = React.useState('');
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
     const [quizId, setQuizId] = React.useState('');
 
     React.useEffect(() => {
-        quizAllQuestions.forEach(function get(currentValue) {
-            quizSelectedQuestions.forEach(function countEntry(entry) {
-                if(currentValue.questionId === entry.questionId){
-                    setquizAllQuestions((questions) =>
-                        questions.filter((question) => question.questionId !== currentValue.questionId)
+        Promise.all([getAllQuestions(), getQuizQuestions()])
+            .then(function (results) {
+                setquizAllQuestions();
+                setquizAllQuestions(results[0].data);
+                setquizSelectQuestions(results[1].data);
+            }).then(function (results) {
 
-                    );
-                }
-            })
-        })
+        });
     }, []);
-    //
-    //     const filterAll = () => {
-    //         results[0].data.forEach(function get(currentValue) {
-    //             console.log(currentValue);
-    //             results[1].data.forEach(function countEntry(entry) {
-    //                 if(currentValue.questionId === entry.questionId){
-    //                     setquizAllQuestions((questions) =>
-    //                         questions.filter((question) => question.questionId !== currentValue.questionId)
-    //
-    //                     );
-    //                 }
-    //             })
-    //         })
-    //     }
-    //
-    //
-    //
-    // function getAll(currentValue) {
-    //     console.log(currentValue);
-    //     console.log(this);
-    //
-    //
-    // }
-    //
-    // function getAllQuestions() {
-    //     return axios.get("http://localhost:8088/QuizSystem/api/questions/quizCreation/mcqs")
-    //
-    // }
-    //
-    //
-    // function getQuizQuestions() {
-    //     return  axios.get("http://localhost:8088/QuizSystem/api/quizzes/"+ editQuiz.quizId +"/questions")
-    // }
+
+    function getAllQuestions() {
+        return axios.get("http://localhost:8088/QuizSystem/api/questions/quizEdit/"+ editQuiz.quizId +"/mcqs")
+
+    }
 
 
+    function getQuizQuestions() {
+        return  axios.get("http://localhost:8088/QuizSystem/api/quizzes/" + editQuiz.quizId + "/questions")
+    }
+
+    const updateQuiz = () => {
+        axios.put("http://localhost:8088/QuizSystem/api/quizzes/"+editQuiz.quizId+"/"+getUserId()+"", {
+            "creatorId": getUserId(),
+            "name": name,
+            "quizCategory": category,
+            "quizId": editQuiz.quizId
+        }).then(function (response) {
+                updateQuestions(editQuiz.quizId);
+                // setquizSelectQuestions([]);
+            setEMessage("Success");
+            })
+            .catch(function (error) {
+                console.log(error);
+            }).then(function () {
+            // always executed
+        });
+    }
+    const updateQuestions = (id) => {
+        console.log(JSON.stringify(quizSelectedQuestions))
+        axios.put("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/questions/" + getUserId() + "",
+            quizSelectedQuestions
+        )
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+            });
+    }
+    const handleUpdate = () => {
+        updateQuiz();
+    };
 
     const handleName = (event) => {
         setName(event.target.value);
@@ -86,6 +96,10 @@ const EditQuiz = () => {
 
     console.log(editQuiz);
 
+    if (!editQuiz) return(
+        <ErrorPage errorPage="Unauthorized"/>
+
+    );
     if (!quizAllQuestions) return(
         <Grid
             container
@@ -109,6 +123,9 @@ const EditQuiz = () => {
             <Grid item>
                 <Typography variant="h6" gutterBottom>
                     Edit Quiz
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                    {eMessage}
                 </Typography>
             </Grid>
             <Grid item container
@@ -147,6 +164,11 @@ const EditQuiz = () => {
                 </Grid>
                 <Grid item>
                     <QuizSelectedQuestionsTable/>
+                </Grid>
+                <Grid item xs={1}>
+                    <Button onClick={handleUpdate} variant="outlined">
+                        Update
+                    </Button>
                 </Grid>
                 <Grid item>
                     <QuizAllQuestionsTable/>

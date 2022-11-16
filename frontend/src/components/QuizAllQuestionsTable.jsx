@@ -19,18 +19,7 @@ export default function QuizAllQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
 
-    React.useEffect(() => {
-        quizAllQuestions.forEach(function get(currentValue) {
-            quizSelectedQuestions.forEach(function countEntry(entry) {
-                if(currentValue.questionId === entry.questionId){
-                    setquizAllQuestions((questions) =>
-                        questions.filter((question) => question.questionId !== currentValue.questionId)
 
-                    );
-                }
-            })
-        })
-    }, []);
     function hanldleAdd (current) {
         setquizAllQuestions((questions) =>
             questions.filter((question) => question.questionId !== current.questionId)
@@ -64,6 +53,7 @@ export default function QuizAllQuestionsTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Select from Questions</TableCell>
+                        <TableCell>Tags</TableCell>
                         <TableCell>
                             <TextField
                                 id="outlined-basic"
