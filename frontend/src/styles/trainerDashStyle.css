@@ -1,6 +1,6 @@
 .trainerDashboardContainer{
     width: 100%;
-    height: fit-content;
+    height: 100vh;
     background-color: #5e548e;
     background-size: cover;
     background-position: center;

@@ -70,26 +70,34 @@ const MyQuizzes = () => {
 
     );
     return (
+
+        <div className={"myQuizzesContainer"}>
         <Grid
             container
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
+            className={"myQuizzesBox"}
 
         >
             <Grid item>
-                <Typography variant="h4" gutterBottom>
+                <Typography className={"myQuizzesHeader"} variant="h4" gutterBottom>
+                    Manage Quizzes
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Typography className={"myQuizzesExampleText"} variant="h4" gutterBottom>
                     Example 1 : You have not created any quiz. Click below to create.
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h4" gutterBottom>
+                <Typography className={"myQuizzesExampleText"} variant="h4" gutterBottom>
                     Example 2:Available Quizzes {eMessage}
                 </Typography>
             </Grid>
             <Grid item>
                 <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table className={"myQuizzesTable"} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
@@ -103,7 +111,7 @@ const MyQuizzes = () => {
                                     key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell component="th" scope="row">
+                                    <TableCell className={"myQuizzesTableRow"} component="th" scope="row">
                                         {row.name}
                                     </TableCell>
                                     <TableCell align="right">
@@ -114,14 +122,15 @@ const MyQuizzes = () => {
                                             justifyContent="flex-end"
                                             alignItems="flex-start"
                                             spacing={1}
+                                            display=""
                                         >
                                             <Grid item>
-                                                <Button variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
+                                                <Button className={"myQuizzesButton"} variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
                                                     Edit
                                                 </Button>
                                             </Grid>
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => handleDelete(row.quizId)}>
+                                                <Button className={"myQuizzesButton"} variant="contained" onClick={() => handleDelete(row.quizId)}>
                                                     Remove
                                                 </Button>
                                             </Grid>
@@ -138,11 +147,11 @@ const MyQuizzes = () => {
             </Grid>
 
             <Grid item sx={{ width:650 }}>
-                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
+                <Button className={"createQuizButton"} fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
 
         </Grid>
-
+        </div>
     )
 };
 

@@ -1,3 +1,94 @@
+
 .table{
     background-color: #ebe1f2;
+}
+
+.myQuizzesContainer{
+    width: 100%;
+    height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createQuizContainer{
+    width: 100%;
+    min-height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selectedQuestions{
+    width: 100%;
+}
+
+.myQuizzesBox{
+    background: #9f86c0;
+    width: 50%;
+    min-height: 70%;
+    text-align: center;
+    padding: 40px 90px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.myQuizzesButton{
+    display: block;
+    background: #fff;
+    color: #8A2BE2;
+    border: 1px solid black;
+    box-shadow: 0 5px 10px rgba(147, 112, 219, 0.5);
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.myQuizzesTable{
+    border: 1px solid black;
+    background: #ebe1f2;
+    border-radius: 20px;
+}
+
+.myQuizzesTableRow{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.myQuizzesHeader{
+    color: black;
+    font-weight: 600;
+}
+
+.createQuizHeader{
+    color: black;
+    font-weight: 600;
+    font-size: 35px;
+}
+
+.createQuizDropDown{
+    color: black;
+    font-size: 15px;
+}
+
+.myQuizzesExampleText{
+    font-size: 20px;
+}
+
+.createQuizButton{
+    background: #fff;
+    color: #8A2BE2;
+    border: 2px solid black;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    font-weight: 600;
+    margin-left: 291px;
+
 }

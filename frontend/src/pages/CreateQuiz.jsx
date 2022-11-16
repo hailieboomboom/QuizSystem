@@ -15,6 +15,7 @@ import { useRecoilState } from 'recoil';
 import {createQuizAllQuestions, createQuizSelectedQuestions} from '../recoil/Atoms'
 import QuizSelectedQuestionsTable from "../components/QuizSelectedQuestionsTable";
 import axios from "axios";
+import '../styles/QuizzesTableStyle.css'
 
 const CreateQuiz = () => {
     const [category, setCategory] = useState('');
@@ -78,6 +79,7 @@ const CreateQuiz = () => {
         setCategory(event.target.value);
     };
     return (
+        <div className={"createQuizContainer"}>
             <Grid
                 container
                 direction="column"
@@ -85,7 +87,7 @@ const CreateQuiz = () => {
                 alignItems="center"
             >
                 <Grid item>
-                <Typography variant="h6" gutterBottom>
+                <Typography className={"createQuizHeader"} variant="h6" gutterBottom>
                     Create Quiz
                 </Typography>
                 </Grid>
@@ -118,16 +120,16 @@ const CreateQuiz = () => {
                                 onChange={handleCategory}
                                 label="Category"
                             >
-                                <MenuItem value="COURSE_QUIZ">Course Content</MenuItem>
-                                <MenuItem value="INTERVIEW_QUIZ">Interview Prep</MenuItem>
+                                <MenuItem className={"createQuizDropDown"} value="COURSE_QUIZ">Course Content</MenuItem>
+                                <MenuItem className={"createQuizDropDown"} value="INTERVIEW_QUIZ">Interview Prep</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid className={"selectedQuestions"} item>
                         <QuizSelectedQuestionsTable/>
                     </Grid>
                     <Grid item xs={1}>
-                        <Button onClick={handleCreate} variant="outlined" as={Link} to="/myQuizzes" >
+                        <Button className={"createQuizButton"} onClick={handleCreate} variant="outlined" as={Link} to="/myQuizzes" >
                             Create
                         </Button>
                     </Grid>
@@ -136,6 +138,7 @@ const CreateQuiz = () => {
                     </Grid>
                 </Grid>
             </Grid>
+        </div>
     )
 };
 
