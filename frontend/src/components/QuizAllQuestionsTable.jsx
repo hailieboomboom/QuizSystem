@@ -19,6 +19,18 @@ export default function QuizAllQuestionsTable() {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
     const [quizSelectedQuestions, setquizSelectQuestions] = useRecoilState(createQuizSelectedQuestions);
 
+    React.useEffect(() => {
+        quizAllQuestions.forEach(function get(currentValue) {
+            quizSelectedQuestions.forEach(function countEntry(entry) {
+                if(currentValue.questionId === entry.questionId){
+                    setquizAllQuestions((questions) =>
+                        questions.filter((question) => question.questionId !== currentValue.questionId)
+
+                    );
+                }
+            })
+        })
+    }, []);
     function hanldleAdd (current) {
         setquizAllQuestions((questions) =>
             questions.filter((question) => question.questionId !== current.questionId)
@@ -41,6 +53,8 @@ export default function QuizAllQuestionsTable() {
             return od.questionDetails.toLowerCase().includes(inputText)
         }
     })
+
+
     console.log(quizAllQuestions);
     console.log(quizSelectedQuestions);
 
@@ -65,27 +79,7 @@ export default function QuizAllQuestionsTable() {
                 </TableHead>
                 <TableBody>
                     {filteredData.map((question) => (
-                        // <TableRow
-                        //     key={question.questionId}
-                        //     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        // >
-                        //     <TableCell component="th" scope="row">
-                        //         <Typography variant="body">{question.questionDetails}</Typography>
-                        //     </TableCell>
-                        //     <TableCell align="right" component="th" scope="row">
-                        //         <TextField
-                        //             type="number"
-                        //             name="Grade"
-                        //             label="Grade"
-                        //             InputProps={{ inputProps: { min: 0, max: 10 } }}
-                        //             variant="filled"
-                        //             value={question.grade}
-                        //         />
-                        //     </TableCell>
-                        //     <TableCell component="th" scope="row">
-                        //         <Button variant="outlined" onClick={()=>hanldleAdd(question)} >Add</Button>
-                        //     </TableCell>
-                        // </TableRow>
+
                         <QuizAllQuestionsTableRow question={question}/>
                     ))}
                 </TableBody>
