@@ -13,6 +13,7 @@ import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
 import StudentTable from "../components/StudentTable";
+import '../styles/trainerDashStyle.css'
 
 export default function TrainerDashboard(){
 
@@ -41,7 +42,6 @@ export default function TrainerDashboard(){
     }
 
     return (
-<Container>
     <div className={"trainerDashboardContainer"}>
         <div className={"trainerDashboardBox"}>
             <h1>Trainer Dashboard</h1>
@@ -83,7 +83,6 @@ export default function TrainerDashboard(){
             <StudentTable></StudentTable>
         </div>
     </div>
-</Container>
 
 
     

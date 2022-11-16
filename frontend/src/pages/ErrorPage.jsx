@@ -7,10 +7,18 @@ import { useLocation } from 'react-router-dom'
 import React from "react";
 
 
-const ErrorPage = () => {
+const ErrorPage = (props) => {
 
     const location = useLocation();
     const { errorPage } = location.state;
+
+    if(props.errorPage)
+    return (
+        <div>
+            <h1>{props.errorPage}</h1>
+        </div>
+
+    )
 
     return (
         <div>
