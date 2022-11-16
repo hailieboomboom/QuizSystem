@@ -106,19 +106,42 @@ public class DataLoader implements ApplicationRunner {
         System.out.println(salesService.findByUsername("us"));
 
         Student student1 = new Student();
-        student1.setUsername("ts");
+        student1.setUsername("skarima");
         student1.setPassword(passwordEncoder.encode("1"));
         student1.setEmail("student1@gmail.com");
         student1.setFirstName("student1");
         student1.setLastName("Karima");
         studentService.save(student1);
-        System.out.println(salesService.findByUsername("us"));
+       
 
+        // add pond student 
+        Student student2 = new Student();
+        student2.setUsername("slong");
+        student2.setPassword(passwordEncoder.encode("2"));
+        student2.setEmail("student2@gmail.com");
+        student2.setFirstName("student2");
+        student2.setLastName("Long");
+        student2.setRole(Role.POND);
+        studentService.save(student2);
+      
+        
+        // add beached student 
+        Student student3 = new Student();
+        student3.setUsername("sbrown");
+        student3.setPassword(passwordEncoder.encode("3"));
+        student3.setEmail("student3@gmail.com");
+        student3.setFirstName("student3");
+        student3.setLastName("Brown");
+        student3.setRole(Role.BEACHED);
+        studentService.save(student3);
+        
+       
         log.info("Finished setup");
 
+       
 
         ////////// Load Questions ////////////
-
+        
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
         mcq1.setQuestionDetails("test mcq1");
         MultipleChoiceOption mco1 = new MultipleChoiceOption("op1",true,mcq1);
@@ -268,6 +291,11 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco111);
         mcoService.save(mco112);
         mcoService.save(mco113);
+        
+        // add more 10 mcq course (5+2+3)
+        
+        // add 10 mcq for interview (5+2+3)
+
 
         ////////// Load Quizzes ////////////
 
@@ -276,7 +304,9 @@ public class DataLoader implements ApplicationRunner {
 //        qqg1.setKey(qqgKey);
 //        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
 //        qqgList.add(qqg1);
-//        
+//      
+        // male 2 quizzes
+        
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
         quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type 
@@ -329,6 +359,9 @@ public class DataLoader implements ApplicationRunner {
 //        log.info("--------------- All users ------------------------");
 //        log.info(quizService.getAllQuizzes());
 
+        
+        //quiz attempt
+        
         ////// quiz attempt //////
         
         QuizAttempt qa1 = new QuizAttempt();
