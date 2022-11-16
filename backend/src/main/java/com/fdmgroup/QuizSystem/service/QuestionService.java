@@ -21,7 +21,9 @@ import com.fdmgroup.QuizSystem.exception.McqException.TagNotValidException;
 
 import com.fdmgroup.QuizSystem.repository.McqRepository;
 import com.fdmgroup.QuizSystem.repository.QuestionRepository;
+import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
+import com.fdmgroup.QuizSystem.repository.QuizRepository;
 import com.fdmgroup.QuizSystem.repository.UserRepository;
 
 
@@ -46,6 +48,10 @@ public class QuestionService {
 	private MultipleChoiceOptionService multipleChoiceOptionService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private QuizRepository quizRepository;
+	@Autowired
+	private QuizQuestionGradeRepository qqgRepository;
 
 	
 	
@@ -112,7 +118,7 @@ public class QuestionService {
 		}
 	}
 
-
+ 
 	public void updateMCQ(AddMcqDto addMcqDto, long mcqId) {
 		MultipleChoiceQuestion originalMcq = findMcqById(mcqId);
 
@@ -190,6 +196,28 @@ public class QuestionService {
 		}
 
 		return mcqDtoList;
+	}
+	
+	public List<QuestionGradeDTO> getMcqDtosforQuizEdit(long quiz_id){
+		List<QuestionGradeDTO> dtos = new ArrayList<QuestionGradeDTO>();
+		List<MultipleChoiceQuestion> involvedQuestions = new ArrayList<MultipleChoiceQuestion>();
+		List<MultipleChoiceQuestion> allmcqs = mcqRepository.findAll();
+		List<QuizQuestionGrade> qqgs =  qqgRepository.findAllByQuizId(quiz_id);
+		for(QuizQuestionGrade qqg: qqgs) {
+			MultipleChoiceQuestion q = (MultipleChoiceQuestion) findById(qqg.getKey().getQuestionId());
+			involvedQuestions.add(q);
+		}
+		for(MultipleChoiceQuestion mcq: allmcqs) {
+			if(!involvedQuestions.contains(mcq)) {
+				QuestionGradeDTO mcqDto = new QuestionGradeDTO();
+				mcqDto.setGrade(0);
+				mcqDto.setQuestionId(mcq.getId());
+				mcqDto.setQuestionDetails(mcq.getQuestionDetails());
+				dtos.add(mcqDto);	
+			}
+		}
+		
+		return dtos;
 	}
 	
 	public List<ReturnMcqDto> getAllMcqQuestion() {

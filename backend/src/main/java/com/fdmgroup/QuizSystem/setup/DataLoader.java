@@ -186,6 +186,7 @@ public class DataLoader implements ApplicationRunner {
         sa4.setCorrectAnswer("java");
         sa4.setCreator(trainer);
         
+        
 
         Tag tag1 = new Tag();
         Tag tag2 = new Tag();
@@ -253,6 +254,68 @@ public class DataLoader implements ApplicationRunner {
         sa3.addOneTag(tag1);
         sa4.addOneTag(tag1);
         sa4.addOneTag(tag2);
+        
+        
+        // LOAD MCQ QUESTIONS AND SET TAGS
+    	// add more 10 mcq course (5+2+3)
+        //2 by beach student
+        MultipleChoiceQuestion mcq5 = new MultipleChoiceQuestion();
+        mcq5.setQuestionDetails("What testing framework(s) are when() and verify() a part of?");
+        MultipleChoiceOption mco51 = new MultipleChoiceOption("JUnit",false,mcq5);
+        MultipleChoiceOption mco52 = new MultipleChoiceOption("JUnit and Mockito",false,mcq5);
+        MultipleChoiceOption mco53 = new MultipleChoiceOption("Mockito",true,mcq5);
+        mcq5.setCreator(student2);
+        mcq5.addOneTag(tag17);
+        mcq5.addOneTag(tag1);
+        mcq5.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq5);
+        tag17.addOneQuestion(mcq5);
+        tag8.addOneQuestion(mcq5);
+        
+        //2 by pond student
+        MultipleChoiceQuestion mcq6 = new MultipleChoiceQuestion();
+        mcq6.setQuestionDetails("Which method is not defined in the Object class?");
+        MultipleChoiceOption mco61 = new MultipleChoiceOption("hashCode()",false,mcq6);
+        MultipleChoiceOption mco62 = new MultipleChoiceOption("notify()",false,mcq6);
+        MultipleChoiceOption mco63 = new MultipleChoiceOption("compareTo(Object o)",true,mcq6);
+        mcq6.setCreator(student2);
+        mcq6.addOneTag(tag17);
+        mcq6.addOneTag(tag1);
+        mcq6.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq6);
+        tag17.addOneQuestion(mcq6);
+        tag8.addOneQuestion(mcq6);
+        
+        MultipleChoiceQuestion mcq7 = new MultipleChoiceQuestion();
+        mcq7.setQuestionDetails("Is multiple inheritance possible in Java?");
+        MultipleChoiceOption mco71 = new MultipleChoiceOption("No",false,mcq7);
+        MultipleChoiceOption mco72 = new MultipleChoiceOption("Yes, only with interfaces",true,mcq7);
+        MultipleChoiceOption mco73 = new MultipleChoiceOption("Yes, with both classes and interfaces",false,mcq7);
+        mcq7.setCreator(student2);
+        mcq7.addOneTag(tag17);
+        mcq7.addOneTag(tag1);
+        mcq7.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq7);
+        tag17.addOneQuestion(mcq7);
+        tag8.addOneQuestion(mcq7);
+        
+        
+        //1 by student 1
+        MultipleChoiceQuestion mcq8 = new MultipleChoiceQuestion();
+        mcq8.setQuestionDetails("Where can the static keyword be used?");
+        MultipleChoiceOption mco81 = new MultipleChoiceOption("On variables",false,mcq8);
+        MultipleChoiceOption mco82 = new MultipleChoiceOption("On methods",false,mcq8);
+        MultipleChoiceOption mco83 = new MultipleChoiceOption("On variables, methods, and classes",true,mcq8);
+        mcq8.setCreator(student1);
+        mcq8.addOneTag(tag17);
+        mcq8.addOneTag(tag1);
+        mcq8.addOneTag(tag8); 
+        tag1.addOneQuestion(mcq8);
+        tag17.addOneQuestion(mcq8);
+        tag8.addOneQuestion(mcq8);
+        
+        
+        // SAVE TAGS and QUESTIONS
 
         tagService.save(tag1);
         tagService.save(tag2);
@@ -292,9 +355,26 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco112);
         mcoService.save(mco113);
         
-        // add more 10 mcq course (5+2+3)
+        mcq5 = (MultipleChoiceQuestion) questionService.save(mcq5);
+        mcoService.save(mco51);
+        mcoService.save(mco52);
+        mcoService.save(mco53);
         
-        // add 10 mcq for interview (5+2+3)
+        mcq6 = (MultipleChoiceQuestion) questionService.save(mcq6);
+        mcoService.save(mco61);
+        mcoService.save(mco62);
+        mcoService.save(mco63);
+        
+        mcq7 = (MultipleChoiceQuestion) questionService.save(mcq7);
+        mcoService.save(mco71);
+        mcoService.save(mco72);
+        mcoService.save(mco73);
+        
+        mcq8 = (MultipleChoiceQuestion) questionService.save(mcq8);
+        mcoService.save(mco81);
+        mcoService.save(mco82);
+        mcoService.save(mco83);
+        
 
 
         ////////// Load Quizzes ////////////

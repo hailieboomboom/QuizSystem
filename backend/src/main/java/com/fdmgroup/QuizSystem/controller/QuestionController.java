@@ -135,6 +135,11 @@ public class QuestionController {
 	public ResponseEntity<List<QuestionGradeDTO>> getAllMcqforQuizCreation() {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestionforQuizCreation(),HttpStatus.OK);
 	}
+	
+	@GetMapping("/quizEdit/{quiz_id}/mcqs")
+	public ResponseEntity<List<QuestionGradeDTO>> getMcqsforQuizEdit(@PathVariable long quiz_id) {
+		return  new ResponseEntity<>(questionService.getMcqDtosforQuizEdit(quiz_id),HttpStatus.OK);
+	}
 
 	@DeleteMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "delete a multiple choice question based on questionId",

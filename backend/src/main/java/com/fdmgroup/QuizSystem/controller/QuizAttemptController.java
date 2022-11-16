@@ -46,6 +46,7 @@ public class QuizAttemptController {
 		quizAttempt.setUser(userService.getUserById(quizAttemptDTO.getUserId()));
 		quizAttempt = quizAttemptService.save(quizAttempt);
 		
+		
 		for(MCQAttemptDTO mcqAttemptDTO: quizAttemptDTO.getMCQAttemptList()) {
 			mcqAttemptService.createMCQAttempt(mcqAttemptDTO, quizAttempt.getId(), quizAttempt.getQuiz().getId());
 		}
