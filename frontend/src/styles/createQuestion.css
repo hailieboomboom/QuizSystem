@@ -4,10 +4,9 @@
     background-color: #5e548e;
     background-size: cover;
     background-position: center;
-    display: block;
+    display: flex;
     align-items: center;
     justify-content: center;
-    text-align: -webkit-center;
 }
 
 .tableGrid{
