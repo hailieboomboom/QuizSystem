@@ -22,25 +22,25 @@ const Questions = () => {
 
     return (
 
+        <div className={"mcqCardContainer"}>
+            <Grid
+                container
+                direction="column"
+                justifyContent="space-around"
+                alignItems="center"
+            >
 
-        <Grid
-            container
-            direction="column"
-            justifyContent="space-around"
-            alignItems="center"
-        >
-
-            <div><h1>Multiple Choice Questions</h1>
-            <Typography className="headerTest" >test</Typography>
-                {
-                    question.map((question) => (<ViewMCQCard questionCard={question}/>))
-                }
+                <div className={"viewQuestionsBox"}>
+                    <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
+                    {
+                        question.map((question) => (<ViewMCQCard questionCard={question}/>))
+                    }
 
 
 
-            </div>
-        </Grid>
-
+                </div>
+            </Grid>
+        </div>
 
     )
 

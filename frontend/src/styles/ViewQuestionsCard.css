@@ -7,98 +7,85 @@
     border: none;
 }
 
+.questionListTitle{
+    font-weight: 600;
+}
+
+.viewQuestionsBox{
+    background: #9f86c0;
+    text-align: center;
+    padding: 40px 90px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.mcqCardContainer{
+    /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    width: 100%;
+    height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .questionCard{
     background-color: #ebe1f2;
     min-height: 200px;
     border-radius: 15px;
     box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
     margin: 20px;
+    padding: 10px;
 }
+
 .questionCard:hover{
     transform: scale(1.1, 1.1);
-
 }
 
-.questionCardContent{
-    background-color: #ebe1f2;
-    display: inline;
-}
-
-.questionTitle{
-    font-size: 20px;
-    text-align-last: left;
-}
-
-.questionString{
-    font-size: 15px;
-    text-align: left;
-}
-.headerTest{
-    color: red;
-}
-
-.answerSection {
-    width: 100%;
-}
-.correctAnswer{
-    background-color: green;
-}
-.divider{
-    width: auto;
-    height:5px;
-    display:block;
-}
-
-button {
+.questionCard button{
     width: 100%;
     background-color: #ebe1f2;
+    font-weight: 600;
     padding: 5px;
-
+    margin-bottom: 10px;
+    border-radius: 15px;
 }
 
 button:hover {
     background-color: #c9b6d6;
-    border-radius: 15px;
+    border-radius: 20px;
 }
 
-button:focus {
-    outline: none;
-}
-.checkmark {
-    display:inline-block;
-    width: 22px;
-    height:22px;
-    -ms-transform: rotate(45deg); /* IE 9 */
-    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
-    transform: rotate(45deg);
+.questionId{
+    font-size: 15px;
+    text-align: left;
 }
 
-.checkmark_circle {
-    position: absolute;
-    width:22px;
-    height:22px;
-    background-color: green;
-    border-radius:11px;
-    left:0;
-    top:0;
+.questionTitle{
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 10px;
 }
 
-.checkmark_stem {
-    position: absolute;
-    width:3px;
-    height:9px;
-    background-color:#fff;
-    left:11px;
-    top:6px;
+.cardFooterButtons button{
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: #ebe1f2;
+    color: #7a49a5;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-.checkmark_kick {
-    position: absolute;
-    width:3px;
-    height:3px;
-    background-color:#fff;
-    left:8px;
-    top:12px;
+.cardFooterButtons button:hover{
+    border-radius: 20px;
+    background-color: #E1E1E1;
+    color: #7a49a5;
+    font-size: 15px;
+    font-weight: bold;
 }
-/*********************/
 
