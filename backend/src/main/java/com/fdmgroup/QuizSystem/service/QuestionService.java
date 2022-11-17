@@ -120,22 +120,22 @@ public class QuestionService {
 		}
 	}
 
- 
+ @Transactional
 	public void updateMCQ(AddMcqDto addMcqDto, long mcqId) {
 		MultipleChoiceQuestion originalMcq = findMcqById(mcqId);
-
-		List<MultipleChoiceOption> updatedOptions = multipleChoiceOptionService.updateMcqOption(addMcqDto.getOptions(), originalMcq.getId());
+		deleteAttempt(mcqId);
+		List<MultipleChoiceOption> updatedOptions = multipleChoiceOptionService.updateMcqOption(addMcqDto.getOptions(), originalMcq);
+		System.out.println(updatedOptions);
 		originalMcq.setQuestionDetails(addMcqDto.getQuestionDetails());
 		originalMcq = (MultipleChoiceQuestion) save(originalMcq);
 
 		Long userId = findCreatorIdOfAQuestion(originalMcq.getId());
 		User user = userRepository.findById(userId).get();
-
 		originalMcq.setCreator(user);
 		originalMcq.setMcoptions(updatedOptions);
 		originalMcq.setTags(tagService.getTagsFromDto(addMcqDto.getTags()));
 		this.save(originalMcq);
-		deleteAttempt(mcqId);
+
 	}
 	
 	public void updateMCQByRole(AddMcqDto addMcqDto, long mcqId, long activeUserId) {
