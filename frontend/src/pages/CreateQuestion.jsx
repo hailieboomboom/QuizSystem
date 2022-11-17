@@ -109,15 +109,25 @@ function CreateQuestion () {
           "tags": tags,
           "userId": 1
         }
-        axios.post(postUrl, data)
-            .then(data => {
-                console.log(data)
-                navigate('/questions')
-            })
-            .catch((err) =>{
-                console.log(err)
-                alert(err.response.data.message)
-            });
+        // axios.post(postUrl, data)
+        //     .then(data => {
+        //         console.log(data)
+        //         navigate('/questions')
+        //     })
+        //     .catch((err) =>{
+        //         console.log(err)
+        //         alert(err.response.data.message)
+        //     });
+        apis.createQuestion(activeUserId,data)
+        .then(res => {
+            console.log(res.data)
+            navigate('/questions')
+        })
+        .catch((err) =>{
+            console.log(err)
+            alert(err.response.data.message)
+        });
+
         
     }
 
@@ -185,6 +195,9 @@ function CreateQuestion () {
                 </Typography> */}
 
                 <Grid className={"tableGrid"} container spacing={3}>
+                    <Typography variant="h6" gutterBottom>
+                        Create Question
+                    </Typography>
                     <Grid item xs={12}>
                         {/* <FormControl variant="standard"  fullWidth>
                             <TextField
@@ -288,6 +301,9 @@ function CreateQuestion () {
                         </Button>
                         <Button  onClick={handleSaveQuestion} variant="outlined" >
                             Create Question
+                        </Button>
+                        <Button className={"cancelQuestionButton"} as={Link} to="/questions" variant="outlined" >
+                            Cancel
                         </Button>
                     </Grid>
                 </Grid>

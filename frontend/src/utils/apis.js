@@ -21,7 +21,10 @@ export const apis = {
     getTagById,
     updateStudentInfoWithRole,
     getAllInterviewQuestions,
-    getAllCourseQuestions
+    getAllCourseQuestions,
+    updateQuestion,
+    createQuestion,
+    getQuestion
 }
 
 const config = {
@@ -51,6 +54,18 @@ function getAllTags(){
 
 function getTagById(id){
     return instance.get("/api/questions/tags/" + id, config)
+}
+
+function getQuestion(id){
+    return instance.get("api/questions/mcqs/" + id, config)
+}
+
+function updateQuestion(id,data){
+    return instance.put("api/questions/mcqs/" + id, data, config)
+}
+
+function createQuestion(user_id,data){
+    return instance.post("api/questions/mcqs/" + user_id, data, config)
 }
 
 function getAllStudents(){

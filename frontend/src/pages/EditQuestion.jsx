@@ -22,7 +22,7 @@ import Alert from '@mui/material/Alert';
 import EditQuestionOptions from "../components/EditQuestionOptions";
 import CreateWrongOptions from '../components/CreateWrongOptions';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
-
+import '../styles/createQuestion.css'
 
 const API_URL = 'http://localhost:8088/QuizSystem/api/questions/mcqs'
 
@@ -37,7 +37,23 @@ function EditQuestion () {
     const [tags, setTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
 
-    const [answers, setAnswers] = useRecoilState(editQuestionOptionsState);
+    const [answers, setAnswers] = useState([
+      {
+       "index": "0",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      },{
+        "index": "1",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      },{
+        "index": "2",
+        "correct": false,
+        "id": 0,
+        "optionDescription": ""
+      }]);
     const [correctAnswer, setCorrectAnswer] = useState(
       {
         "correct": true,
@@ -46,7 +62,7 @@ function EditQuestion () {
       });
     const activeUserId = getUserId();
     const activeUserRole = getUserRole();
-    const postUrl = API_URL+"/"+editQuestions.questionId //change to active user id
+    const Url = API_URL+"/"+editQuestions.questionId //change to active user id
 
     React.useEffect(()=> {
       console.log(answers);
@@ -67,9 +83,19 @@ function EditQuestion () {
       .catch((err) =>{
         console.log(err)
       })
-      setQuestion(editQuestions.questionDetails);
-      setCorrectAnswer(answers.filter((answer) => answer.correct == true))
-      setAnswers(prevState => prevState.filter((answer) => answer.correct == false))
+      console.log(editQuestions.questionId)
+      // apis.getQuestion(editQuestions.questionId)
+      // .then(response => {
+      //   console.log(response.data)
+      //   setQuestion(response.data.questionDetails)
+      //   setCorrectAnswer((response.data.options).find(answer => answer.correct == true))
+      //   setAnswers((response.data.options).filter((answer) => answer.correct == false))
+      // })
+      // setQuestion(editQuestions.questionDetails);
+      // const tempAnswer = answers.find(answer => answer.correct == true);
+      // console.log(tempAnswer)
+      // setCorrectAnswer(tempAnswer)
+      // setAnswers(prevState => prevState.filter((answer) => answer.correct == false))
 
     },[]);
 
@@ -90,15 +116,24 @@ function EditQuestion () {
           "tags": tags,
           "userId": 1
         }
-        axios.post(postUrl, data)
-            .then(data => {
-                console.log(data)
-                navigate('/questions')
-            })
-            .catch((err) =>{
-                console.log(err)
-                alert(err.response.data.message)
-            });
+        // axios.put(postUrl, data)
+        //     .then(data => {
+        //         console.log(data)
+        //         navigate('/questions')
+        //     })
+        //     .catch((err) =>{
+        //         console.log(err)
+        //         alert(err.response.data.message)
+        //     });
+        apis.updateQuestion(activeUserId,data)
+        .then(res => {
+            console.log(res.data)
+            navigate('/questions')
+        })
+        .catch((err) =>{
+            console.log(err)
+            alert(err.response.data.message)
+        });
         
     }
 
@@ -160,12 +195,12 @@ function EditQuestion () {
 
     return (
         <React.Fragment>
-            <Container>
-                {/* <Typography variant="h6" gutterBottom>
-                    Edit Question: {editQuestions.questionDetail} {editQuestions.questionId}
-                </Typography> */}
+            <Container className={"createQuestionContainer"}>
 
-                <Grid container spacing={3}>
+                <Grid className={"tableGrid"} container spacing={3}>
+                    <Typography variant="h6" gutterBottom>
+                        Edit Question
+                    </Typography>
                     <Grid item xs={12}>
                         {/* <FormControl variant="standard"  fullWidth>
                             <TextField
@@ -257,9 +292,8 @@ function EditQuestion () {
                         </FormControl>
                     </Grid>
 
-                </Grid>
 
-                    <Grid item xs={1}>
+                    <Grid className={"createQuestionButtons"} item xs={1}>
                         {/*as={Link} to="/successEditQuestion"*/}
                         <Button  onClick={addWrongOption} variant="outlined" >
                             Add Incorrect Answer
@@ -268,9 +302,13 @@ function EditQuestion () {
                             Remove Incorrect Answer
                         </Button>
                         <Button  onClick={handleSaveQuestion} variant="outlined" >
-                            Create Question
+                            Update Question
+                        </Button>
+                        <Button className={"cancelQuestionButton"} as={Link} to="/questions" variant="outlined" >
+                            Cancel
                         </Button>
                     </Grid>
+                </Grid>
             </Container>
 
         </React.Fragment>

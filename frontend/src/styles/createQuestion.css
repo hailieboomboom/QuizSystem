@@ -49,17 +49,29 @@
     position: relative;
     border-radius: 20px;
     box-shadow: 0 5px 5px 5px black;
+    justify-content: center;
 }
 
 .createQuestionButtons{
-    display: flex;
+    display: contents;
     margin: auto;
     justify-content: center;
 }
 
 .createQuestionButtons button{
     background: #ebe1f2;
-    min-width: 200px;
+    min-width: 45%;
+    padding: 5px;
+    margin: 10px;
+}
+
+.createQuestionButtons button:hover{
+    border-radius: 5px;
+}
+
+.cancelQuestionButton {
+    background: #ebe1f2;
+    min-width: 45%;
     padding: 5px;
     margin: 10px;
 }
@@ -67,4 +79,8 @@
 .createQuizHeader{
     color: black;
     font-weight: 600;
+}
+
+.css-zow5z4-MuiGrid-root>.MuiGrid-item {
+    padding-left: 0px;
 }
