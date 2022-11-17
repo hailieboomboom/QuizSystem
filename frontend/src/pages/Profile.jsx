@@ -65,7 +65,6 @@ const Profile = () => {
               <img src={editButton} className={"editIcon"} onClick={()=>setOpenDialog(true)}/>
               <h3>{username}</h3>
               <p>Role: {roleMapper(role)}</p>
-
               {/*<p>Role: {roleMapper(role)}</p>*/}
               <button onClick={handleViewYourQuestions} type={"button"}>View Your Questions</button>
               <div className={"profileBottom"}>
@@ -75,7 +74,7 @@ const Profile = () => {
               </div>
           </div>
           <div>
-            <FormDialog role={roleMapper(role)} openNow={openDialog} closeWindow={closeWindow}></FormDialog>
+            <FormDialog changeCategory={"hidden"} role={roleMapper(role)} openNow={openDialog} closeWindow={closeWindow}></FormDialog>
           </div>
       </div>
   )
