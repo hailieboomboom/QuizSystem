@@ -17,7 +17,9 @@ export const apis = {
     getAllStudents,
     getAllMCQs,
     getAllMCQsFromUser,
-    updateStudentInfoWithRole
+    updateStudentInfoWithRole,
+    getAllInterviewQuestions,
+    getAllCourseQuestions
 }
 
 const config = {
@@ -89,6 +91,14 @@ function getAllMCQs() {
 
 function getAllMCQsFromUser(id){
     return instance.get("/api/questions/" + id + "/mcqs", config)
+}
+
+function getAllInterviewQuestions(){
+    return instance.get("/api/questions/questionBank/interview", config)
+}
+
+function getAllCourseQuestions(){
+    return instance.get("/api/questions/questionBank/course", config)
 }
 
 function signup(username, email, password, firstName, lastName, role){
