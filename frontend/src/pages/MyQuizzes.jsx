@@ -14,7 +14,7 @@ import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import {attemptQuizState, createQuizAllQuestions, createQuizSelectedQuestions, editResponseState} from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import '../styles/QuizzesTableStyle.css';
+import '../styles/AvailableQuizzes.css';
 import CircularProgress from "@mui/material/CircularProgress";
 
 const MyQuizzes = () => {
@@ -64,12 +64,13 @@ const MyQuizzes = () => {
 
     if (!getUserId()) return(
         <Grid
+            className={"availableQuizzesContainer"}
             container
             justifyContent="center"
             alignItems="center"
         >
             <Grid item>
-                <Typography>Please Log in first.</Typography>
+                <Typography className={"availableQuizzesTitle"}>Please Log in first.</Typography>
             </Grid>
         </Grid>
 
@@ -105,21 +106,23 @@ const MyQuizzes = () => {
     );
 
     return (
+        <div className={"availableQuizzesContainer"}>
+            <Typography className={"availableQuizzesTitle"} variant="h4" gutterBottom>
+                Manage Quizzes
+            </Typography>
         <Grid
             container
+            className={"ManageQuizzesBox"}
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
 
         >
             <Grid item>
-                <Typography variant="h4" gutterBottom>
-                    Available Quizzes
-                </Typography>
             </Grid>
             <Grid item>
-                <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableContainer component={Paper} sx={{ width:700 }}>
+                    <Table className={"availableQuizzesTable"} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
@@ -138,15 +141,15 @@ const MyQuizzes = () => {
                                     </TableCell>
                                     <TableCell align="right">
                                         <Grid
-                                            item
                                             container
+                                            className={"availableQuizzesButtons"}
                                             direction="row"
                                             justifyContent="flex-end"
                                             alignItems="flex-start"
                                             spacing={1}
                                         >
                                             <Grid item>
-                                                <Button variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
+                                                <Button className={"editButtonAvailableQuizzes"} variant="contained" state={{ editQuiz: row }} as={Link} to="/editQuiz" >
                                                     Edit
                                                 </Button>
                                             </Grid>
@@ -164,12 +167,12 @@ const MyQuizzes = () => {
                 </TableContainer>
             </Grid>
 
-            <Grid item sx={{ width:650 }}>
-                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
+            <Grid className={"bottomButtonAQ"} item sx={{ width:650 }}>
+                <Button className={"createQuizButtonAvailableQuizzes"} fullWidth as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
 
         </Grid>
-
+        </div>
     )
 };
 
