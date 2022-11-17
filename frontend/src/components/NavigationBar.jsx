@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from "react-router-dom";
 import {apis} from "../utils/apis";
-import {isLoggedIn, setCookie, deleteCookie, getUserId} from "../utils/cookies"
+import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {Dropdown, DropdownButton} from "react-bootstrap";
@@ -16,26 +16,26 @@ import * as React from 'react';
 function NavigationBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logedOut, setLogout] = useState(false);
+  const [loggedOut, setLogout] = useState(false);
   const [role, setRole] = useState();
 
   useEffect(()=> {
     if(isLoggedIn()) {
       apis.getRoleByUserId(getUserId()).then(
-        res => {
-          console.log("In navigation bar, role is: " + res.data["role"])
-          const role = res.data["role"]
-          if(role === "AUTHORISED_TRAINER") {
-            setRole("trainer")
+          res => {
+            console.log("In navigation bar, role is: " + res.data["role"])
+            const role = res.data["role"]
+            if(role === "AUTHORISED_TRAINER") {
+              setRole("trainer")
+            }
+            else if(role === "AUTHORISED_SALES") {
+              setRole("sales")
+            }
           }
-          else if(role === "AUTHORISED_SALES") {
-            setRole("sales")
-          }
-        }
       ).catch(
-        (err) => {
-          console.log(err)
-        }
+          (err) => {
+            console.log(err)
+          }
       )
     }
   }, [role])
@@ -56,98 +56,95 @@ function NavigationBar() {
     return () => {
 
     };
-  }, [logedOut]);
+  }, [loggedOut]);
 
   console.log("is logged in "+ isLoggedIn())
-console.log(logedOut)
+  console.log(loggedOut)
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" >
-      <Container>
-        <Navbar.Brand as={Link} to="/">
-          <img src="https://surveymonkey-assets.s3.amazonaws.com/survey/182409455/e1ca79ba-8544-401a-b369-7cd97429a630.png" width="84" height="50"
-               className="d-inline-block align-content-center" alt=""/>
-    Quizz App
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" >
+
+        <Container>
+
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+          <Navbar.Brand as={Link} to="/">
+            <img src="https://surveymonkey-assets.s3.amazonaws.com/survey/182409455/e1ca79ba-8544-401a-b369-7cd97429a630.png" width="84" height="50"
+                 className="d-inline-block align-content-center" alt=""/>
+            XQuizIT
           </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
 
-            <div className="me-2">
-              <Dropdown>
-                <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
-                  Create
-                </Dropdown.Toggle>
+          <Navbar.Collapse id="responsive-navbar-nav">
 
-                <Dropdown.Menu>
-                  <Dropdown.Item  as={Link} to="/createQuestion">Create Question</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/autoGenerate">Auto generate quiz</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-
-            <div className="me-2">
-              <Dropdown>
-                <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
-                  Quiz
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item  as={Link} to="/viewQuizzes">Take Quiz</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/myQuizzes">Manage Quiz</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/attemptedQuizzes">Attempted Quiz</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-
-
-          </Nav>
 
             {isLoggedIn() ? (
-                    <div>
-                      <IconButton
-                          size="large"
-                          aria-label="account of current user"
-                          aria-controls="menu-appbar"
-                          aria-haspopup="true"
-                          onClick={handleMenu}
-                          color="primary"
-                      >
-                        <AccountCircle />
-                      </IconButton>
-                      <Menu
-                          id="menu-appbar"
-                          anchorEl={anchorEl}
-                          anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                          keepMounted
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                          open={Boolean(anchorEl)}
-                          onClose={handleClose}
-                      >
-                        <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/profile">Profile</MenuItem>
-                        <MenuItem onClick={() => setLogout(false)} as={Link} to={"/" + role}>Dashboard</MenuItem>
-                        <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/">Logout</MenuItem>
-                      </Menu>
-                    </div>
-                // <Nav>
-                //   <Nav.Link onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/register">
-                //    <Button color="success">Logout</Button>
-                //   </Nav.Link>
-                // </Nav>
+                <Nav className="me-auto">
+                  <div className="me-2">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
+                        Create
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item  as={Link} to="/createQuestion">Create Question</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
+                       
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+
+                  <div className="me-2">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
+                        Quiz
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item  as={Link} to="/viewQuizzes">Take Quiz</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/myQuizzes">Manage Quiz</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/attemptedQuizzes">Attempted Quiz</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                  <div className="me-12">
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleMenu}
+                        color="primary"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                      <MenuItem onClick={() =>  setLogout(false)} as={Link} to="/profile">Profile</MenuItem>
+                      <MenuItem onClick={() => setLogout(false)} as={Link} to={"/" + role}>Dashboard</MenuItem>
+                      <MenuItem onClick={() => {deleteCookie(); setLogout(true)}} as={Link} to="/">Logout</MenuItem>
+                    </Menu>
+                  </div>
+                </Nav>
+
             ) : (
                 <Nav>
                   <Nav.Link as={Link} to="/register" onClick={() =>  setLogout(false)}>Register</Nav.Link>
                   <Nav.Link as={Link} to="/login" onClick={() =>  setLogout(false)}>Login</Nav.Link>
                 </Nav>
-                  )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
   );
 }
 export default NavigationBar;

@@ -171,8 +171,10 @@ function App() {
         <div className="App">
           <RecoilRoot>
           <BrowserRouter>
+
             <NavigationBar />
               {routes}
+
           </BrowserRouter>
           </RecoilRoot>
         </div>
