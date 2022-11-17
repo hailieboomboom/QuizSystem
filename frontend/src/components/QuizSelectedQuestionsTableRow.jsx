@@ -47,7 +47,7 @@ export default function QuizSelectedQuestionsTableRow(props) {
                             <TableCell align="right" component="th" scope="row">
                                 <Typography variant="body">{props.question.grade}</Typography>
                             </TableCell>
-                            <TableCell component="th" scope="row"s>
+                            <TableCell align="right" component="th" scope="row"s>
                                 <Button className={"tableButton"}  onClick={()=>handleRemove(props.question)} >Remove</Button>
                             </TableCell>
                         </TableRow>

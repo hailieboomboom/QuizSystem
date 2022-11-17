@@ -14,8 +14,7 @@ import { attemptQuizState } from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-// import '../styles/QuizzesTableStyle.css';
-import '../styles/trainerDashStyle.css'
+import '../styles/AvailableQuizzes.css';
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import {getUserId} from "../utils/cookies";
@@ -62,30 +61,28 @@ const AttemptedQuizzes = () => {
     );
 
     return (
-        <div className={"trainerDashboardContainer"}>
+        <div className={"availableQuizzesContainer"}>
 
+            <Typography className={"availableQuizzesTitle"} variant="h2" gutterBottom>
+                Attempted Quizzes
+            </Typography>
         <Grid
             container
+            className={"ManageQuizzesBox"}
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
             spacing={3}
         >
-            <Grid item>
-                <Typography className={"trainerDashboardTitle"} variant="h2" gutterBottom>
-                    Attempted Quizzes
-                </Typography>
-            </Grid>
-
             <Grid  item>
                 <TableContainer component={Paper} >
-                    <Table className={"trainerDashboardTable"} aria-label="simple table">
+                    <Table className={"availableQuizzesTable"} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className={"trainerDashboardHead"}>Quiz</TableCell>
-                                <TableCell className={"trainerDashboardHead"} align="right">Attempt Number</TableCell>
-                                <TableCell className={"trainerDashboardHead"} align="right">Grade Awarded</TableCell>
-                                <TableCell className={"trainerDashboardHead"} align="right">Max Grade</TableCell>
+                                <TableCell >Quiz</TableCell>
+                                <TableCell align="right">Attempt Number</TableCell>
+                                <TableCell align="right">Grade Awarded</TableCell>
+                                <TableCell align="right">Max Grade</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
