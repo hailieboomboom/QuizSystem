@@ -16,7 +16,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {createQuestionOptionsState, createQuestionState} from "../recoil/Atoms";
 import axios from "axios";
-import {getUserId} from "../utils/cookies.js";
+import {getUserId, getUserRole} from "../utils/cookies.js";
 import {apis} from "../utils/apis.js";
 import Alert from '@mui/material/Alert';
 import EditQuestionOptions from "../components/EditQuestionOptions";
@@ -63,6 +63,7 @@ function CreateQuestion () {
       });
 
     const activeUserId = getUserId();
+    const activeUserRole = getUserRole();
     const postUrl = API_URL+"/"+activeUserId //change to active user id
 
     React.useEffect(()=> {
@@ -70,11 +71,20 @@ function CreateQuestion () {
     },[answers]);
 
     React.useEffect(()=> {
+      console.log(allTags);
+    },[allTags]);
+
+    React.useEffect(()=> {
       apis.getAllTags()
       .then(response => {
-        console.log(response.data)
-        setAllTags(response.data)
-        // const allTags = response.data
+        console.log("tag response:" + response.data)
+        if(activeUserRole == "TRAINING") {
+          setAllTags((response.data).filter((tag) => tag.toString() !== "interview"))
+        }else if(activeUserRole == "AUTHORISED_SALES") {
+          setAllTags((response.data).filter((tag) => tag.toString() !== "course"))
+        }else {
+          setAllTags(response.data)
+        }
 
       })
       .catch((err) =>{
