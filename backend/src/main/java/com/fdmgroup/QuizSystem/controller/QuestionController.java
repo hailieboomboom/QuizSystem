@@ -71,12 +71,28 @@ public class QuestionController {
 		)
 	public ResponseEntity<ApiResponse> createMcq(@PathVariable Long active_user_id,@RequestBody AddMcqDto addMcqDto) {
 		User user = userService.getUserById(active_user_id);
+		mcoService.validateOptions(addMcqDto.getOptions());
+		tagService.validateTagsFromDto(addMcqDto.getTags());
 		questionService.accessControlCreateMCQ(addMcqDto.getTags(), user.getRole());
 		questionService.createMCQ(addMcqDto,user);
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
-
+	@GetMapping("/tags")
+	public ResponseEntity<List<String>> getAllTags(){
+		List<String> tags = tagService.findAll();
+		
+		return new ResponseEntity<>(tags,HttpStatus.OK);
+	}
+	
+	@GetMapping("/tags/{tag_id}")
+	public ResponseEntity<String> getTagById(@PathVariable long tag_id){
+		String tagName = tagService.getTagById(tag_id);
+		
+		return new ResponseEntity<>(tagName,HttpStatus.OK);
+	}
+	
+	
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
 			notes = "return question along with tags and options")
@@ -97,6 +113,7 @@ public class QuestionController {
 			@io.swagger.annotations.ApiResponse(code = 404, message = "Question Not Found")}
 	)
 	public ResponseEntity<CorrectOptionDto> getCorrectOption(@PathVariable Long mcqId) {
+
 		return  new ResponseEntity<>(mcoService.getRightOption(mcqId),HttpStatus.OK);
 	}
 

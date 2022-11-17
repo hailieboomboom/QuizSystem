@@ -243,7 +243,6 @@ public class DataLoader implements ApplicationRunner {
 
 
         tagCourse.addOneQuestion(mcq1);
-        tagCourse.addOneQuestion(mcq2); // adding tag1 & tag2 into mcq2
         tagCourse.addOneQuestion(sa1);
         tagCourse.addOneQuestion(sa2);
         tagCourse.addOneQuestion(sa3);
@@ -251,7 +250,6 @@ public class DataLoader implements ApplicationRunner {
         tagInterview.addOneQuestion(mcq2);  // adding tag1 & tag2 into mcq2
         tagInterview.addOneQuestion(sa1);
         tagInterview.addOneQuestion(sa4);
-        tagInterview.addOneQuestion(mcq2);
         tagCourse.addOneQuestion(mcq3);
 
         tagMcq.addOneQuestion(mcq1);
@@ -411,6 +409,157 @@ public class DataLoader implements ApplicationRunner {
         tagMcq.addOneQuestion(mcq13);
         tagPython.addOneQuestion(mcq13);
 
+        
+        // LOAD MCQ QUESTIONS AND SET TAGS
+        // Interview based, tagInterview, tagMcq
+        
+        // 5 by sales
+        MultipleChoiceQuestion mcqIntv1 = new MultipleChoiceQuestion();
+        mcqIntv1.setQuestionDetails("Under which pillar of OOPS do base class and derived class relationships come?");
+        MultipleChoiceOption mcoIntv1_1 = new MultipleChoiceOption("Polymorphism", false, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_2 = new MultipleChoiceOption("Inheritance", true, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_3 = new MultipleChoiceOption("Encapsulation",false, mcqIntv1);
+        MultipleChoiceOption mcoIntv1_4 = new MultipleChoiceOption("Abstraction",false, mcqIntv1);
+        mcqIntv1.setCreator(sales);
+        mcqIntv1.addOneTag(tagMcq);
+        mcqIntv1.addOneTag(tagInterview);
+        mcqIntv1.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv1);
+        tagMcq.addOneQuestion(mcqIntv1);
+        tagOod.addOneQuestion(mcqIntv1);
+
+        
+        MultipleChoiceQuestion mcqIntv2 = new MultipleChoiceQuestion();
+        mcqIntv2.setQuestionDetails("What is the number of parameters that a default constructor requires?");
+        MultipleChoiceOption mcoIntv2_1 = new MultipleChoiceOption("0",true, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_2 = new MultipleChoiceOption("1",false, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_3 = new MultipleChoiceOption("2",false, mcqIntv2);
+        MultipleChoiceOption mcoIntv2_4 = new MultipleChoiceOption("3",false, mcqIntv2);
+        mcqIntv2.setCreator(sales);
+        mcqIntv2.addOneTag(tagMcq);
+        mcqIntv2.addOneTag(tagInterview);
+        mcqIntv2.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv2);
+        tagMcq.addOneQuestion(mcqIntv2);
+        tagOod.addOneQuestion(mcqIntv2);
+
+        MultipleChoiceQuestion mcqIntv3 = new MultipleChoiceQuestion();
+        mcqIntv3.setQuestionDetails("Annotation to find a transaction and then fail, complaining that no Hibernate session’s been bound to the thread.");
+        MultipleChoiceOption mcoIntv3_1 = new MultipleChoiceOption("Transaction", false, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_2 = new MultipleChoiceOption("Transactional", true, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_3 = new MultipleChoiceOption("Transactions",false, mcqIntv3);
+        MultipleChoiceOption mcoIntv3_4 = new MultipleChoiceOption("None of the mentioned",false, mcqIntv3);
+        mcqIntv3.setCreator(sales);
+        mcqIntv3.addOneTag(tagMcq);
+        mcqIntv3.addOneTag(tagInterview);
+        mcqIntv3.addOneTag(tagJpa);
+        tagInterview.addOneQuestion(mcqIntv3);
+        tagMcq.addOneQuestion(mcqIntv3);
+        tagJpa.addOneQuestion(mcqIntv3);
+        
+        MultipleChoiceQuestion mcqIntv4 = new MultipleChoiceQuestion();
+        mcqIntv4.setQuestionDetails("In which access should a constructor be defined, so that object of the class can be created in any function?");
+        MultipleChoiceOption mcoIntv4_1 = new MultipleChoiceOption("Any access specifier will work", false, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_2 = new MultipleChoiceOption("Private", false, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_3 = new MultipleChoiceOption("Public",true, mcqIntv4);
+        MultipleChoiceOption mcoIntv4_4 = new MultipleChoiceOption("Protected",false, mcqIntv4);
+        mcqIntv4.setCreator(sales);
+        mcqIntv4.addOneTag(tagMcq);
+        mcqIntv4.addOneTag(tagInterview);
+        mcqIntv4.addOneTag(tagOod);
+        tagInterview.addOneQuestion(mcqIntv4);
+        tagMcq.addOneQuestion(mcqIntv4);
+        tagOod.addOneQuestion(mcqIntv4);
+        
+        
+        MultipleChoiceQuestion mcqIntv5 = new MultipleChoiceQuestion();
+        mcqIntv5.setQuestionDetails("Which of the following is used to find and fix bugs in the Java programs?");
+        MultipleChoiceOption mcoIntv5_1 = new MultipleChoiceOption("JVM", false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_2 = new MultipleChoiceOption("JRE", false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_3 = new MultipleChoiceOption("JDK",false, mcqIntv5);
+        MultipleChoiceOption mcoIntv5_4 = new MultipleChoiceOption("JDB",true, mcqIntv5);
+        mcqIntv5.setCreator(sales);
+        mcqIntv5.addOneTag(tagMcq);
+        mcqIntv5.addOneTag(tagInterview);
+        mcqIntv5.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv5);
+        tagMcq.addOneQuestion(mcqIntv5);
+        tagJava.addOneQuestion(mcqIntv5);
+        
+        
+        // 2 by pond student
+        MultipleChoiceQuestion mcqIntv6 = new MultipleChoiceQuestion();
+        mcqIntv6.setQuestionDetails("Which method of the Class.class is used to determine the name of a class represented by the class object as a String?");
+        MultipleChoiceOption mcoIntv6_1 = new MultipleChoiceOption("getClass()", false, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_2 = new MultipleChoiceOption("intern()", false, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_3 = new MultipleChoiceOption("getName()",true, mcqIntv6);
+        MultipleChoiceOption mcoIntv6_4 = new MultipleChoiceOption("toString()",false, mcqIntv6);
+        mcqIntv6.setCreator(student2);
+        mcqIntv6.addOneTag(tagMcq);
+        mcqIntv6.addOneTag(tagInterview);
+        mcqIntv6.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv6);
+        tagMcq.addOneQuestion(mcqIntv6);
+        tagJava.addOneQuestion(mcqIntv6);
+        
+        MultipleChoiceQuestion mcqIntv7 = new MultipleChoiceQuestion();
+        mcqIntv7.setQuestionDetails("Which option is false about the final keyword?");
+        MultipleChoiceOption mcoIntv7_1 = new MultipleChoiceOption("A final method cannot be overridden in its subclasses.", false, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_2 = new MultipleChoiceOption("A final class cannot be extended.", false, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_3 = new MultipleChoiceOption("A final class cannot extend other classes.",true, mcqIntv7);
+        MultipleChoiceOption mcoIntv7_4 = new MultipleChoiceOption("A final method can be inherited.",false, mcqIntv7);
+        mcqIntv7.setCreator(student2);
+        mcqIntv7.addOneTag(tagMcq);
+        mcqIntv7.addOneTag(tagInterview);
+        mcqIntv7.addOneTag(tagJava);
+        tagInterview.addOneQuestion(mcqIntv7);
+        tagMcq.addOneQuestion(mcqIntv7);
+        tagJava.addOneQuestion(mcqIntv7);
+        
+        
+        // 3 by beached student
+        MultipleChoiceQuestion mcqIntv8 = new MultipleChoiceQuestion();
+        mcqIntv8.setQuestionDetails("Who is responsible for sprint meeting?");
+        MultipleChoiceOption mcoIntv8_1 = new MultipleChoiceOption("Product owner", false, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_2 = new MultipleChoiceOption("Scrum team", false, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_3 = new MultipleChoiceOption("Scrum master",true, mcqIntv8);
+        MultipleChoiceOption mcoIntv8_4 = new MultipleChoiceOption("All of the above",false, mcqIntv8);
+        mcqIntv8.setCreator(student3);
+        mcqIntv8.addOneTag(tagMcq);
+        mcqIntv8.addOneTag(tagInterview);
+        mcqIntv8.addOneTag(tagAgile);
+        tagInterview.addOneQuestion(mcqIntv8);
+        tagMcq.addOneQuestion(mcqIntv8);
+        tagAgile.addOneQuestion(mcqIntv8);
+
+        MultipleChoiceQuestion mcqIntv9 = new MultipleChoiceQuestion();
+        mcqIntv9.setQuestionDetails("In Scrum, the prioritized work to be done is referred as");
+        MultipleChoiceOption mcoIntv9_1 = new MultipleChoiceOption("Sprint planning", false, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_2 = new MultipleChoiceOption("Product backlog", true, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_3 = new MultipleChoiceOption("Sprint retrospective",false, mcqIntv9);
+        MultipleChoiceOption mcoIntv9_4 = new MultipleChoiceOption("Meetings",false, mcqIntv9);
+        mcqIntv9.setCreator(student3);
+        mcqIntv9.addOneTag(tagMcq);
+        mcqIntv9.addOneTag(tagInterview);
+        mcqIntv9.addOneTag(tagAgile);
+        tagInterview.addOneQuestion(mcqIntv9);
+        tagMcq.addOneQuestion(mcqIntv9);
+        tagAgile.addOneQuestion(mcqIntv9);
+
+        MultipleChoiceQuestion mcqIntv10 = new MultipleChoiceQuestion();
+        mcqIntv10.setQuestionDetails("Which class is used to map a database row to a java object in spring?");
+        MultipleChoiceOption mcoIntv10_1 = new MultipleChoiceOption("ResultSet", false, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_2 = new MultipleChoiceOption("RowMapper", true, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_3 = new MultipleChoiceOption("RowSetMapper",false, mcqIntv10);
+        MultipleChoiceOption mcoIntv10_4 = new MultipleChoiceOption("ResultSetMapper",false, mcqIntv10);
+        mcqIntv10.setCreator(student3);
+        mcqIntv10.addOneTag(tagMcq);
+        mcqIntv10.addOneTag(tagInterview);
+        mcqIntv10.addOneTag(tagSpring);
+        tagInterview.addOneQuestion(mcqIntv10);
+        tagMcq.addOneQuestion(mcqIntv10);
+        tagSpring.addOneQuestion(mcqIntv10);
+
 
         // SAVE TAGS and QUESTIONS
 
@@ -441,7 +590,6 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco2);
         mcoService.save(mco3);
 
-
         mcq2 = (MultipleChoiceQuestion) questionService.save(mcq2);
         mcoService.save(mco11);
         mcoService.save(mco12);
@@ -451,6 +599,11 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco111);
         mcoService.save(mco112);
         mcoService.save(mco113);
+        
+        mcq4 = (MultipleChoiceQuestion) questionService.save(mcq4);
+        mcoService.save(mco41);
+        mcoService.save(mco42);
+        mcoService.save(mco43);
 
         mcq5 = (MultipleChoiceQuestion) questionService.save(mcq5);
         mcoService.save(mco51);
@@ -498,7 +651,69 @@ public class DataLoader implements ApplicationRunner {
         mcoService.save(mco133);
 
 
+        // Save interview questions
+        mcqIntv1 = (MultipleChoiceQuestion) questionService.save(mcqIntv1);
+        mcoService.save(mcoIntv1_1);
+        mcoService.save(mcoIntv1_2);
+        mcoService.save(mcoIntv1_3);
+        mcoService.save(mcoIntv1_4);
 
+        mcqIntv2 = (MultipleChoiceQuestion) questionService.save(mcqIntv2);
+        mcoService.save(mcoIntv2_1);
+        mcoService.save(mcoIntv2_2);
+        mcoService.save(mcoIntv2_3);
+        mcoService.save(mcoIntv2_4);
+        
+        mcqIntv3 = (MultipleChoiceQuestion) questionService.save(mcqIntv3);
+        mcoService.save(mcoIntv3_1);
+        mcoService.save(mcoIntv3_2);
+        mcoService.save(mcoIntv3_3);
+        mcoService.save(mcoIntv3_4);
+        
+        mcqIntv4 = (MultipleChoiceQuestion) questionService.save(mcqIntv4);
+        mcoService.save(mcoIntv4_1);
+        mcoService.save(mcoIntv4_2);
+        mcoService.save(mcoIntv4_3);
+        mcoService.save(mcoIntv4_4);
+        
+        mcqIntv5 = (MultipleChoiceQuestion) questionService.save(mcqIntv5);
+        mcoService.save(mcoIntv5_1);
+        mcoService.save(mcoIntv5_2);
+        mcoService.save(mcoIntv5_3);
+        mcoService.save(mcoIntv5_4);
+
+        mcqIntv6 = (MultipleChoiceQuestion) questionService.save(mcqIntv6);
+        mcoService.save(mcoIntv6_1);
+        mcoService.save(mcoIntv6_2);
+        mcoService.save(mcoIntv6_3);
+        mcoService.save(mcoIntv6_4);
+        
+        mcqIntv7 = (MultipleChoiceQuestion) questionService.save(mcqIntv7);
+        mcoService.save(mcoIntv7_1);
+        mcoService.save(mcoIntv7_2);
+        mcoService.save(mcoIntv7_3);
+        mcoService.save(mcoIntv7_4);
+        
+        mcqIntv8 = (MultipleChoiceQuestion) questionService.save(mcqIntv8);
+        mcoService.save(mcoIntv8_1);
+        mcoService.save(mcoIntv8_2);
+        mcoService.save(mcoIntv8_3);
+        mcoService.save(mcoIntv8_4);
+        
+        mcqIntv9 = (MultipleChoiceQuestion) questionService.save(mcqIntv9);
+        mcoService.save(mcoIntv9_1);
+        mcoService.save(mcoIntv9_2);
+        mcoService.save(mcoIntv9_3);
+        mcoService.save(mcoIntv9_4);        
+        
+        
+        mcqIntv10 = (MultipleChoiceQuestion) questionService.save(mcqIntv10);
+        mcoService.save(mcoIntv10_1);
+        mcoService.save(mcoIntv10_2);
+        mcoService.save(mcoIntv10_3);
+        mcoService.save(mcoIntv10_4);  
+        
+        
         ////////// Load Quizzes ////////////
 
 //        QuizQuestionGrade qqg1 = new QuizQuestionGrade();
@@ -507,59 +722,59 @@ public class DataLoader implements ApplicationRunner {
 //        List<QuizQuestionGrade> qqgList = new ArrayList<QuizQuestionGrade>();
 //        qqgList.add(qqg1);
 //
-        // male 2 quizzes
+        // 2 Quizzes for interview, 2 Quizzes for Course content
 
         Quiz quiz1 = new Quiz();
         quiz1.setCreator(trainer);
         quiz1.setName("Course quiz created by trainer id 1"); // fixed the name to interview quiz to match with quiz type
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ); // fixed the quiz type to match with question tags
         quiz1 = quizService.save(quiz1);
-
         quizService.addQuestionIntoQuiz(mcq1, quiz1, (float)5.0);
+        quizService.addQuestionIntoQuiz(mcq3, quiz1, (float)6.0);
+        
+        Quiz quizCourse1 = new Quiz();
+        quizCourse1.setCreator(trainer);
+        quizCourse1.setName("Course Quiz 1 by student1 id 7");
+        quizCourse1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quizCourse1 = quizService.save(quizCourse1);
+        quizService.addQuestionIntoQuiz(mcq4, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq6, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq8, quizCourse1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq5, quizCourse1, (float) 5);
+        
+        Quiz quizCourse2 = new Quiz();
+        quizCourse2.setCreator(student2);
+        quizCourse2.setName("Course Quiz 2 by student2 id 8");
+        quizCourse2.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quizCourse2 = quizService.save(quizCourse2);
+        quizService.addQuestionIntoQuiz(mcq9, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq7, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq10, quizCourse2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcq12, quizCourse2, (float) 5);
+        
+        Quiz quizInterview1 = new Quiz();
+        quizInterview1.setCreator(sales);
+        quizInterview1.setName("Interview Quiz 1 by sales id 2");
+        quizInterview1.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quizInterview1 = quizService.save(quizInterview1);
+        quizService.addQuestionIntoQuiz(mcqIntv1, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv2, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv3, quizInterview1, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv5, quizInterview1, (float) 5);
+        
+        Quiz quizInterview2 = new Quiz();
+        quizInterview2.setCreator(student3);
+        quizInterview2.setName("Interview Quiz 2 by student3 id 9");
+        quizInterview2.setQuizCategory(QuizCategory.INTERVIEW_QUIZ);
+        quizInterview2 = quizService.save(quizInterview2);
+        quizService.addQuestionIntoQuiz(mcqIntv7, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv6, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv9, quizInterview2, (float) 5);
+        quizService.addQuestionIntoQuiz(mcqIntv4, quizInterview2, (float) 5);
 
-        quizService.addQuestionIntoQuiz(mcq2, quiz1, (float)6.0);
-
-        System.out.println("--------SAVE QUIZ1 DONE-------");
-//        quizService.removeQuestionFromQuiz(mcq1, quiz1);
-//        System.out.println("--------REMOVE MCQ1 AND QUIZ1 WITH GRADE DONE-------");
-//
-
-////        quiz1.setQuizQuestionsGrade(qqgList);
-////
-////        mcq1.setQuizQuestionsGrade(qqgList);
-//        quizService.addQuestion(mcq1, quiz1);
-//
-//
-//        questionService.save(mcq1);
-//        quizService.save(quiz1);
-
-
-//        Quiz courseQuiz1 = new Quiz(QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1,sa1)));
-//        quizService.save(courseQuiz1);
+        System.out.println("--------SAVE QUIZ DONE-------");
+        
         log.info("--------------- All users ------------------------");
-//        log.info(quizService.getAllQuizzes());
-
-        // TO SUMMER: QUIZ CONSTRUCTOR HAS BEEN UPDATED
-//		Quiz courseQuiz1 = new Quiz("course quiz 1", QuizCategory.COURSE_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1, sa1)), trainer);
-//		Quiz interviewQuiz1 = new Quiz("interview quiz 1", QuizCategory.INTERVIEW_QUIZ, new ArrayList<Question>(Arrays.asList(mcq1)), sales);
-//		quizRepository.save(courseQuiz1);
-//		quizRepository.save(interviewQuiz1);
-
-
-//		// let question know about quiz
-//		mcq1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1,interviewQuiz1 )));
-//		sa1.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1 )));
-//		questionService.save(mcq1);
-//		questionService.save(sa1);
-
-//		// let user know about quiz
-//		trainer.setQuizzes(new ArrayList<Quiz>(Arrays.asList(courseQuiz1)));
-//		sales.setQuizzes(new ArrayList<Quiz>(Arrays.asList(interviewQuiz1)));
-//		userService.save(trainer);
-//		userService.save(sales);
-
-//        log.info("--------------- All users ------------------------");
-//        log.info(quizService.getAllQuizzes());
 
 
         //quiz attempt
@@ -597,8 +812,138 @@ public class DataLoader implements ApplicationRunner {
         mcqAttempt2.setSelectedOption(mco2);
         mcqAttemptRepository.save(mcqAttempt1);
         mcqAttemptRepository.save(mcqAttempt2);
+        
+        // QuizAttempt: student2 takes quizCourse1 twice
+        QuizAttempt qa_qc1_student2_1 = new QuizAttempt();
+        qa_qc1_student2_1.setQuiz(quizCourse1);
+        qa_qc1_student2_1.setUser(student2);
+        qa_qc1_student2_1.setAttemptNo(1);
+        qa_qc1_student2_1.setTotalAwarded(0);
+        qa_qc1_student2_1 = qaRepo.save(qa_qc1_student2_1);
+        
+        QuizQuestionMCQAttemptKey qaAttemptqc1MCQ4Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_1.getId(), mcq4.getId());
+        QuizQuestionMCQAttempt qaAttemptqc1MCQ4 = new QuizQuestionMCQAttempt();
+        qaAttemptqc1MCQ4.setKey(qaAttemptqc1MCQ4Key);
+        qaAttemptqc1MCQ4.setQuizAttempt(qa_qc1_student2_1);
+        qaAttemptqc1MCQ4.setMultipleChoiceQuestion(mcq4);
+        qaAttemptqc1MCQ4.setSelectedOption(mco41);
+        qaAttemptqc1MCQ4.setAwarded_grade(0);
+        mcqAttemptRepository.save(qaAttemptqc1MCQ4);
+        
+        QuizQuestionMCQAttemptKey qaAttemptqc1MCQ5Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_1.getId(), mcq5.getId());
+        QuizQuestionMCQAttempt qaAttemptqc1MCQ5 = new QuizQuestionMCQAttempt();
+        qaAttemptqc1MCQ5.setKey(qaAttemptqc1MCQ5Key);
+        qaAttemptqc1MCQ5.setQuizAttempt(qa_qc1_student2_1);
+        qaAttemptqc1MCQ5.setMultipleChoiceQuestion(mcq5);
+        qaAttemptqc1MCQ5.setSelectedOption(mco51);
+        qaAttemptqc1MCQ5.setAwarded_grade(0);
+        mcqAttemptRepository.save(qaAttemptqc1MCQ5);
+        
+        QuizQuestionMCQAttemptKey qaAttemptqc1MCQ6Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_1.getId(), mcq6.getId());
+        QuizQuestionMCQAttempt qaAttemptqc1MCQ6 = new QuizQuestionMCQAttempt();
+        qaAttemptqc1MCQ6.setKey(qaAttemptqc1MCQ6Key);
+        qaAttemptqc1MCQ6.setQuizAttempt(qa_qc1_student2_1);
+        qaAttemptqc1MCQ6.setMultipleChoiceQuestion(mcq6);
+        qaAttemptqc1MCQ6.setSelectedOption(mco61);
+        qaAttemptqc1MCQ6.setAwarded_grade(0);
+        mcqAttemptRepository.save(qaAttemptqc1MCQ6);
+        
+        QuizQuestionMCQAttemptKey qaAttemptqc1MCQ8Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_1.getId(), mcq8.getId());
+        QuizQuestionMCQAttempt qaAttemptqc1MCQ8 = new QuizQuestionMCQAttempt();
+        qaAttemptqc1MCQ8.setKey(qaAttemptqc1MCQ8Key);
+        qaAttemptqc1MCQ8.setQuizAttempt(qa_qc1_student2_1);
+        qaAttemptqc1MCQ8.setMultipleChoiceQuestion(mcq8);
+        qaAttemptqc1MCQ8.setSelectedOption(mco81);
+        qaAttemptqc1MCQ8.setAwarded_grade(0);
+        mcqAttemptRepository.save(qaAttemptqc1MCQ8);
+        
+        // student2 quizCourse1 attempt 2
+        QuizAttempt qa_qc1_student2_2 = new QuizAttempt();
+        qa_qc1_student2_2.setQuiz(quizCourse1);
+        qa_qc1_student2_2.setUser(student2);
+        qa_qc1_student2_2.setAttemptNo(2);
+        qa_qc1_student2_2.setTotalAwarded(15);
+        qa_qc1_student2_2 = qaRepo.save(qa_qc1_student2_2);
+        
+        QuizQuestionMCQAttemptKey qaAttempt2qc1MCQ4Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_2.getId(), mcq4.getId());
+        QuizQuestionMCQAttempt qaAttempt2qc1MCQ4 = new QuizQuestionMCQAttempt();
+        qaAttempt2qc1MCQ4.setKey(qaAttempt2qc1MCQ4Key);
+        qaAttempt2qc1MCQ4.setQuizAttempt(qa_qc1_student2_2);
+        qaAttempt2qc1MCQ4.setMultipleChoiceQuestion(mcq4);
+        qaAttempt2qc1MCQ4.setSelectedOption(mco43);
+        qaAttempt2qc1MCQ4.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt2qc1MCQ4);
+        
+        QuizQuestionMCQAttemptKey qaAttempt2qc1MCQ5Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_2.getId(), mcq5.getId());
+        QuizQuestionMCQAttempt qaAttempt2qc1MCQ5 = new QuizQuestionMCQAttempt();
+        qaAttempt2qc1MCQ5.setKey(qaAttempt2qc1MCQ5Key);
+        qaAttempt2qc1MCQ5.setQuizAttempt(qa_qc1_student2_2);
+        qaAttempt2qc1MCQ5.setMultipleChoiceQuestion(mcq5);
+        qaAttempt2qc1MCQ5.setSelectedOption(mco53);
+        qaAttempt2qc1MCQ5.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt2qc1MCQ5);
+        
+        QuizQuestionMCQAttemptKey qaAttempt2qc1MCQ6Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_2.getId(), mcq6.getId());
+        QuizQuestionMCQAttempt qaAttempt2qc1MCQ6 = new QuizQuestionMCQAttempt();
+        qaAttempt2qc1MCQ6.setKey(qaAttempt2qc1MCQ6Key);
+        qaAttempt2qc1MCQ6.setQuizAttempt(qa_qc1_student2_2);
+        qaAttempt2qc1MCQ6.setMultipleChoiceQuestion(mcq6);
+        qaAttempt2qc1MCQ6.setSelectedOption(mco63);
+        qaAttempt2qc1MCQ6.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt2qc1MCQ6);
+        
+        QuizQuestionMCQAttemptKey qaAttempt2qc1MCQ8Key = new QuizQuestionMCQAttemptKey(qa_qc1_student2_2.getId(), mcq8.getId());
+        QuizQuestionMCQAttempt qaAttempt2qc1MCQ8 = new QuizQuestionMCQAttempt();
+        qaAttempt2qc1MCQ8.setKey(qaAttempt2qc1MCQ8Key);
+        qaAttempt2qc1MCQ8.setQuizAttempt(qa_qc1_student2_2);
+        qaAttempt2qc1MCQ8.setMultipleChoiceQuestion(mcq8);
+        qaAttempt2qc1MCQ8.setSelectedOption(mco82);
+        qaAttempt2qc1MCQ8.setAwarded_grade(0);
+        mcqAttemptRepository.save(qaAttempt2qc1MCQ8);
 
-//        quizAttemptService.deleteAttempt(qa1);
+        // student3 quizCourse1 attempt 1
+        QuizAttempt qa_qc1_student3_1 = new QuizAttempt();
+        qa_qc1_student3_1.setQuiz(quizCourse1);
+        qa_qc1_student3_1.setUser(student3);
+        qa_qc1_student3_1.setAttemptNo(1);
+        qa_qc1_student3_1.setTotalAwarded(20);
+        qa_qc1_student3_1 = qaRepo.save(qa_qc1_student3_1);
+        
+        QuizQuestionMCQAttemptKey qaAttempt1qc1MCQ4Key = new QuizQuestionMCQAttemptKey(qa_qc1_student3_1.getId(), mcq4.getId());
+        QuizQuestionMCQAttempt qaAttempt1qc1MCQ4 = new QuizQuestionMCQAttempt();
+        qaAttempt1qc1MCQ4.setKey(qaAttempt1qc1MCQ4Key);
+        qaAttempt1qc1MCQ4.setQuizAttempt(qa_qc1_student3_1);
+        qaAttempt1qc1MCQ4.setMultipleChoiceQuestion(mcq4);
+        qaAttempt1qc1MCQ4.setSelectedOption(mco43);
+        qaAttempt1qc1MCQ4.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt1qc1MCQ4);
+        
+        QuizQuestionMCQAttemptKey qaAttempt1qc1MCQ5Key = new QuizQuestionMCQAttemptKey(qa_qc1_student3_1.getId(), mcq5.getId());
+        QuizQuestionMCQAttempt qaAttempt1qc1MCQ5 = new QuizQuestionMCQAttempt();
+        qaAttempt1qc1MCQ5.setKey(qaAttempt1qc1MCQ5Key);
+        qaAttempt1qc1MCQ5.setQuizAttempt(qa_qc1_student3_1);
+        qaAttempt1qc1MCQ5.setMultipleChoiceQuestion(mcq5);
+        qaAttempt1qc1MCQ5.setSelectedOption(mco53);
+        qaAttempt1qc1MCQ5.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt1qc1MCQ5);
+        
+        QuizQuestionMCQAttemptKey qaAttempt1qc1MCQ6Key = new QuizQuestionMCQAttemptKey(qa_qc1_student3_1.getId(), mcq6.getId());
+        QuizQuestionMCQAttempt qaAttempt1qc1MCQ6 = new QuizQuestionMCQAttempt();
+        qaAttempt1qc1MCQ6.setKey(qaAttempt1qc1MCQ6Key);
+        qaAttempt1qc1MCQ6.setQuizAttempt(qa_qc1_student3_1);
+        qaAttempt1qc1MCQ6.setMultipleChoiceQuestion(mcq6);
+        qaAttempt1qc1MCQ6.setSelectedOption(mco63);
+        qaAttempt1qc1MCQ6.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt1qc1MCQ6);
+        
+        QuizQuestionMCQAttemptKey qaAttempt1qc1MCQ8Key = new QuizQuestionMCQAttemptKey(qa_qc1_student3_1.getId(), mcq8.getId());
+        QuizQuestionMCQAttempt qaAttempt1qc1MCQ8 = new QuizQuestionMCQAttempt();
+        qaAttempt1qc1MCQ8.setKey(qaAttempt1qc1MCQ8Key);
+        qaAttempt1qc1MCQ8.setQuizAttempt(qa_qc1_student3_1);
+        qaAttempt1qc1MCQ8.setMultipleChoiceQuestion(mcq8);
+        qaAttempt1qc1MCQ8.setSelectedOption(mco83);
+        qaAttempt1qc1MCQ8.setAwarded_grade(5);
+        mcqAttemptRepository.save(qaAttempt1qc1MCQ8);
 
         log.info("Finished setup");
         log.info("http://localhost:8088/QuizSystem");

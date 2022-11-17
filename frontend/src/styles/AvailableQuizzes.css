@@ -1,4 +1,4 @@
-.trainerDashboardContainer{
+.availableQuizzesContainer{
     width: 100%;
     min-height: 100vh;
     background-color: #5e548e;
@@ -10,12 +10,8 @@
     padding: 15px;
     text-align: -webkit-center;
 }
-.trainerDashboardTitle{
-    font-weight: 600;
-    font-size: 50px;
-    padding-bottom: 40px;
-}
-.trainerDashboardBox{
+
+.availableQuizzesBox{
     width: 50%;
     background: #9f86c0;
     text-align: center;
@@ -26,21 +22,14 @@
     box-shadow: 0 5px 5px 5px black;
 }
 
-.trainerDashboardBox button{
-    background: #a08cba;
-    color: black;
-    border-style: dashed;
-    outline: none;
-    box-shadow: 0 5px 10px rgba(147, 112, 219, 0.5);
-    padding: 15px 60px;
-    border-radius: 30px;
+.availableQuizzesTitle{
     font-weight: 600;
+    font-size: 50px;
+    padding-bottom: 40px;
 }
 
-.trainerDashboardTable{
+
+.availableQuizzesTable{
     background-color: #cabcdc;
-}
 
-.trainerDashboardHead{
-    background-color: #7d5baa;
 }

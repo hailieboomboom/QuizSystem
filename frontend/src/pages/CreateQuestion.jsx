@@ -16,6 +16,8 @@ import axios from "axios";
 import EditQuestionOptions from "../components/EditQuestionOptions";
 import CreateWrongOptions from '../components/CreateWrongOptions';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
+import '../styles/createQuestion.css'
+
 const API_URL = 'http://localhost:8088/QuizSystem/api/questions/mcqs'
 
 function CreateQuestion () {
@@ -115,12 +117,12 @@ function CreateQuestion () {
 
     return (
         <React.Fragment>
-            <Container>
+            <Container className={"createQuestionContainer"}>
                 {/* <Typography variant="h6" gutterBottom>
                     Edit Question: {editQuestions.questionDetail} {editQuestions.questionId}
                 </Typography> */}
 
-                <Grid container spacing={3}>
+                <Grid className={"tableGrid"} container spacing={3}>
                     <Grid item xs={12}>
                         <FormControl variant="standard"  fullWidth>
                             <TextField
@@ -201,9 +203,9 @@ function CreateQuestion () {
                         </FormControl>
                     </Grid>
 
-                </Grid>
 
-                    <Grid item xs={1}>
+
+                    <Grid className={"createQuestionButtons"} item xs={1}>
                         {/*as={Link} to="/successEditQuestion"*/}
                         <Button  onClick={handleTag} variant="outlined" >
                             Add Tag
@@ -215,6 +217,7 @@ function CreateQuestion () {
                             Create Question
                         </Button>
                     </Grid>
+                </Grid>
             </Container>
 
         </React.Fragment>
