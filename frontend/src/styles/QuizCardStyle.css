@@ -74,6 +74,7 @@
     box-shadow: 0 5px 10px rgba(244, 67, 54, 0.5);
     padding: 15px 60px;
     cursor: pointer;
+
     border-radius: 30px;
     /*font-weight: 600;*/
 }

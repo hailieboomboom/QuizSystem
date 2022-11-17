@@ -20,6 +20,8 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import {Route} from "@mui/icons-material";
 import ErrorPage from "./ErrorPage";
+import '../styles/createQuestion.css'
+
 
 const EditQuiz = () => {
     const location = useLocation();
@@ -114,16 +116,18 @@ const EditQuiz = () => {
 
     );
     return (
+        <div className={"createQuizPageContainer"}>
+            <Typography className={"createQuizTitle"} variant="h6" gutterBottom>
+                Edit Quiz
+            </Typography>
         <Grid
             container
+            className={"createQuizBox"}
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
         >
             <Grid item>
-                <Typography variant="h6" gutterBottom>
-                    Edit Quiz
-                </Typography>
                 <Typography variant="h6" gutterBottom>
                     {eMessage}
                 </Typography>
@@ -175,6 +179,7 @@ const EditQuiz = () => {
                 </Grid>
             </Grid>
         </Grid>
+        </div>
     )
 };
 
