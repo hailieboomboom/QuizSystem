@@ -14,7 +14,8 @@ import { attemptQuizState } from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import '../styles/QuizzesTableStyle.css';
+// import '../styles/QuizzesTableStyle.css';
+import '../styles/trainerDashStyle.css'
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import {getUserId} from "../utils/cookies";
@@ -61,6 +62,8 @@ const AttemptedQuizzes = () => {
     );
 
     return (
+        <div className={"trainerDashboardContainer"}>
+
         <Grid
             container
             direction="column"
@@ -69,20 +72,20 @@ const AttemptedQuizzes = () => {
             spacing={3}
         >
             <Grid item>
-                <Typography variant="h2" gutterBottom>
+                <Typography className={"trainerDashboardTitle"} variant="h2" gutterBottom>
                     Attempted Quizzes
                 </Typography>
             </Grid>
 
-            <Grid item>
-                <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Grid  item>
+                <TableContainer component={Paper} >
+                    <Table className={"trainerDashboardTable"} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Quiz</TableCell>
-                                <TableCell align="right">Attempt Number</TableCell>
-                                <TableCell align="right">Grade Awarded</TableCell>
-                                <TableCell align="right">Max Grade</TableCell>
+                                <TableCell className={"trainerDashboardHead"}>Quiz</TableCell>
+                                <TableCell className={"trainerDashboardHead"} align="right">Attempt Number</TableCell>
+                                <TableCell className={"trainerDashboardHead"} align="right">Grade Awarded</TableCell>
+                                <TableCell className={"trainerDashboardHead"} align="right">Max Grade</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -112,6 +115,7 @@ const AttemptedQuizzes = () => {
                 </TableContainer>
             </Grid>
         </Grid>
+        </div>
 
     )
 };
