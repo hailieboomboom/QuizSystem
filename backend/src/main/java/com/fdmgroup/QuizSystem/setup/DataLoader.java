@@ -1,13 +1,11 @@
 package com.fdmgroup.QuizSystem.setup;
 
 import javax.transaction.Transactional;
-
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import com.fdmgroup.QuizSystem.model.MultipleChoiceOption;
 import com.fdmgroup.QuizSystem.model.MultipleChoiceQuestion;
 import com.fdmgroup.QuizSystem.model.Quiz;
@@ -32,7 +30,6 @@ import com.fdmgroup.QuizSystem.service.SalesService;
 import com.fdmgroup.QuizSystem.service.StudentService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.TrainerService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +45,7 @@ public class DataLoader implements ApplicationRunner {
 	private final QuizAttemptRepository qaRepo;
 
 	private final QuizRepository quizRepository;
+
 
 	private final QuizQuestionMCQAttemptRepository mcqAttemptRepository;
 

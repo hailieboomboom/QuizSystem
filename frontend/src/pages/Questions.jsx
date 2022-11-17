@@ -3,11 +3,23 @@ import Typography from '@mui/material/Typography';
 import ViewMCQCard from "../components/ViewMCQCard";
 import '../styles/ViewQuestionsCard.css';
 import {apis} from "../utils/apis"
-import { getUserId } from '../utils/cookies';
+import { getUserId, getUserRole } from '../utils/cookies';
+import { useState } from 'react';
 
 const Questions = () => {
 
-    const [question, setQuestion] = React.useState([]);
+    const [question, setQuestion] = useState([]);
+    const [showEdit, setShowEdit] = useState(true);
+    const [role, setRole] = useState("");
+
+    React.useEffect(() => {
+        const role = getUserRole();
+        setRole(role);
+        if(role === "TRAINING" || role === "POND" || role === "BEACHED" || role === "AUTHORISED_SALES") {
+            setShowEdit(false);
+        }
+        getAllMCQs();
+    }, []);
 
     // const getAllMCQs = () => {
     //     console.log("first")
@@ -24,7 +36,13 @@ const Questions = () => {
         apis.getAllMCQs().then(
             res => {
                 setQuestion(res.data);
-            }
+                if(role === "TRAINING" || role === "POND" || role === "BEACHED" || role === "AUTHORISED_SALES") {
+                    setShowEdit(false);
+                }
+                else if(role === "AUTHORISED_TRAINER") {
+                    setShowEdit(true);
+                }
+                }
         ).catch(
             err => console.log(err)
         )
@@ -34,6 +52,39 @@ const Questions = () => {
         apis.getAllMCQsFromUser(getUserId()).then(
             res => {
                 setQuestion(res.data);
+                setShowEdit(true);
+            }
+        ).catch(
+            err => console.log(err)
+        )
+    }
+
+    const getAllInterviewQuestions = () => {
+        apis.getAllInterviewQuestions().then(
+            res => {
+                setQuestion(res.data);
+                if(role === "TRAINING" || role === "POND" || role === "BEACHED") {
+                    setShowEdit(false);
+                }
+                else if(role === "AUTHORISED_TRAINER" || role === "AUTHORISED_SALES") {
+                    setShowEdit(true);
+                }
+            }
+        ).catch(
+            err => console.log(err)
+        )
+    }
+
+    const getAllCourseQuestions = () => {
+        apis.getAllCourseQuestions().then(
+            res => {
+                setQuestion(res.data);
+                if(role === "TRAINING" || role === "POND" || role === "BEACHED" || role === "AUTHORISED_SALES") {
+                    setShowEdit(false);
+                }
+                else if(role === "AUTHORISED_TRAINER") {
+                    setShowEdit(true);
+                }
             }
         ).catch(
             err => console.log(err)
@@ -51,21 +102,19 @@ const Questions = () => {
     //     });
     // }
 
-    React.useEffect(() => {
-        getAllMCQs()
-    }, []);
-
     return (
 
         <div className={"mcqCardContainer"}>
             <div className={"filterQuestionButton"}>
-                <button onClick={getAllMCQsFromUser}>Your Questions</button>
                 <button onClick={getAllMCQs}>All Questions</button>
+                <button onClick={getAllCourseQuestions}>Course Questions</button>
+                <button onClick={getAllInterviewQuestions}>Interview Questions</button>
+                <button onClick={getAllMCQsFromUser}>Your Questions</button>
             </div>
             <div className={"viewQuestionsBox"}>
                 <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
                 {
-                    question.map((question) => (<ViewMCQCard questionCard={question}/>))
+                    question.map((question) => (<ViewMCQCard questionCard={question} showEdit={showEdit}/>))
                 }
             </div>
 
