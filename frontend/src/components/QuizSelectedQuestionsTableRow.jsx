@@ -2,6 +2,7 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import "../styles/QuizCardStyle.css"
 import { useRecoilState } from 'recoil';
+import "../styles/QuizCardStyle.css"
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -12,6 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import { createQuizAllQuestions, createQuizSelectedQuestions } from '../recoil/Atoms'
 import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
 
 export default function QuizSelectedQuestionsTableRow(props) {
     const [quizAllQuestions, setquizAllQuestions] = useRecoilState(createQuizAllQuestions);
@@ -34,11 +36,19 @@ export default function QuizSelectedQuestionsTableRow(props) {
                             <TableCell component="th" scope="row">
                                 <Typography variant="body">{props.question.questionDetails}</Typography>
                             </TableCell>
+                            <TableCell component="th" scope="row" spacing={3}>
+                                {props.question.tags.map((tag) => (
+
+
+                                    <Chip className={"tableTag"} variant="outlined" label={tag.tagName} color="primary" size="small" />
+                                ))}
+
+                            </TableCell>
                             <TableCell align="right" component="th" scope="row">
                                 <Typography variant="body">{props.question.grade}</Typography>
                             </TableCell>
                             <TableCell component="th" scope="row"s>
-                                <Button variant="outlined" onClick={()=>handleRemove(props.question)} >Remove</Button>
+                                <Button className={"tableButton"}  onClick={()=>handleRemove(props.question)} >Remove</Button>
                             </TableCell>
                         </TableRow>
 

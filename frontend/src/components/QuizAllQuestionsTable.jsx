@@ -50,12 +50,13 @@ export default function QuizAllQuestionsTable() {
     return (
         <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
+                <TableHead className={"tableHead"}>
                     <TableRow>
-                        <TableCell>Select from Questions</TableCell>
-                        <TableCell>Tags</TableCell>
-                        <TableCell>
+                        <TableCell className={"tableHeadText"}>Select from Questions</TableCell>
+                        <TableCell className={"tableHeadText"} >Tags</TableCell>
+                        <TableCell className={"tableHeadText"}>
                             <TextField
+                                className={"tableHeadSearch"}
                                 id="outlined-basic"
                                 onChange={inputHandler}
                                 variant="filled"
@@ -64,7 +65,7 @@ export default function QuizAllQuestionsTable() {
                                 label="Search"
                             />
                         </TableCell>
-                        <TableCell align="right">Action</TableCell>
+                        <TableCell className={"tableHeadText"} align="right">Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

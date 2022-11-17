@@ -50,6 +50,9 @@ export default function QuizMcqCard(props) {
                 <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
                     Question:  {question.questionDetails}
                 </Typography>
+                <Typography color="text.secondary" gutterBottom>
+                    Mark:  {props.grade}
+                </Typography>
                 <RadioGroup
                     className={"radioGroup"}
                     value={value}

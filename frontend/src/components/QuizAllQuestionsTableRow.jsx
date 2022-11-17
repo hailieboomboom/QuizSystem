@@ -2,6 +2,7 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import "../styles/QuizCardStyle.css"
 import { useRecoilState } from 'recoil';
+import "../styles/QuizCardStyle.css"
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -29,7 +30,8 @@ export default function QuizAllQuestionsTableRow(props) {
         setquizSelectQuestions(oldArray => [...oldArray,{
             "questionId": props.question.questionId,
             "grade": grade,
-            "questionDetails": props.question.questionDetails
+            "questionDetails": props.question.questionDetails,
+            "tags": props.question.tags
         }] );
         setGrade(props.question.grade)
     }
@@ -52,7 +54,7 @@ export default function QuizAllQuestionsTableRow(props) {
                 {props.question.tags.map((tag) => (
 
 
-                    <Chip label={tag.tagName} color="primary" size="small" />
+                    <Chip className={"tableTag"} label={tag.tagName} variant="outlined" color="primary" size="small" />
                 ))}
 
             </TableCell>
@@ -68,7 +70,7 @@ export default function QuizAllQuestionsTableRow(props) {
                 />
             </TableCell>
             <TableCell component="th" scope="row">
-                <Button variant="outlined" onClick={()=>handleAdd(props.question)} >Add</Button>
+                <Button className={"tableButton"}  onClick={()=>handleAdd(props.question)} >Add</Button>
             </TableCell>
         </TableRow>
 

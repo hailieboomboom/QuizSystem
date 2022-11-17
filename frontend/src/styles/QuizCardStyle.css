@@ -2,6 +2,51 @@
 
 }
 
+.table{
+     /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+     background-color: #ebe1f2;
+     background-size: cover;
+     background-position: center;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+
+ }
+.tableHead{
+    background-color: #5e548e;
+
+}
+.tableHeadSearch{
+    background-color: white;
+
+}
+.tableHeadText{
+    color: white;
+
+}
+.tableRow{
+    /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    background-color: #ebe1f2;
+
+}
+.tableButton{
+    background: #9f86c0;
+    color: white;
+    padding: 8px;
+    min-height: 30px;
+    text-decoration: none;
+    box-shadow: 0 0 1px 1px gray;
+}
+.tableButton:hover{
+    background: #5e548e;
+    color: white;
+    border-radius: 5px;
+}
+.tableTag{
+    border-color: #5e548e;
+    color: #5e548e;
+    margin: 2px;
+}
 .quizContainer{
     /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
     width: 100%;
