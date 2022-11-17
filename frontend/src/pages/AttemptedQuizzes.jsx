@@ -79,7 +79,7 @@ const AttemptedQuizzes = () => {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Quiz Id</TableCell>
+                                <TableCell>Quiz</TableCell>
                                 <TableCell align="right">Attempt Number</TableCell>
                                 <TableCell align="right">Grade Awarded</TableCell>
                                 <TableCell align="right">Max Grade</TableCell>
@@ -92,7 +92,7 @@ const AttemptedQuizzes = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <Typography variant="body">{attempt.quizId}</Typography>
+                                        <Typography variant="body">{attempt.quizName}</Typography>
                                     </TableCell>
                                     <TableCell align="right">
                                         <Typography variant="body">{attempt.attemptNo}</Typography>
