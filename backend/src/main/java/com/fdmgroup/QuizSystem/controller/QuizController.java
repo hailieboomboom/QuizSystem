@@ -137,7 +137,12 @@ public class QuizController {
 
 	@GetMapping("/api/quizzes/{id}/questions")
 	public ResponseEntity<List<QuestionGradeDTO>> getAllQuestionsByQuizId(@PathVariable long id) {
+		
 		List<QuestionGradeDTO> resultList = quizQuestionGradeService.findAllByQuizId(id).stream().map(modelToDTO::qqgToQg).toList();
+		for(QuestionGradeDTO questionGradeDTO : resultList) {
+			Question question = questionService.findById(questionGradeDTO.getQuestionId());
+			questionGradeDTO.setTags(question.getTags());
+		}
 		return new ResponseEntity<>(resultList, HttpStatus.OK);
 	}
 	

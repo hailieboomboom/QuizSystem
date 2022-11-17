@@ -69,16 +69,26 @@ public class QuizAttemptService {
 
 	
 	public void deleteAttempt(QuizAttempt quizAttempt) {
+
 		// find associated MCQ Attempts
-		List<QuizQuestionMCQAttempt> mcqAttempts = mcqAttemptRepo.findByQuizAttempt(quizAttempt);
-		
-		// delete quizQuestionattempt
-		for(QuizQuestionMCQAttempt mcqAttempt: mcqAttempts) {
-			mcqAttemptRepo.delete(mcqAttempt);
-		}
-		
-		// delete quizAttempt itself
-		quizAttemptRepository.delete(quizAttempt);
+
+			var attempt= mcqAttemptRepo.findByQuizAttempt(quizAttempt);
+			if(!attempt.isEmpty() && attempt!=null ){
+				List<QuizQuestionMCQAttempt> mcqAttempts = mcqAttemptRepo.findByQuizAttempt(quizAttempt);
+				// delete quizQuestionattempt
+				for(QuizQuestionMCQAttempt mcqAttempt: mcqAttempts) {
+					mcqAttemptRepo.delete(mcqAttempt);
+				}
+			}
+
+
+			// delete quizAttempt itself
+			quizAttemptRepository.delete(quizAttempt);
+
+
+
+
+
 	}
 
 	public List<QuizAttempt> findQuizAttemptByUser(User user) {

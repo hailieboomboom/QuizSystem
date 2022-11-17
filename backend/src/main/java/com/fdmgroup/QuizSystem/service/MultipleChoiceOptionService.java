@@ -38,7 +38,6 @@ public class MultipleChoiceOptionService {
 
 	public List<MultipleChoiceOption> createListOfOption(List<McqOptionDto> mcqOptionDtoList, MultipleChoiceQuestion mcqQuestion){
 		List<MultipleChoiceOption> optionList = new ArrayList<>();
-		validateOptions(mcqOptionDtoList);
 
 		for(McqOptionDto mcqOption: mcqOptionDtoList) {
 			optionList.add(createMcqOption(mcqOption, mcqQuestion));
@@ -93,27 +92,12 @@ public class MultipleChoiceOptionService {
 	}
 
 
-	public List<MultipleChoiceOption> updateMcqOption(List<McqOptionDto> mcqOptionDtoList,long macId){
+	public List<MultipleChoiceOption> updateMcqOption(List<McqOptionDto> mcqOptionDtoList,MultipleChoiceQuestion originalMcq){
+		long mcqId = originalMcq.getId();
+		deleteQuestionOptions(mcqId);
 
-		List<MultipleChoiceOption> originalMcqOption = mcoRepo.findAllByMcqId(macId);
-		if(originalMcqOption.size()!=mcqOptionDtoList.size()){
-			throw new McqOptionNotValidException("You can't change the number of options after creating it");
-		}
-		int i = 0;
-
-		int numberOfCorrectOption = 0;
-		for (MultipleChoiceOption option:originalMcqOption){
-			option.setCorrect(mcqOptionDtoList.get(i).isCorrect());
-			option.setOptionDetail(mcqOptionDtoList.get(i).getOptionDescription());
-			if(option.isCorrect() == true){
-				numberOfCorrectOption++;
-			}
-			i++;
-		}
-		if(numberOfCorrectOption!=1)
-			throw new McqOptionNotValidException("Please choose only one correct option");
-
-		return originalMcqOption;
+		List<MultipleChoiceOption> optionList= createListOfOption(mcqOptionDtoList,originalMcq);
+		return optionList;
 	}
 
 	public void deleteQuestionOptions(long questionId){
