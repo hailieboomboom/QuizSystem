@@ -12,6 +12,12 @@ import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
 import {getUserId} from "../utils/cookies";
 import Typography from "@mui/material/Typography";
+import CardContent from "@mui/material/CardContent";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import Card from "@mui/material/Card";
+import GradeIcon from '@mui/icons-material/Grade';
 // quizId
 
 const Quiz = () => {
@@ -52,10 +58,27 @@ const Quiz = () => {
 
     if (!quizQuestions) return null;
     if (grade) return (
-        <Grid className={"quizContainer"}>
-            <Typography color="warning">Thank you ! Your quiz attempt has been submitted. </Typography>
-            <Typography> You have gained {grade.totalAwarded} marks out of {grade.maxGrade}
-            </Typography>
+        <Grid
+            className={"quizContainer"}
+            container
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="center"
+        >
+            <Card className={"cardContent"} sx={{width: 700}}>
+                <CardContent>
+                    <GradeIcon fontSize="large" />
+                    <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
+                        {grade.totalAwarded} marks out of {grade.maxGrade} !
+                    </Typography>
+                    <Typography color="warning">Thank you ! Your quiz attempt has been submitted. </Typography>
+
+                </CardContent><CardContent>
+                <Button className={"submitButton"} as={Link} to="/viewQuizzes" >
+                    Attempt Another Quiz
+                </Button>
+            </CardContent>
+            </Card>
         </Grid>
     );
     return (
