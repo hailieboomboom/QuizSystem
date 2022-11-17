@@ -14,7 +14,7 @@ import { attemptQuizState } from '../recoil/Atoms'
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import '../styles/QuizzesTableStyle.css';
+import '../styles/AvailableQuizzes.css';
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -86,18 +86,18 @@ const AttemptQuizzes = () => {
 
     );
     return (
+        <div className={"availableQuizzesContainer"}>
+            <Typography className={"availableQuizzesTitle"} variant="h2" gutterBottom>
+                Available Quizzes
+            </Typography>
         <Grid
             container
+            className={"availableQuizzesBox"}
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
             spacing={3}
         >
-            <Grid item>
-                <Typography variant="h2" gutterBottom>
-                    Available Quizzes
-                </Typography>
-            </Grid>
 
             <Grid
                 item
@@ -123,8 +123,8 @@ const AttemptQuizzes = () => {
             </Grid>
 
             <Grid item>
-                <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableContainer component={Paper} sx={{ width:700 }}>
+                    <Table className={"availableQuizzesTable"} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
@@ -154,7 +154,7 @@ const AttemptQuizzes = () => {
                 </TableContainer>
             </Grid>
         </Grid>
-
+        </div>
     )
 };
 
