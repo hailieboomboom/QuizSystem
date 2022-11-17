@@ -20,7 +20,7 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import {Route} from "@mui/icons-material";
 import ErrorPage from "./ErrorPage";
-import '../styles/createQuestion.css'
+import '../styles/createEditQuiz.css'
 
 
 const EditQuiz = () => {
@@ -152,7 +152,7 @@ const EditQuiz = () => {
                     </FormControl>
                 </Grid>
                 <Grid item  xs={12}>
-                    <FormControl variant="standard" fullWidth>
+                    <FormControl variant="standard"  disabled fullWidth>
                         <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
                         <Select
                             labelId="questionCategory"
@@ -170,7 +170,7 @@ const EditQuiz = () => {
                     <QuizSelectedQuestionsTable/>
                 </Grid>
                 <Grid item xs={1}>
-                    <Button onClick={handleUpdate} variant="outlined">
+                    <Button className={"createButton"} onClick={handleUpdate} >
                         Update
                     </Button>
                 </Grid>
