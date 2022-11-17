@@ -21,6 +21,7 @@ import {apis} from "../utils/apis";
 import Autocomplete from "@mui/material/Autocomplete";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import '../styles/createQuestion.css'
 
 const CreateQuiz = () => {
     const [category, setCategory] = useState('');
@@ -141,17 +142,17 @@ const CreateQuiz = () => {
 
     );
     return (
-            <Grid
+        <div className={"createQuizPageContainer"}>
+            <Typography className={"createQuizTitle"} variant="h6" gutterBottom>
+                Create Quiz
+            </Typography>
+            <Grid className={"createQuizBox"}
                 container
                 direction="column"
                 justifyContent="flex-start"
                 alignItems="center"
             >
-                <Grid item>
-                <Typography variant="h6" gutterBottom>
-                    Create Quiz
-                </Typography>
-                </Grid>
+
                 <Grid item container
                       alignItems="center"
                       textAlign="left"
@@ -202,6 +203,7 @@ const CreateQuiz = () => {
                     </Grid>
                 </Grid>
             </Grid>
+        </div>
     )
 };
 

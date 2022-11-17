@@ -48,10 +48,7 @@ export default function QuizMcqCard(props) {
         <Card className={"cardContent"} sx={{width: 700}}>
             <CardContent>
                 <Typography className={"questionTitle"} color="text.secondary" gutterBottom>
-                    Question:
-                </Typography>
-                <Typography className={"questionString"} variant="h5" component="div">
-                    {question.questionDetails}
+                    Question:  {question.questionDetails}
                 </Typography>
                 <RadioGroup
                     className={"radioGroup"}
@@ -59,7 +56,7 @@ export default function QuizMcqCard(props) {
                     onChange={handleChange}
                 >
                     {question.options.map(answer => {
-                        return <FormControlLabel key={answer.optionDescription} value={answer.id} control={<Radio/>} label={answer.optionDescription}/>;
+                        return <FormControlLabel key={answer.optionDescription} value={answer.id} control={<Radio color="default"/>} label={answer.optionDescription}/>;
                     })}
                 </RadioGroup>
             </CardContent>

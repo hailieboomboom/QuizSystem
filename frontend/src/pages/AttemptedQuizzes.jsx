@@ -17,27 +17,35 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import '../styles/QuizzesTableStyle.css';
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import {getUserId} from "../utils/cookies";
 
 const AttemptedQuizzes = () => {
 
     const [quizzes, setQuizzes] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [quiz, setQuiz] = useRecoilState(attemptQuizState);
+    const [attempts, setAttempts] = React.useState([]);
 
-    const filterOptions = createFilterOptions({
-        matchFrom: 'start',
-        stringify: (option) => option.title,
-    });
+
 
     React.useEffect(() => {
-        axios.get("https://the-trivia-api.com/api/questions?limit=10").then((response) => {
-            setQuizzes([...quizzes, response.data]);
+        axios.get("http://localhost:8088/QuizSystem/api/quizAttempts/quizTaker/"+getUserId()+"").then((response) => {
+            setAttempts(response.data);
             setLoading(false);
         });
     }, []);
-    console.log(quizzes);
-    console.log(quiz);
+    if (!getUserId()) return(
+        <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <Typography>Please Log in first.</Typography>
+            </Grid>
+        </Grid>
 
+    );
     if (loading) return(
         <Grid
             container
@@ -71,27 +79,29 @@ const AttemptedQuizzes = () => {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Quizzes</TableCell>
+                                <TableCell>Quiz Id</TableCell>
                                 <TableCell align="right">Attempt Number</TableCell>
-                                <TableCell align="right">Marks</TableCell>
-                                {/*<TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-                                {/*<TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
+                                <TableCell align="right">Grade Awarded</TableCell>
+                                <TableCell align="right">Max Grade</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quizzes.map((row) => (
+                            {attempts.map((attempt) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={attempt.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        <Typography variant="body">This is a demo quiz</Typography>
+                                        <Typography variant="body">{attempt.quizId}</Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Typography variant="body">1</Typography>
+                                        <Typography variant="body">{attempt.attemptNo}</Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Typography variant="body">100</Typography>
+                                        <Typography variant="body">{attempt.totalAwarded}</Typography>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Typography variant="body">{attempt.maxGrade}</Typography>
                                     </TableCell>
                                     {/*<TableCell align="right">{row.carbs}</TableCell>*/}
                                     {/*<TableCell align="right">{row.protein}</TableCell>*/}
