@@ -154,7 +154,7 @@ const MyQuizzes = () => {
                                                 </Button>
                                             </Grid>
                                             <Grid item>
-                                                <Button variant="contained" onClick={() => handleDelete(row.quizId)}>
+                                                <Button className={"editButtonAvailableQuizzes"} variant="contained" as={Link} onClick={() => handleDelete(row.quizId)}>
                                                     Remove
                                                 </Button>
                                             </Grid>

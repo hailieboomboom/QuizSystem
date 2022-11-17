@@ -81,7 +81,7 @@ export default function TrainerDashboard(){
             </TableContainer>
             <br/>
             <h1>Student List</h1>
-            <StudentTable></StudentTable>
+            <StudentTable ></StudentTable>
         </div>
     </div>
 

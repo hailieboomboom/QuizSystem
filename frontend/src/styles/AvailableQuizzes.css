@@ -52,9 +52,16 @@
     justify-content: center;
 }
 
+.availableQuizzesButtons{
+    align-items: center;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+
 .availableQuizzesButtons button{
     background: #9f86c0;
-    min-width: 100px;
     padding: 5px;
     margin: 10px;
 }
@@ -62,6 +69,13 @@
 .editButtonAvailableQuizzes{
     background: #9f86c0;
     padding: 8px;
+    min-height: 30px;
+    text-decoration: none;
+}
+.editButtonAvailableQuizzes:hover{
+    background: #5e548e;
+    color: white;
+    border-radius: 5px;
 }
 
 .bottomButtonAQ{
@@ -78,3 +92,5 @@
     margin-top: 20px;
     padding: 10px;
 }
+
+
