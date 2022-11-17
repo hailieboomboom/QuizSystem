@@ -15,7 +15,18 @@
     width: 50%;
     background: #9f86c0;
     text-align: center;
-    padding: 10px 10px;
+    padding: 30px 10px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.ManageQuizzesBox{
+    width: 50%;
+    background: #9f86c0;
+    text-align: center;
+    padding: 30px 10px;
     color: #fff;
     position: relative;
     border-radius: 20px;
@@ -23,13 +34,47 @@
 }
 
 .availableQuizzesTitle{
+    color: black;
     font-weight: 600;
     font-size: 50px;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
-
 
 .availableQuizzesTable{
     background-color: #cabcdc;
 
+}
+
+.availableQuizzesButtons{
+    align-items: center;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.availableQuizzesButtons button{
+    background: #9f86c0;
+    min-width: 100px;
+    padding: 5px;
+    margin: 10px;
+}
+
+.editButtonAvailableQuizzes{
+    background: #9f86c0;
+    padding: 8px;
+}
+
+.bottomButtonAQ{
+    text-align: -webkit-center;
+}
+
+.createQuizButtonAvailableQuizzes{
+    display: flex;
+    background-color: #cabcdc;
+    justify-content: center;
+    border: 2px solid black;
+    box-sizing: border-box;
+    width: 25%;
+    margin-top: 20px;
+    padding: 10px;
 }
