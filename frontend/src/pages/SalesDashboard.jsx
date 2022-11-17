@@ -13,7 +13,7 @@ import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
 import Grid from "@mui/material/Grid";
-
+import StudentTable from "../components/StudentTable";
 
 export default function SalesDashboard(){
     const [sales, setSales] = useState([]);
@@ -56,7 +56,6 @@ export default function SalesDashboard(){
                             <Table aria-label="simple table" stickyHeader>
                                 <TableHead>
                                     <TableRow>
-
                                         <TableCell >Username</TableCell>
                                         <TableCell >First Name</TableCell>
                                         <TableCell >Last Name</TableCell>
@@ -78,7 +77,6 @@ export default function SalesDashboard(){
                                             <TableCell >
                                                 <Button variant="outlined" onClick={()=>{handleAuthorise(row.username)}}>Authorize</Button>
                                             </TableCell>
-
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -86,39 +84,7 @@ export default function SalesDashboard(){
                         </TableContainer>
                         <br/>
                         <h1>Student List</h1>
-                        <TableContainer component={Paper}>
-
-                            <Table aria-label="simple table" stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell >Username</TableCell>
-                                        <TableCell >First Name</TableCell>
-                                        <TableCell >Last Name</TableCell>
-                                        <TableCell >Email</TableCell>
-                                        <TableCell >Role</TableCell>
-                                        <TableCell >Authorize</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {students.map((student) => (
-                                        <TableRow key={student.username}>
-                                            <TableCell component="th" scope="row" key={student.username}>
-                                                {student.username}
-                                            </TableCell>
-                                            <TableCell >{student.firstName}</TableCell>
-                                            <TableCell >{student.lastName}</TableCell>
-                                            <TableCell >{student.email}</TableCell>
-                                            <TableCell >{student.role}</TableCell>
-                                            <TableCell >
-                                                <Button variant="outlined" >Edit</Button>
-                                            </TableCell>
-
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-
+                        <StudentTable></StudentTable>
             </Container>
         </>
 

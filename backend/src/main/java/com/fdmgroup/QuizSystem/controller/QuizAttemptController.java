@@ -72,6 +72,11 @@ public class QuizAttemptController {
 		}
 		quizAttemptDTOResponse.setMCQAttemptList(mcqResponses);
 		quizAttemptDTOResponse.setMaxGrade(quizService.getMaxGrade(quizAttemptDTO.getQuizId()));
+		
+		// Added by Summer: 
+		quizAttemptDTOResponse.setQuizName(quizAttempt.getQuiz().getName());
+		quizAttemptDTOResponse.setQuizTakerName(quizAttempt.getUser().getFirstName() + " " + quizAttempt.getUser().getLastName());
+		
 		quizAttempt = quizAttemptService.save(quizAttempt);
 		
 		return new ResponseEntity<>(quizAttemptDTOResponse,HttpStatus.CREATED);
@@ -98,6 +103,12 @@ public class QuizAttemptController {
 				quizAttemptDTO.setAttemptNo(quizAttemptService.calculateNumberOfAttempts(quizAttempt.getId()));
 				quizAttemptDTO.setTotalAwarded(quizAttempt.getTotalAwarded());
 				quizAttemptDTO.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(quizAttempt));
+				
+				// Added by Summer: 
+				quizAttemptDTO.setMaxGrade(quizService.getMaxGrade(quizAttemptDTO.getQuizId()));
+				quizAttemptDTO.setQuizName(quizAttempt.getQuiz().getName()); 
+				quizAttemptDTO.setQuizTakerName(quizAttempt.getUser().getFirstName() + " " + quizAttempt.getUser().getLastName());
+				
 				resultList.add(quizAttemptDTO);
 			}
 		}
@@ -121,6 +132,12 @@ public class QuizAttemptController {
 			qaDto.setTotalAwarded(qa.getTotalAwarded());
 			qaDto.setUserId(qa.getUser().getId());
 			qaDto.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(qa));
+			
+			// Added by Summer: 
+			qaDto.setMaxGrade(quizService.getMaxGrade(qaDto.getQuizId()));
+			qaDto.setQuizName(qa.getQuiz().getName()); 
+			qaDto.setQuizTakerName(qa.getUser().getFirstName() + " " + qa.getUser().getLastName());
+			
 			returnedAttemptDTOs.add(qaDto);
 		}
 		return new ResponseEntity<>(returnedAttemptDTOs, HttpStatus.OK);

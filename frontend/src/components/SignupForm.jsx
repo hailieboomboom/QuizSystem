@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -12,25 +11,21 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
 import {FormLabel, Select} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import {apis} from "../utils/apis";
-import { ApiSharp } from "@mui/icons-material";
 
 export default function Signup() {
-  const[username,setUsername] = useState('');
-    const[firstName,setFirstname] = useState('');
-    const[lastName,setLastname] = useState('');
-    const[email,setEmail] = useState('');
-    const[password,setPassword] = useState('');
-    const[role,setRole] = useState('');
-    const[user,setUser]=useState([]);
+    const [username,setUsername] = useState('');
+    const [firstName,setFirstname] = useState('');
+    const [lastName,setLastname] = useState('');
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [role,setRole] = useState('');
+    const [user,setUser] = useState([]);
     const [value, setValue] = useState('');
-
 
 
     const handleClick=(e)=>{
@@ -91,12 +86,8 @@ export default function Signup() {
           <Box
             component="form"
             noValidate
-
             sx={{ mt: 3 }}
           >
-
-
-
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <TextField
@@ -145,7 +136,6 @@ export default function Signup() {
                   autoComplete="email"
                   value={email}
                   onChange={(e)=>setEmail(e.target.value)}
-
                 />
               </Grid>
               <Grid item xs={12}>

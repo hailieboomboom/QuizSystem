@@ -54,7 +54,6 @@ public class UserController {
             @io.swagger.annotations.ApiResponse(code = 409, message = "Either username or email already exists.")
     }
     )
-
     public ResponseEntity<UserOutputDTO> updateStudentById(@PathVariable long id, @RequestBody UserUpdateDTO modifiedUser){
         if(modifiedUser.getPassword() != null) {
             modifiedUser.setPassword(passwordEncoder.encode(modifiedUser.getPassword()));

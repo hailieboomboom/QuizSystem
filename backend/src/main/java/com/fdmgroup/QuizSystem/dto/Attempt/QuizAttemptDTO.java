@@ -17,4 +17,7 @@ public class QuizAttemptDTO {
     private float totalAwarded;
     private float maxGrade;
     List<MCQAttemptDTO> MCQAttemptList;
+    
+	private String quizName;
+	private String quizTakerName;
 }
