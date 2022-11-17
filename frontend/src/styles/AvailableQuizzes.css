@@ -1,0 +1,96 @@
+.availableQuizzesContainer{
+    width: 100%;
+    min-height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: -webkit-center;
+}
+
+.availableQuizzesBox{
+    width: 50%;
+    background: #9f86c0;
+    text-align: center;
+    padding: 30px 10px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.ManageQuizzesBox{
+    width: 50%;
+    background: #9f86c0;
+    text-align: center;
+    padding: 30px 10px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.availableQuizzesTitle{
+    color: black;
+    font-weight: 600;
+    font-size: 50px;
+    padding-bottom: 30px;
+}
+
+.availableQuizzesTable{
+    background-color: #cabcdc;
+
+}
+
+.availableQuizzesButtons{
+    align-items: center;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.availableQuizzesButtons{
+    align-items: center;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+
+.availableQuizzesButtons button{
+    background: #9f86c0;
+    padding: 5px;
+    margin: 10px;
+}
+
+.editButtonAvailableQuizzes{
+    background: #9f86c0;
+    padding: 8px;
+    min-height: 30px;
+    text-decoration: none;
+}
+.editButtonAvailableQuizzes:hover{
+    background: #5e548e;
+    color: white;
+    border-radius: 5px;
+}
+
+.bottomButtonAQ{
+    text-align: -webkit-center;
+}
+
+.createQuizButtonAvailableQuizzes{
+    display: flex;
+    background-color: #cabcdc;
+    justify-content: center;
+    border: 2px solid black;
+    box-sizing: border-box;
+    width: 25%;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+

@@ -1,0 +1,86 @@
+.createQuestionContainer{
+    min-width: 100%;
+    height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createQuizPageContainer{
+    width: 100%;
+    min-height: 100vh;
+    background-color: #5e548e;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: -webkit-center;
+}
+
+.createQuizTitle{
+    font-weight: 600;
+    font-size: 50px;
+    padding-bottom: 40px;
+}
+
+.createQuizBox{
+    width: 50%;
+    background: #9f86c0;
+    text-align: center;
+    padding: 10px 10px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+}
+
+.tableGrid{
+    background: #9f86c0;
+    width: 50%;
+    min-height: 70%;
+    align-content: center;
+    padding: 40px 90px;
+    color: #fff;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px 5px black;
+    justify-content: center;
+}
+
+.createQuestionButtons{
+    display: contents;
+    margin: auto;
+    justify-content: center;
+}
+
+.createQuestionButtons button{
+    background: #ebe1f2;
+    min-width: 45%;
+    padding: 5px;
+    margin: 10px;
+}
+
+.createQuestionButtons button:hover{
+    border-radius: 5px;
+}
+
+.cancelQuestionButton {
+    background: #ebe1f2;
+    min-width: 45%;
+    padding: 5px;
+    margin: 10px;
+}
+
+.createQuizHeader{
+    color: black;
+    font-weight: 600;
+}
+
+.css-zow5z4-MuiGrid-root>.MuiGrid-item {
+    padding-left: 0px;
+}

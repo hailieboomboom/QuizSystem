@@ -16,18 +16,7 @@ export default function QuizShortAnswerCard(props) {
                 <Typography variant="h3" color="text.secondary" gutterBottom>
                     Quiz: {props.quizName}
                 </Typography>
-                <Typography className={"quizTitle"} color="text.secondary" gutterBottom>
-                    Description:
-                </Typography>
-                <Typography className={"quizString"} >
-                    This is a formal test that you take to show your knowledge or ability in a particular subject, or to obtain a skill.
-                </Typography>
-                <Typography className={"quizTitle"} color="text.secondary" gutterBottom>
-                    Instructions:
-                </Typography>
-                <Typography className={"quizStringRed"} >
-                    Open Book
-                </Typography>
+
             </CardContent>
         </Card>
     );
