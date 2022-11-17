@@ -116,9 +116,12 @@ const MyQuizzes = () => {
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
+            spacing={2}
 
         >
-            <Grid item>
+
+            <Grid className={"bottomButtonAQ"} item sx={{ width:650 }}>
+                <Button className={"createQuizButtonAvailableQuizzes"} fullWidth as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
             <Grid item>
                 <TableContainer component={Paper} sx={{ width:700 }}>
@@ -165,10 +168,6 @@ const MyQuizzes = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Grid>
-
-            <Grid className={"bottomButtonAQ"} item sx={{ width:650 }}>
-                <Button className={"createQuizButtonAvailableQuizzes"} fullWidth as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
 
         </Grid>
