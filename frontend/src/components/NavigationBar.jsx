@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from "react-router-dom";
 import {apis} from "../utils/apis";
-import {isLoggedIn,setCookie, deleteCookie, getUserId} from "../utils/cookies"
+import {isLoggedIn, setCookie, deleteCookie, getUserId} from "../utils/cookies"
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {Dropdown, DropdownButton} from "react-bootstrap";
@@ -94,6 +94,7 @@ console.log(logedOut)
                 <Dropdown.Menu>
                   <Dropdown.Item  as={Link} to="/viewQuizzes">Take Quiz</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/myQuizzes">Manage Quiz</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/attemptedQuizzes">Attempted Quiz</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
