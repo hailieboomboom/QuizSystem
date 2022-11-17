@@ -98,19 +98,19 @@ const AttemptQuizzes = () => {
 
     );
     return (
+        <div className={"availableQuizzesContainer"}>
+            <Typography className={"availableQuizzesTitle"} variant="h2" gutterBottom>
+                Available Quizzes
+            </Typography>
         <Grid
-            className={"viewContainer"}
+            className={"availableQuizzesBox"}
             container
             direction="column"
             justifyContent="flex-start"
             alignItems="center"
             spacing={3}
         >
-            <Grid item>
-                <Typography className={"textHeader"} variant="h2" gutterBottom>
-                    Available Quizzes
-                </Typography>
-            </Grid>
+
 
             <Grid
                 item
@@ -139,8 +139,8 @@ const AttemptQuizzes = () => {
             </Grid>
 
             <Grid item>
-                <TableContainer className={"quizTable"} component={Paper} sx={{ width:700 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableContainer component={Paper} sx={{ width:700 }}>
+                    <Table className={"availableQuizzesTable"} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Quizzes</TableCell>
@@ -170,7 +170,7 @@ const AttemptQuizzes = () => {
                 </TableContainer>
             </Grid>
         </Grid>
-
+        </div>
     )
 };
 
