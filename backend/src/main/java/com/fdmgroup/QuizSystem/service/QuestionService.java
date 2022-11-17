@@ -161,11 +161,12 @@ public class QuestionService {
 					isUserValid = true;
 				}
 			}
-			if(isUserValid) {
-				updateMCQ(addMcqDto, mcqId);
-			}else {
-				throw new NoDataFoundException("You can't modify this question, because trainer can only modify course content questions");
-			}
+			updateMCQ(addMcqDto, mcqId);
+//			if(isUserValid) {
+//				updateMCQ(addMcqDto, mcqId);
+//			}else {
+//				throw new NoDataFoundException("You can't modify this question, because trainer can only modify course content questions");
+//			}
 		}
 		// if current user is a sales, he can only update questions of interview content type
 		else if(currentUser.getRole().equals(Role.AUTHORISED_SALES)) {
