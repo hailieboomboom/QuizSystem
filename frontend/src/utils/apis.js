@@ -18,7 +18,10 @@ export const apis = {
     getAllMCQs,
     getAllMCQsFromUser,
     getAllTags,
-    getTagById
+    getTagById,
+    updateStudentInfoWithRole,
+    getAllInterviewQuestions,
+    getAllCourseQuestions
 }
 
 const config = {
@@ -56,6 +59,10 @@ function getAllStudents(){
 
 function updateStudentInfo(id, password, email, firstName, lastName){
     return instance.put("/users/students/" + id, {password, email, firstName, lastName}, config);
+}
+ 
+function updateStudentInfoWithRole(id, password, email, firstName, lastName, role) {
+    return instance.put("/users/students/" + id, {password, email, firstName, lastName, role}, config);
 }
 
 function updateTrainerInfo(id, password, email, firstName, lastName){
@@ -95,6 +102,14 @@ function getAllMCQs() {
 
 function getAllMCQsFromUser(id){
     return instance.get("/api/questions/" + id + "/mcqs", config)
+}
+
+function getAllInterviewQuestions(){
+    return instance.get("/api/questions/questionBank/interview", config)
+}
+
+function getAllCourseQuestions(){
+    return instance.get("/api/questions/questionBank/course", config)
 }
 
 function signup(username, email, password, firstName, lastName, role){

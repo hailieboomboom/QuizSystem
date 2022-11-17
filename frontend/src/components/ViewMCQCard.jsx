@@ -5,13 +5,10 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
 import '../styles/ViewQuestionsCard.css';
 import QuestionData from '../data/QuestionData';
 import { ShuffleAnswers } from '../components/ShuffleAnswer';
 import Answer from "../components/QuestionAnswer";
-
-import axios from "axios";
 import questions from "../pages/Questions";
 import {useState} from "react";
 import Grid from "@mui/material/Grid";
@@ -39,9 +36,6 @@ export default function ViewMCQCard(props) {
     console.log(question)
 
     const [show, setShow] = useState(false);
-    const changeStyle = () => {
-
-    }
 
     function handleOnClick(){
         setEditQuestions(props.questionCard);
@@ -101,9 +95,8 @@ export default function ViewMCQCard(props) {
                 </Grid>
                 <div className={"cardFooterButtons"}>
                     <CardActions>
-                        <Button onClick={handleOnClick} size="small">Edit Question</Button>
+                        {props.showEdit && <Button onClick={handleOnClick} size="small">Edit Question</Button>}
                         <Button size="small" onClick={()=>setShow(!show)}>{show === true ? 'Hide Answer' : 'Show Answer'}</Button>
-
                     </CardActions>
                 </div>
             </Card>
