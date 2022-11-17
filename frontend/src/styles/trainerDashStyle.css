@@ -1,9 +1,10 @@
 .trainerDashboardContainer{
     width: 100%;
     min-height: 100vh;
-    background-color: #5e548e;
+    background: linear-gradient(360deg, hsl(230, 88%, 29%) 0%, hsl(248, 88%, 29%) 100%),
+    url(../media/patternpad.png);
     background-size: cover;
-    background-position: center;
+    /*background-position: center;*/
     display: block;
     align-items: center;
     justify-content: center;
@@ -11,19 +12,21 @@
     text-align: -webkit-center;
 }
 .trainerDashboardTitle{
-    font-weight: 600;
+    /*font-weight: 600;*/
     font-size: 50px;
     padding-bottom: 40px;
+    color: white;
+    font-weight: bold;
 }
 .trainerDashboardBox{
     width: 50%;
-    background: #9f86c0;
+    background: #1a098b;
     text-align: center;
     padding: 10px 10px;
     color: #fff;
     position: relative;
     border-radius: 20px;
-    box-shadow: 0 5px 5px 5px black;
+    box-shadow: 0 5px 5px 5px rgba(0,0,0,0.4);
 }
 
 .trainerDashboardBox button{
@@ -38,9 +41,9 @@
 }
 
 .trainerDashboardTable{
-    background-color: #cabcdc;
+    background-color: #f7f7ff;
 }
 
 .trainerDashboardHead{
-    background-color: #7d5baa;
+    background-color: #c8cde6;
 }

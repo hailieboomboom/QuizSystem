@@ -6,18 +6,20 @@
 }
 
 .profileContainer{
-    /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    background: url(../media/Oreti.png);
+
     width: 100%;
     height: 100vh;
-    background-color: #5e548e;
+    /*background-color: #5e548e;*/
     background-size: cover;
-    background-position: center;
+    /*background-position: center;*/
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .profileBox{
-    background: #9f86c0;
+    background-image: linear-gradient(to left bottom, #92afde, #98b3da, #9eb7d7, #a6bbd3, #aebecf);
+    /*background-color:  #92afde;*/
     text-align: center;
     padding: 40px 90px;
     color: #fff;
@@ -28,10 +30,10 @@
 
 .profileBox button{
     background: #fff;
-    color: #ff574a;
+    color: #091f8b;
     border: none;
     outline: none;
-    box-shadow: 0 5px 10px rgba(244, 67, 54, 0.5);
+    box-shadow: 0 5px 10px rgb(9, 31, 1);
     padding: 15px 60px;
     cursor: pointer;
     border-radius: 30px;

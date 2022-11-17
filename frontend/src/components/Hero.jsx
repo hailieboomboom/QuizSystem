@@ -1,29 +1,79 @@
-import React from 'react'
-import {Stack} from "@mui/material";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import BG from "../media/bg1.png";
+import {Box, Button, Container, styled, Typography} from "@mui/material";
+import React from "react";
+import Navbar from "./Navbar";
+import heroImg from "../media/people-collaborating-in-the-workplace(1).png";
+import CustomButton from "./CustomButton";
 
 const Hero = () => {
+    const CustomBox = styled(Box)(({ theme }) => ({
+        display: "flex",
+        justifyContent: "center",
+        gap: theme.spacing(5),
+        marginTop: theme.spacing(0),
+        [theme.breakpoints.down("md")]: {
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+        },
+    }));
+
+    const Title = styled(Typography)(({ theme }) => ({
+        fontSize: "64px",
+        color: "#000336",
+        fontWeight: "bold",
+        margin: theme.spacing(4, 0, 4, 0),
+        [theme.breakpoints.down("sm")]: {
+            fontSize: "40px",
+        },
+    }));
+
     return (
-       <Box>
+        <Box sx={{ backgroundColor: "#E6F0FF", minHeight: "90vh" }}>
+            <Container>
 
-           <Box sx={{
-               backgroundImage: `url(${BG})`,
-               backgroundRepeat: "no-repeat",
-               backgroundPosition: "center",
-               backgroundSize:"cover",
-               height: 900,
-               width:"100%"
-           }}>
-               <Typography align="center" variant={"h3"} sx={{fontWeight:900}}>
-                   Welcome to Quiz App
-               </Typography>
+                <CustomBox>
+                    <Box sx={{ flex: "1" }}>
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                fontSize: "18px",
+                                color: "white",
+                                fontWeight: "500",
+                                mt: 10,
+                                mb: 4,
+                            }}
+                        >
+                            Welcome to Besnik Agency
+                        </Typography>
+                        <Title variant="h1">
+                            Discover a place where you'll love to live.
+                        </Title>
+                        <Typography
+                            variant="body2"
+                            sx={{ fontSize: "18px", color: "#5A6473", my: 4 }}
+                        >
+                            Be the first to get the best real estate deals before they hit the
+                            mass market! Hot foreclosure deals with one simple search!
+                        </Typography>
+                        <CustomButton
+                            backgroundColor="#0F1B4C"
+                            color="#fff"
+                            buttonText="More About Us"
+                            heroBtn={true}
+                        />
+                    </Box>
 
-           </Box>
+                    <Box sx={{ flex: "1.25" }}>
+                        <img
+                            src={heroImg}
+                            alt="heroImg"
+                            style={{ height:'100%', width:'100%' }}
+                        />
+                    </Box>
+                </CustomBox>
+            </Container>
+        </Box>
+    );
+};
 
-       </Box>
-    )
-}
-
-export default Hero
+export default Hero;

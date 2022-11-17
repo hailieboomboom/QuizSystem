@@ -32,39 +32,42 @@ export default function StudentTable(){
     }
 
     return (
-        <div>
-            <TableContainer component={Paper}>
-                <Table aria-label="simple table" stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell >Username</TableCell>
-                            <TableCell >First Name</TableCell>
-                            <TableCell >Last Name</TableCell>
-                            <TableCell >Email</TableCell>
-                            <TableCell >Role</TableCell>
-                            <TableCell >Authorize</TableCell>
+<>
+    <div className={"trainerDashboardContainer"}>
+
+        <TableContainer component={Paper}>
+            <Table className={"trainerDashboardTable"} aria-label="simple table" stickyHeader>
+                <TableHead>
+                    <TableRow>
+                        <TableCell className={"trainerDashboardHead"}>Username</TableCell>
+                        <TableCell className={"trainerDashboardHead"}>First Name</TableCell>
+                        <TableCell className={"trainerDashboardHead"}>Last Name</TableCell>
+                        <TableCell className={"trainerDashboardHead"}>Email</TableCell>
+                        <TableCell className={"trainerDashboardHead"}>Role</TableCell>
+                        <TableCell className={"trainerDashboardHead"}>Edit</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {students.map((student) => (
+                        <TableRow key={student.username}>
+                            <TableCell component="th" scope="row" key={student.username}>
+                                {student.username}
+                            </TableCell>
+                            <TableCell >{student.firstName}</TableCell>
+                            <TableCell >{student.lastName}</TableCell>
+                            <TableCell >{student.email}</TableCell>
+                            <TableCell >{student.role}</TableCell>
+                            <TableCell >
+                                <Button variant="outlined" onClick={()=>{setOpenDialog(true); setStudentId(student.id)}}>Edit</Button>
+                            </TableCell>
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {students.map((student) => (
-                            <TableRow key={student.username}>
-                                <TableCell component="th" scope="row" key={student.username}>
-                                    {student.username}
-                                </TableCell>
-                                <TableCell >{student.firstName}</TableCell>
-                                <TableCell >{student.lastName}</TableCell>
-                                <TableCell >{student.email}</TableCell>
-                                <TableCell >{student.role}</TableCell>
-                                <TableCell >
-                                    <Button variant="outlined" onClick={()=>{setOpenDialog(true); setStudentId(student.id)}}>Edit</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <FormDialog changeCategory={"visible"} studentId={studentId} openNow={openDialog} closeWindow={closeWindow}></FormDialog>
-        </div>
-        
-    )
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        <FormDialog changeCategory={"visible"} studentId={studentId} openNow={openDialog} closeWindow={closeWindow}></FormDialog>
+    </div>
+</>
+
+    );
 }
