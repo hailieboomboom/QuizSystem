@@ -60,8 +60,8 @@ function getQuestion(id){
     return instance.get("api/questions/mcqs/" + id, config)
 }
 
-function updateQuestion(id,data){
-    return instance.put("api/questions/mcqs/" + id, data, config)
+function updateQuestion(id,activeUser,data){
+    return instance.put("api/questions/mcqs/" + id + "/" + activeUser, data, config)
 }
 
 function createQuestion(user_id,data){

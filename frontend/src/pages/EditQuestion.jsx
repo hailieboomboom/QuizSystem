@@ -114,7 +114,7 @@ function EditQuestion () {
           "options": [correctAnswer, ...answers],
           "questionDetails": question,
           "tags": tags,
-          "userId": 1
+          "userId": editQuestions.getUserId
         }
         // axios.put(postUrl, data)
         //     .then(data => {
@@ -125,7 +125,7 @@ function EditQuestion () {
         //         console.log(err)
         //         alert(err.response.data.message)
         //     });
-        apis.updateQuestion(activeUserId,data)
+        apis.updateQuestion(editQuestions.questionId,activeUserId,data)
         .then(res => {
             console.log(res.data)
             navigate('/questions')
