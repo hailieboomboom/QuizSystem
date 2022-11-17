@@ -1,14 +1,7 @@
 .homeDiv{
-    background:
-    url(../media/Waihou.png);
-    /*background-image:*/
-    /*        linear-gradient(135deg, hsla(239, 100%, 67%, 0.4) 0%, hsla(187, 100%, 89%, 0.4) 100%),*/
-    /*        url('https://images.pexels.com/photos/5537513/pexels-photo-5537513.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');*/
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    color: white;
-
+    /*background: url("https://learn.microsoft.com/events/learntv/swa-anniversary-may-2022/media/header-background.jpg");*/
+    background-color: #5e548e;
+    height: 91.9vh;
 }
 
 .homeTitle{
@@ -16,7 +9,7 @@
 }
 
 .homeGrid{
-    /*border: 2px solid purple;*/
+    border: 2px solid purple;
     height: 91.9vh;
 
     position: relative;
@@ -24,9 +17,9 @@
 }
 
 .homeCenter{
-
-    max-width: 800px;
-    max-height: 800px;
+    border: 1px solid gray;
+    max-width: 400px;
+    max-height: 100px;
     width: auto;
 
     height: 50vh;

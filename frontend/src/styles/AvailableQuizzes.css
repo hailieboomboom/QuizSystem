@@ -1,9 +1,9 @@
 .availableQuizzesContainer{
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(360deg, hsl(230, 88%, 29%) 0%, hsl(248, 88%, 29%) 100%);
+    background-color: #5e548e;
     background-size: cover;
-    /*background-position: center;*/
+    background-position: center;
     display: block;
     align-items: center;
     justify-content: center;
@@ -13,13 +13,13 @@
 
 .availableQuizzesBox{
     width: 50%;
-    background: linear-gradient(360deg, hsl(230, 88%, 29%) 0%, hsl(248, 88%, 29%) 100%);
+    background: #9f86c0;
     text-align: center;
     padding: 30px 10px;
     color: #fff;
     position: relative;
     border-radius: 20px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 5px 5px black;
 }
 
 .ManageQuizzesBox{
@@ -30,18 +30,18 @@
     color: #fff;
     position: relative;
     border-radius: 20px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 5px 5px black;
 }
 
 .availableQuizzesTitle{
-    color: whitesmoke;
+    color: black;
     font-weight: 600;
     font-size: 50px;
     padding-bottom: 30px;
 }
 
 .availableQuizzesTable{
-    background: linear-gradient(360deg, hsl(230, 37%, 84%) 0%, hsl(240, 100%, 98%) 100%);
+    background-color: #cabcdc;
 
 }
 

@@ -1,22 +1,11 @@
 import React from 'react'
-import {Stack, styled} from "@mui/material";
+import {Stack} from "@mui/material";
 import Box from "@mui/material/Box";
 
 import '../styles/homepageStyle.css'
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
-import Typography from "@mui/material/Typography";
-
-const Title = styled(Typography)(({ theme }) => ({
-    fontSize: "64px",
-    color: "#000336",
-    fontWeight: "bold",
-    margin: theme.spacing(4, 0, 4, 0),
-    [theme.breakpoints.down("sm")]: {
-        fontSize: "40px",
-    },
-}));
 
 const Home = () => {
     return (
@@ -24,27 +13,21 @@ const Home = () => {
         <div className={"homeDiv"}>
             <Grid className={"homeGrid"}>
                 <Stack
-                    className={"homeCenter"}
+                    direction="row"
+                    justifyContent="space-between"
                     alignItems="center"
-                    spacing={3}
+                    spacing={2}
                 >
-
-<Box sx={{
-
-    backgroundColor: 'white',opacity: [0.1, 0.7, 1],
-
-}}>
-    <Title>
-        Welcome to XQuizIT
-    </Title>
-    <Title>
-        Quiz Maker for FDMers
-    </Title>
-</Box>
-
-
+                    <Box>Item 1</Box>
+                    <Box>Item 2</Box>
+                    <Box>Item 3</Box>
                 </Stack>
-
+                <Grid item>
+                    <div className={"homeCenter"}>
+                        <h1 className={"homeTitle"}>Welcome, Human!</h1>
+                        {/*<Button variant="contained" state={{ errorPage: "Sorry! you can't access this." }} as={Link} to="/ErrorPage" >Click Me!</Button>*/}
+                    </div>
+                </Grid>
             </Grid>
         </div>
 
