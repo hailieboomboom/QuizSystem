@@ -56,10 +56,12 @@ public class MultipleChoiceOptionService {
 		if (mcqOptionDtoList.size() <= 1)
 			throw new McqOptionNotValidException("Please provide at least more than one option");
 		for(McqOptionDto mcqOption: mcqOptionDtoList) {
+			String optionDescription = mcqOption.getOptionDescription();
+			if( optionDescription == null || optionDescription.isEmpty())
+				throw new McqOptionNotValidException("Option description can't be empty!");
 			if (mcqOption.isCorrect())
 				numberOfCorrectOption++;
 		}
-		System.out.println(numberOfCorrectOption);
 		if (numberOfCorrectOption !=1)
 			throw new McqOptionNotValidException("Please only choose one correct option");
 	}
