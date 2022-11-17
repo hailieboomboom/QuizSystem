@@ -107,10 +107,13 @@ public class QuizAttemptService {
 		
 		HashMap<QuizCategory, Set<Role>> quizRoleMap = new HashMap<>();
 		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<Role>(Arrays.asList(
+				Role.AUTHORISED_TRAINER,
 				Role.POND,Role.BEACHED,
 				Role.TRAINING)));
 		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<Role>(Arrays.asList(
-				Role.POND,Role.BEACHED)));
+				Role.AUTHORISED_TRAINER,
+				Role.POND,Role.BEACHED,
+				Role.AUTHORISED_SALES)));
 		
 		Role activeUserRole = userService.getUserById(activeUserId).getRole();
 		Set<Role> authorisedRoleSet = quizRoleMap.get(requestQuizCategory);

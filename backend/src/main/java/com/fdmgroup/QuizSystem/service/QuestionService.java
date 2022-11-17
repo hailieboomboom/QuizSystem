@@ -111,7 +111,7 @@ public class QuestionService {
 	}
 
 	public void accessControlCreateMCQ(List<String> tags, Role role) {
-		if(tags==null)
+		if(tags==null || tags.isEmpty())
 			throw new TagNotValidException("Please provide at least one tag");
 		if(role.equals(Role.TRAINING)&& tags.contains("interview")){
 			throw new NotEnoughAccessException("Student cannot create interview Questions");
