@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import {useRecoilState} from "recoil";
 import {quizSelectedAnswersState} from "../recoil/Atoms";
+import {ShuffleTakeQuizAnswers} from "./ShuffleTakeQuizAnswer";
 
 export default function QuizMcqCard(props) {
     const [answers, setAnswers] = useRecoilState(quizSelectedAnswersState);
@@ -58,7 +59,7 @@ export default function QuizMcqCard(props) {
                     value={value}
                     onChange={handleChange}
                 >
-                    {question.options.map(answer => {
+                    {ShuffleTakeQuizAnswers(question.options).map(answer => {
                         return <FormControlLabel key={answer.optionDescription} value={answer.id} control={<Radio color="default"/>} label={answer.optionDescription}/>;
                     })}
                 </RadioGroup>
