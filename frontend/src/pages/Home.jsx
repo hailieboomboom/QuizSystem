@@ -12,19 +12,16 @@ const Home = () => {
 
         <div className={"homeDiv"}>
             <Grid className={"homeGrid"}>
-                <Stack
+                {/* <Stack
                     direction="row"
                     justifyContent="space-between"
                     alignItems="center"
                     spacing={2}
                 >
-                    <Box>Item 1</Box>
-                    <Box>Item 2</Box>
-                    <Box>Item 3</Box>
-                </Stack>
+                </Stack> */}
                 <Grid item>
                     <div className={"homeCenter"}>
-                        <h1 className={"homeTitle"}>Welcome, Human!</h1>
+                        <h1 className={"homeTitle"}>Welcome to ExQuizIT</h1>
                         {/*<Button variant="contained" state={{ errorPage: "Sorry! you can't access this." }} as={Link} to="/ErrorPage" >Click Me!</Button>*/}
                     </div>
                 </Grid>

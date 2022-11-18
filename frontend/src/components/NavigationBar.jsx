@@ -66,22 +66,22 @@ console.log(logedOut)
         <Navbar.Brand as={Link} to="/">
           <img src="https://surveymonkey-assets.s3.amazonaws.com/survey/182409455/e1ca79ba-8544-401a-b369-7cd97429a630.png" width="84" height="50"
                className="d-inline-block align-content-center" alt=""/>
-    Quizz App
+    ExQuizIT
           </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+            {isLoggedIn() ? (
           <Nav className="me-auto">
 
             <div className="me-2">
               <Dropdown>
                 <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
-                  Create
+                  Question
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   <Dropdown.Item  as={Link} to="/createQuestion">Create Question</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/autoGenerate">Auto generate quiz</Dropdown.Item>
+                  <Dropdown.Item  as={Link} to="/questions">Questions</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -92,6 +92,7 @@ console.log(logedOut)
                   Quiz
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
                   <Dropdown.Item  as={Link} to="/viewQuizzes">Take Quiz</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/myQuizzes">Manage Quiz</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/attemptedQuizzes">Attempted Quiz</Dropdown.Item>
@@ -101,6 +102,8 @@ console.log(logedOut)
 
 
           </Nav>
+            ):
+            <Nav className="me-auto"></Nav>}
 
             {isLoggedIn() ? (
                     <div>
@@ -140,6 +143,7 @@ console.log(logedOut)
                 //   </Nav.Link>
                 // </Nav>
             ) : (
+              
                 <Nav>
                   <Nav.Link as={Link} to="/register" onClick={() =>  setLogout(false)}>Register</Nav.Link>
                   <Nav.Link as={Link} to="/login" onClick={() =>  setLogout(false)}>Login</Nav.Link>

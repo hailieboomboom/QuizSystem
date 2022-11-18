@@ -92,37 +92,37 @@ public class DataLoader implements ApplicationRunner {
         Trainer unauthorisedTrainer = new Trainer();
         unauthorisedTrainer.setUsername("ut");
         unauthorisedTrainer.setPassword(passwordEncoder.encode("1"));
-        unauthorisedTrainer.setEmail("1234@gmail.com");
+        unauthorisedTrainer.setEmail("ut@gmail.com");
         unauthorisedTrainer.setFirstName("JHJ");
         unauthorisedTrainer.setLastName("Liu");
         trainerService.save(unauthorisedTrainer); 
         System.out.println(trainerService.findByUsername("ut"));
 
         // unauthorisedTrainer1 - id 4
-        Trainer unauthorisedTrainer1 = new Trainer();
-        unauthorisedTrainer1.setUsername("ut1");
-        unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
-        unauthorisedTrainer1.setEmail("12345@gmail.com");
-        unauthorisedTrainer1.setFirstName("JHJ");
-        unauthorisedTrainer1.setLastName("Liu");
-        trainerService.save(unauthorisedTrainer1);  
-        System.out.println(trainerService.findByUsername("ut1"));
-
-        // unauthorisedTrainer1 - id 5
-        Trainer unauthorisedTrainer2 = new Trainer();
-        unauthorisedTrainer2.setUsername("ut2");
-        unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
-        unauthorisedTrainer2.setEmail("123467@gmail.com");
-        unauthorisedTrainer2.setFirstName("JHJ");
-        unauthorisedTrainer2.setLastName("Liu");
-        trainerService.save(unauthorisedTrainer2);  
-        System.out.println(trainerService.findByUsername("ut2"));
+//        Trainer unauthorisedTrainer1 = new Trainer();
+//        unauthorisedTrainer1.setUsername("ut1");
+//        unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
+//        unauthorisedTrainer1.setEmail("utone@gmail.com");
+//        unauthorisedTrainer1.setFirstName("JHJ");
+//        unauthorisedTrainer1.setLastName("Liu");
+//        trainerService.save(unauthorisedTrainer1);  
+//        System.out.println(trainerService.findByUsername("ut1"));
+//
+//        // unauthorisedTrainer1 - id 5
+//        Trainer unauthorisedTrainer2 = new Trainer();
+//        unauthorisedTrainer2.setUsername("ut2");
+//        unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
+//        unauthorisedTrainer2.setEmail("uttwo@gmail.com");
+//        unauthorisedTrainer2.setFirstName("JHJ");
+//        unauthorisedTrainer2.setLastName("Liu");
+//        trainerService.save(unauthorisedTrainer2);  
+//        System.out.println(trainerService.findByUsername("ut2"));
 
         // unauthorisedSales - id 6
         Sales unauthorisedSales = new Sales();
         unauthorisedSales.setUsername("us");
         unauthorisedSales.setPassword(passwordEncoder.encode("1"));
-        unauthorisedSales.setEmail("3210@gmail.com");
+        unauthorisedSales.setEmail("us@gmail.com");
         unauthorisedSales.setFirstName("Yutta");
         unauthorisedSales.setLastName("Karima");
         salesService.save(unauthorisedSales);  
@@ -132,7 +132,7 @@ public class DataLoader implements ApplicationRunner {
         Student student1 = new Student();
         student1.setUsername("skarima");
         student1.setPassword(passwordEncoder.encode("1"));
-        student1.setEmail("student1@gmail.com");
+        student1.setEmail("skarima@gmail.com");
         student1.setFirstName("student1");
         student1.setLastName("Karima");
         studentService.save(student1);
@@ -141,7 +141,7 @@ public class DataLoader implements ApplicationRunner {
         Student student2 = new Student();
         student2.setUsername("slong");
         student2.setPassword(passwordEncoder.encode("2"));
-        student2.setEmail("student2@gmail.com");
+        student2.setEmail("slong@gmail.com");
         student2.setFirstName("student2");
         student2.setLastName("Long");
         student2.setRole(Role.POND);
@@ -151,7 +151,7 @@ public class DataLoader implements ApplicationRunner {
         Student student3 = new Student();
         student3.setUsername("sbrown");
         student3.setPassword(passwordEncoder.encode("3"));
-        student3.setEmail("student3@gmail.com");
+        student3.setEmail("sbrown@gmail.com");
         student3.setFirstName("student3");
         student3.setLastName("Brown");
         student3.setRole(Role.BEACHED);
@@ -164,24 +164,24 @@ public class DataLoader implements ApplicationRunner {
 
         // MultipleChoice questions
         MultipleChoiceQuestion mcq1 = new MultipleChoiceQuestion();
-        mcq1.setQuestionDetails("test mcq1");
-        MultipleChoiceOption mco1 = new MultipleChoiceOption("op1 for 1",true,mcq1);
-        MultipleChoiceOption mco2 = new MultipleChoiceOption("op2 for 2",false,mcq1);
-        MultipleChoiceOption mco3 = new MultipleChoiceOption("op3 for 3",false,mcq1);
+        mcq1.setQuestionDetails("Which is not a Programming Language");
+        MultipleChoiceOption mco1 = new MultipleChoiceOption("tt",true,mcq1);
+        MultipleChoiceOption mco2 = new MultipleChoiceOption("t",false,mcq1);
+        MultipleChoiceOption mco3 = new MultipleChoiceOption("r",false,mcq1);
         mcq1.setCreator(trainer);
 
         MultipleChoiceQuestion mcq2 = new MultipleChoiceQuestion();
-        mcq2.setQuestionDetails("test mcq2");
-        MultipleChoiceOption mco11 = new MultipleChoiceOption("op1 for 2",true,mcq2);
-        MultipleChoiceOption mco12 = new MultipleChoiceOption("op2 for 2",false,mcq2);
-        MultipleChoiceOption mco13 = new MultipleChoiceOption("op3 for 2",false,mcq2);
+        mcq2.setQuestionDetails("Is multiple inheritance possible in Java?");
+        MultipleChoiceOption mco11 = new MultipleChoiceOption("length()",true,mcq2);
+        MultipleChoiceOption mco12 = new MultipleChoiceOption("max()",false,mcq2);
+        MultipleChoiceOption mco13 = new MultipleChoiceOption("str",false,mcq2);
         mcq2.setCreator(sales);
 
         MultipleChoiceQuestion mcq3 = new MultipleChoiceQuestion();
-        mcq3.setQuestionDetails("test mcq3");
-        MultipleChoiceOption mco111 = new MultipleChoiceOption("op1 for 3",true,mcq3);
-        MultipleChoiceOption mco112 = new MultipleChoiceOption("op2 for 3",false,mcq3);
-        MultipleChoiceOption mco113 = new MultipleChoiceOption("op3 for 3",false,mcq3);
+        mcq3.setQuestionDetails("Which method can be used to find the length of a string?");
+        MultipleChoiceOption mco111 = new MultipleChoiceOption("Yes, only with interfaces",true,mcq3);
+        MultipleChoiceOption mco112 = new MultipleChoiceOption("No",false,mcq3);
+        MultipleChoiceOption mco113 = new MultipleChoiceOption("Yes, with both classes and interfaces",false,mcq3);
         mcq3.setCreator(student1);
 
         // ShortAnswer questions

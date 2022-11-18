@@ -26,7 +26,7 @@ export default function QuizSelectedQuestionsTable() {
     }
     return (
         <TableContainer className={"table"} component={Paper} sx={{ width:700 }}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: 675 }} aria-label="simple table">
                 <TableHead className={"tableHead"}>
                     <TableRow>
                         <TableCell className={"tableHeadText"}>Selected Questions</TableCell>

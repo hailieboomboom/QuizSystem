@@ -44,7 +44,7 @@ const MyQuizzes = () => {
         });
     }
     const deleteQuiz = (id) => {
-        axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "").then(function (response) {
+        axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/"+ getUserId()).then(function (response) {
                 console.log(response);
                 setDummy(id);
             })
@@ -91,15 +91,16 @@ const MyQuizzes = () => {
     );
     if (quizzes.length<1) return(
         <Grid
+            className={"availableQuizzesContainer"}
             container
             justifyContent="center"
             alignItems="center"
         >
-            <Typography variant="h4" gutterBottom>
+            <Typography className={"availableQuizzesTitle"} variant="h4" gutterBottom>
                 You have not created any quiz. Click below to create.
             </Typography>
             <Grid item sx={{ width:650 }}>
-                <Button fullWidth color="success" variant="outlined" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
+                <Button className={"createQuizButtonAvailableQuizzes"} fullWidth color="success" size="large" as={Link} to="/createQuiz">Create Quiz</Button>
             </Grid>
         </Grid>
 
@@ -142,13 +143,12 @@ const MyQuizzes = () => {
                                     <TableCell component="th" scope="row">
                                         {row.name}
                                     </TableCell>
-                                    <TableCell align="right">
+                                    <TableCell component="th" align="right">
                                         <Grid
                                             container
-                                            className={"availableQuizzesButtons"}
                                             direction="row"
                                             justifyContent="flex-end"
-                                            alignItems="flex-start"
+                                            alignItems="center"
                                             spacing={1}
                                         >
                                             <Grid item>

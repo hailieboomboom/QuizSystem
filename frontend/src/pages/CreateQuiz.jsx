@@ -21,7 +21,7 @@ import {apis} from "../utils/apis";
 import Autocomplete from "@mui/material/Autocomplete";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import '../styles/createQuestion.css'
+import '../styles/createEditQuiz.css'
 
 const CreateQuiz = () => {
     const [category, setCategory] = useState('');
@@ -194,7 +194,7 @@ const CreateQuiz = () => {
                         <QuizSelectedQuestionsTable/>
                     </Grid>
                     <Grid item xs={1}>
-                        <Button onClick={handleCreate} variant="outlined" as={Link} to="/myQuizzes" >
+                        <Button className={"createButton"} onClick={handleCreate} as={Link} to="/myQuizzes" >
                             Create
                         </Button>
                     </Grid>

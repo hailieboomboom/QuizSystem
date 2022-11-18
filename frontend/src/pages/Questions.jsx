@@ -107,9 +107,9 @@ const Questions = () => {
         <div className={"mcqCardContainer"}>
             <div className={"filterQuestionButton"}>
                 <button onClick={getAllMCQs}>All Questions</button>
+                <button onClick={getAllMCQsFromUser}>Your Questions</button>
                 <button onClick={getAllCourseQuestions}>Course Questions</button>
                 <button onClick={getAllInterviewQuestions}>Interview Questions</button>
-                <button onClick={getAllMCQsFromUser}>Your Questions</button>
             </div>
             <div className={"viewQuestionsBox"}>
                 <h1 className={"questionListTitle"}>Multiple Choice Questions</h1>
