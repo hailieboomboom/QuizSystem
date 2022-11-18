@@ -10,6 +10,7 @@ import { apis } from '../utils/apis';
 import {useState, useEffect} from "react";
 import Button from '@mui/material/Button';
 import FormDialog from './FormDialog';
+import '../styles/trainerDashStyle.css'
 
 
 export default function StudentTable(){
@@ -34,15 +35,15 @@ export default function StudentTable(){
     return (
         <div>
             <TableContainer component={Paper}>
-                <Table aria-label="simple table" stickyHeader>
+                <Table className={"trainerDashboardTable"} aria-label="simple table" stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell >Username</TableCell>
-                            <TableCell >First Name</TableCell>
-                            <TableCell >Last Name</TableCell>
-                            <TableCell >Email</TableCell>
-                            <TableCell >Role</TableCell>
-                            <TableCell >Authorize</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Username</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>First Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Last Name</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Email</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Role</TableCell>
+                            <TableCell className={"trainerDashboardHead"}>Authorize</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

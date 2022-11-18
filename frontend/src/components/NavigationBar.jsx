@@ -76,12 +76,12 @@ console.log(logedOut)
             <div className="me-2">
               <Dropdown>
                 <Dropdown.Toggle variant="outline-info" id="dropdown-basic" >
-                  Create
+                  Question
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   <Dropdown.Item  as={Link} to="/createQuestion">Create Question</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
+                  <Dropdown.Item  as={Link} to="/questions">Questions</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -92,6 +92,7 @@ console.log(logedOut)
                   Quiz
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to="/createQuiz">Create Quiz</Dropdown.Item>
                   <Dropdown.Item  as={Link} to="/viewQuizzes">Take Quiz</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/myQuizzes">Manage Quiz</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/attemptedQuizzes">Attempted Quiz</Dropdown.Item>

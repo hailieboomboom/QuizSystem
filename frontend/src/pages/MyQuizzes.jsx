@@ -44,7 +44,7 @@ const MyQuizzes = () => {
         });
     }
     const deleteQuiz = (id) => {
-        axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "").then(function (response) {
+        axios.delete("http://localhost:8088/QuizSystem/api/quizzes/" + id + "/"+ getUserId()).then(function (response) {
                 console.log(response);
                 setDummy(id);
             })
