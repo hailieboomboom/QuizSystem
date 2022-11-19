@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Student service.
+ * Student service is used to retrieve student object and change student categories.
  *
  * @author Jason Liu
  * @version 1.0

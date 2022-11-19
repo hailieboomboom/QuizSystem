@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.config;
+import com.fdmgroup.QuizSystem.dto.CustomUserDetails;
 import com.fdmgroup.QuizSystem.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -78,11 +79,12 @@ public class WebSecurityConfig {
     }
 
     /**
-     * Create BCryptPasswordEncoder.
+     * Create a bean for BCryptPasswordEncoder.
      * @return PasswordEncoder.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

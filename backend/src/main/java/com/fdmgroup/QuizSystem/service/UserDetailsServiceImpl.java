@@ -21,6 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
+    private final CustomUserDetails customUserDetails;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userService.getUserByUsername(username);
@@ -33,9 +35,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @param user User
      * @return     UserDetails
      */
-    private CustomUserDetails mapUserToCustomUserDetails(User user, List<SimpleGrantedAuthority> authorities) {
+    protected CustomUserDetails mapUserToCustomUserDetails(User user, List<SimpleGrantedAuthority> authorities) {
 
-        CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.setId(user.getId());
         customUserDetails.setUsername(user.getUsername());
         customUserDetails.setPassword(user.getPassword());

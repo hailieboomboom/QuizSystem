@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Trainer service.
+ * Trainer service for CRUD and authorisation actions on trainers.
  *
  * @author Jason Liu
  * @version 1.0
