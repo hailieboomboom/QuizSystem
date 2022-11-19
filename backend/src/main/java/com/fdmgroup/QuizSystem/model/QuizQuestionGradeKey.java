@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * The composite key of QuizQuestionGrade
- * @author sm
+ * @author Hailie
  *
  */
 @SuppressWarnings("serial")

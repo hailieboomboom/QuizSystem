@@ -35,14 +35,6 @@ public class Quiz {
 	private String name;
 	private QuizCategory quizCategory;
 
-
-//	@ManyToMany
-//	@JoinTable(name="QUIZ_QUESTION", 
-//		    joinColumns=@JoinColumn(name="quiz_id"),
-//		    inverseJoinColumns= @JoinColumn(name="question_id"))
-//	private List<Question> questions;
-	
-
 	@OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<QuizQuestionGrade> quizQuestionsGrade;

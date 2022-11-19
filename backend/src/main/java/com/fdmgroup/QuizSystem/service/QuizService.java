@@ -19,7 +19,6 @@ import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuestionTagNotMatchQuizCategory;
 import com.fdmgroup.QuizSystem.exception.QuizAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
 import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
@@ -29,9 +28,7 @@ import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.User;
-import com.fdmgroup.QuizSystem.repository.QuestionRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -51,11 +48,11 @@ public class QuizService {
 	@Autowired
 	private QuizQuestionGradeService qqgService;
 
-	@Autowired
-	private QuestionRepository questionRepo;
+//	@Autowired
+//	private QuestionRepository questionRepo;
 
-	@Autowired
-	private UserRepository userRepository;
+//	@Autowired
+//	private UserRepository userRepository;
 
 	@Autowired
 	private QuizQuestionGradeService quizQuestionGradeService;
@@ -77,7 +74,9 @@ public class QuizService {
 		Quiz quizEntity = new Quiz();
 		quizEntity.setName(quizDto.getName());
 		quizEntity.setQuizCategory(quizDto.getQuizCategory());
-		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+
+//		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quizEntity.setCreator(userService.getUserById(quizDto.getCreatorId()));
 
 		Quiz managedQuiz = quizRepository.save(quizEntity);
 		quizDto.setQuizId(managedQuiz.getId());
@@ -86,8 +85,8 @@ public class QuizService {
 
 	/**
 	 * Persists a Quiz to the database.
- 	 * @param quiz
-	 * @return
+ 	 * @param quiz Quiz to be persisted
+	 * @return Quiz that has been persisted
 	 */
 	public Quiz save(Quiz quiz) {
 		return quizRepository.save(quiz);
@@ -137,7 +136,8 @@ public class QuizService {
 		Quiz quiz = optionalQuiz.get();
 		quiz.setName(quizDto.getName());
 		quiz.setQuizCategory(quizDto.getQuizCategory());
-		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+//		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quiz.setCreator(userService.getUserById(quizDto.getCreatorId()));
 
 		quizRepository.save(quiz);
 	}
@@ -171,17 +171,6 @@ public class QuizService {
 		}
 		return optionalQuiz.get();
 	}
-
-	/**
-	 * Finds all quizzes by quiz category.
-	 * @param quizCategory The quiz category to be found
-	 * @return List<Quiz> A list of quiz entity
-	 */
-	public List<Quiz> getQuizzesByQuizCategory(QuizCategory quizCategory) {
-		return quizRepository.findByQuizCategory(quizCategory);
-
-	}
-
 	
 	/**
 	 * Adds a question with a corresponding grade into the quiz.
@@ -191,9 +180,11 @@ public class QuizService {
 	 */
 	public void addQuestionIntoQuiz(Question question, Quiz quiz, Float grade) {
 
-		question = questionRepo.findById(question.getId()).get();
-		quiz = quizRepository.findById(quiz.getId()).get();
-		
+//		question = questionRepo.findById(question.getId()).get();
+		question = questionService.findById(question.getId());
+//		quiz = quizRepository.findById(quiz.getId()).get();
+		quiz = getQuizById(quiz.getId());
+
 		QuizQuestionGradeKey qqgkey = new QuizQuestionGradeKey(quiz.getId(), question.getId());
 		QuizQuestionGrade qqg = new QuizQuestionGrade();
 		qqg.setKey(qqgkey);
@@ -226,13 +217,13 @@ public class QuizService {
 	 */
 	public List<QuizDto> getQuizzesByCreatorId(long creatorId) {
 
-		Optional<User> optionalCreator = userRepository.findById(creatorId);
-
-		if (optionalCreator.isEmpty()) {
-			throw new UserNotFoundException("User not found");
-		}
-
-		List<Quiz> quizzes = quizRepository.findByCreator(optionalCreator.get());
+//		Optional<User> optionalCreator = userRepository.findById(creatorId);
+//		if (optionalCreator.isEmpty()) {
+//			throw new UserNotFoundException("User not found");
+//		}
+//		List<Quiz> quizzes = quizRepository.findByCreator(optionalCreator.get());
+		User creator = userService.getUserById(creatorId);
+		List<Quiz> quizzes = quizRepository.findByCreator(creator);
 
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (Quiz quiz : quizzes) {
@@ -264,11 +255,11 @@ public class QuizService {
 	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
 
 		HashMap<QuizCategory, Set<Role>> quizRoleMap = new HashMap<>();
-		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<Role>(Arrays.asList(
+		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<>(Arrays.asList(
 				Role.AUTHORISED_TRAINER,
 				Role.POND,Role.BEACHED,
 				Role.TRAINING)));
-		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<Role>(Arrays.asList(
+		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<>(Arrays.asList(
 				Role.AUTHORISED_TRAINER,
 				Role.POND,Role.BEACHED,
 				Role.AUTHORISED_SALES)));

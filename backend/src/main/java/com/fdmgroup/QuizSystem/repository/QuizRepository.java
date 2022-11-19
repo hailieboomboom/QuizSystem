@@ -9,6 +9,9 @@ import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.User;
 
+/**
+ * Repository for quiz
+ */
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
