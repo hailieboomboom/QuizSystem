@@ -3,6 +3,12 @@ import lombok.*;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+/**
+ * Sales entity. Default role is UNAUTHORISED_SALES.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Entity
 @Getter
 @Setter

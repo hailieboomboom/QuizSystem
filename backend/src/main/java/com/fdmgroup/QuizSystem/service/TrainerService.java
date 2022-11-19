@@ -1,20 +1,20 @@
 package com.fdmgroup.QuizSystem.service;
-import com.fdmgroup.QuizSystem.dto.UserUpdateDTO;
-import com.fdmgroup.QuizSystem.exception.UserAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
 import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.Student;
 import com.fdmgroup.QuizSystem.model.Trainer;
-import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.TrainerRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Trainer service.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +22,11 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
 
+    /**
+     * Get trainer by user id.
+     * @param id User id.
+     * @return   Trainer.
+     */
     public Trainer getTrainerById(long id) {
         Optional<Trainer> maybeTrainer = trainerRepository.findById(id);
         if (maybeTrainer.isEmpty()) {
@@ -30,6 +35,11 @@ public class TrainerService {
         return maybeTrainer.get();
     }
 
+    /**
+     * Get trainer by username.
+     * @param username Username.
+     * @return         Trainer.
+     */
     public Trainer findByUsername(String username){
 
         Optional<Trainer> maybeTrainer = trainerRepository.findByUsername(username);
@@ -39,21 +49,30 @@ public class TrainerService {
         return maybeTrainer.get();
     }
 
+    /**
+     * Authorise trainer.
+     * @param username Username.
+     * @return         Trainer.
+     */
     public Trainer authoriseTrainer(String username) {
         Trainer trainer = findByUsername(username);
         trainer.setRole(Role.AUTHORISED_TRAINER);
         return trainerRepository.save(trainer);
     }
 
+    /**
+     * Get all unauthorised trainers.
+     * @return A list of unauthorised trainers.
+     */
     public List<Trainer> getAllUnauthorisedTrainers(){
        return trainerRepository.findAll().stream().filter(trainer -> trainer.getRole() == Role.UNAUTHORISED_TRAINER).toList();
     }
 
-    public List<Trainer> getAllTrainers(){
-        return trainerRepository.findAll();
-    }
-
-
+    /**
+     * Persist trainer into database.
+     * @param trainer Trainer.
+     * @return        Persisted trainer.
+     */
     public Trainer save(Trainer trainer){
        return trainerRepository.save(trainer);
     }

@@ -7,6 +7,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import java.util.List;
 
+/**
+ * Cross-origin resource sharing configuration.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Configuration
 public class CorsConfig {
 

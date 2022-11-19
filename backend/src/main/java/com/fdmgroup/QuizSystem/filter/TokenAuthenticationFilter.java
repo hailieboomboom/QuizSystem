@@ -17,6 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Request filter is used for token validation and user authentication.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

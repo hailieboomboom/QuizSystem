@@ -6,6 +6,12 @@ import lombok.NonNull;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * Formatting user update request body.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Data
 public class UserUpdateDTO {
 
