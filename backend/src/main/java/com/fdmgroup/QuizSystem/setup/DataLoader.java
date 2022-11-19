@@ -33,6 +33,9 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Generate preloaded users, questions, quizzes, attempts and tags.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

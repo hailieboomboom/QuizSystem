@@ -10,6 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
+
+/**
+ * User service.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -17,8 +24,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    private final TrainerService trainerService;
 
     /**
      * Get user by id.
@@ -49,18 +54,6 @@ public class UserService {
         return maybe_user.get();
     }
 
-    /**
-     * Delete user.
-     * @param id User id.
-     */
-    public void deleteUserById(long id){
-        if(userRepository.existsById(id)){
-            userRepository.deleteById(id);
-        }
-        else {
-            throw new UserNotFoundException();
-        }
-    }
 
     /**
      * Update user.
@@ -75,9 +68,6 @@ public class UserService {
             throw new UserNotFoundException();
         }
 
-//        if (userRepository.existsByUsername(modifiedUser.getUsername())) {
-//            throw new UserAlreadyExistsException(String.format("Username %s already been used", modifiedUser.getUsername()));
-//        }
 
         if (userRepository.existsByEmail(modifiedUser.getEmail())) {
             throw new UserAlreadyExistsException(String.format("Email %s already been used", modifiedUser.getEmail()));
@@ -88,9 +78,7 @@ public class UserService {
         if(modifiedUser.getPassword() != null) {
             user.setPassword(modifiedUser.getPassword());
         }
-//        if(modifiedUser.getUsername() != null) {
-//            user.setUsername(modifiedUser.getUsername());
-//        }
+
         if(modifiedUser.getFirstName() != null) {
             user.setFirstName(modifiedUser.getFirstName());
         }
@@ -108,6 +96,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Get role by user id.
+     * @param id User id.
+     * @return   Role.
+     */
     public Role getRoleByUserId(long id){
 
         Optional<User> maybeUser = userRepository.findById(id);
@@ -127,23 +120,14 @@ public class UserService {
     public boolean existsByUsername(String username){
         return userRepository.existsByUsername(username);
     }
-//
-//    /**
-//     * Check user's existence by email.
-//     * @param email Email.
-//     * @return      true or false.
-//     */
+
+    /**
+     * Check user's existence by email.
+     * @param email Email.
+     * @return      true or false.
+     */
     public boolean existsByEmail(String email){
         return userRepository.existsByEmail(email);
     }
 
-//
-//    /**
-//     * Persist user to the database.
-//     * @param user User.
-//     * @return     Persisted user.
-//     */
-//    public User save(User user) {
-//        return userRepository.save(user);
-//    }
 }

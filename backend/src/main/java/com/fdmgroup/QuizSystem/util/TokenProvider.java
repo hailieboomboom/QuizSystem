@@ -11,6 +11,12 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Generate token from authentication context. Validate JWT with secret key.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Slf4j
 @Component
 public class TokenProvider {

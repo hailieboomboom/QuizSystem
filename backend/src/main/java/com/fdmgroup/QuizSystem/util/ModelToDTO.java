@@ -1,27 +1,29 @@
 package com.fdmgroup.QuizSystem.util;
-
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.dto.RoleDTO;
 import com.fdmgroup.QuizSystem.dto.UserOutputDTO;
 import com.fdmgroup.QuizSystem.dto.Attempt.MCQAttemptDTO;
 import com.fdmgroup.QuizSystem.dto.Attempt.QuizAttemptDTO;
 import com.fdmgroup.QuizSystem.model.*;
-import com.fdmgroup.QuizSystem.repository.QuizQuestionMCQAttemptRepository;
-import com.fdmgroup.QuizSystem.service.QuizQuestionMCQAttemptService;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Map entity to the corresponding DTO.
+ *
+ * @author Jason, Indrayutta, Summer
+ * @version 1.0
+ */
 @Component
 public class ModelToDTO {
 
     private ModelMapper modelMapper;
-    
-//    @Autowired
-//    private QuizQuestionMCQAttemptService mcqAttemptService;
 
+    /**
+     * Mapper configuration.
+     * @param modelMapper ModelMapper.
+     */
     @Autowired
     public ModelToDTO(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -54,22 +56,47 @@ public class ModelToDTO {
 
     }
 
+    /**
+     * Map User to UserOutputDTO.
+     * @param user User.
+     * @return     UserOutputDTO.
+     */
     public UserOutputDTO userToOutput(User user){
         return modelMapper.map(user, UserOutputDTO.class);
     }
 
+    /**
+     * Map Quiz to QuizDto.
+     * @param quiz Quiz.
+     * @return     QuizDto
+     */
     public QuizDto quizToOutput(Quiz quiz) {
         return modelMapper.map(quiz, QuizDto.class);
     }
 
+    /**
+     * Map QuizQuestionGrade to QuestionGradeDTO.
+     * @param quizQuestionGrade QuizQuestionGrade.
+     * @return                  QuestionGradeDTO.
+     */
     public QuestionGradeDTO qqgToQg(QuizQuestionGrade quizQuestionGrade){
         return modelMapper.map(quizQuestionGrade, QuestionGradeDTO.class);
     }
 
+    /**
+     * Map QuizAttempt to QuizAttemptDTO.
+     * @param quizAttempt QuizAttempt.
+     * @return            QuizAttemptDTO.
+     */
     public QuizAttemptDTO quizAttemptToOutput(QuizAttempt quizAttempt){
         return modelMapper.map(quizAttempt, QuizAttemptDTO.class);
     }
 
+    /**
+     * Map QuizQuestionMCQAttempt to MCQAttemptDTO.
+     * @param mcqAttempt QuizQuestionMCQAttempt.
+     * @return           MCQAttemptDTO.
+     */
     public MCQAttemptDTO mcqAttemptToOutput(QuizQuestionMCQAttempt mcqAttempt){
         return modelMapper.map(mcqAttempt, MCQAttemptDTO.class);
     }
