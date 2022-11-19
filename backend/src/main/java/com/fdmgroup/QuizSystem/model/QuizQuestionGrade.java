@@ -1,26 +1,28 @@
 package com.fdmgroup.QuizSystem.model;
 
-import lombok.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-
+/**
+ * QuizQuestionGrade entity which mainly represents the questions and the grades of the questions of a quiz
+ * @author Hailie
+ *
+ */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table( name = "quiz_question_grade")
 public class QuizQuestionGrade {
-	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name = "id")
-//	private Long id;
-	
+		
 	@EmbeddedId
 	QuizQuestionGradeKey key;
 	

@@ -85,7 +85,7 @@ public class QuizService {
 	}
 
 	/**
-	 * Persists a quiz to the database.
+	 * Persists a Quiz to the database.
  	 * @param quiz
 	 * @return
 	 */
