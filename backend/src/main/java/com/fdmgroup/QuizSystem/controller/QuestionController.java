@@ -57,7 +57,7 @@ public class QuestionController {
 	public static final String PATH_MAPPING_CREATE_MCQ = "/mcqs/{active_user_id}";
 	public static final String PATH_MAPPING_GET_ALL_TAGS = "/tags";
 	public static final String PATH_MAPPING_GET_TAGS_BY_TAG_ID = "/tags/{tag_id}";
-	public static final String PATH_MAPPING_GET_MCQ_BY_MCQ_ID = PATH_DELETE_OR_UPDATE_MCQ_BY_ID;
+	public static final String PATH_MAPPING_GET_MCQ_BY_MCQ_ID = "/mcqs/{mcqId}";
 	public static final String PATH_MAPPING_GET_CORRECT_OPTION_OF_MCQ = "/mcqs/{mcqId}/correct_option";
 	public static final String PATH_MAPPING_GET_MCQ_CREATED_BY_A_USER = "/{userId}/mcqs";
 	public static final String PATH_MAPPING_GET_ALL_MCQS = "/mcqs";
