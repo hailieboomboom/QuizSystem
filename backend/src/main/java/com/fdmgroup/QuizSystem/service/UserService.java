@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * User service.
+ * User service to implement user CRUD relying on user repository.
  *
  * @author Jason Liu
  * @version 1.0
