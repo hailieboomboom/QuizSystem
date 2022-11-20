@@ -4,6 +4,11 @@ import com.fdmgroup.QuizSystem.model.QuizCategory;
 
 import lombok.Data;
 
+/**
+ * Represents the Quiz DTO.
+ * @author sm
+ *
+ */
 @Data
 public class QuizDto {
 	

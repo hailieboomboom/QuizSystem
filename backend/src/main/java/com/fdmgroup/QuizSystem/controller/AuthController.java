@@ -24,6 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
+/**
+ * AuthController handles requests for user login and sign-up. It depends on other services such as userService
+ * and authentication manager.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -42,8 +49,6 @@ public class AuthController {
      * @param loginRequest User input object containing username and password
      * @return             JWT token
      */
-
-
     @ApiOperation(value = "log in using username and password")
     @PostMapping("/login")
     @ApiResponses(value = {

@@ -1,6 +1,5 @@
 package com.fdmgroup.QuizSystem.dto;
 
-import java.util.List;
 import java.util.Set;
 
 import com.fdmgroup.QuizSystem.model.Tag;
@@ -9,6 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the QuestionGrade DTO
+ * @author sm
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

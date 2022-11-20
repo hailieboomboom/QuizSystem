@@ -2,6 +2,12 @@ package com.fdmgroup.QuizSystem.dto;
 
 import lombok.Data;
 
+/**
+ * User output DTO.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Data
 public class UserOutputDTO {
 
