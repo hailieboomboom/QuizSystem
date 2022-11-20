@@ -3,13 +3,16 @@ package com.fdmgroup.QuizSystem.model;
 import lombok.*;
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+/**
+ * This class defines mcqOption entity attributes, including:id, detail and the option is correct or not
+ * One question can have multiple options
+ * */
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table( name = "mcoption")
 public class MultipleChoiceOption {
 	

@@ -35,10 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
- * DataLoader class is used to load pre_defined data into MySQL Database for the website running.
+ * DataLoader class is used to generate preloaded users, questions, quizzes, attempts and tags.
  * @author Hailie Long, Summer Su, Indrayutta Karima, Jason Liu
  *
  */
+
 
 @Component
 @RequiredArgsConstructor

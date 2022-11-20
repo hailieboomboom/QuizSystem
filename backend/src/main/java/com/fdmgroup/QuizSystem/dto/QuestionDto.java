@@ -7,6 +7,10 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 
+/**
+ * This class is an object that contains Question info including: tags, question details and ids.
+ * The object will be sent to frontend when user requests question.
+ */
 @Data
 public class QuestionDto {
 	

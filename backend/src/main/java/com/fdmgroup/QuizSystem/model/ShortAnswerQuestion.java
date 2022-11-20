@@ -6,6 +6,11 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+/**
+ *
+ * This class inherits from question class
+ * the attributes includes : correct answer.
+ */
 @Entity
 @Getter
 @Setter

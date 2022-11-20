@@ -25,6 +25,7 @@ import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.service.MultipleChoiceOptionService;
 import com.fdmgroup.QuizSystem.service.QuestionService;
+import com.fdmgroup.QuizSystem.service.ShortAnswerQuestionService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.UserService;
 
@@ -53,6 +54,9 @@ class QuestionControllerTest {
 	@Mock
 	TagService mockTagService;
 	
+	@Mock
+	ShortAnswerQuestionService mockSAQService;
+	
 	private User user;
 	
 	private AddMcqDto addMcqDto;
@@ -66,7 +70,7 @@ class QuestionControllerTest {
 	
 	@BeforeEach
 	void setup() {
-		questionController = new QuestionController(mockQuestionService, mockMcoService, mockUserService, mockTagService);
+		questionController = new QuestionController(mockQuestionService, mockMcoService, mockUserService, mockTagService, mockSAQService);
 		
 		user = new User(0L, "username", "password", "email", "firstName", "lastName",
                 Role.POND);
@@ -219,12 +223,12 @@ class QuestionControllerTest {
     
     
     @Test
-    void test_getInterviewQuestionBank_call_getMcqBank_from_questionService() throws Exception{
+    void test_getDifferentQuestionBank_call_getMcqBank_from_questionService() throws Exception{
     	String questionBankType = "test";
     	when(mockQuestionService.getMcqBank(questionBankType)).thenReturn(List.of(returnMcqDto));
     	ResponseEntity<List> expectedRes = new ResponseEntity<>(List.of(returnMcqDto), HttpStatus.OK);
     	
-    	ResponseEntity<List> result = questionController.getInterviewQuestionBank(questionBankType);
+    	ResponseEntity<List> result = questionController.getDifferentQuestionBank(questionBankType);
     	
     	verify(mockQuestionService, times(1)).getMcqBank(questionBankType);
     	assertEquals(expectedRes, result);

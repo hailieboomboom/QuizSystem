@@ -5,6 +5,9 @@ import lombok.*;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+/**
+ * Student entity. Default role is TRAINING.
+ */
 @Entity
 @Setter
 @Getter

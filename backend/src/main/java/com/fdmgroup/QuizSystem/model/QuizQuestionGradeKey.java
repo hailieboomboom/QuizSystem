@@ -3,10 +3,18 @@ package com.fdmgroup.QuizSystem.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * The composite key of QuizQuestionGrade
+ * @author Hailie
+ *
+ */
 @SuppressWarnings("serial")
 @Embeddable
 @Getter

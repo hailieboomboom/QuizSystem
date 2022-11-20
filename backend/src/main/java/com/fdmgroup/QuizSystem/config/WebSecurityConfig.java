@@ -1,4 +1,5 @@
 package com.fdmgroup.QuizSystem.config;
+import com.fdmgroup.QuizSystem.dto.CustomUserDetails;
 import com.fdmgroup.QuizSystem.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,16 +15,36 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Spring security configuration. It adds gateways for api access in filter chains which allows users with
+ * specified authorities to access corresponding apis. It relies on the token authentication filter to
+ * authenticate users. BCryptPasswordEncoder is used for password encryption.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig {
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
+    /**
+     * Create a bean of AuthenticationManager.
+     * @param authenticationConfiguration AuthenticationConfiguration.
+     * @return                            AuthenticationManager.
+     * @throws Exception
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * Configure request authorisation.
+     * @param http       HttpSecurity.
+     * @return           SecurityFilterChain.
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -57,8 +78,13 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Create a bean for BCryptPasswordEncoder.
+     * @return PasswordEncoder.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

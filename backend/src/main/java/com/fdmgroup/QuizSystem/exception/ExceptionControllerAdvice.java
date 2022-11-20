@@ -18,23 +18,42 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionControllerAdvice {
 
 
+    /**
+     * handles NoDataFoundException
+     * @param exception NoDataFoundException
+     * @return Api response 404 Error
+     */
     @ExceptionHandler(value = NoDataFoundException.class)
     public final ResponseEntity<ApiResponse> handleNoDataFoundException(NoDataFoundException exception){
 
         return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.NOT_FOUND);
 
     }
-
+    /**
+     * handles TagNotValidException
+     * @param exception TagNotValidException
+     * @return Api response 400 Error
+     */
     @ExceptionHandler(value = TagNotValidException.class)
     public final ResponseEntity<ApiResponse> handleTagNotValidException(TagNotValidException exception){
         return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * handles McqOptionNotValidException
+     * @param exception McqOptionNotValidException
+     * @return Api response with 400 Error
+     */
     @ExceptionHandler(value = McqOptionNotValidException.class)
     public final ResponseEntity<ApiResponse> handleMcqOptionNotValidException(McqOptionNotValidException exception){
         return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * handles NotEnoughAccessException
+     * @param exception NotEnoughAccessException
+     * @return api responsw with Forbidden code
+     */
     @ExceptionHandler(value = NotEnoughAccessException.class)
     public final ResponseEntity<ApiResponse> handleNotEnoughAccessException(NotEnoughAccessException exception){
         return new ResponseEntity<>(new ApiResponse(false,exception.getMessage()), HttpStatus.FORBIDDEN);

@@ -10,6 +10,12 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Composite Key for QuizQuestionMCQAttempt
+ * @author Yutta
+ *
+ */
+
 @Embeddable
 @Getter
 @Setter

@@ -5,11 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * Sales repository.
+ */
 public interface SalesRepository extends JpaRepository<Sales, Long> {
 
     Optional<Sales> findByUsername(String username);
 
-    boolean existsByUsername(String username);
-
-    boolean existsByEmail(String email);
 }

@@ -5,6 +5,12 @@ import lombok.*;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+/**
+ * Trainer entity. Default role is UNAUTHORISED_TRAINER.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Entity
 @Getter
 @Setter

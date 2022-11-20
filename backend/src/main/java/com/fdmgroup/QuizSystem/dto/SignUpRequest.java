@@ -3,6 +3,13 @@ import com.fdmgroup.QuizSystem.model.Role;
 import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+/**
+ * Sign up request DTO.
+ *
+ * @author Jason Liu
+ * @version 1.0
+ */
 @Data
 public class SignUpRequest {
 

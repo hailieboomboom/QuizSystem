@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ import com.fdmgroup.QuizSystem.dto.QuizDto;
 import com.fdmgroup.QuizSystem.exception.QuestionTagNotMatchQuizCategory;
 import com.fdmgroup.QuizSystem.exception.QuizAlreadyExistsException;
 import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.exception.UserNotFoundException;
 import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
@@ -29,70 +27,81 @@ import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.Role;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.User;
-import com.fdmgroup.QuizSystem.repository.QuestionRepository;
-import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
-import com.fdmgroup.QuizSystem.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * Service that validates and process quiz related data
+ * 
+ * @author sm
+ *
+ */
 @Service
 @AllArgsConstructor
 @Transactional
 public class QuizService {
 
-	@Autowired
 	private QuizRepository quizRepository;
 
-	@Autowired
 	private QuizQuestionGradeService qqgService;
 
-	@Autowired
-	private QuestionRepository questionRepo;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
 	private QuizQuestionGradeService quizQuestionGradeService;
 
-	@Autowired
-	private QuizQuestionGradeRepository qqgRepository;
-
-	@Autowired
 	private UserService userService;
-	@Autowired
+
 	private QuestionService questionService;
-	@Autowired
+
 	private TagService tagService;
 
+	/**
+	 * Creates a quiz to the database and returns the quiz DTO.
+	 * 
+	 * @param quizDto The quiz DTO that needs to be stored into database
+	 * @return QuizDto The quiz DTO with the quiz id from database
+	 */
 	public QuizDto createQuiz(QuizDto quizDto) {
 
 		Quiz quizEntity = new Quiz();
 		quizEntity.setName(quizDto.getName());
 		quizEntity.setQuizCategory(quizDto.getQuizCategory());
-//		quizEntity.setQuestions(quizDto.getQuestions());
-		quizEntity.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quizEntity.setCreator(userService.getUserById(quizDto.getCreatorId()));
 
 		Quiz managedQuiz = quizRepository.save(quizEntity);
 		quizDto.setQuizId(managedQuiz.getId());
 		return quizDto;
 	}
 
+	/**
+	 * Persists a Quiz to the database.
+	 * 
+	 * @param quiz Quiz to be persisted
+	 * @return Quiz that has been persisted
+	 */
 	public Quiz save(Quiz quiz) {
 		return quizRepository.save(quiz);
 	}
 
+	/**
+	 * Gets quiz DTO from given quiz entity
+	 * 
+	 * @param quiz The quiz entity
+	 * @return QuizDto that contains selected information of the quiz entity
+	 */
 	public QuizDto getQuizDto(Quiz quiz) {
 		QuizDto quizDto = new QuizDto();
 		quizDto.setQuizId(quiz.getId());
 		quizDto.setCreatorId(quiz.getCreator().getId());
 		quizDto.setName(quiz.getName());
 		quizDto.setQuizCategory(quiz.getQuizCategory());
-//		quizDto.setQuestions(quiz.getQuestions());
 		return quizDto;
 	}
 
+	/**
+	 * Finds all quizzes
+	 * 
+	 * @return List<QuizDto> A list of quiz DTO
+	 */
 	public List<QuizDto> getAllQuizzes() {
 		List<Quiz> allQuizzes = quizRepository.findAll();
 
@@ -103,43 +112,43 @@ public class QuizService {
 		return quizDtos;
 	}
 
-	// update quiz details (not including questions)
+	/**
+	 * Updates existing quiz in the database.
+	 * 
+	 * @param id      The id of the quiz to be updated
+	 * @param quizDto The quiz DTO that contains the information to update
+	 */
 	public void updateQuiz(long id, QuizDto quizDto) {
 
-		// Check if quiz exists
-		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
-		if (optionalQuiz.isEmpty()) {
-			throw new QuizNotFoundException("Quiz not found");
-		}
+		Quiz quiz = getQuizById(id);
 
-		Quiz quiz = optionalQuiz.get();
 		quiz.setName(quizDto.getName());
 		quiz.setQuizCategory(quizDto.getQuizCategory());
-//		quiz.setQuestions(quizDto.getQuestions());
-		quiz.setCreator(userRepository.findById(quizDto.getCreatorId()).get());
+		quiz.setCreator(userService.getUserById(quizDto.getCreatorId()));
 
 		quizRepository.save(quiz);
 	}
 
+	/**
+	 * Delete quiz by quiz id.
+	 * 
+	 * @param id The id of the quiz to be deleted.
+	 */
 	public void deleteQuizById(long id) {
 
-		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
-		if (optionalQuiz.isEmpty()) {
-			throw new QuizNotFoundException("Quiz not found");
-		}
-
-//		// TODO This part is handled by CascadeType.REMOVE on Quiz.java
-//		// To be deleted by Summer: find all of the quizQuestionGrade associated with the quiz, loop and remove all of them.
-//		List<QuizQuestionGrade> qqgsToRemove = qqgRepository.findByQuizId(id);
-//		for(QuizQuestionGrade qqg: qqgsToRemove) {
-//			qqgRepository.delete(qqg);
-//		}
-
+		// check if the quiz exists in database
+		getQuizById(id);
 		quizRepository.deleteById(id); // related QuizQuestionGrade list will be removed behind the scene for "cascade
 										// = CascadeType.REMOVE"
 
 	}
 
+	/**
+	 * Finds quiz by quiz id
+	 * 
+	 * @param id The id of the quiz to be returned
+	 * @return Quiz the managed quiz in the database
+	 */
 	public Quiz getQuizById(long id) {
 
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
@@ -149,46 +158,54 @@ public class QuizService {
 		return optionalQuiz.get();
 	}
 
-	public List<Quiz> getQuizzesByQuizCategory(QuizCategory quizCategory) {
-		return quizRepository.findByQuizCategory(quizCategory);
-
-	}
-
-	// TODO: parameters can be just Ids instead of entities? (from Yutta and Jason)
+	/**
+	 * Adds a question with a corresponding grade into the quiz.
+	 * 
+	 * @param question The question to be added into the quiz
+	 * @param quiz     The quiz to be added to
+	 * @param grade    The grade to be added to the question
+	 */
 	public void addQuestionIntoQuiz(Question question, Quiz quiz, Float grade) {
 
-		System.out.println("----ENTER ADDQUESTION: question id is " + question.getId() + " quiz id is " + quiz.getId());
+		question = questionService.findById(question.getId());
+		quiz = getQuizById(quiz.getId());
 
-		question = questionRepo.findById(question.getId()).get();
-		quiz = quizRepository.findById(quiz.getId()).get();
 		QuizQuestionGradeKey qqgkey = new QuizQuestionGradeKey(quiz.getId(), question.getId());
-		QuizQuestionGrade quizQuestion = new QuizQuestionGrade();
-		quizQuestion.setKey(qqgkey);
-		quizQuestion.setGrade(grade);
-		quizQuestion.setQuestion(question);
-		quizQuestion.setQuiz(quiz);
-		System.out.println("after setkey try to get key: " + quizQuestion.getKey().getQuestionId() + "  "
-				+ quizQuestion.getKey().getQuizId());
-		qqgService.save(quizQuestion);
+		QuizQuestionGrade qqg = new QuizQuestionGrade();
+		qqg.setKey(qqgkey);
+		qqg.setGrade(grade);
+		qqg.setQuestion(question);
+		qqg.setQuiz(quiz);
+
+		qqgService.save(qqg);
 	}
 
+	/**
+	 * Removes a question from the quiz.
+	 * 
+	 * @param question The question to be removed
+	 * @param quiz     The quiz to be removed from
+	 */
 	public void removeQuestionFromQuiz(Question question, Quiz quiz) {
+
 		QuizQuestionGradeKey qqgkey = new QuizQuestionGradeKey(quiz.getId(), question.getId());
 		QuizQuestionGrade quizQuestion = qqgService.findById(qqgkey);
+
 		if (quizQuestion != null) {
 			qqgService.remove(quizQuestion);
 		}
 	}
 
+	/**
+	 * Find all quizzes by quiz creator id.
+	 * 
+	 * @param creatorId The id of the quiz creator
+	 * @return List<QuizDto> A list of quiz DTO
+	 */
 	public List<QuizDto> getQuizzesByCreatorId(long creatorId) {
 
-		Optional<User> optionalCreator = userRepository.findById(creatorId);
-
-		if (optionalCreator.isEmpty()) {
-			throw new UserNotFoundException("User not found");
-		}
-
-		List<Quiz> quizzes = quizRepository.findByCreator(optionalCreator.get());
+		User creator = userService.getUserById(creatorId);
+		List<Quiz> quizzes = quizRepository.findByCreator(creator);
 
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (Quiz quiz : quizzes) {
@@ -197,6 +214,12 @@ public class QuizService {
 		return quizDtos;
 	}
 
+	/**
+	 * Finds maximum grade of a quiz.
+	 * 
+	 * @param quizId The id of the quiz
+	 * @return float The maximum grade of a quiz
+	 */
 	public float getMaxGrade(Long quizId) {
 		Quiz quiz = getQuizById(quizId);
 		float maxGrade = 0;
@@ -206,43 +229,37 @@ public class QuizService {
 		return maxGrade;
 	}
 
-//  // TODO for Summer: to be deleted once confirmed everything works
-//	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
-//
-//		Role activeUserRole = userService.getUserById(activeUserId).getRole();
-//
-//		// Sales only have access to interview quizzes, but not course quizzes
-//		if (requestQuizCategory == QuizCategory.COURSE_QUIZ && activeUserRole == Role.AUTHORISED_SALES) {
-//			throw new UserUnauthorisedError("You do not have access to create, update or delete course quizzes!");
-//		}
-//		// Training students only have access to course quizzes, but not interview
-//		// quizzes
-//		if (requestQuizCategory == QuizCategory.INTERVIEW_QUIZ && activeUserRole == Role.TRAINING) {
-//			throw new UserUnauthorisedError("You do not have access to create, update or delete interview quizzes!");
-//		}
-//	}
+	/**
+	 * Checks if the active user(currently logged-in user) has the authority to
+	 * access a given quiz category.
+	 * 
+	 * @param requestQuizCategory The quiz category to be accessed
+	 * @param activeUserId        The id of the active user
+	 */
 	public void checkAccessToQuizCategory(QuizCategory requestQuizCategory, long activeUserId) {
 
 		HashMap<QuizCategory, Set<Role>> quizRoleMap = new HashMap<>();
-		quizRoleMap.put(QuizCategory.COURSE_QUIZ, new HashSet<Role>(Arrays.asList(
-				Role.AUTHORISED_TRAINER,
-				Role.POND,Role.BEACHED,
-				Role.TRAINING)));
-		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ, new HashSet<Role>(Arrays.asList(
-				Role.AUTHORISED_TRAINER,
-				Role.POND,Role.BEACHED,
-				Role.AUTHORISED_SALES)));
-		
+		quizRoleMap.put(QuizCategory.COURSE_QUIZ,
+				new HashSet<>(Arrays.asList(Role.AUTHORISED_TRAINER, Role.POND, Role.BEACHED, Role.TRAINING)));
+		quizRoleMap.put(QuizCategory.INTERVIEW_QUIZ,
+				new HashSet<>(Arrays.asList(Role.AUTHORISED_TRAINER, Role.POND, Role.BEACHED, Role.AUTHORISED_SALES)));
+
 		Role activeUserRole = userService.getUserById(activeUserId).getRole();
 		Set<Role> authorisedRoleSet = quizRoleMap.get(requestQuizCategory);
-		
-		if(!authorisedRoleSet.contains(activeUserRole)) {
-			throw new UserUnauthorisedError("You do not have access to create, update or delete " + requestQuizCategory + " quizzes!");
+
+		if (!authorisedRoleSet.contains(activeUserRole)) {
+			throw new UserUnauthorisedError(
+					"You do not have access to create, update or delete " + requestQuizCategory + " quizzes!");
 		}
 	}
 
-	// Only the quiz creator edit its own quiz, or trainer/sales can edit others'
-	// quiz
+	/**
+	 * Checks if the active user (currently logged-in user) has authority to access
+	 * the quiz.
+	 * 
+	 * @param quizId       The id of the quiz to be accessed
+	 * @param activeUserId The id of the active user
+	 */
 	public void checkAccessToQuizId(long quizId, long activeUserId) {
 
 		long quizCreatorId = getQuizById(quizId).getCreator().getId();
@@ -255,49 +272,47 @@ public class QuizService {
 		}
 	}
 
+	/**
+	 * Check if the tag of the question matches with the given quiz category.
+	 * 
+	 * @param quizCategory The quiz category
+	 * @param question     The question
+	 */
 	public void checkQuestionTagMatchQuizCategory(QuizCategory quizCategory, Question question) {
 
 		HashMap<QuizCategory, String> quizQuestionMap = new HashMap<>(
 				Map.of(QuizCategory.COURSE_QUIZ, "course", QuizCategory.INTERVIEW_QUIZ, "interview"));
-		
+
 		Set<Tag> questionTags = question.getTags();
-		System.out.println("questionTags: " + questionTags);
 		String requiredTagName = quizQuestionMap.get(quizCategory);
-		System.out.println("requiredTagName: " + requiredTagName);
 		Tag requiredTag = tagService.getTagByName(requiredTagName);
-		
+
 		if (!questionTags.contains(requiredTag)) {
 			throw new QuestionTagNotMatchQuizCategory("Question " + question.getQuestionDetails()
 					+ "' does not match with quiz category " + quizCategory);
 		}
 
-//		 // If quiz category is "COURSE", only the questions that are tagged with
-//		 // "course" can be added into quiz
-//  
-//		Set<Tag> questionTags = question.getTags();
-//		Tag requiredTag = tagService.getTagByName("course");
-//		
-//		if (!questionTags.contains(requiredTag)) {
-//			throw new QuestionTagNotMatchQuizCategory("Question " + question.getQuestionDetails()
-//					+ "can't be added as it does not have a tag that matches " + quizCategory);
-//		}
-		
 	}
 
+	/**
+	 * Creates questions of the quiz.
+	 * 
+	 * @param quiz_id              The id of the quiz to add questions to
+	 * @param questionGradeDtoList The list of QuestionGradeDTO
+	 */
 	public void createQuizQuestions(long quiz_id, List<QuestionGradeDTO> questionGradeDtoList) {
 
 		Quiz quiz = getQuizById(quiz_id);
 		QuizCategory quizCategory = quiz.getQuizCategory();
 
-		// TODO for Summer: to confirm if this step is needed
 		// check if the quizQuestionGrade record already exists for the given quiz id
 		List<QuizQuestionGrade> foundQuizQuestionGrades = quizQuestionGradeService.findAllByQuizId(quiz_id);
-		if(foundQuizQuestionGrades.size() != 0) {
+		if (foundQuizQuestionGrades.size() != 0) {
 			throw new QuizAlreadyExistsException("This quiz already already contains questions and grades");
 		}
 
 		for (QuestionGradeDTO questionGradeDTO : questionGradeDtoList) {
-			
+
 			Question question = questionService.findById(questionGradeDTO.getQuestionId());
 			float grade = questionGradeDTO.getGrade();
 
@@ -308,13 +323,19 @@ public class QuizService {
 		}
 	}
 
+	/**
+	 * Updates the questions of the quiz
+	 * 
+	 * @param quiz_id              The id of the quiz to add questions to
+	 * @param questionGradeDtoList The list of QuestionGradeDTO
+	 */
 	public void updateQuizQuestions(long quiz_id, List<QuestionGradeDTO> questionGradeDtoList) {
 
 		Quiz quiz = getQuizById(quiz_id);
 		QuizCategory quizCategory = quiz.getQuizCategory();
 
 		List<QuizQuestionGrade> quizQuestionGradeList = quizQuestionGradeService.findAllByQuizId(quiz_id);
-		// Database
+
 		Set<Long> questionIdSet = quizQuestionGradeList.stream()
 				.map(quizQuestionGrade -> quizQuestionGrade.getQuestion().getId()).collect(Collectors.toSet());
 		Set<Long> questionIdInputSet = questionGradeDtoList.stream().map(QuestionGradeDTO::getQuestionId)
@@ -325,10 +346,10 @@ public class QuizService {
 			if (!questionIdSet.contains(questionGradeDTO.getQuestionId())) {
 				Question question = questionService.findById(questionGradeDTO.getQuestionId());
 				float grade = questionGradeDTO.getGrade();
-				
+
 				// Check if the question tag match with quiz category
 				checkQuestionTagMatchQuizCategory(quizCategory, question);
-				
+
 				addQuestionIntoQuiz(question, quiz, grade);
 			} else if (questionGradeDTO.getGrade() != (quizQuestionGradeService
 					.findById(new QuizQuestionGradeKey(quiz_id, questionGradeDTO.getQuestionId())).getGrade())) {
