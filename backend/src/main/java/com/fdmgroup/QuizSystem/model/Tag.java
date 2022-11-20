@@ -2,19 +2,25 @@ package com.fdmgroup.QuizSystem.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * This class defines the attribute of a tag class.
+ * The attributes include name of tag and id of tag.
+ * many questions can have many tags.
+ * many tags can have many question
+ */
 @Entity
 @Table(name = "tag")
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +29,7 @@ public class Tag {
 
     @ManyToMany(fetch = FetchType.EAGER,mappedBy = "tags")
     @JsonIgnore
-    private Set<Question> tutorials = new HashSet<>();
+    private Set<Question> questions = new HashSet<>();
 
     @Column(name = "tag_name")
     private String tagName;
@@ -33,14 +39,14 @@ public class Tag {
     }
     
     public void addOneQuestion(Question question) {
-    	if(tutorials.contains(question) == false) {
-    		this.tutorials.add(question);
+    	if(!questions.contains(question)) {
+    		this.questions.add(question);
     	}
     }
     
     public void removeOneQuestion(Question question) {
-    	if(tutorials.contains(question)) {
-    		this.tutorials.remove(question);
+    	if(questions.contains(question)) {
+    		this.questions.remove(question);
     	}
     }
 

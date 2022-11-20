@@ -2,6 +2,10 @@ package com.fdmgroup.QuizSystem.common;
 
 import java.util.Objects;
 
+/**
+ * This class defines api response message and success status of api response.
+ * It will send to frontend once the server process the request
+ */
 public class ApiResponse {
 
     private final boolean success;

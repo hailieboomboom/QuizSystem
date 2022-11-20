@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * This feature has not been implemented
+ */
 @Data
 public class SAQDto {
 	

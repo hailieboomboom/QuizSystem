@@ -1,7 +1,6 @@
 package com.fdmgroup.QuizSystem.model;
 
 import java.util.HashSet;
-import java.util.List;
 
 import java.util.Objects;
 
@@ -19,22 +18,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
+/**
+ * This class defines attributes of a question, including question detail,id,creator and tags
+ * one creator can have many question.
+ * many question can have many tags
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @Table( name = "question")
+@AllArgsConstructor
 public class Question {
 
     @Id
@@ -45,15 +49,6 @@ public class Question {
     
     @ManyToOne
     private User creator;
-    
-
-//    @ManyToMany(mappedBy="questions")
-//    private List<Quiz> quizzes;
-
-	// To Haile, Jason and Yutta think we don't need this part of code because it already exists in the quiz model.
-//    @OneToMany(mappedBy = "question")
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	private List<QuizQuestionGrade> quizQuestionsGrade;
     
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "QUESTION_Tag",
@@ -68,7 +63,7 @@ public class Question {
 	}
     
     public void addOneTag(Tag tag) {
-    	if(tags.contains(tag) == false) {
+    	if(!tags.contains(tag)) {
     		this.tags.add(tag);
     	}
     	

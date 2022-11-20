@@ -12,9 +12,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * This class setUp the configuration of swagger.
+ * swagger is used to document all api automatically.
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
+    /**
+     * set up swagger
+     * @return a Docket
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -24,6 +32,10 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .build().apiInfo(metaData());
     }
 
+    /**
+     * set up mata data about api info
+     * @return apiInfo that will be displayed in api page
+     */
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
                 .title("Quiz System - API Documentation")
@@ -33,6 +45,10 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .build();
     }
 
+    /**
+     * change path to a html page for displaying api
+     * @param registry api registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 

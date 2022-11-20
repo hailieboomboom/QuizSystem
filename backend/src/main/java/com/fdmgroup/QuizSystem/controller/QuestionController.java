@@ -20,7 +20,6 @@ import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.SAQDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.AddMcqDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.CorrectOptionDto;
-import com.fdmgroup.QuizSystem.dto.McqDto.McqOptionDto;
 import com.fdmgroup.QuizSystem.dto.McqDto.ReturnMcqDto;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.ShortAnswerQuestion;
@@ -31,10 +30,11 @@ import com.fdmgroup.QuizSystem.service.QuestionService;
 import com.fdmgroup.QuizSystem.service.ShortAnswerQuestionService;
 import com.fdmgroup.QuizSystem.service.TagService;
 import com.fdmgroup.QuizSystem.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
 
+/**
+ * The controller defines question related api and handles those api requests
+ */
 @RestController
 @RequestMapping("/api/questions") // http://localhost:8088/QuestionSystem/questions
 public class QuestionController {
@@ -42,8 +42,16 @@ public class QuestionController {
 	public static final String CREATED_QUESTION_SUCCESS = "Question has been created";
 	public static final String DELETED_QUESTION_SUCCESS = "Question has been deleted";
 	public static final String UPDATED_QUESTION_SUCCESS = "Question has been updated";
-	public final String COURSETAG = "course";
-	public final String INTERVIEWTAG = "interview";
+	public static final String PATH_MAPPING_CREATE_MCQ = "/mcqs/{active_user_id}";
+	public static final String PATH_MAPPING_GET_ALL_TAGS = "/tags";
+	public static final String PATH_MAPPING_GET_TAGS_BY_TAG_ID = "/tags/{tag_id}";
+	public static final String PATH_MAPPING_GET_MCQ_BY_MCQ_ID = "/mcqs/{mcqId}";
+	public static final String PATH_MAPPING_GET_CORRECT_OPTION_OF_MCQ = "/mcqs/{mcqId}/correct_option";
+	public static final String PATH_MAPPING_GET_MCQ_CREATED_BY_A_USER = "/{userId}/mcqs";
+	public static final String PATH_MAPPING_GET_ALL_MCQS = "/mcqs";
+	public static final String PATH_MAPPING_GET_QUESTION_BY_TYPE = "/questionBank/{questionBankType}";
+	public final String COURSE_TAG = "course";
+	public final String INTERVIEW_TAG = "interview";
 
 	@Autowired
 	private QuestionService questionService;
@@ -60,15 +68,23 @@ public class QuestionController {
 	@Autowired
 	private ShortAnswerQuestionService saqService;
 
-	@PostMapping("/mcqs/{active_user_id}")
-	@ApiOperation(value = "create a multiple choice question",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 201, message = CREATED_QUESTION_SUCCESS),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "User not found"),
-			@io.swagger.annotations.ApiResponse(code = 400, message = "1. provide more/less than one correct option 2. provide less than one tag/ doesn't contain at least one interview or course tag")
+	public QuestionController(QuestionService questionService, MultipleChoiceOptionService mcoService, UserService userService, TagService tagService, ShortAnswerQuestionService saqService) {
+		this.questionService = questionService;
+		this.mcoService = mcoService;
+		this.userService = userService;
+		this.tagService = tagService;
+		this.saqService = saqService;
 	}
-		)
+
+	/**
+	 * handles create multiple choice question
+	 * @param active_user_id the id of user who wants to create question
+	 * @param addMcqDto the multiple choice question that sent from user
+	 * @return an Api response that contains the result of the creation
+	 */
+
+
+	@PostMapping(PATH_MAPPING_CREATE_MCQ)
 	public ResponseEntity<ApiResponse> createMcq(@PathVariable Long active_user_id,@RequestBody AddMcqDto addMcqDto) {
 		User user = userService.getUserById(active_user_id);
 		mcoService.validateOptions(addMcqDto.getOptions());
@@ -78,65 +94,57 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
-	@GetMapping("/tags")
+	@GetMapping(PATH_MAPPING_GET_ALL_TAGS)
 	public ResponseEntity<List<String>> getAllTags(){
 		List<String> tags = tagService.findAll();
 		
 		return new ResponseEntity<>(tags,HttpStatus.OK);
 	}
 	
-	@GetMapping("/tags/{tag_id}")
+	@GetMapping(PATH_MAPPING_GET_TAGS_BY_TAG_ID)
 	public ResponseEntity<String> getTagById(@PathVariable long tag_id){
 		String tagName = tagService.getTagById(tag_id);
 		
 		return new ResponseEntity<>(tagName,HttpStatus.OK);
 	}
-	
-	
-	@GetMapping("/mcqs/{mcqId}")
-	@ApiOperation(value = "get a multiple choice question via the question id",
-			notes = "return question along with tags and options")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = "return question along with tags and options",response = ReturnMcqDto.class),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question Not Found")}
-	)
+
+
+	/**
+	 * handles request of getting a multiple choice question
+	 * @param mcqId the id of a multiple choice question
+	 * @return a list of Multiple choice dto that contains tags/multiple choice question and options
+	 */
+	@GetMapping(PATH_MAPPING_GET_MCQ_BY_MCQ_ID)
 	public ResponseEntity<AddMcqDto> getOneMcq(@PathVariable Long mcqId) {
 		return  new ResponseEntity<>(questionService.getMcqDto(mcqId),HttpStatus.OK);
 	}
 
-
-	@GetMapping("/mcqs/{mcqId}/correct_option")
-	@ApiOperation(value = "get the correction option of a multiple choice question via a question id",
-			notes = "return the correct option")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = "return question along with tags and options",response = CorrectOptionDto.class),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question Not Found")}
-	)
+	/**
+	 * handles request of getting the correct answer of a multiple choice question
+	 * @param mcqId the id of a multiple choice question
+	 * @return correct option dto
+	 */
+	@GetMapping(PATH_MAPPING_GET_CORRECT_OPTION_OF_MCQ)
 	public ResponseEntity<CorrectOptionDto> getCorrectOption(@PathVariable Long mcqId) {
 
 		return  new ResponseEntity<>(mcoService.getRightOption(mcqId),HttpStatus.OK);
 	}
 
-
-	@GetMapping("/{userId}/mcqs")
-	@ApiOperation(value = "get all multiple choice question created by a user based on userId",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = "return a list of multiple choice questions created by an user",response = ReturnMcqDto.class, responseContainer = "List"),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "User Not Found")}
-	)
+	/**
+	 * handles request of getting all multiple choice questions created by a user
+	 * @param userId the id of the user
+	 * @return a list of Multiple choice dto that contains tags/multiple choice question and options
+	 */
+	@GetMapping(PATH_MAPPING_GET_MCQ_CREATED_BY_A_USER)
 	public ResponseEntity<List> getAllMcqCreatedByAnUser(@PathVariable Long userId) {
 		return  new ResponseEntity<>(questionService.getAllMcqCreatedByAnUser(userId),HttpStatus.OK);
 	}
 
-
-	@GetMapping("/mcqs")
-	@ApiOperation(value = "get all multiple choice question from question bank",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = "return all questions from question bank ",response = ReturnMcqDto.class, responseContainer = "List")
-	}
-	)
+	/**
+	 * handles request of getting all multiple choice questions in database
+	 * @return a list of Multiple choice dto that contains tags/multiple choice question and options
+	 */
+	@GetMapping(PATH_MAPPING_GET_ALL_MCQS)
 	public ResponseEntity<List<ReturnMcqDto>> getAllMcq() {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestion(),HttpStatus.OK);
 	}
@@ -151,20 +159,7 @@ public class QuestionController {
 		return  new ResponseEntity<>(questionService.getMcqDtosforQuizEdit(quiz_id),HttpStatus.OK);
 	}
 
-	@DeleteMapping("/mcqs/{mcqId}")
-	@ApiOperation(value = "delete a multiple choice question based on questionId",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = "return success message"),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question Not Found/Options Not Found for this Question")}
-	)
-	public ResponseEntity<ApiResponse> deleteOneMcqById(@PathVariable Long mcqId) {
-		questionService.deleteOneMcq(mcqId);
 
-		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
-	}
-	
-	 
 	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
 	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
 	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
@@ -173,20 +168,6 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, DELETED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
 
-
-	@PutMapping("/mcqs/{mcqId}")
-	@ApiOperation(value = "update a multiple choice question by questionId",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = UPDATED_QUESTION_SUCCESS),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question not found"),
-			@io.swagger.annotations.ApiResponse(code = 400, message = "1. provide more/less than one correct option 2.provide less than one tag/ doesn't contain at least one interview or course tag")
-
-	})
-	public ResponseEntity<ApiResponse> updateOneMcqById(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto) {
-		questionService.updateMCQ(addMcqDto,mcqId);
-		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
-	}
 	
 	//HAILIE NOTE: UPDATE MCQ: ADD LOGGED IN USER ID INTO PATH
 	@PutMapping("/mcqs/{mcqId}/{active_user_id}")
@@ -196,17 +177,15 @@ public class QuestionController {
 		questionService.updateMCQByRole(addMcqDto, mcqId, active_user_id);
 		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
-	
 
-	@GetMapping("/questionBank/{questionBankType}")
-	@ApiOperation(value = "get interview/question question bank ",
-			notes = "return success or failure message")
-	@ApiResponses(value = {
-			@io.swagger.annotations.ApiResponse(code = 200, message = UPDATED_QUESTION_SUCCESS,response = ReturnMcqDto.class, responseContainer = "List"),
-			@io.swagger.annotations.ApiResponse(code = 404, message = "Question bank not found")
+	/**
+	 * handles the request of getting different types of question
+	 * @param questionBankType question bank type could be interview/course
+	 * @return a list of Multiple choice dto based on questionBankType
+	 */
 
-	})
-	public ResponseEntity<List> getInterviewQuestionBank(@NonNull @PathVariable String questionBankType){
+	@GetMapping(PATH_MAPPING_GET_QUESTION_BY_TYPE)
+	public ResponseEntity<List> getDifferentQuestionBank(@NonNull @PathVariable String questionBankType){
 		return  new ResponseEntity<>(questionService.getMcqBank(questionBankType),HttpStatus.OK);
 	}
 
@@ -222,8 +201,8 @@ public class QuestionController {
 		}
 		
 		// check if tag contains interview/course
-		if((saqDto.getTags().contains(COURSETAG) == false)
-				&& (saqDto.getTags().contains(INTERVIEWTAG) == false)) {
+		if((saqDto.getTags().contains(COURSE_TAG) == false)
+				&& (saqDto.getTags().contains(INTERVIEW_TAG) == false)) {
 			return new ResponseEntity<>(new ApiResponse(false, "please tag question with course or interview"), HttpStatus.BAD_REQUEST);
 		}
 		
@@ -308,8 +287,8 @@ public class QuestionController {
 		}
 		
 		// check if tag contains interview/course
-		if((saqDto.getTags().contains(COURSETAG) == false)
-				&& (saqDto.getTags().contains(INTERVIEWTAG) == false)) {
+		if((saqDto.getTags().contains(COURSE_TAG) == false)
+				&& (saqDto.getTags().contains(INTERVIEW_TAG) == false)) {
 			return new ResponseEntity<>(new ApiResponse(false, "please tag question with course or interview"), HttpStatus.BAD_REQUEST);
 		}
 		
