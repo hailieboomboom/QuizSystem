@@ -33,6 +33,13 @@ import com.fdmgroup.QuizSystem.service.TrainerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * DataLoader class is used to load pre_defined data into MySQL Database for the website running.
+ * @author Hailie Long, Summer Su, Indrayutta Karima, Jason Liu
+ *
+ */
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -44,8 +51,6 @@ public class DataLoader implements ApplicationRunner {
 
 	private final QuizAttemptRepository qaRepo;
 
-	private final QuizRepository quizRepository;
-
 
 	private final QuizQuestionMCQAttemptRepository mcqAttemptRepository;
 
@@ -56,7 +61,6 @@ public class DataLoader implements ApplicationRunner {
     private final QuizService quizService;
     private final MultipleChoiceOptionService mcoService;
     private final TagService tagService;
-    private final QuizAttemptService quizAttemptService;
 
 
     @Override
@@ -99,24 +103,24 @@ public class DataLoader implements ApplicationRunner {
         System.out.println(trainerService.findByUsername("ut"));
 
         // unauthorisedTrainer1 - id 4
-//        Trainer unauthorisedTrainer1 = new Trainer();
-//        unauthorisedTrainer1.setUsername("ut1");
-//        unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
-//        unauthorisedTrainer1.setEmail("utone@gmail.com");
-//        unauthorisedTrainer1.setFirstName("JHJ");
-//        unauthorisedTrainer1.setLastName("Liu");
-//        trainerService.save(unauthorisedTrainer1);  
-//        System.out.println(trainerService.findByUsername("ut1"));
-//
-//        // unauthorisedTrainer1 - id 5
-//        Trainer unauthorisedTrainer2 = new Trainer();
-//        unauthorisedTrainer2.setUsername("ut2");
-//        unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
-//        unauthorisedTrainer2.setEmail("uttwo@gmail.com");
-//        unauthorisedTrainer2.setFirstName("JHJ");
-//        unauthorisedTrainer2.setLastName("Liu");
-//        trainerService.save(unauthorisedTrainer2);  
-//        System.out.println(trainerService.findByUsername("ut2"));
+        Trainer unauthorisedTrainer1 = new Trainer();
+        unauthorisedTrainer1.setUsername("ut1");
+        unauthorisedTrainer1.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer1.setEmail("utone@gmail.com");
+        unauthorisedTrainer1.setFirstName("JHJ");
+        unauthorisedTrainer1.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer1);  
+        System.out.println(trainerService.findByUsername("ut1"));
+
+        // unauthorisedTrainer1 - id 5
+        Trainer unauthorisedTrainer2 = new Trainer();
+        unauthorisedTrainer2.setUsername("ut2");
+        unauthorisedTrainer2.setPassword(passwordEncoder.encode("1"));
+        unauthorisedTrainer2.setEmail("uttwo@gmail.com");
+        unauthorisedTrainer2.setFirstName("JHJ");
+        unauthorisedTrainer2.setLastName("Liu");
+        trainerService.save(unauthorisedTrainer2);  
+        System.out.println(trainerService.findByUsername("ut2"));
 
         // unauthorisedSales - id 6
         Sales unauthorisedSales = new Sales();

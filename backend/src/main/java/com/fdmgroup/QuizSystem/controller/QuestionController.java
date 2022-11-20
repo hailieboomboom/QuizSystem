@@ -35,6 +35,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
 
+/**
+ * 
+ * QuestionController is responsible for handling frontend requests regarding questions, 
+ * and send corresponding information or data back as responses.
+ * 
+ * Please note that APIs for Short Answer Questions (SAQs) are not yet implemented.
+ * 
+ * @author Chris Tang, Hailie Long
+ *
+ */
 @RestController
 @RequestMapping("/api/questions") // http://localhost:8088/QuestionSystem/questions
 public class QuestionController {
@@ -59,7 +69,30 @@ public class QuestionController {
 	
 	@Autowired
 	private ShortAnswerQuestionService saqService;
+	
+	
+	/**
+	 * Constructor with fields
+	 * @param questionService QuestionService 
+	 * @param mcoService MultipleChoiceOptionService 
+	 * @param userService UserService 
+	 * @param tagService TagService
+	 */
+	public QuestionController(QuestionService questionService, MultipleChoiceOptionService mcoService,
+			UserService userService, TagService tagService) {
+		super();
+		this.questionService = questionService;
+		this.mcoService = mcoService;
+		this.userService = userService;
+		this.tagService = tagService;
+	}
 
+	/**
+	 * create a multiple choice question (mcq)
+	 * @param active_user_id : id of current logged in user
+	 * @param addMcqDto: the question created by user is sent in the format of DTO to controller
+	 * @return response entity containing Api response result
+	 */
 	@PostMapping("/mcqs/{active_user_id}")
 	@ApiOperation(value = "create a multiple choice question",
 			notes = "return success or failure message")
@@ -78,6 +111,10 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, CREATED_QUESTION_SUCCESS),HttpStatus.CREATED);
 	}
 
+	/**
+	 * get all available tags in database
+	 * @return List of tag names stored in response entity
+	 */
 	@GetMapping("/tags")
 	public ResponseEntity<List<String>> getAllTags(){
 		List<String> tags = tagService.findAll();
@@ -85,6 +122,11 @@ public class QuestionController {
 		return new ResponseEntity<>(tags,HttpStatus.OK);
 	}
 	
+	/**
+	 * get a tag by tag id stored in database
+	 * @param tag_id: tag id
+	 * @return tag name stored in response entity
+	 */
 	@GetMapping("/tags/{tag_id}")
 	public ResponseEntity<String> getTagById(@PathVariable long tag_id){
 		String tagName = tagService.getTagById(tag_id);
@@ -92,7 +134,11 @@ public class QuestionController {
 		return new ResponseEntity<>(tagName,HttpStatus.OK);
 	}
 	
-	
+	/**
+	 * get one mcq by its id
+	 * @param mcqId: mcq id stored in database
+	 * @return found mcq stored in the form of AddMcqDto, which involved in response entity
+	 */
 	@GetMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "get a multiple choice question via the question id",
 			notes = "return question along with tags and options")
@@ -105,6 +151,11 @@ public class QuestionController {
 	}
 
 
+	/**
+	 * get correct option of one mcq
+	 * @param mcqId id of mcq to be found
+	 * @return the correct option of the required mcq, stored in CorrectOptionDto format and involved in response entity
+	 */
 	@GetMapping("/mcqs/{mcqId}/correct_option")
 	@ApiOperation(value = "get the correction option of a multiple choice question via a question id",
 			notes = "return the correct option")
@@ -118,6 +169,11 @@ public class QuestionController {
 	}
 
 
+	/**
+	 * get all mcqs created by the user
+	 * @param userId id of the user (creator)
+	 * @return list of ReturnMcqDtos that stores all multiple choice questions created by found user
+	 */
 	@GetMapping("/{userId}/mcqs")
 	@ApiOperation(value = "get all multiple choice question created by a user based on userId",
 			notes = "return success or failure message")
@@ -130,6 +186,10 @@ public class QuestionController {
 	}
 
 
+	/**
+	 * get all mcqs stored in database
+	 * @return all mcqs returned in list of ReturnMcqDto format, included in response entity
+	 */
 	@GetMapping("/mcqs")
 	@ApiOperation(value = "get all multiple choice question from question bank",
 			notes = "return success or failure message")
@@ -141,16 +201,30 @@ public class QuestionController {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestion(),HttpStatus.OK);
 	}
 
+	/**
+	 * get all mcqs in another format for quiz creation
+	 * @return all mcqs in another format (list of QuestionGradeDto), included in response entity
+	 */
 	@GetMapping("/quizCreation/mcqs")
 	public ResponseEntity<List<QuestionGradeDTO>> getAllMcqforQuizCreation() {
 		return  new ResponseEntity<>(questionService.getAllMcqQuestionforQuizCreation(),HttpStatus.OK);
 	}
 	
+	/**
+	 * get all mcqs that are not involved in current quiz yet when editing the quiz
+	 * @param quiz_id id of the quiz to be edited
+	 * @return all mcqs that are not involved in current quiz yet, in the format of QuestionGradeDTO list
+	 */
 	@GetMapping("/quizEdit/{quiz_id}/mcqs")
 	public ResponseEntity<List<QuestionGradeDTO>> getMcqsforQuizEdit(@PathVariable long quiz_id) {
 		return  new ResponseEntity<>(questionService.getMcqDtosforQuizEdit(quiz_id),HttpStatus.OK);
 	}
 
+	/**
+	 * delete one mcq by its id
+	 * @param mcqId: id of the mcq to be deleted
+	 * @return api response involved in response entity indicating successful deletion
+	 */
 	@DeleteMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "delete a multiple choice question based on questionId",
 			notes = "return success or failure message")
@@ -165,7 +239,12 @@ public class QuestionController {
 	}
 	
 	 
-	//HAILIE NOTE: UPDATE DELETE MCQ ADD LOGGED IN USER ID INTO PATH
+	/**
+	 * delete one mcq by its id and user id. for instance, a student cannot delete any questions that are not created by himself
+	 * @param mcqId : id of mcq to be deleted
+	 * @param active_user_id: current logged in user id
+	 * @return api response involved in response entity indicating successful deletion
+	 */
 	@DeleteMapping("/mcqs/{mcqId}/{active_user_id}")
 	public ResponseEntity<ApiResponse> deleteOneMcqByIdVer2(@PathVariable Long mcqId, @PathVariable Long active_user_id) {
 		questionService.deleteOneMcqByRole(mcqId, active_user_id);
@@ -174,6 +253,12 @@ public class QuestionController {
 	}
 
 
+	/**
+	 * update an mcq according to user update input
+	 * @param mcqId: id of mcq to be updated
+	 * @param addMcqDto: question details to be updated
+	 * @return api response involved in response entity indicating successful update
+	 */
 	@PutMapping("/mcqs/{mcqId}")
 	@ApiOperation(value = "update a multiple choice question by questionId",
 			notes = "return success or failure message")
@@ -188,7 +273,13 @@ public class QuestionController {
 		return  new ResponseEntity<>(new ApiResponse(true, UPDATED_QUESTION_SUCCESS),HttpStatus.OK);
 	}
 	
-	//HAILIE NOTE: UPDATE MCQ: ADD LOGGED IN USER ID INTO PATH
+	/**
+	 * update an mcq according to user update input and user's role. For instance, a student cannot update questions not created by himself
+	 * @param mcqId: id of mcq to be updated
+	 * @param addMcqDto: question details to be updated
+	 * @param active_user_id: id of logged in user
+	 * @return api response involved in response entity indicating successful update if both user's role and input are valid
+	 */
 	@PutMapping("/mcqs/{mcqId}/{active_user_id}")
 	public ResponseEntity<ApiResponse> updateOneMcqByIdVer2(@PathVariable Long mcqId,@RequestBody AddMcqDto addMcqDto, @PathVariable Long active_user_id) {
 		mcoService.validateOptions(addMcqDto.getOptions());
@@ -198,6 +289,11 @@ public class QuestionController {
 	}
 	
 
+	/**
+	 * get all questions of particular type (course/interview)
+	 * @param questionBankType type of questions to be returned
+	 * @return list of qualified questions returned in form of list of ReturnMcqDto, involved in response entity
+	 */
 	@GetMapping("/questionBank/{questionBankType}")
 	@ApiOperation(value = "get interview/question question bank ",
 			notes = "return success or failure message")
@@ -211,7 +307,10 @@ public class QuestionController {
 	}
 
 
+	/////// BELOW ARE APIs RELATED TO SHORT ANSWER QUESTIONS, WHICH ARE NOT YET IMPLEMENTED ////////
+	/////// THEREFORE NO JAVADOCS ARE AVAILABLE FOR THEM ///////
 
+	// create a short answer question (saq)
 	@PostMapping("/saqs")
 	public ResponseEntity<ApiResponse> postShortAnswerQuestion(@RequestBody SAQDto saqDto) {
 		
@@ -250,7 +349,7 @@ public class QuestionController {
 		return new ResponseEntity<>(new ApiResponse(true, "create short answer question success"), HttpStatus.CREATED);
 	}
 	
-	// get one saq  by id
+	// get one saq by id
 	@GetMapping("/saqs/{id}")
 	public SAQDto getOneShortAnswerQuestion(@PathVariable Long id) {
 		
@@ -268,7 +367,8 @@ public class QuestionController {
 		return saqDto;
 	}
 	
-	// get all saqs
+	
+	// get all saqs in database
 	@GetMapping("/saqs")
 	public List<SAQDto> getAllShortAnswerQuestion(){
 		List<ShortAnswerQuestion> saqs = saqService.findAll();
@@ -290,7 +390,7 @@ public class QuestionController {
 		return saqDtos;
 	}
 	
-	// update saq
+	// update one saq
 	@PutMapping("/saqs/{id}")
 	public ResponseEntity<ApiResponse> updateShortAnswerQuestion(@RequestBody SAQDto saqDto, @PathVariable Long id){
 		
@@ -341,7 +441,7 @@ public class QuestionController {
 		
 	}
 	
-	// delete saq
+	// delete one saq
 	@DeleteMapping("/saqs/{id}")
 	public ResponseEntity<ApiResponse> deleteOneShortAnswerQuestion(@PathVariable Long id){
 		
@@ -416,5 +516,4 @@ public class QuestionController {
 		return saqDtos;
 	}
 
-	// view questions by tag
 }
