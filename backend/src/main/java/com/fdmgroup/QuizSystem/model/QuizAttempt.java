@@ -16,6 +16,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * QuizAttempt Entity created when a user takes a quiz.
+ * @author Yutta
+ *
+ */
 @Entity
 @Getter
 @Setter

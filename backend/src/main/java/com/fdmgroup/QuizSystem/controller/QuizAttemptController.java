@@ -28,9 +28,15 @@ import com.fdmgroup.QuizSystem.util.ModelToDTO;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * Controller that handles all quiz attempt requests
+ * @author Yutta
+ *
+ */
+
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/quizAttempts") // http://localhost:8088/QuestionSystem/questions
+@RequestMapping("/api/quizAttempts") 
 public class QuizAttemptController {
 
 	private QuizQuestionMCQAttemptService mcqAttemptService;
@@ -39,11 +45,15 @@ public class QuizAttemptController {
 	private UserService userService;
 	private ModelToDTO modelToDTO;
 
-	// create an quiz attempt (return graded attempt)
+	/**
+	 * Handles creating a quiz attempt request.
+	 * @param active_user_id the id of the logged in user
+	 * @param quizAttemptDTO quiz atttempt DTO that contains in the request body
+	 * @return the created quiz attempt as DTO
+	 */
 	@PostMapping("/{active_user_id}")
 	public ResponseEntity<QuizAttemptDTO> createQuizAttempt(@PathVariable long active_user_id,@RequestBody QuizAttemptDTO quizAttemptDTO) {
 		
-		// Added by Summer: check if the active user has authority to take a certain quiz category
 		QuizCategory requestedQuizCategory = quizService.getQuizById(quizAttemptDTO.getQuizId()).getQuizCategory();
 		quizAttemptService.checkAccessToQuizCategory(requestedQuizCategory, active_user_id);
 	
@@ -58,13 +68,9 @@ public class QuizAttemptController {
 			mcqAttemptService.createMCQAttempt(mcqAttemptDTO, quizAttempt.getId(), quizAttempt.getQuiz().getId());
 		}
 		
-		// creat method in quizattemptService to calculate totalawrded
-//		quizAttemptService.calculateTotalAwarded(quizAttempt);//set total awarded
-		// calculate attempt number
 
 		quizAttempt.setAttemptNo(quizAttemptService.calculateNumberOfAttempts(quizAttempt.getId()));
 		quizAttempt.setTotalAwarded(quizAttemptService.calculateTotalAwarded(quizAttempt.getId()));
-		//TODO map to dto (ask jason)
 		QuizAttemptDTO quizAttemptDTOResponse = modelToDTO.quizAttemptToOutput(quizAttempt);
 		List<MCQAttemptDTO> mcqResponses = new ArrayList<>();
 		for (QuizQuestionMCQAttempt mcqAttempt : mcqAttemptService.findMcqAttemptsByAttemptId(quizAttempt.getId())) {
@@ -73,7 +79,6 @@ public class QuizAttemptController {
 		quizAttemptDTOResponse.setMCQAttemptList(mcqResponses);
 		quizAttemptDTOResponse.setMaxGrade(quizService.getMaxGrade(quizAttemptDTO.getQuizId()));
 		
-		// Added by Summer: 
 		quizAttemptDTOResponse.setQuizName(quizAttempt.getQuiz().getName());
 		quizAttemptDTOResponse.setQuizTakerName(quizAttempt.getUser().getFirstName() + " " + quizAttempt.getUser().getLastName());
 		
@@ -83,7 +88,11 @@ public class QuizAttemptController {
 	}
 	
 
-	// view attempts of quizzes created by a user
+	/**
+	 * Handles request to view attempts of quizzes created by a user
+	 * @param quizCreatorId id of user who created the quiz
+	 * @return list of all quiz attempts for quizzes made by user
+	 */
 	@GetMapping("/quizCreator/{creator_id}")
 	public ResponseEntity<List<QuizAttemptDTO>> getQuizAttemptsByQuizCreatorId(@PathVariable("creator_id") long quizCreatorId){
 
@@ -104,7 +113,6 @@ public class QuizAttemptController {
 				quizAttemptDTO.setTotalAwarded(quizAttempt.getTotalAwarded());
 				quizAttemptDTO.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(quizAttempt));
 				
-				// Added by Summer: 
 				quizAttemptDTO.setMaxGrade(quizService.getMaxGrade(quizAttemptDTO.getQuizId()));
 				quizAttemptDTO.setQuizName(quizAttempt.getQuiz().getName()); 
 				quizAttemptDTO.setQuizTakerName(quizAttempt.getUser().getFirstName() + " " + quizAttempt.getUser().getLastName());
@@ -117,7 +125,11 @@ public class QuizAttemptController {
 	
 	}
 	
-	// view all attempts by user(student) (user, quiz name/attempt, quiz_grade)
+	/**
+	 * Handles requests to view all attempts by user
+	 * @param attempted_by_id id of attempting user
+	 * @return list of all attempts by user
+	 */
 	@GetMapping("/quizTaker/{attempted_by_id}")
 	public ResponseEntity<List<QuizAttemptDTO>> getAllQuizAttemptsByTaker(@PathVariable long attempted_by_id){
 		List<QuizAttemptDTO> returnedAttemptDTOs = new ArrayList<QuizAttemptDTO>();
@@ -133,7 +145,6 @@ public class QuizAttemptController {
 			qaDto.setUserId(qa.getUser().getId());
 			qaDto.setMCQAttemptList(quizAttemptService.getMCQAttemptsforOneQuizAttempt(qa));
 			
-			// Added by Summer: 
 			qaDto.setMaxGrade(quizService.getMaxGrade(qaDto.getQuizId()));
 			qaDto.setQuizName(qa.getQuiz().getName()); 
 			qaDto.setQuizTakerName(qa.getUser().getFirstName() + " " + qa.getUser().getLastName());

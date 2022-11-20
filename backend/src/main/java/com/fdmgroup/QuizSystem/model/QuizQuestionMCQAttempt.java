@@ -6,6 +6,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * QuizQuestionMCQAttempt Entity stores the selected option for a particular question in a quiz.
+ * @author Yutta
+ *
+ */
+
 @Entity
 @Getter
 @Setter

@@ -6,6 +6,11 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
+/**
+ * Data Transfer Object for QuizAttempt.
+ * @author Yutta
+ *
+ */
 @Data
 public class QuizAttemptDTO {
 	private long id;
