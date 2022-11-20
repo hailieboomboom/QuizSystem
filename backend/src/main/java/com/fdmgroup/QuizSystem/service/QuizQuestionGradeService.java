@@ -3,15 +3,14 @@ package com.fdmgroup.QuizSystem.service;
 import java.util.List;
 import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
-import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuizQuestionGradeRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Service that validate and processing QuizQuestionGrade related data.
@@ -48,9 +47,9 @@ public class QuizQuestionGradeService {
 	}
 
 	/**
-	 * Finds all of the QuizQuestionGrade by quiz id
-	 * @param quizId
-	 * @return
+	 * Finds all the QuizQuestionGrade by quiz id
+	 * @param quizId ID of the quiz to be found
+	 * @return List of QuizQuetionGrade
 	 */
 	public List<QuizQuestionGrade> findAllByQuizId(long quizId) {
 		return qqgRepo.findAllByQuizId(quizId);

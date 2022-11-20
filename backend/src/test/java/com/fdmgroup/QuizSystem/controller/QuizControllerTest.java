@@ -39,19 +39,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class QuizControllerTest {
     @MockBean
-    private ModelToDTO modelToDTO;
+    private ModelToDTO mockModelToDTO;
 
     @MockBean
-    private QuestionService questionService;
+    private QuestionService mockQuestionService;
 
     @Autowired
-    private QuizController quizController;
+    private QuizController mockQuizController;
 
     @MockBean
-    private QuizQuestionGradeService quizQuestionGradeService;
+    private QuizQuestionGradeService mockQqgService;
 
     @MockBean
-    private QuizService quizService;
+    private QuizService mockQuizService;
 
     /**
      * Method under test: {@link QuizController#createQuiz(long, QuizDto)}
@@ -63,8 +63,8 @@ class QuizControllerTest {
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        when(quizService.createQuiz((QuizDto) any())).thenReturn(quizDto);
-        doNothing().when(quizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        when(mockQuizService.createQuiz((QuizDto) any())).thenReturn(quizDto);
+        doNothing().when(mockQuizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
 
         QuizDto quizDto1 = new QuizDto();
         quizDto1.setCreatorId(123L);
@@ -75,15 +75,15 @@ class QuizControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/quizzes/{activeUserId}", 123L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(quizController).build().perform(requestBuilder);
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(mockQuizController).build().perform(requestBuilder);
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string("{\"quizId\":123,\"creatorId\":123,\"name\":\"Name\",\"quizCategory\":\"COURSE_QUIZ\"}"));
 
-        InOrder order = inOrder(quizService);
-        order.verify(quizService,times(1)).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        order.verify(quizService, times(1)).createQuiz((QuizDto) any());
+        InOrder order = inOrder(mockQuizService);
+        order.verify(mockQuizService,times(1)).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        order.verify(mockQuizService, times(1)).createQuiz((QuizDto) any());
     }
 
     /**
@@ -91,16 +91,16 @@ class QuizControllerTest {
      */
     @Test
     void testGetAllQuizzes_buildsRequest_and_returnsResponseEntity_thatContainsListOfQuizDtoAndOkHttpStatus() throws Exception {
-        when(quizService.getAllQuizzes()).thenReturn(new ArrayList<>());
+        when(mockQuizService.getAllQuizzes()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/quizzes");
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
 
-        verify(quizService,times(1)).getAllQuizzes();
+        verify(mockQuizService,times(1)).getAllQuizzes();
     }
 
     /**
@@ -108,17 +108,17 @@ class QuizControllerTest {
      */
     @Test
     void testGetAllQuizzes_returnsResponseEntity_thatContainsListOfQuizDtoAndOkHttpStatus() throws Exception {
-        when(quizService.getAllQuizzes()).thenReturn(new ArrayList<>());
+        when(mockQuizService.getAllQuizzes()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/api/quizzes");
         getResult.characterEncoding("Encoding");
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(getResult)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
 
-        verify(quizService,times(1)).getAllQuizzes();
+        verify(mockQuizService,times(1)).getAllQuizzes();
     }
 
     /**
@@ -131,7 +131,7 @@ class QuizControllerTest {
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        when(modelToDTO.quizToOutput((Quiz) any())).thenReturn(quizDto);
+        when(mockModelToDTO.quizToOutput((Quiz) any())).thenReturn(quizDto);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -148,9 +148,9 @@ class QuizControllerTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizService.getQuizById(anyLong())).thenReturn(quiz);
+        when(mockQuizService.getQuizById(anyLong())).thenReturn(quiz);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/quizzes/{id}", 123L);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -158,9 +158,9 @@ class QuizControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string("{\"quizId\":123,\"creatorId\":123,\"name\":\"Name\",\"quizCategory\":\"COURSE_QUIZ\"}"));
 
-        InOrder order = inOrder(quizService, modelToDTO);
-        order.verify(quizService,times(1)).getQuizById(anyLong());
-        order.verify(modelToDTO,times(1)).quizToOutput((Quiz) any());
+        InOrder order = inOrder(mockQuizService, mockModelToDTO);
+        order.verify(mockQuizService,times(1)).getQuizById(anyLong());
+        order.verify(mockModelToDTO,times(1)).quizToOutput((Quiz) any());
     }
 
     /**
@@ -168,9 +168,9 @@ class QuizControllerTest {
      */
     @Test
     void testUpdateQuiz_returnsResponseEntity_thatContainsApiResponseOfSuccessMessage() throws Exception {
-        doNothing().when(quizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        doNothing().when(quizService).checkAccessToQuizId(anyLong(), anyLong());
-        doNothing().when(quizService).updateQuiz(anyLong(), (QuizDto) any());
+        doNothing().when(mockQuizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        doNothing().when(mockQuizService).checkAccessToQuizId(anyLong(), anyLong());
+        doNothing().when(mockQuizService).updateQuiz(anyLong(), (QuizDto) any());
 
         QuizDto quizDto = new QuizDto();
         quizDto.setCreatorId(123L);
@@ -182,7 +182,7 @@ class QuizControllerTest {
                 .put("/api/quizzes/{id}/{activeUserId}", 123L, 123L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -190,10 +190,10 @@ class QuizControllerTest {
                 .andExpect(
                         MockMvcResultMatchers.content().string("{\"success\":true,\"message\":\"Product has been updated\"}"));
 
-        InOrder order = inOrder(quizService);
-        order.verify(quizService, times(1)).checkAccessToQuizId(anyLong(), anyLong());
-        order.verify(quizService, times(1)).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        order.verify(quizService, times(1)).updateQuiz(anyLong(), (QuizDto) any());
+        InOrder order = inOrder(mockQuizService);
+        order.verify(mockQuizService, times(1)).checkAccessToQuizId(anyLong(), anyLong());
+        order.verify(mockQuizService, times(1)).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        order.verify(mockQuizService, times(1)).updateQuiz(anyLong(), (QuizDto) any());
     }
 
     /**
@@ -216,10 +216,10 @@ class QuizControllerTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        doNothing().when(quizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        doNothing().when(quizService).checkAccessToQuizId(anyLong(), anyLong());
-        doNothing().when(quizService).createQuizQuestions(anyLong(), (List<QuestionGradeDTO>) any());
-        when(quizService.getQuizById(anyLong())).thenReturn(quiz);
+        doNothing().when(mockQuizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        doNothing().when(mockQuizService).checkAccessToQuizId(anyLong(), anyLong());
+        doNothing().when(mockQuizService).createQuizQuestions(anyLong(), (List<QuestionGradeDTO>) any());
+        when(mockQuizService.getQuizById(anyLong())).thenReturn(quiz);
         MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
                 .post("/api/quizzes/{id}/questions/{activeUserId}", 123L, 123L)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -227,7 +227,7 @@ class QuizControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MockHttpServletRequestBuilder requestBuilder = contentTypeResult
                 .content(objectMapper.writeValueAsString(new ArrayList<>()));
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -256,10 +256,10 @@ class QuizControllerTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        doNothing().when(quizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        doNothing().when(quizService).checkAccessToQuizId(anyLong(), anyLong());
-        doNothing().when(quizService).updateQuizQuestions(anyLong(), (List<QuestionGradeDTO>) any());
-        when(quizService.getQuizById(anyLong())).thenReturn(quiz);
+        doNothing().when(mockQuizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        doNothing().when(mockQuizService).checkAccessToQuizId(anyLong(), anyLong());
+        doNothing().when(mockQuizService).updateQuizQuestions(anyLong(), (List<QuestionGradeDTO>) any());
+        when(mockQuizService.getQuizById(anyLong())).thenReturn(quiz);
         MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
                 .put("/api/quizzes/{id}/questions/{activeUserId}", 123L, 123L)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -267,7 +267,7 @@ class QuizControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MockHttpServletRequestBuilder requestBuilder = contentTypeResult
                 .content(objectMapper.writeValueAsString(new ArrayList<>()));
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -281,9 +281,9 @@ class QuizControllerTest {
      */
     @Test
     void testGetQuizzesByCreatorId_buildsRequest_returnsResponseEntity_thatContainsListOfQuizDTOs_andOkHttpStatus() throws Exception {
-        when(quizService.getQuizzesByCreatorId(anyLong())).thenReturn(new ArrayList<>());
+        when(mockQuizService.getQuizzesByCreatorId(anyLong())).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/quizzes/users/{id}", 123L);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -296,10 +296,10 @@ class QuizControllerTest {
      */
     @Test
     void testGetQuizzesByCreatorId_returnsResponseEntity_thatContainsListOfQuizDTOs_andOkHttpStatus() throws Exception {
-        when(quizService.getQuizzesByCreatorId(anyLong())).thenReturn(new ArrayList<>());
+        when(mockQuizService.getQuizzesByCreatorId(anyLong())).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/api/quizzes/users/{id}", 123L);
         getResult.characterEncoding("Encoding");
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(getResult)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -327,13 +327,13 @@ class QuizControllerTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        doNothing().when(quizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
-        doNothing().when(quizService).checkAccessToQuizId(anyLong(), anyLong());
-        doNothing().when(quizService).deleteQuizById(anyLong());
-        when(quizService.getQuizById(anyLong())).thenReturn(quiz);
+        doNothing().when(mockQuizService).checkAccessToQuizCategory((QuizCategory) any(), anyLong());
+        doNothing().when(mockQuizService).checkAccessToQuizId(anyLong(), anyLong());
+        doNothing().when(mockQuizService).deleteQuizById(anyLong());
+        when(mockQuizService.getQuizById(anyLong())).thenReturn(quiz);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/quizzes/{id}/{activeUserId}",
                 123L, 123L);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -347,9 +347,9 @@ class QuizControllerTest {
      */
     @Test
     void testGetAllQuestionsByQuizId_buildsRequest_returnsResponseEntity_thatContainsListOfQuestionGradeDTO_andOkHttpStatus() throws Exception {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/quizzes/{id}/questions", 123L);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -367,7 +367,7 @@ class QuizControllerTest {
         questionGradeDTO.setQuestionDetails("Question Details");
         questionGradeDTO.setQuestionId(123L);
         questionGradeDTO.setTags(new HashSet<>());
-        when(modelToDTO.qqgToQg((QuizQuestionGrade) any())).thenReturn(questionGradeDTO);
+        when(mockModelToDTO.qqgToQg((QuizQuestionGrade) any())).thenReturn(questionGradeDTO);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -383,7 +383,7 @@ class QuizControllerTest {
         question.setId(123L);
         question.setQuestionDetails("Question Details");
         question.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question);
+        when(mockQuestionService.findById((Long) any())).thenReturn(question);
 
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
@@ -428,9 +428,9 @@ class QuizControllerTest {
 
         ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
         quizQuestionGradeList.add(quizQuestionGrade);
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/quizzes/{id}/questions", 123L);
-        MockMvcBuilders.standaloneSetup(quizController)
+        MockMvcBuilders.standaloneSetup(mockQuizController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())

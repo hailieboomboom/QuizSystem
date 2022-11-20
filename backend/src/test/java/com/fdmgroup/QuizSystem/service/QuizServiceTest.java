@@ -14,25 +14,19 @@ import static org.mockito.Mockito.when;
 
 import com.fdmgroup.QuizSystem.dto.QuestionGradeDTO;
 import com.fdmgroup.QuizSystem.dto.QuizDto;
-import com.fdmgroup.QuizSystem.exception.QuestionTagNotMatchQuizCategory;
-import com.fdmgroup.QuizSystem.exception.QuizAlreadyExistsException;
-import com.fdmgroup.QuizSystem.exception.QuizNotFoundException;
-import com.fdmgroup.QuizSystem.exception.UserUnauthorisedError;
+import com.fdmgroup.QuizSystem.exception.*;
 import com.fdmgroup.QuizSystem.model.Question;
 import com.fdmgroup.QuizSystem.model.Quiz;
 import com.fdmgroup.QuizSystem.model.QuizCategory;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGrade;
 import com.fdmgroup.QuizSystem.model.QuizQuestionGradeKey;
 import com.fdmgroup.QuizSystem.model.Role;
-import com.fdmgroup.QuizSystem.model.Sales;
 import com.fdmgroup.QuizSystem.model.Tag;
 import com.fdmgroup.QuizSystem.model.User;
 import com.fdmgroup.QuizSystem.repository.QuizRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,28 +39,28 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class QuizServiceTest {
     @MockBean
-    private QuestionService questionService;
+    private QuestionService mockQuestionService;
 
     @MockBean
-    private QuizQuestionGradeService quizQuestionGradeService;
+    private QuizQuestionGradeService mockQqgService;
 
     @MockBean
-    private QuizRepository quizRepository;
+    private QuizRepository mockQuizRepository;
 
     @Autowired
-    private QuizService quizService;
+    private QuizService mockQuizService;
 
     @MockBean
-    private TagService tagService;
+    private TagService mockTagService;
 
     @MockBean
-    private UserService userService;
+    private UserService mockUserService;
 
     /**
      * Method under test: {@link QuizService#createQuiz(QuizDto)}
      */
     @Test
-    void testCreateQuiz() {
+    void testCreateQuiz_returnsQuizDto_whenUserCanBeFoundInDatabase_andQuizIsSavedToDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -82,7 +76,7 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz);
+        when(mockQuizRepository.save((Quiz) any())).thenReturn(quiz);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -92,25 +86,25 @@ class QuizServiceTest {
         user1.setPassword("iloveyou");
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user1);
 
         QuizDto quizDto = new QuizDto();
         quizDto.setCreatorId(123L);
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        QuizDto actualCreateQuizResult = quizService.createQuiz(quizDto);
+        QuizDto actualCreateQuizResult = mockQuizService.createQuiz(quizDto);
         assertSame(quizDto, actualCreateQuizResult);
         assertEquals(123L, actualCreateQuizResult.getQuizId());
-        verify(quizRepository).save((Quiz) any());
-        verify(userService).getUserById(anyLong());
+        verify(mockQuizRepository).save((Quiz) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#createQuiz(QuizDto)}
      */
     @Test
-    void testCreateQuiz2() {
+    void testCreateQuiz_throwsQuizNotFoundException_whenUserCanNotBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -126,23 +120,23 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz);
-        when(userService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
+        when(mockQuizRepository.save((Quiz) any())).thenReturn(quiz);
+        when(mockUserService.getUserById(anyLong())).thenThrow(new UserNotFoundException("An error occurred"));
 
         QuizDto quizDto = new QuizDto();
         quizDto.setCreatorId(123L);
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        assertThrows(QuizNotFoundException.class, () -> quizService.createQuiz(quizDto));
-        verify(userService).getUserById(anyLong());
+        assertThrows(UserNotFoundException.class, () -> mockQuizService.createQuiz(quizDto));
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#save(Quiz)}
      */
     @Test
-    void testSave() {
+    void testSave_returnsQuizThatIsSavedToDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -158,7 +152,7 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz);
+        when(mockQuizRepository.save((Quiz) any())).thenReturn(quiz);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -175,16 +169,16 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        assertSame(quiz, quizService.save(quiz1));
-        verify(quizRepository).save((Quiz) any());
+        assertSame(quiz, mockQuizService.save(quiz1));
+        verify(mockQuizRepository).save((Quiz) any());
     }
 
     /**
      * Method under test: {@link QuizService#save(Quiz)}
      */
     @Test
-    void testSave2() {
-        when(quizRepository.save((Quiz) any())).thenThrow(new QuizNotFoundException("An error occurred"));
+    void testSave_throwsException_whenQuizCanNotBeSavedToDatabase() {
+        when(mockQuizRepository.save((Quiz) any())).thenThrow(new QuizNotFoundException("An error occurred"));
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -201,15 +195,15 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        assertThrows(QuizNotFoundException.class, () -> quizService.save(quiz));
-        verify(quizRepository).save((Quiz) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.save(quiz));
+        verify(mockQuizRepository).save((Quiz) any());
     }
 
     /**
      * Method under test: {@link QuizService#getQuizDto(Quiz)}
      */
     @Test
-    void testGetQuizDto() {
+    void testGetQuizDto_returnsQuizDto() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -225,7 +219,7 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        QuizDto actualQuizDto = quizService.getQuizDto(quiz);
+        QuizDto actualQuizDto = mockQuizService.getQuizDto(quiz);
         assertEquals(123L, actualQuizDto.getCreatorId());
         assertEquals(123L, actualQuizDto.getQuizId());
         assertEquals(QuizCategory.COURSE_QUIZ, actualQuizDto.getQuizCategory());
@@ -236,7 +230,7 @@ class QuizServiceTest {
      * Method under test: {@link QuizService#getQuizDto(Quiz)}
      */
     @Test
-    void testGetQuizDto2() {
+    void testGetQuizDto_returnsQuizDto_andGoesThroughAllSetterMethods() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -254,6 +248,7 @@ class QuizServiceTest {
         user1.setPassword("iloveyou");
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
+
         Quiz quiz = mock(Quiz.class);
         when(quiz.getQuizCategory()).thenReturn(QuizCategory.COURSE_QUIZ);
         when(quiz.getName()).thenReturn("Name");
@@ -269,7 +264,7 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        QuizDto actualQuizDto = quizService.getQuizDto(quiz);
+        QuizDto actualQuizDto = mockQuizService.getQuizDto(quiz);
         assertEquals(123L, actualQuizDto.getCreatorId());
         assertEquals(123L, actualQuizDto.getQuizId());
         assertEquals(QuizCategory.COURSE_QUIZ, actualQuizDto.getQuizCategory());
@@ -286,68 +281,20 @@ class QuizServiceTest {
     }
 
     /**
-     * Method under test: {@link QuizService#getQuizDto(Quiz)}
+     * Method under test: {@link QuizService#getAllQuizzes()}
      */
     @Test
-    void testGetQuizDto3() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        Quiz quiz = mock(Quiz.class);
-        when(quiz.getQuizCategory()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getName()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getCreator()).thenReturn(user1);
-        when(quiz.getId()).thenReturn(123L);
-        doNothing().when(quiz).setCreator((User) any());
-        doNothing().when(quiz).setId(anyLong());
-        doNothing().when(quiz).setName((String) any());
-        doNothing().when(quiz).setQuizCategory((QuizCategory) any());
-        doNothing().when(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        quiz.setCreator(user);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-        assertThrows(QuizAlreadyExistsException.class, () -> quizService.getQuizDto(quiz));
-        verify(quiz).getCreator();
-        verify(quiz).getName();
-        verify(quiz).getId();
-        verify(quiz).setCreator((User) any());
-        verify(quiz).setId(anyLong());
-        verify(quiz).setName((String) any());
-        verify(quiz).setQuizCategory((QuizCategory) any());
-        verify(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
+    void testGetAllQuizzes_returnsEmptyList_whenNoQuizzesAreFound() {
+        when(mockQuizRepository.findAll()).thenReturn(new ArrayList<>());
+        assertTrue(mockQuizService.getAllQuizzes().isEmpty());
+        verify(mockQuizRepository).findAll();
     }
 
     /**
      * Method under test: {@link QuizService#getAllQuizzes()}
      */
     @Test
-    void testGetAllQuizzes() {
-        when(quizRepository.findAll()).thenReturn(new ArrayList<>());
-        assertTrue(quizService.getAllQuizzes().isEmpty());
-        verify(quizRepository).findAll();
-    }
-
-    /**
-     * Method under test: {@link QuizService#getAllQuizzes()}
-     */
-    @Test
-    void testGetAllQuizzes2() {
+    void testGetAllQuizzes_returnsOneQuiz_whenOnlyOneQuizIsFound() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -366,85 +313,32 @@ class QuizServiceTest {
 
         ArrayList<Quiz> quizList = new ArrayList<>();
         quizList.add(quiz);
-        when(quizRepository.findAll()).thenReturn(quizList);
-        List<QuizDto> actualAllQuizzes = quizService.getAllQuizzes();
+        when(mockQuizRepository.findAll()).thenReturn(quizList);
+        List<QuizDto> actualAllQuizzes = mockQuizService.getAllQuizzes();
         assertEquals(1, actualAllQuizzes.size());
         QuizDto getResult = actualAllQuizzes.get(0);
         assertEquals(123L, getResult.getCreatorId());
         assertEquals(123L, getResult.getQuizId());
         assertEquals(QuizCategory.COURSE_QUIZ, getResult.getQuizCategory());
         assertEquals("Name", getResult.getName());
-        verify(quizRepository).findAll();
+        verify(mockQuizRepository).findAll();
     }
 
     /**
      * Method under test: {@link QuizService#getAllQuizzes()}
      */
     @Test
-    void testGetAllQuizzes3() {
-        when(quizRepository.findAll()).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class, () -> quizService.getAllQuizzes());
-        verify(quizRepository).findAll();
-    }
-
-    /**
-     * Method under test: {@link QuizService#getAllQuizzes()}
-     */
-    @Test
-    void testGetAllQuizzes4() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        Quiz quiz = mock(Quiz.class);
-        when(quiz.getQuizCategory()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getName()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getCreator()).thenReturn(user1);
-        when(quiz.getId()).thenReturn(123L);
-        doNothing().when(quiz).setCreator((User) any());
-        doNothing().when(quiz).setId(anyLong());
-        doNothing().when(quiz).setName((String) any());
-        doNothing().when(quiz).setQuizCategory((QuizCategory) any());
-        doNothing().when(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        quiz.setCreator(user);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        ArrayList<Quiz> quizList = new ArrayList<>();
-        quizList.add(quiz);
-        when(quizRepository.findAll()).thenReturn(quizList);
-        assertThrows(QuizAlreadyExistsException.class, () -> quizService.getAllQuizzes());
-        verify(quizRepository).findAll();
-        verify(quiz).getCreator();
-        verify(quiz).getName();
-        verify(quiz).getId();
-        verify(quiz).setCreator((User) any());
-        verify(quiz).setId(anyLong());
-        verify(quiz).setName((String) any());
-        verify(quiz).setQuizCategory((QuizCategory) any());
-        verify(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
+    void testGetAllQuizzes_throwsException_whenFindAllMethodThrowsException() {
+        when(mockQuizRepository.findAll()).thenThrow(new QuizNotFoundException("An error occurred"));
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.getAllQuizzes());
+        verify(mockQuizRepository).findAll();
     }
 
     /**
      * Method under test: {@link QuizService#updateQuiz(long, QuizDto)}
      */
     @Test
-    void testUpdateQuiz() {
+    void testUpdateQuiz_updatesQuizInDatabaseWithGivenQuizDTO() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -477,8 +371,8 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz1);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQuizRepository.save((Quiz) any())).thenReturn(quiz1);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -488,24 +382,24 @@ class QuizServiceTest {
         user2.setPassword("iloveyou");
         user2.setRole(Role.UNAUTHORISED_TRAINER);
         user2.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user2);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user2);
 
         QuizDto quizDto = new QuizDto();
         quizDto.setCreatorId(123L);
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        quizService.updateQuiz(123L, quizDto);
-        verify(quizRepository).save((Quiz) any());
-        verify(quizRepository).findById((Long) any());
-        verify(userService).getUserById(anyLong());
+        mockQuizService.updateQuiz(123L, quizDto);
+        verify(mockQuizRepository).save((Quiz) any());
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#updateQuiz(long, QuizDto)}
      */
     @Test
-    void testUpdateQuiz2() {
+    void testUpdateQuiz_throwsUserNotFoundException_whenUserCanNotBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -538,67 +432,25 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz1);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        when(userService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
+        when(mockQuizRepository.save((Quiz) any())).thenReturn(quiz1);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockUserService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
 
         QuizDto quizDto = new QuizDto();
         quizDto.setCreatorId(123L);
         quizDto.setName("Name");
         quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quizDto.setQuizId(123L);
-        assertThrows(QuizNotFoundException.class, () -> quizService.updateQuiz(123L, quizDto));
-        verify(quizRepository).findById((Long) any());
-        verify(userService).getUserById(anyLong());
-    }
-
-    /**
-     * Method under test: {@link QuizService#updateQuiz(long, QuizDto)}
-     */
-    @Test
-    void testUpdateQuiz3() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-        when(quizRepository.save((Quiz) any())).thenReturn(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
-
-        QuizDto quizDto = new QuizDto();
-        quizDto.setCreatorId(123L);
-        quizDto.setName("Name");
-        quizDto.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quizDto.setQuizId(123L);
-        assertThrows(QuizNotFoundException.class, () -> quizService.updateQuiz(123L, quizDto));
-        verify(quizRepository).findById((Long) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.updateQuiz(123L, quizDto));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#deleteQuizById(long)}
      */
     @Test
-    void testDeleteQuizById() {
+    void testDeleteQuizById_deletesQuizFromDatabase_whenQuizCanBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -616,19 +468,31 @@ class QuizServiceTest {
         ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
         quiz.setQuizQuestionsGrade(quizQuestionGradeList);
         Optional<Quiz> ofResult = Optional.of(quiz);
-        doNothing().when(quizRepository).deleteById((Long) any());
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        quizService.deleteQuizById(123L);
-        verify(quizRepository).findById((Long) any());
-        verify(quizRepository).deleteById((Long) any());
-        assertEquals(quizQuestionGradeList, quizService.getAllQuizzes());
+        doNothing().when(mockQuizRepository).deleteById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        mockQuizService.deleteQuizById(123L);
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQuizRepository).deleteById((Long) any());
+        assertEquals(quizQuestionGradeList, mockQuizService.getAllQuizzes());
     }
+
 
     /**
      * Method under test: {@link QuizService#deleteQuizById(long)}
      */
     @Test
-    void testDeleteQuizById2() {
+    void testDeleteQuizById_throwsQuizNotFoundException_whenQuizCanNotBeFoundInDatabase() {
+        doNothing().when(mockQuizRepository).deleteById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.deleteQuizById(123L));
+        verify(mockQuizRepository).findById((Long) any());
+    }
+
+    /**
+     * Method under test: {@link QuizService#getQuizById(long)}
+     */
+    @Test
+    void testGetQuizById_returnsQuiz_whenQuizCanBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -645,80 +509,26 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        doThrow(new QuizNotFoundException("An error occurred")).when(quizRepository).deleteById((Long) any());
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertThrows(QuizNotFoundException.class, () -> quizService.deleteQuizById(123L));
-        verify(quizRepository).findById((Long) any());
-        verify(quizRepository).deleteById((Long) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#deleteQuizById(long)}
-     */
-    @Test
-    void testDeleteQuizById3() {
-        doNothing().when(quizRepository).deleteById((Long) any());
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
-        assertThrows(QuizNotFoundException.class, () -> quizService.deleteQuizById(123L));
-        verify(quizRepository).findById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        assertSame(quiz, mockQuizService.getQuizById(123L));
+        verify(mockQuizRepository).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#getQuizById(long)}
      */
     @Test
-    void testGetQuizById() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertSame(quiz, quizService.getQuizById(123L));
-        verify(quizRepository).findById((Long) any());
+    void testGetQuizById_throwsQuizNotFoundException_whenQuizCanNotBeFoundInDatabase() {
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.getQuizById(123L));
+        verify(mockQuizRepository).findById((Long) any());
     }
 
-    /**
-     * Method under test: {@link QuizService#getQuizById(long)}
-     */
-    @Test
-    void testGetQuizById2() {
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
-        assertThrows(QuizNotFoundException.class, () -> quizService.getQuizById(123L));
-        verify(quizRepository).findById((Long) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#getQuizById(long)}
-     */
-    @Test
-    void testGetQuizById3() {
-        when(quizRepository.findById((Long) any())).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class, () -> quizService.getQuizById(123L));
-        verify(quizRepository).findById((Long) any());
-    }
-
-    
     /**
      * Method under test: {@link QuizService#addQuestionIntoQuiz(Question, Quiz, Float)}
      */
     @Test
-    void testAddQuestionIntoQuiz() {
-        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
-        quizQuestionGradeKey.setQuestionId(123L);
-        quizQuestionGradeKey.setQuizId(123L);
-
+    void testAddQuestionIntoQuiz_addsQuestionToQuiz_whenQuestionAndQuizCanBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -728,11 +538,18 @@ class QuizServiceTest {
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
 
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+
+        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
+        quizQuestionGradeKey.setQuestionId(123L);
+        quizQuestionGradeKey.setQuizId(123L);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -743,19 +560,11 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
-        quizQuestionGrade.setGrade(10.0f);
-        quizQuestionGrade.setKey(quizQuestionGradeKey);
-        quizQuestionGrade.setQuestion(question);
-        quizQuestionGrade.setQuiz(quiz);
-        when(quizQuestionGradeService.save((QuizQuestionGrade) any())).thenReturn(quizQuestionGrade);
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -766,12 +575,19 @@ class QuizServiceTest {
         user2.setRole(Role.UNAUTHORISED_TRAINER);
         user2.setUsername("janedoe");
 
-        Question question1 = new Question();
-        question1.setCreator(user2);
-        question1.setId(123L);
-        question1.setQuestionDetails("Question Details");
-        question1.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question1);
+        Quiz quiz1 = new Quiz();
+        quiz1.setCreator(user2);
+        quiz1.setId(123L);
+        quiz1.setName("Name");
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz1.setQuizQuestionsGrade(new ArrayList<>());
+
+        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
+        quizQuestionGrade.setGrade(10.0f);
+        quizQuestionGrade.setKey(quizQuestionGradeKey);
+        quizQuestionGrade.setQuestion(question);
+        quizQuestionGrade.setQuiz(quiz1);
+        when(mockQqgService.save((QuizQuestionGrade) any())).thenReturn(quizQuestionGrade);
 
         User user3 = new User();
         user3.setEmail("jane.doe@example.org");
@@ -782,14 +598,12 @@ class QuizServiceTest {
         user3.setRole(Role.UNAUTHORISED_TRAINER);
         user3.setUsername("janedoe");
 
-        Quiz quiz1 = new Quiz();
-        quiz1.setCreator(user3);
-        quiz1.setId(123L);
-        quiz1.setName("Name");
-        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz1);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
+        Question question1 = new Question();
+        question1.setCreator(user3);
+        question1.setId(123L);
+        question1.setQuestionDetails("Question Details");
+        question1.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question1);
 
         User user4 = new User();
         user4.setEmail("jane.doe@example.org");
@@ -821,20 +635,17 @@ class QuizServiceTest {
         quiz2.setName("Name");
         quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz2.setQuizQuestionsGrade(new ArrayList<>());
-        quizService.addQuestionIntoQuiz(question2, quiz2, 10.0f);
-        verify(quizQuestionGradeService).save((QuizQuestionGrade) any());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
+        mockQuizService.addQuestionIntoQuiz(question2, quiz2, 10.0f);
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).save((QuizQuestionGrade) any());
+        verify(mockQuestionService).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#addQuestionIntoQuiz(Question, Quiz, Float)}
      */
     @Test
-    void testAddQuestionIntoQuiz2() {
-        when(quizQuestionGradeService.save((QuizQuestionGrade) any()))
-                .thenThrow(new QuizNotFoundException("An error occurred"));
-
+    void testAddQuestionIntoQuiz_throwsException_whenQuizQuestionGradeCanNotBeSavedIntoDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -844,30 +655,32 @@ class QuizServiceTest {
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
 
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question);
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-
         Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
+        quiz.setCreator(user);
         quiz.setId(123L);
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.save((QuizQuestionGrade) any()))
+                .thenThrow(new QuizNotFoundException("An error occurred"));
+
+        User user1 = new User();
+        user1.setEmail("jane.doe@example.org");
+        user1.setFirstName("Jane");
+        user1.setId(123L);
+        user1.setLastName("Doe");
+        user1.setPassword("iloveyou");
+        user1.setRole(Role.UNAUTHORISED_TRAINER);
+        user1.setUsername("janedoe");
+
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -899,17 +712,19 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        assertThrows(QuizNotFoundException.class, () -> quizService.addQuestionIntoQuiz(question1, quiz1, 10.0f));
-        verify(quizQuestionGradeService).save((QuizQuestionGrade) any());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.addQuestionIntoQuiz(question1, quiz1, 10.0f));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).save((QuizQuestionGrade) any());
+        verify(mockQuestionService).findById((Long) any());
     }
 
     /**
-     * Method under test: {@link QuizService#removeQuestionFromQuiz(Question, Quiz)}
+     * Method under test: {@link QuizService#addQuestionIntoQuiz(Question, Quiz, Float)}
      */
     @Test
-    void testRemoveQuestionFromQuiz() {
+    void testAddQuestionIntoQuiz_throwsQuizNotFoundException_whenQuizCanNotBeFoundInDatabase() {
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
         quizQuestionGradeKey.setQuizId(123L);
@@ -950,8 +765,7 @@ class QuizServiceTest {
         quizQuestionGrade.setKey(quizQuestionGradeKey);
         quizQuestionGrade.setQuestion(question);
         quizQuestionGrade.setQuiz(quiz);
-        doNothing().when(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        when(quizQuestionGradeService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade);
+        when(mockQqgService.save((QuizQuestionGrade) any())).thenReturn(quizQuestionGrade);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -967,6 +781,7 @@ class QuizServiceTest {
         question1.setId(123L);
         question1.setQuestionDetails("Question Details");
         question1.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question1);
 
         User user3 = new User();
         user3.setEmail("jane.doe@example.org");
@@ -977,22 +792,37 @@ class QuizServiceTest {
         user3.setRole(Role.UNAUTHORISED_TRAINER);
         user3.setUsername("janedoe");
 
+        Question question2 = new Question();
+        question2.setCreator(user3);
+        question2.setId(123L);
+        question2.setQuestionDetails("Question Details");
+        question2.setTags(new HashSet<>());
+
+        User user4 = new User();
+        user4.setEmail("jane.doe@example.org");
+        user4.setFirstName("Jane");
+        user4.setId(123L);
+        user4.setLastName("Doe");
+        user4.setPassword("iloveyou");
+        user4.setRole(Role.UNAUTHORISED_TRAINER);
+        user4.setUsername("janedoe");
+
         Quiz quiz1 = new Quiz();
-        quiz1.setCreator(user3);
+        quiz1.setCreator(user4);
         quiz1.setId(123L);
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        quizService.removeQuestionFromQuiz(question1, quiz1);
-        verify(quizQuestionGradeService).findById((QuizQuestionGradeKey) any());
-        verify(quizQuestionGradeService).remove((QuizQuestionGrade) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.addQuestionIntoQuiz(question2, quiz1, 10.0f));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQuestionService).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#removeQuestionFromQuiz(Question, Quiz)}
      */
     @Test
-    void testRemoveQuestionFromQuiz2() {
+    void testRemoveQuestionFromQuiz_removesQuestionFromQuiz_whenQuestionAndQuizCanBeFoundInDatabase() {
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
         quizQuestionGradeKey.setQuizId(123L);
@@ -1033,9 +863,92 @@ class QuizServiceTest {
         quizQuestionGrade.setKey(quizQuestionGradeKey);
         quizQuestionGrade.setQuestion(question);
         quizQuestionGrade.setQuiz(quiz);
-        doThrow(new QuizNotFoundException("An error occurred")).when(quizQuestionGradeService)
+        doNothing().when(mockQqgService).remove((QuizQuestionGrade) any());
+        when(mockQqgService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade);
+
+        User user2 = new User();
+        user2.setEmail("jane.doe@example.org");
+        user2.setFirstName("Jane");
+        user2.setId(123L);
+        user2.setLastName("Doe");
+        user2.setPassword("iloveyou");
+        user2.setRole(Role.UNAUTHORISED_TRAINER);
+        user2.setUsername("janedoe");
+
+        Question question1 = new Question();
+        question1.setCreator(user2);
+        question1.setId(123L);
+        question1.setQuestionDetails("Question Details");
+        question1.setTags(new HashSet<>());
+
+        User user3 = new User();
+        user3.setEmail("jane.doe@example.org");
+        user3.setFirstName("Jane");
+        user3.setId(123L);
+        user3.setLastName("Doe");
+        user3.setPassword("iloveyou");
+        user3.setRole(Role.UNAUTHORISED_TRAINER);
+        user3.setUsername("janedoe");
+
+        Quiz quiz1 = new Quiz();
+        quiz1.setCreator(user3);
+        quiz1.setId(123L);
+        quiz1.setName("Name");
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz1.setQuizQuestionsGrade(new ArrayList<>());
+        mockQuizService.removeQuestionFromQuiz(question1, quiz1);
+        verify(mockQqgService).findById((QuizQuestionGradeKey) any());
+        verify(mockQqgService).remove((QuizQuestionGrade) any());
+    }
+
+    /**
+     * Method under test: {@link QuizService#removeQuestionFromQuiz(Question, Quiz)}
+     */
+    @Test
+    void testRemoveQuestionFromQuiz_throwsException_whenQuestionGradeCanNotBeRemovedFromDatabase() {
+        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
+        quizQuestionGradeKey.setQuestionId(123L);
+        quizQuestionGradeKey.setQuizId(123L);
+
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        user.setFirstName("Jane");
+        user.setId(123L);
+        user.setLastName("Doe");
+        user.setPassword("iloveyou");
+        user.setRole(Role.UNAUTHORISED_TRAINER);
+        user.setUsername("janedoe");
+
+        Question question = new Question();
+        question.setCreator(user);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
+
+        User user1 = new User();
+        user1.setEmail("jane.doe@example.org");
+        user1.setFirstName("Jane");
+        user1.setId(123L);
+        user1.setLastName("Doe");
+        user1.setPassword("iloveyou");
+        user1.setRole(Role.UNAUTHORISED_TRAINER);
+        user1.setUsername("janedoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user1);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+
+        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
+        quizQuestionGrade.setGrade(10.0f);
+        quizQuestionGrade.setKey(quizQuestionGradeKey);
+        quizQuestionGrade.setQuestion(question);
+        quizQuestionGrade.setQuiz(quiz);
+        doThrow(new QuizNotFoundException("An error occurred")).when(mockQqgService)
                 .remove((QuizQuestionGrade) any());
-        when(quizQuestionGradeService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade);
+        when(mockQqgService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -1067,17 +980,17 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        assertThrows(QuizNotFoundException.class, () -> quizService.removeQuestionFromQuiz(question1, quiz1));
-        verify(quizQuestionGradeService).findById((QuizQuestionGradeKey) any());
-        verify(quizQuestionGradeService).remove((QuizQuestionGrade) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.removeQuestionFromQuiz(question1, quiz1));
+        verify(mockQqgService).findById((QuizQuestionGradeKey) any());
+        verify(mockQqgService).remove((QuizQuestionGrade) any());
     }
 
     /**
      * Method under test: {@link QuizService#getQuizzesByCreatorId(long)}
      */
     @Test
-    void testGetQuizzesByCreatorId() {
-        when(quizRepository.findByCreator((User) any())).thenReturn(new ArrayList<>());
+    void testGetQuizzesByCreatorId_returnsEmptyList_whenNoQuizIsFoundInDatabase() {
+        when(mockQuizRepository.findByCreator((User) any())).thenReturn(new ArrayList<>());
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -1087,28 +1000,28 @@ class QuizServiceTest {
         user.setPassword("iloveyou");
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user);
-        assertTrue(quizService.getQuizzesByCreatorId(123L).isEmpty());
-        verify(quizRepository).findByCreator((User) any());
-        verify(userService).getUserById(anyLong());
+        when(mockUserService.getUserById(anyLong())).thenReturn(user);
+        assertTrue(mockQuizService.getQuizzesByCreatorId(123L).isEmpty());
+        verify(mockQuizRepository).findByCreator((User) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#getQuizzesByCreatorId(long)}
      */
     @Test
-    void testGetQuizzesByCreatorId2() {
-        when(quizRepository.findByCreator((User) any())).thenReturn(new ArrayList<>());
-        when(userService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class, () -> quizService.getQuizzesByCreatorId(123L));
-        verify(userService).getUserById(anyLong());
+    void testGetQuizzesByCreatorId_throwsException_whenCreatorCanNotBeFoundInDatabase() {
+        when(mockQuizRepository.findByCreator((User) any())).thenReturn(new ArrayList<>());
+        when(mockUserService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.getQuizzesByCreatorId(123L));
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#getQuizzesByCreatorId(long)}
      */
     @Test
-    void testGetQuizzesByCreatorId3() {
+    void testGetQuizzesByCreatorId_returnsOneQuiz_whenOneQuizIsFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1127,7 +1040,7 @@ class QuizServiceTest {
 
         ArrayList<Quiz> quizList = new ArrayList<>();
         quizList.add(quiz);
-        when(quizRepository.findByCreator((User) any())).thenReturn(quizList);
+        when(mockQuizRepository.findByCreator((User) any())).thenReturn(quizList);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1137,87 +1050,24 @@ class QuizServiceTest {
         user1.setPassword("iloveyou");
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
-        List<QuizDto> actualQuizzesByCreatorId = quizService.getQuizzesByCreatorId(123L);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user1);
+        List<QuizDto> actualQuizzesByCreatorId = mockQuizService.getQuizzesByCreatorId(123L);
         assertEquals(1, actualQuizzesByCreatorId.size());
         QuizDto getResult = actualQuizzesByCreatorId.get(0);
         assertEquals(123L, getResult.getCreatorId());
         assertEquals(123L, getResult.getQuizId());
         assertEquals(QuizCategory.COURSE_QUIZ, getResult.getQuizCategory());
         assertEquals("Name", getResult.getName());
-        verify(quizRepository).findByCreator((User) any());
-        verify(userService).getUserById(anyLong());
+        verify(mockQuizRepository).findByCreator((User) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
-    /**
-     * Method under test: {@link QuizService#getQuizzesByCreatorId(long)}
-     */
-    @Test
-    void testGetQuizzesByCreatorId4() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        Quiz quiz = mock(Quiz.class);
-        when(quiz.getQuizCategory()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getName()).thenThrow(new QuizAlreadyExistsException("An error occurred"));
-        when(quiz.getCreator()).thenReturn(user1);
-        when(quiz.getId()).thenReturn(123L);
-        doNothing().when(quiz).setCreator((User) any());
-        doNothing().when(quiz).setId(anyLong());
-        doNothing().when(quiz).setName((String) any());
-        doNothing().when(quiz).setQuizCategory((QuizCategory) any());
-        doNothing().when(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        quiz.setCreator(user);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        ArrayList<Quiz> quizList = new ArrayList<>();
-        quizList.add(quiz);
-        when(quizRepository.findByCreator((User) any())).thenReturn(quizList);
-
-        User user2 = new User();
-        user2.setEmail("jane.doe@example.org");
-        user2.setFirstName("Jane");
-        user2.setId(123L);
-        user2.setLastName("Doe");
-        user2.setPassword("iloveyou");
-        user2.setRole(Role.UNAUTHORISED_TRAINER);
-        user2.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user2);
-        assertThrows(QuizAlreadyExistsException.class, () -> quizService.getQuizzesByCreatorId(123L));
-        verify(quizRepository).findByCreator((User) any());
-        verify(quiz).getCreator();
-        verify(quiz).getName();
-        verify(quiz).getId();
-        verify(quiz).setCreator((User) any());
-        verify(quiz).setId(anyLong());
-        verify(quiz).setName((String) any());
-        verify(quiz).setQuizCategory((QuizCategory) any());
-        verify(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        verify(userService).getUserById(anyLong());
-    }
 
     /**
      * Method under test: {@link QuizService#getMaxGrade(Long)}
      */
     @Test
-    void testGetMaxGrade() {
+    void testGetMaxGrade_returns0_whenQuizCanBeFoundInDatabase_andQuizQuestionGradeIsEmptyList() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1234,16 +1084,16 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertEquals(0.0f, quizService.getMaxGrade(123L));
-        verify(quizRepository).findById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        assertEquals(0.0f, mockQuizService.getMaxGrade(123L));
+        verify(mockQuizRepository).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#getMaxGrade(Long)}
      */
     @Test
-    void testGetMaxGrade2() {
+    void testGetMaxGrade_returnsMaxGradeOfQuizQuestionGradeList_whenQuizCanBeFoundInDatabase_andQuizQuestionGradeListIsNotEmpty() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1304,36 +1154,26 @@ class QuizServiceTest {
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(quizQuestionGradeList);
         Optional<Quiz> ofResult = Optional.of(quiz1);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertEquals(10.0f, quizService.getMaxGrade(123L));
-        verify(quizRepository).findById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        assertEquals(10.0f, mockQuizService.getMaxGrade(123L));
+        verify(mockQuizRepository).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#getMaxGrade(Long)}
      */
     @Test
-    void testGetMaxGrade3() {
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
-        assertThrows(QuizNotFoundException.class, () -> quizService.getMaxGrade(123L));
-        verify(quizRepository).findById((Long) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#getMaxGrade(Long)}
-     */
-    @Test
-    void testGetMaxGrade4() {
-        when(quizRepository.findById((Long) any())).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class, () -> quizService.getMaxGrade(123L));
-        verify(quizRepository).findById((Long) any());
+    void testGetMaxGrade_throwsException_whenQuizCanNotBeFoundInDatabase() {
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.getMaxGrade(123L));
+        verify(mockQuizRepository).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizCategory(QuizCategory, long)}
      */
     @Test
-    void testCheckAccessToQuizCategory() {
+    void testCheckAccessToQuizCategory_throwsException_whenActiveUserIsUNAUTHORISED_TRAINER_andQuizCategoryIsCOURSE_QUIZ() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1342,17 +1182,17 @@ class QuizServiceTest {
         user.setPassword("iloveyou");
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user);
         assertThrows(UserUnauthorisedError.class,
-                () -> quizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L));
-        verify(userService).getUserById(anyLong());
+                () -> mockQuizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L));
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizCategory(QuizCategory, long)}
      */
     @Test
-    void testCheckAccessToQuizCategory2() {
+    void testCheckAccessToQuizCategory_doNothing_ifActiveUserIsAUTHORISED_TRAINER_andQuizCategoryIsCOURSE_QUIZ() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1361,16 +1201,16 @@ class QuizServiceTest {
         user.setPassword("iloveyou");
         user.setRole(Role.AUTHORISED_TRAINER);
         user.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user);
-        quizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L);
-        verify(userService).getUserById(anyLong());
+        when(mockUserService.getUserById(anyLong())).thenReturn(user);
+        mockQuizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L);
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizCategory(QuizCategory, long)}
      */
     @Test
-    void testCheckAccessToQuizCategory3() {
+    void testCheckAccessToQuizCategory_throwsException_ifActiveUserIsUNAUTHORISED_TRAINER_andQuizCategoryIsINTERVIEW_QUIZ() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1379,28 +1219,65 @@ class QuizServiceTest {
         user.setPassword("iloveyou");
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user);
         assertThrows(UserUnauthorisedError.class,
-                () -> quizService.checkAccessToQuizCategory(QuizCategory.INTERVIEW_QUIZ, 123L));
-        verify(userService).getUserById(anyLong());
+                () -> mockQuizService.checkAccessToQuizCategory(QuizCategory.INTERVIEW_QUIZ, 123L));
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizCategory(QuizCategory, long)}
      */
     @Test
-    void testCheckAccessToQuizCategory4() {
-        when(userService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class,
-                () -> quizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L));
-        verify(userService).getUserById(anyLong());
+    void testCheckAccessToQuizCategory_throwsException_ifActiveUserCanNotBeFoundInDatabase() {
+        when(mockUserService.getUserById(anyLong())).thenThrow(new UserNotFoundException("An error occurred"));
+        assertThrows(UserNotFoundException.class,
+                () -> mockQuizService.checkAccessToQuizCategory(QuizCategory.COURSE_QUIZ, 123L));
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
      */
     @Test
-    void testCheckAccessToQuizId() {
+    void testCheckAccessToQuizId_doNothing_whenActiveUserIsTheCreatorOfQuiz() {
+        User creator = new User();
+        creator.setEmail("jane.doe@example.org");
+        creator.setFirstName("Jane");
+        creator.setId(123L);
+        creator.setLastName("Doe");
+        creator.setPassword("iloveyou");
+        creator.setRole(Role.UNAUTHORISED_TRAINER);
+        creator.setUsername("janedoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(creator);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+
+        User activeUser = new User();
+        activeUser.setEmail("jane.doe@example.org");
+        activeUser.setFirstName("Jane");
+        activeUser.setId(123L);
+        activeUser.setLastName("Doe");
+        activeUser.setPassword("iloveyou");
+        activeUser.setRole(Role.UNAUTHORISED_TRAINER);
+        activeUser.setUsername("janedoe");
+        when(mockUserService.getUserById(anyLong())).thenReturn(activeUser);
+        mockQuizService.checkAccessToQuizId(123L, 123L);
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
+    }
+
+    /**
+     * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
+     */
+    @Test
+    void testCheckAccessToQuizId_throwsException_whenActiveUserCanNotBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1417,27 +1294,18 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
-        quizService.checkAccessToQuizId(123L, 123L);
-        verify(quizRepository).findById((Long) any());
-        verify(userService).getUserById(anyLong());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockUserService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.checkAccessToQuizId(123L, 123L));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
      */
     @Test
-    void testCheckAccessToQuizId2() {
+    void testCheckAccessToQuizId_throwsException_whenQuizCanNotBeFoundInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1453,165 +1321,166 @@ class QuizServiceTest {
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        when(userService.getUserById(anyLong())).thenThrow(new QuizNotFoundException("An error occurred"));
-        assertThrows(QuizNotFoundException.class, () -> quizService.checkAccessToQuizId(123L, 123L));
-        verify(quizRepository).findById((Long) any());
-        verify(userService).getUserById(anyLong());
+        Optional<Quiz> ofResult = Optional.empty();
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockUserService.getUserById(anyLong())).thenReturn(user);
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.checkAccessToQuizId(123L, 123L));
+        verify(mockQuizRepository).findById((Long) any());
+
     }
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
      */
     @Test
-    void testCheckAccessToQuizId3() {
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-        Sales sales = mock(Sales.class);
-        when(sales.getId()).thenReturn(1L);
-        doNothing().when(sales).setRole((Role) any());
-        doNothing().when(sales).setEmail((String) any());
-        doNothing().when(sales).setFirstName((String) any());
-        doNothing().when(sales).setId(anyLong());
-        doNothing().when(sales).setLastName((String) any());
-        doNothing().when(sales).setPassword((String) any());
-        doNothing().when(sales).setUsername((String) any());
-        sales.setEmail("jane.doe@example.org");
-        sales.setFirstName("Jane");
-        sales.setId(123L);
-        sales.setLastName("Doe");
-        sales.setPassword("iloveyou");
-        sales.setRole(Role.UNAUTHORISED_TRAINER);
-        sales.setUsername("janedoe");
-        Quiz quiz = mock(Quiz.class);
-        when(quiz.getCreator()).thenReturn(sales);
-        doNothing().when(quiz).setCreator((User) any());
-        doNothing().when(quiz).setId(anyLong());
-        doNothing().when(quiz).setName((String) any());
-        doNothing().when(quiz).setQuizCategory((QuizCategory) any());
-        doNothing().when(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        quiz.setCreator(user);
+    void testCheckAccessToQuizId_doNothing_whenActiveUserIsNotCreatorOfQuiz_butIsAUTHORISED_TRAINER() {
+        User creator = new User();
+        creator.setEmail("alex.doe@example.org");
+        creator.setFirstName("Alex");
+        creator.setId(123L);
+        creator.setLastName("Doe");
+        creator.setPassword("iloveyou");
+        creator.setRole(Role.UNAUTHORISED_TRAINER);
+        creator.setUsername("alexdoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(creator);
         quiz.setId(123L);
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
 
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
-        assertThrows(UserUnauthorisedError.class, () -> quizService.checkAccessToQuizId(123L, 123L));
-        verify(quizRepository).findById((Long) any());
-        verify(quiz).getCreator();
-        verify(quiz).setCreator((User) any());
-        verify(quiz).setId(anyLong());
-        verify(quiz).setName((String) any());
-        verify(quiz).setQuizCategory((QuizCategory) any());
-        verify(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        verify(sales).getId();
-        verify(sales).setRole((Role) any());
-        verify(sales).setEmail((String) any());
-        verify(sales).setFirstName((String) any());
-        verify(sales).setId(anyLong());
-        verify(sales).setLastName((String) any());
-        verify(sales).setPassword((String) any());
-        verify(sales).setUsername((String) any());
-        verify(userService).getUserById(anyLong());
+        User activeUser = new User();
+        activeUser.setEmail("jane.doe@example.org");
+        activeUser.setFirstName("Jane");
+        activeUser.setId(1L);
+        activeUser.setLastName("Doe");
+        activeUser.setPassword("iloveyou");
+        activeUser.setRole(Role.AUTHORISED_TRAINER);
+        activeUser.setUsername("janedoe");
+        when(mockUserService.getUserById(anyLong())).thenReturn(activeUser);
+        mockQuizService.checkAccessToQuizId(123L, 1L);
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
     }
+    
+    
 
     /**
      * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
      */
     @Test
-    void testCheckAccessToQuizId4() {
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
+    void testCheckAccessToQuizId_doNothing_whenActiveUserIsNotCreatorOfQuiz_butIsAUTHORISED_SALES() {
+        User creator = new User();
+        creator.setEmail("alex.doe@example.org");
+        creator.setFirstName("Alex");
+        creator.setId(123L);
+        creator.setLastName("Doe");
+        creator.setPassword("iloveyou");
+        creator.setRole(Role.UNAUTHORISED_TRAINER);
+        creator.setUsername("alexdoe");
 
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-        Sales sales = mock(Sales.class);
-        when(sales.getId()).thenReturn(123L);
-        doNothing().when(sales).setRole((Role) any());
-        doNothing().when(sales).setEmail((String) any());
-        doNothing().when(sales).setFirstName((String) any());
-        doNothing().when(sales).setId(anyLong());
-        doNothing().when(sales).setLastName((String) any());
-        doNothing().when(sales).setPassword((String) any());
-        doNothing().when(sales).setUsername((String) any());
-        sales.setEmail("jane.doe@example.org");
-        sales.setFirstName("Jane");
-        sales.setId(123L);
-        sales.setLastName("Doe");
-        sales.setPassword("iloveyou");
-        sales.setRole(Role.UNAUTHORISED_TRAINER);
-        sales.setUsername("janedoe");
-        Quiz quiz = mock(Quiz.class);
-        when(quiz.getCreator()).thenReturn(sales);
-        doNothing().when(quiz).setCreator((User) any());
-        doNothing().when(quiz).setId(anyLong());
-        doNothing().when(quiz).setName((String) any());
-        doNothing().when(quiz).setQuizCategory((QuizCategory) any());
-        doNothing().when(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        quiz.setCreator(user);
+        Quiz quiz = new Quiz();
+        quiz.setCreator(creator);
         quiz.setId(123L);
         quiz.setName("Name");
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
 
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-        when(userService.getUserById(anyLong())).thenReturn(user1);
-        assertThrows(QuizNotFoundException.class, () -> quizService.checkAccessToQuizId(123L, 123L));
-        verify(quizRepository).findById((Long) any());
-        verify(quiz).setCreator((User) any());
-        verify(quiz).setId(anyLong());
-        verify(quiz).setName((String) any());
-        verify(quiz).setQuizCategory((QuizCategory) any());
-        verify(quiz).setQuizQuestionsGrade((List<QuizQuestionGrade>) any());
-        verify(sales).setRole((Role) any());
-        verify(sales).setEmail((String) any());
-        verify(sales).setFirstName((String) any());
-        verify(sales).setId(anyLong());
-        verify(sales).setLastName((String) any());
-        verify(sales).setPassword((String) any());
-        verify(sales).setUsername((String) any());
+        User activeUser = new User();
+        activeUser.setEmail("jane.doe@example.org");
+        activeUser.setFirstName("Jane");
+        activeUser.setId(1L);
+        activeUser.setLastName("Doe");
+        activeUser.setPassword("iloveyou");
+        activeUser.setRole(Role.AUTHORISED_SALES);
+        activeUser.setUsername("janedoe");
+        when(mockUserService.getUserById(anyLong())).thenReturn(activeUser);
+        mockQuizService.checkAccessToQuizId(123L, 1L);
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
+    }
+    
+    /**
+     * Method under test: {@link QuizService#checkAccessToQuizId(long, long)}
+     */
+    @Test
+    void testCheckAccessToQuizId_throwsException_whenActiveUserIsNotCreatorOfQuiz_andNotAUTHORISED_TRAINER_andNotAUTHORISED_SALES() {
+        User creator = new User();
+        creator.setEmail("alex.doe@example.org");
+        creator.setFirstName("Alex");
+        creator.setId(123L);
+        creator.setLastName("Doe");
+        creator.setPassword("iloveyou");
+        creator.setRole(Role.UNAUTHORISED_TRAINER);
+        creator.setUsername("alexdoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(creator);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+
+        User activeUser = new User();
+        activeUser.setEmail("jane.doe@example.org");
+        activeUser.setFirstName("Jane");
+        activeUser.setId(1L);
+        activeUser.setLastName("Doe");
+        activeUser.setPassword("iloveyou");
+        activeUser.setRole(Role.TRAINING);
+        activeUser.setUsername("janedoe");
+        when(mockUserService.getUserById(anyLong())).thenReturn(activeUser);
+        assertThrows(UserUnauthorisedError.class, () -> mockQuizService.checkAccessToQuizId(123L, 1L));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockUserService).getUserById(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#checkQuestionTagMatchQuizCategory(QuizCategory, Question)}
      */
     @Test
-    void testCheckQuestionTagMatchQuizCategory() {
+    void testCheckQuestionTagMatchQuizCategory_doNothing_whenTagOfQuestionMatchesQuizCategory() {
         Tag tag = new Tag();
         tag.setId(123L);
-        tag.setTagName("Tag Name");
+        tag.setTagName("interview");
         tag.setTutorials(new HashSet<>());
-        when(tagService.getTagByName((String) any())).thenReturn(tag);
+        when(mockTagService.getTagByName((String) any())).thenReturn(tag);
+
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        user.setFirstName("Jane");
+        user.setId(123L);
+        user.setLastName("Doe");
+        user.setPassword("iloveyou");
+        user.setRole(Role.UNAUTHORISED_TRAINER);
+        user.setUsername("janedoe");
+
+        Question question = new Question();
+        question.setCreator(user);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>(Arrays.asList(tag)));
+        mockQuizService.checkQuestionTagMatchQuizCategory(QuizCategory.INTERVIEW_QUIZ, question);
+        verify(mockTagService).getTagByName((String) any());
+    }
+
+    /**
+     * Method under test: {@link QuizService#checkQuestionTagMatchQuizCategory(QuizCategory, Question)}
+     */
+    @Test
+    void testCheckQuestionTagMatchQuizCategory_throwsException_whenQuestionTagDoesNotMatchQuizCategory() {
+        Tag tag = new Tag();
+        tag.setId(123L);
+        tag.setTagName("course");
+        tag.setTutorials(new HashSet<>());
+        when(mockTagService.getTagByName((String) any())).thenReturn(tag);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -1628,46 +1497,17 @@ class QuizServiceTest {
         question.setQuestionDetails("Question Details");
         question.setTags(new HashSet<>());
         assertThrows(QuestionTagNotMatchQuizCategory.class,
-                () -> quizService.checkQuestionTagMatchQuizCategory(QuizCategory.COURSE_QUIZ, question));
-        verify(tagService).getTagByName((String) any());
+                () -> mockQuizService.checkQuestionTagMatchQuizCategory(QuizCategory.COURSE_QUIZ, question));
+        verify(mockTagService).getTagByName((String) any());
     }
+
 
     /**
      * Method under test: {@link QuizService#checkQuestionTagMatchQuizCategory(QuizCategory, Question)}
      */
     @Test
-    void testCheckQuestionTagMatchQuizCategory2() {
-        Tag tag = new Tag();
-        tag.setId(123L);
-        tag.setTagName("Tag Name");
-        tag.setTutorials(new HashSet<>());
-        when(tagService.getTagByName((String) any())).thenReturn(tag);
-
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-        assertThrows(QuestionTagNotMatchQuizCategory.class,
-                () -> quizService.checkQuestionTagMatchQuizCategory(QuizCategory.INTERVIEW_QUIZ, question));
-        verify(tagService).getTagByName((String) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#checkQuestionTagMatchQuizCategory(QuizCategory, Question)}
-     */
-    @Test
-    void testCheckQuestionTagMatchQuizCategory3() {
-        when(tagService.getTagByName((String) any())).thenThrow(new QuizNotFoundException("An error occurred"));
+    void testCheckQuestionTagMatchQuizCategory_throwsException_whenTagIsNotFoundInDatabase() {
+        when(mockTagService.getTagByName((String) any())).thenThrow(new QuizNotFoundException("An error occurred"));
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -1684,17 +1524,15 @@ class QuizServiceTest {
         question.setQuestionDetails("Question Details");
         question.setTags(new HashSet<>());
         assertThrows(QuizNotFoundException.class,
-                () -> quizService.checkQuestionTagMatchQuizCategory(QuizCategory.COURSE_QUIZ, question));
-        verify(tagService).getTagByName((String) any());
+                () -> mockQuizService.checkQuestionTagMatchQuizCategory(QuizCategory.COURSE_QUIZ, question));
+        verify(mockTagService).getTagByName((String) any());
     }
 
     /**
      * Method under test: {@link QuizService#createQuizQuestions(long, List)}
      */
     @Test
-    void testCreateQuizQuestions() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
-
+    void testCreateQuizQuestions_whenQuestionListIsEmpty() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1711,20 +1549,58 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        quizService.createQuizQuestions(1L, new ArrayList<>());
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizRepository).findById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
+        mockQuizService.createQuizQuestions(1L, new ArrayList<>());
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#createQuizQuestions(long, List)}
      */
     @Test
-    void testCreateQuizQuestions2() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong()))
+    void testCreateQuizQuestions_throwsException_whenQuesitonGradeCanNotBeFound() {
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        user.setFirstName("Jane");
+        user.setId(123L);
+        user.setLastName("Doe");
+        user.setPassword("iloveyou");
+        user.setRole(Role.UNAUTHORISED_TRAINER);
+        user.setUsername("janedoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong()))
                 .thenThrow(new QuizNotFoundException("An error occurred"));
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.createQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+    }
 
+    /**
+     * Method under test: {@link QuizService#createQuizQuestions(long, List)}
+     */
+    @Test
+    void testCreateQuizQuestions_throwsException_whenQuizCanNotBeFound() {
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.createQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+    }
+
+    /**
+     * Method under test: {@link QuizService#createQuizQuestions(long, List)}
+     */
+    @Test
+    void testCreateQuizQuestions_throwsException_whenQuizAlreadyExistInDatabase() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1741,36 +1617,12 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertThrows(QuizNotFoundException.class, () -> quizService.createQuizQuestions(1L, new ArrayList<>()));
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizRepository).findById((Long) any());
-    }
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
 
-    /**
-     * Method under test: {@link QuizService#createQuizQuestions(long, List)}
-     */
-    @Test
-    void testCreateQuizQuestions3() {
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
         quizQuestionGradeKey.setQuizId(123L);
 
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
         user1.setFirstName("Jane");
@@ -1780,22 +1632,11 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
-        quizQuestionGrade.setGrade(10.0f);
-        quizQuestionGrade.setKey(quizQuestionGradeKey);
-        quizQuestionGrade.setQuestion(question);
-        quizQuestionGrade.setQuiz(quiz);
-
-        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
-        quizQuestionGradeList.add(quizQuestionGrade);
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -1812,31 +1653,27 @@ class QuizServiceTest {
         quiz1.setName("Name");
         quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz1.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz1);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertThrows(QuizAlreadyExistsException.class, () -> quizService.createQuizQuestions(1L, new ArrayList<>()));
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizRepository).findById((Long) any());
+
+        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
+        quizQuestionGrade.setGrade(10.0f);
+        quizQuestionGrade.setKey(quizQuestionGradeKey);
+        quizQuestionGrade.setQuestion(question);
+        quizQuestionGrade.setQuiz(quiz1);
+
+        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
+        quizQuestionGradeList.add(quizQuestionGrade);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
+        assertThrows(QuizAlreadyExistsException.class, () -> mockQuizService.createQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+        
     }
 
     /**
      * Method under test: {@link QuizService#createQuizQuestions(long, List)}
      */
     @Test
-    void testCreateQuizQuestions4() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
-        when(quizRepository.findById((Long) any())).thenReturn(Optional.empty());
-        assertThrows(QuizNotFoundException.class, () -> quizService.createQuizQuestions(1L, new ArrayList<>()));
-        verify(quizRepository).findById((Long) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#createQuizQuestions(long, List)}
-     */
-    @Test
-    void testCreateQuizQuestions5() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
-
+    void testCreateQuizQuestions_throwsException_whenQuesitonTagDoesNotMatchQuizCategory() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1846,12 +1683,15 @@ class QuizServiceTest {
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
 
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question);
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1862,20 +1702,18 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question);
 
         Tag tag = new Tag();
         tag.setId(123L);
         tag.setTagName("Tag Name");
         tag.setTutorials(new HashSet<>());
-        when(tagService.getTagByName((String) any())).thenReturn(tag);
+        when(mockTagService.getTagByName((String) any())).thenReturn(tag);
 
         QuestionGradeDTO questionGradeDTO = new QuestionGradeDTO();
         questionGradeDTO.setGrade(10.0f);
@@ -1886,20 +1724,17 @@ class QuizServiceTest {
         ArrayList<QuestionGradeDTO> questionGradeDTOList = new ArrayList<>();
         questionGradeDTOList.add(questionGradeDTO);
         assertThrows(QuestionTagNotMatchQuizCategory.class,
-                () -> quizService.createQuizQuestions(1L, questionGradeDTOList));
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
-        verify(tagService).getTagByName((String) any());
+                () -> mockQuizService.createQuizQuestions(1L, questionGradeDTOList));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+        verify(mockQuestionService).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#createQuizQuestions(long, List)}
      */
     @Test
-    void testCreateQuizQuestions6() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
-
+    void testCreateQuizQuestions_throwsException_whenTagCanNotBeFound() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1909,12 +1744,15 @@ class QuizServiceTest {
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
 
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question);
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1925,15 +1763,13 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        when(tagService.getTagByName((String) any())).thenThrow(new QuizNotFoundException("An error occurred"));
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question);
+        when(mockTagService.getTagByName((String) any())).thenThrow(new QuizNotFoundException("An error occurred"));
 
         QuestionGradeDTO questionGradeDTO = new QuestionGradeDTO();
         questionGradeDTO.setGrade(10.0f);
@@ -1943,20 +1779,18 @@ class QuizServiceTest {
 
         ArrayList<QuestionGradeDTO> questionGradeDTOList = new ArrayList<>();
         questionGradeDTOList.add(questionGradeDTO);
-        assertThrows(QuizNotFoundException.class, () -> quizService.createQuizQuestions(1L, questionGradeDTOList));
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
-        verify(tagService).getTagByName((String) any());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.createQuizQuestions(1L, questionGradeDTOList));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+        verify(mockQuestionService).findById((Long) any());
+        verify(mockTagService).getTagByName((String) any());
     }
 
     /**
      * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
      */
     @Test
-    void testUpdateQuizQuestions() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
-
+    void testUpdateQuizQuestions_updatesQuizQuetions_whenGivenQuizAndQuizQuestionGradeCanBeFound() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -1973,20 +1807,58 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        quizService.updateQuizQuestions(1L, new ArrayList<>());
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizRepository).findById((Long) any());
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
+        mockQuizService.updateQuizQuestions(1L, new ArrayList<>());
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
     }
 
     /**
      * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
      */
     @Test
-    void testUpdateQuizQuestions2() {
-        when(quizQuestionGradeService.findAllByQuizId(anyLong()))
+    void testUpdateQuizQuestions_throwsException_whenQuizQuestionGradeCanNotBeFound() {
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        user.setFirstName("Jane");
+        user.setId(123L);
+        user.setLastName("Doe");
+        user.setPassword("iloveyou");
+        user.setRole(Role.UNAUTHORISED_TRAINER);
+        user.setUsername("janedoe");
+
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+        when(mockQqgService.findAllByQuizId(anyLong()))
                 .thenThrow(new QuizNotFoundException("An error occurred"));
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.updateQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+    }
 
+    /**
+     * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
+     */
+    @Test
+    void testUpdateQuizQuestions_throwsException_whenQuizCanNotBeFound() {
+        when(mockQuizRepository.findById((Long) any())).thenReturn(Optional.empty());
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(new ArrayList<>());
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.updateQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+    }
+
+    /**
+     * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
+     */
+    @Test
+    void testUpdateQuizQuestions_updatesQuestionListOfTheQuiz() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -2003,35 +1875,11 @@ class QuizServiceTest {
         quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
         quiz.setQuizQuestionsGrade(new ArrayList<>());
         Optional<Quiz> ofResult = Optional.of(quiz);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertThrows(QuizNotFoundException.class, () -> quizService.updateQuizQuestions(1L, new ArrayList<>()));
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizRepository).findById((Long) any());
-    }
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
 
-    /**
-     * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
-     */
-    @Test
-    void testUpdateQuizQuestions3() {
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
         quizQuestionGradeKey.setQuizId(123L);
-
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -2042,25 +1890,11 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
-        quizQuestionGrade.setGrade(10.0f);
-        quizQuestionGrade.setKey(quizQuestionGradeKey);
-        quizQuestionGrade.setQuestion(question);
-        quizQuestionGrade.setQuiz(quiz);
-
-        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
-        quizQuestionGradeList.add(quizQuestionGrade);
-
-        QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
-        quizQuestionGradeKey1.setQuestionId(123L);
-        quizQuestionGradeKey1.setQuizId(123L);
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -2071,11 +1905,25 @@ class QuizServiceTest {
         user2.setRole(Role.UNAUTHORISED_TRAINER);
         user2.setUsername("janedoe");
 
-        Question question1 = new Question();
-        question1.setCreator(user2);
-        question1.setId(123L);
-        question1.setQuestionDetails("Question Details");
-        question1.setTags(new HashSet<>());
+        Quiz quiz1 = new Quiz();
+        quiz1.setCreator(user2);
+        quiz1.setId(123L);
+        quiz1.setName("Name");
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz1.setQuizQuestionsGrade(new ArrayList<>());
+
+        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
+        quizQuestionGrade.setGrade(10.0f);
+        quizQuestionGrade.setKey(quizQuestionGradeKey);
+        quizQuestionGrade.setQuestion(question);
+        quizQuestionGrade.setQuiz(quiz1);
+
+        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
+        quizQuestionGradeList.add(quizQuestionGrade);
+
+        QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
+        quizQuestionGradeKey1.setQuestionId(123L);
+        quizQuestionGradeKey1.setQuizId(123L);
 
         User user3 = new User();
         user3.setEmail("jane.doe@example.org");
@@ -2086,21 +1934,11 @@ class QuizServiceTest {
         user3.setRole(Role.UNAUTHORISED_TRAINER);
         user3.setUsername("janedoe");
 
-        Quiz quiz1 = new Quiz();
-        quiz1.setCreator(user3);
-        quiz1.setId(123L);
-        quiz1.setName("Name");
-        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz1.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade1 = new QuizQuestionGrade();
-        quizQuestionGrade1.setGrade(10.0f);
-        quizQuestionGrade1.setKey(quizQuestionGradeKey1);
-        quizQuestionGrade1.setQuestion(question1);
-        quizQuestionGrade1.setQuiz(quiz1);
-        doNothing().when(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        when(quizQuestionGradeService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade1);
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
+        Question question1 = new Question();
+        question1.setCreator(user3);
+        question1.setId(123L);
+        question1.setQuestionDetails("Question Details");
+        question1.setTags(new HashSet<>());
 
         User user4 = new User();
         user4.setEmail("jane.doe@example.org");
@@ -2111,12 +1949,21 @@ class QuizServiceTest {
         user4.setRole(Role.UNAUTHORISED_TRAINER);
         user4.setUsername("janedoe");
 
-        Question question2 = new Question();
-        question2.setCreator(user4);
-        question2.setId(123L);
-        question2.setQuestionDetails("Question Details");
-        question2.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question2);
+        Quiz quiz2 = new Quiz();
+        quiz2.setCreator(user4);
+        quiz2.setId(123L);
+        quiz2.setName("Name");
+        quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz2.setQuizQuestionsGrade(new ArrayList<>());
+
+        QuizQuestionGrade quizQuestionGrade1 = new QuizQuestionGrade();
+        quizQuestionGrade1.setGrade(10.0f);
+        quizQuestionGrade1.setKey(quizQuestionGradeKey1);
+        quizQuestionGrade1.setQuestion(question1);
+        quizQuestionGrade1.setQuiz(quiz2);
+        doNothing().when(mockQqgService).remove((QuizQuestionGrade) any());
+        when(mockQqgService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade1);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
 
         User user5 = new User();
         user5.setEmail("jane.doe@example.org");
@@ -2127,31 +1974,25 @@ class QuizServiceTest {
         user5.setRole(Role.UNAUTHORISED_TRAINER);
         user5.setUsername("janedoe");
 
-        Quiz quiz2 = new Quiz();
-        quiz2.setCreator(user5);
-        quiz2.setId(123L);
-        quiz2.setName("Name");
-        quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz2.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz2);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        quizService.updateQuizQuestions(1L, new ArrayList<>());
-        verify(quizQuestionGradeService).findById((QuizQuestionGradeKey) any());
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
+        Question question2 = new Question();
+        question2.setCreator(user5);
+        question2.setId(123L);
+        question2.setQuestionDetails("Question Details");
+        question2.setTags(new HashSet<>());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question2);
+        mockQuizService.updateQuizQuestions(1L, new ArrayList<>());
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findById((QuizQuestionGradeKey) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+        verify(mockQqgService).remove((QuizQuestionGrade) any());
+        verify(mockQuestionService).findById((Long) any());
     }
 
     /**
      * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
      */
     @Test
-    void testUpdateQuizQuestions4() {
-        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
-        quizQuestionGradeKey.setQuestionId(123L);
-        quizQuestionGradeKey.setQuizId(123L);
-
+    void testUpdateQuizQuestions_throwsException_whenQuesitonCanNotBeRemoveFromQuiz() {
         User user = new User();
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
@@ -2161,11 +2002,18 @@ class QuizServiceTest {
         user.setRole(Role.UNAUTHORISED_TRAINER);
         user.setUsername("janedoe");
 
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
+        Quiz quiz = new Quiz();
+        quiz.setCreator(user);
+        quiz.setId(123L);
+        quiz.setName("Name");
+        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz.setQuizQuestionsGrade(new ArrayList<>());
+        Optional<Quiz> ofResult = Optional.of(quiz);
+        when(mockQuizRepository.findById((Long) any())).thenReturn(ofResult);
+
+        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
+        quizQuestionGradeKey.setQuestionId(123L);
+        quizQuestionGradeKey.setQuizId(123L);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -2176,25 +2024,11 @@ class QuizServiceTest {
         user1.setRole(Role.UNAUTHORISED_TRAINER);
         user1.setUsername("janedoe");
 
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
-        quizQuestionGrade.setGrade(10.0f);
-        quizQuestionGrade.setKey(quizQuestionGradeKey);
-        quizQuestionGrade.setQuestion(question);
-        quizQuestionGrade.setQuiz(quiz);
-
-        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
-        quizQuestionGradeList.add(quizQuestionGrade);
-
-        QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
-        quizQuestionGradeKey1.setQuestionId(123L);
-        quizQuestionGradeKey1.setQuizId(123L);
+        Question question = new Question();
+        question.setCreator(user1);
+        question.setId(123L);
+        question.setQuestionDetails("Question Details");
+        question.setTags(new HashSet<>());
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -2205,11 +2039,25 @@ class QuizServiceTest {
         user2.setRole(Role.UNAUTHORISED_TRAINER);
         user2.setUsername("janedoe");
 
-        Question question1 = new Question();
-        question1.setCreator(user2);
-        question1.setId(123L);
-        question1.setQuestionDetails("Question Details");
-        question1.setTags(new HashSet<>());
+        Quiz quiz1 = new Quiz();
+        quiz1.setCreator(user2);
+        quiz1.setId(123L);
+        quiz1.setName("Name");
+        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz1.setQuizQuestionsGrade(new ArrayList<>());
+
+        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
+        quizQuestionGrade.setGrade(10.0f);
+        quizQuestionGrade.setKey(quizQuestionGradeKey);
+        quizQuestionGrade.setQuestion(question);
+        quizQuestionGrade.setQuiz(quiz1);
+
+        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
+        quizQuestionGradeList.add(quizQuestionGrade);
+
+        QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
+        quizQuestionGradeKey1.setQuestionId(123L);
+        quizQuestionGradeKey1.setQuizId(123L);
 
         User user3 = new User();
         user3.setEmail("jane.doe@example.org");
@@ -2220,38 +2068,37 @@ class QuizServiceTest {
         user3.setRole(Role.UNAUTHORISED_TRAINER);
         user3.setUsername("janedoe");
 
-        Quiz quiz1 = new Quiz();
-        quiz1.setCreator(user3);
-        quiz1.setId(123L);
-        quiz1.setName("Name");
-        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz1.setQuizQuestionsGrade(new ArrayList<>());
+        Question question1 = new Question();
+        question1.setCreator(user3);
+        question1.setId(123L);
+        question1.setQuestionDetails("Question Details");
+        question1.setTags(new HashSet<>());
+
+        User user4 = new User();
+        user4.setEmail("jane.doe@example.org");
+        user4.setFirstName("Jane");
+        user4.setId(123L);
+        user4.setLastName("Doe");
+        user4.setPassword("iloveyou");
+        user4.setRole(Role.UNAUTHORISED_TRAINER);
+        user4.setUsername("janedoe");
+
+        Quiz quiz2 = new Quiz();
+        quiz2.setCreator(user4);
+        quiz2.setId(123L);
+        quiz2.setName("Name");
+        quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
+        quiz2.setQuizQuestionsGrade(new ArrayList<>());
 
         QuizQuestionGrade quizQuestionGrade1 = new QuizQuestionGrade();
         quizQuestionGrade1.setGrade(10.0f);
         quizQuestionGrade1.setKey(quizQuestionGradeKey1);
         quizQuestionGrade1.setQuestion(question1);
-        quizQuestionGrade1.setQuiz(quiz1);
-        doThrow(new QuizNotFoundException("An error occurred")).when(quizQuestionGradeService)
+        quizQuestionGrade1.setQuiz(quiz2);
+        doThrow(new QuizNotFoundException("An error occurred")).when(mockQqgService)
                 .remove((QuizQuestionGrade) any());
-        when(quizQuestionGradeService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade1);
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
-
-        User user4 = new User();
-        user4.setEmail("jane.doe@example.org");
-        user4.setFirstName("Jane");
-        user4.setId(123L);
-        user4.setLastName("Doe");
-        user4.setPassword("iloveyou");
-        user4.setRole(Role.UNAUTHORISED_TRAINER);
-        user4.setUsername("janedoe");
-
-        Question question2 = new Question();
-        question2.setCreator(user4);
-        question2.setId(123L);
-        question2.setQuestionDetails("Question Details");
-        question2.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question2);
+        when(mockQqgService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade1);
+        when(mockQqgService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
 
         User user5 = new User();
         user5.setEmail("jane.doe@example.org");
@@ -2262,196 +2109,19 @@ class QuizServiceTest {
         user5.setRole(Role.UNAUTHORISED_TRAINER);
         user5.setUsername("janedoe");
 
-        Quiz quiz2 = new Quiz();
-        quiz2.setCreator(user5);
-        quiz2.setId(123L);
-        quiz2.setName("Name");
-        quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz2.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz2);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        assertThrows(QuizNotFoundException.class, () -> quizService.updateQuizQuestions(1L, new ArrayList<>()));
-        verify(quizQuestionGradeService).findById((QuizQuestionGradeKey) any());
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
-    }
-
-    /**
-     * Method under test: {@link QuizService#updateQuizQuestions(long, List)}
-     */
-    @Test
-    void testUpdateQuizQuestions5() {
-        QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
-        quizQuestionGradeKey.setQuestionId(123L);
-        quizQuestionGradeKey.setQuizId(123L);
-
-        User user = new User();
-        user.setEmail("jane.doe@example.org");
-        user.setFirstName("Jane");
-        user.setId(123L);
-        user.setLastName("Doe");
-        user.setPassword("iloveyou");
-        user.setRole(Role.UNAUTHORISED_TRAINER);
-        user.setUsername("janedoe");
-
-        Question question = new Question();
-        question.setCreator(user);
-        question.setId(123L);
-        question.setQuestionDetails("Question Details");
-        question.setTags(new HashSet<>());
-
-        User user1 = new User();
-        user1.setEmail("jane.doe@example.org");
-        user1.setFirstName("Jane");
-        user1.setId(123L);
-        user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
-        user1.setRole(Role.UNAUTHORISED_TRAINER);
-        user1.setUsername("janedoe");
-
-        Quiz quiz = new Quiz();
-        quiz.setCreator(user1);
-        quiz.setId(123L);
-        quiz.setName("Name");
-        quiz.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade = new QuizQuestionGrade();
-        quizQuestionGrade.setGrade(10.0f);
-        quizQuestionGrade.setKey(quizQuestionGradeKey);
-        quizQuestionGrade.setQuestion(question);
-        quizQuestionGrade.setQuiz(quiz);
-
-        QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
-        quizQuestionGradeKey1.setQuestionId(123L);
-        quizQuestionGradeKey1.setQuizId(123L);
-
-        User user2 = new User();
-        user2.setEmail("jane.doe@example.org");
-        user2.setFirstName("Jane");
-        user2.setId(123L);
-        user2.setLastName("Doe");
-        user2.setPassword("iloveyou");
-        user2.setRole(Role.UNAUTHORISED_TRAINER);
-        user2.setUsername("janedoe");
-
-        Question question1 = new Question();
-        question1.setCreator(user2);
-        question1.setId(123L);
-        question1.setQuestionDetails("Question Details");
-        question1.setTags(new HashSet<>());
-
-        User user3 = new User();
-        user3.setEmail("jane.doe@example.org");
-        user3.setFirstName("Jane");
-        user3.setId(123L);
-        user3.setLastName("Doe");
-        user3.setPassword("iloveyou");
-        user3.setRole(Role.UNAUTHORISED_TRAINER);
-        user3.setUsername("janedoe");
-
-        Quiz quiz1 = new Quiz();
-        quiz1.setCreator(user3);
-        quiz1.setId(123L);
-        quiz1.setName("Name");
-        quiz1.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz1.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade1 = new QuizQuestionGrade();
-        quizQuestionGrade1.setGrade(10.0f);
-        quizQuestionGrade1.setKey(quizQuestionGradeKey1);
-        quizQuestionGrade1.setQuestion(question1);
-        quizQuestionGrade1.setQuiz(quiz1);
-
-        ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
-        quizQuestionGradeList.add(quizQuestionGrade1);
-        quizQuestionGradeList.add(quizQuestionGrade);
-
-        QuizQuestionGradeKey quizQuestionGradeKey2 = new QuizQuestionGradeKey();
-        quizQuestionGradeKey2.setQuestionId(123L);
-        quizQuestionGradeKey2.setQuizId(123L);
-
-        User user4 = new User();
-        user4.setEmail("jane.doe@example.org");
-        user4.setFirstName("Jane");
-        user4.setId(123L);
-        user4.setLastName("Doe");
-        user4.setPassword("iloveyou");
-        user4.setRole(Role.UNAUTHORISED_TRAINER);
-        user4.setUsername("janedoe");
-
         Question question2 = new Question();
-        question2.setCreator(user4);
+        question2.setCreator(user5);
         question2.setId(123L);
         question2.setQuestionDetails("Question Details");
         question2.setTags(new HashSet<>());
-
-        User user5 = new User();
-        user5.setEmail("jane.doe@example.org");
-        user5.setFirstName("Jane");
-        user5.setId(123L);
-        user5.setLastName("Doe");
-        user5.setPassword("iloveyou");
-        user5.setRole(Role.UNAUTHORISED_TRAINER);
-        user5.setUsername("janedoe");
-
-        Quiz quiz2 = new Quiz();
-        quiz2.setCreator(user5);
-        quiz2.setId(123L);
-        quiz2.setName("Name");
-        quiz2.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz2.setQuizQuestionsGrade(new ArrayList<>());
-
-        QuizQuestionGrade quizQuestionGrade2 = new QuizQuestionGrade();
-        quizQuestionGrade2.setGrade(10.0f);
-        quizQuestionGrade2.setKey(quizQuestionGradeKey2);
-        quizQuestionGrade2.setQuestion(question2);
-        quizQuestionGrade2.setQuiz(quiz2);
-        doNothing().when(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        when(quizQuestionGradeService.findById((QuizQuestionGradeKey) any())).thenReturn(quizQuestionGrade2);
-        when(quizQuestionGradeService.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
-
-        User user6 = new User();
-        user6.setEmail("jane.doe@example.org");
-        user6.setFirstName("Jane");
-        user6.setId(123L);
-        user6.setLastName("Doe");
-        user6.setPassword("iloveyou");
-        user6.setRole(Role.UNAUTHORISED_TRAINER);
-        user6.setUsername("janedoe");
-
-        Question question3 = new Question();
-        question3.setCreator(user6);
-        question3.setId(123L);
-        question3.setQuestionDetails("Question Details");
-        question3.setTags(new HashSet<>());
-        when(questionService.findById((Long) any())).thenReturn(question3);
-
-        User user7 = new User();
-        user7.setEmail("jane.doe@example.org");
-        user7.setFirstName("Jane");
-        user7.setId(123L);
-        user7.setLastName("Doe");
-        user7.setPassword("iloveyou");
-        user7.setRole(Role.UNAUTHORISED_TRAINER);
-        user7.setUsername("janedoe");
-
-        Quiz quiz3 = new Quiz();
-        quiz3.setCreator(user7);
-        quiz3.setId(123L);
-        quiz3.setName("Name");
-        quiz3.setQuizCategory(QuizCategory.COURSE_QUIZ);
-        quiz3.setQuizQuestionsGrade(new ArrayList<>());
-        Optional<Quiz> ofResult = Optional.of(quiz3);
-        when(quizRepository.findById((Long) any())).thenReturn(ofResult);
-        quizService.updateQuizQuestions(1L, new ArrayList<>());
-        verify(quizQuestionGradeService).findById((QuizQuestionGradeKey) any());
-        verify(quizQuestionGradeService).findAllByQuizId(anyLong());
-        verify(quizQuestionGradeService).remove((QuizQuestionGrade) any());
-        verify(questionService).findById((Long) any());
-        verify(quizRepository).findById((Long) any());
+        when(mockQuestionService.findById((Long) any())).thenReturn(question2);
+        assertThrows(QuizNotFoundException.class, () -> mockQuizService.updateQuizQuestions(1L, new ArrayList<>()));
+        verify(mockQuizRepository).findById((Long) any());
+        verify(mockQqgService).findById((QuizQuestionGradeKey) any());
+        verify(mockQqgService).findAllByQuizId(anyLong());
+        verify(mockQqgService).remove((QuizQuestionGrade) any());
+        verify(mockQuestionService).findById((Long) any());
     }
+
 }
 

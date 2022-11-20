@@ -19,5 +19,4 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
 	List<Quiz> findByCreator(User creator);
 	
-//	Optional<Quiz> findByQuizCategory(QuizCategory quizCategory);
 }

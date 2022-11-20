@@ -35,8 +35,6 @@ public class QuizController {
 
 	private static final String SUCCESS_PRODUCT_HAS_BEEN_DELETED = "Product has been deleted";
 	public static final String SUCCESS_PRODUCT_HAS_BEEN_UPDATED = "Product has been updated";
-	public static final String ERROR_USER_DOES_NOT_EXIST = "User does not exist";
-	public static final String SUCCESS_QUIZ_HAS_BEEN_CREATED = "Quiz has been created";
 
 	private final ModelToDTO modelToDTO;
 	private final QuizService quizService;
@@ -46,9 +44,9 @@ public class QuizController {
 
 	/**
 	 * Handles creating a quiz request.
-	 * @param activeUserId the id of the logged in user
+	 * @param activeUserId the id of the logged-in user
 	 * @param quizDto quiz DTO that contains in the request body
-	 * @return
+	 * @return  responseEntity which contains httpsStatus and quizDto
 	 */
 	@PostMapping("/api/quizzes/{activeUserId}")
 	public ResponseEntity<QuizDto> createQuiz(@PathVariable long activeUserId, @RequestBody QuizDto quizDto) {
@@ -57,7 +55,7 @@ public class QuizController {
 		quizService.checkAccessToQuizCategory(quizDto.getQuizCategory(), activeUserId);
 		
 		QuizDto quizDtoResponse =  quizService.createQuiz(quizDto);
-		return new ResponseEntity<QuizDto>(quizDtoResponse, HttpStatus.CREATED);
+		return new ResponseEntity<>(quizDtoResponse, HttpStatus.CREATED);
 	}
 	
 	
@@ -87,7 +85,7 @@ public class QuizController {
 	/**
 	 * Handles updating quiz request.
 	 * @param id the id of the quiz to be updated
-	 * @param activeUserId the id of the logged in user
+	 * @param activeUserId the id of the logged-in user
 	 * @param quizDto the quiz Dto contains updated quiz information
 	 * @return responseEntity which contains httpsStatus of the request
 	 */
@@ -104,7 +102,7 @@ public class QuizController {
 	/**
 	 * Handles deleting quiz request.
 	 * @param id The id of the quiz to be deleted
-	 * @param activeUserId The id of the logged in user
+	 * @param activeUserId The id of the logged-in user
 	 * @return responseEntity which contains httpsStatus of the request
 	 */
 	@DeleteMapping("/api/quizzes/{id}/{activeUserId}")
@@ -121,7 +119,7 @@ public class QuizController {
 	/**
 	 * Handles the request for creating/adding the questions of the quiz.
 	 * @param quiz_id The id of the quiz to which the questions are added 
-	 * @param activeUserId The id of the logged in user
+	 * @param activeUserId The id of the logged-in user
 	 * @param questionGradeDtoList  The list of questionGradeDto to be added 
 	 * @return responseEntity which contains the result of process request and messages
 	 */
@@ -140,7 +138,7 @@ public class QuizController {
 	/**
 	 * Handles requests for updating the questions of the quiz.
 	 * @param quiz_id The id of the quiz to which the questions are updated 
-	 * @param activeUserId The id of the logged in user
+	 * @param activeUserId The id of the logged-in user
 	 * @param questionGradeDtoList  The list of questionGradeDto to be updated 
 	 * @return responseEntity which contains the result of process request and messages
 	 */

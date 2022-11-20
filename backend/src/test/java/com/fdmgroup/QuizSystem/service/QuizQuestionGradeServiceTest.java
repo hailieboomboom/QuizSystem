@@ -35,7 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class QuizQuestionGradeServiceTest {
     @MockBean
-    private QuizQuestionGradeRepository quizQuestionGradeRepository;
+    private QuizQuestionGradeRepository mockQqgRepository;
 
     @Autowired
     private QuizQuestionGradeService quizQuestionGradeService;
@@ -85,7 +85,7 @@ class QuizQuestionGradeServiceTest {
         quizQuestionGrade.setKey(quizQuestionGradeKey);
         quizQuestionGrade.setQuestion(question);
         quizQuestionGrade.setQuiz(quiz);
-        when(quizQuestionGradeRepository.save(any())).thenReturn(quizQuestionGrade);
+        when(mockQqgRepository.save(any())).thenReturn(quizQuestionGrade);
 
         QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
         quizQuestionGradeKey1.setQuestionId(123L);
@@ -128,7 +128,7 @@ class QuizQuestionGradeServiceTest {
         quizQuestionGrade1.setQuestion(question1);
         quizQuestionGrade1.setQuiz(quiz1);
         assertSame(quizQuestionGrade, quizQuestionGradeService.save(quizQuestionGrade1));
-        verify(quizQuestionGradeRepository).save((QuizQuestionGrade) any());
+        verify(mockQqgRepository).save((QuizQuestionGrade) any());
     }
 
     /**
@@ -177,13 +177,13 @@ class QuizQuestionGradeServiceTest {
         quizQuestionGrade.setQuestion(question);
         quizQuestionGrade.setQuiz(quiz);
         Optional<QuizQuestionGrade> ofResult = Optional.of(quizQuestionGrade);
-        when(quizQuestionGradeRepository.findByKey((QuizQuestionGradeKey) any())).thenReturn(ofResult);
+        when(mockQqgRepository.findByKey((QuizQuestionGradeKey) any())).thenReturn(ofResult);
 
         QuizQuestionGradeKey quizQuestionGradeKey1 = new QuizQuestionGradeKey();
         quizQuestionGradeKey1.setQuestionId(123L);
         quizQuestionGradeKey1.setQuizId(123L);
         assertSame(quizQuestionGrade, quizQuestionGradeService.findById(quizQuestionGradeKey1));
-        verify(quizQuestionGradeRepository).findByKey((QuizQuestionGradeKey) any());
+        verify(mockQqgRepository).findByKey((QuizQuestionGradeKey) any());
     }
 
     /**
@@ -191,13 +191,13 @@ class QuizQuestionGradeServiceTest {
      */
     @Test
     void testFindById_returnsNull_whenQuizCanNotBeFoundByGivenQuizId() {
-        when(quizQuestionGradeRepository.findByKey((QuizQuestionGradeKey) any())).thenReturn(Optional.empty());
+        when(mockQqgRepository.findByKey((QuizQuestionGradeKey) any())).thenReturn(Optional.empty());
 
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
         quizQuestionGradeKey.setQuizId(123L);
         assertNull(quizQuestionGradeService.findById(quizQuestionGradeKey));
-        verify(quizQuestionGradeRepository).findByKey((QuizQuestionGradeKey) any());
+        verify(mockQqgRepository).findByKey((QuizQuestionGradeKey) any());
     }
 
     /**
@@ -206,11 +206,11 @@ class QuizQuestionGradeServiceTest {
     @Test
     void testFindAllByQuizId_returnsListOfQuizQuestionGrade() {
         ArrayList<QuizQuestionGrade> quizQuestionGradeList = new ArrayList<>();
-        when(quizQuestionGradeRepository.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
+        when(mockQqgRepository.findAllByQuizId(anyLong())).thenReturn(quizQuestionGradeList);
         List<QuizQuestionGrade> actualFindAllByQuizIdResult = quizQuestionGradeService.findAllByQuizId(123L);
         assertSame(quizQuestionGradeList, actualFindAllByQuizIdResult);
         assertTrue(actualFindAllByQuizIdResult.isEmpty());
-        verify(quizQuestionGradeRepository).findAllByQuizId(anyLong());
+        verify(mockQqgRepository).findAllByQuizId(anyLong());
     }
 
     /**
@@ -218,7 +218,7 @@ class QuizQuestionGradeServiceTest {
      */
     @Test
     void testRemove_removesGivenQuizQuestionGrade() {
-        doNothing().when(quizQuestionGradeRepository).delete((QuizQuestionGrade) any());
+        doNothing().when(mockQqgRepository).delete((QuizQuestionGrade) any());
 
         QuizQuestionGradeKey quizQuestionGradeKey = new QuizQuestionGradeKey();
         quizQuestionGradeKey.setQuestionId(123L);
@@ -261,7 +261,7 @@ class QuizQuestionGradeServiceTest {
         quizQuestionGrade.setQuestion(question);
         quizQuestionGrade.setQuiz(quiz);
         quizQuestionGradeService.remove(quizQuestionGrade);
-        verify(quizQuestionGradeRepository).delete((QuizQuestionGrade) any());
+        verify(mockQqgRepository).delete((QuizQuestionGrade) any());
         assertEquals(10.0f, quizQuestionGrade.getGrade());
         assertSame(quiz, quizQuestionGrade.getQuiz());
         assertSame(question, quizQuestionGrade.getQuestion());
