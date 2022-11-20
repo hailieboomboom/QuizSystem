@@ -1450,7 +1450,7 @@ class QuizServiceTest {
         Tag tag = new Tag();
         tag.setId(123L);
         tag.setTagName("interview");
-        tag.setTutorials(new HashSet<>());
+        tag.setQuestions(new HashSet<>());
         when(mockTagService.getTagByName((String) any())).thenReturn(tag);
 
         User user = new User();
@@ -1479,7 +1479,7 @@ class QuizServiceTest {
         Tag tag = new Tag();
         tag.setId(123L);
         tag.setTagName("course");
-        tag.setTutorials(new HashSet<>());
+        tag.setQuestions(new HashSet<>());
         when(mockTagService.getTagByName((String) any())).thenReturn(tag);
 
         User user = new User();
@@ -1712,7 +1712,7 @@ class QuizServiceTest {
         Tag tag = new Tag();
         tag.setId(123L);
         tag.setTagName("Tag Name");
-        tag.setTutorials(new HashSet<>());
+        tag.setQuestions(new HashSet<>());
         when(mockTagService.getTagByName((String) any())).thenReturn(tag);
 
         QuestionGradeDTO questionGradeDTO = new QuestionGradeDTO();
